@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.3 (voice leading).
+**Next:** Bucket 2, task 2.4 (rhythm and meter).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -96,7 +96,7 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       sevenths, borrowed and secondary chords, names and roman numerals, function (home, away, tension); what the
       four styles need (trap's dark minor, synthwave's borrowed chords, salsa's ii–V and montuno, rock's power
       chords and bVII).
-- [ ] 2.3 Voice leading: smooth moves, a range per member (new roles too, decision 11), the melody on top
+- [x] 2.3 Voice leading: smooth moves, a range per member (new roles too, decision 11), the melody on top
       (`docs/taste.md`); parallels and the like as tendencies a style sets, not bans.
 - [ ] 2.4 Rhythm and meter: the 12-step grid, meters past 4/4, half-time, clave, swing and feel per member.
 - [ ] 2.5 Form, sections and energy; how a long play evolves over ~20 minutes (energy arc, key changes, motifs that
@@ -201,3 +201,13 @@ Trained on this PC (RTX 2070, 8 GB).
 - Oct 23: DadCraft approved both 2.2 choices: roman numerals count from the tonic's major scale (A minor reads i ii°
   bIII iv v bVI bVII; bVII the same in every key), and the functions (tension: V, vii°, secondaries, phrygian's bII;
   softer homes: vi, iii, the relative major; away: bVII and minor v).
+- Oct 23: 2.3 done. `maestro/theory/voicing.py`: a range per pitched member in MIDI notes (bass C1-G3, guitar
+  E2-E5, keys G2-E6, pad C3-C6, horns E3-C6, arp G3-G6, melody C4-C7), narrowed by the register control. The check
+  rules out notes out of range or outside the chord, a needed tone missing (the perfect fifth goes first when there's
+  no room; a rootless style leaves the root to the bass), notes not under the melody, and low intervals that turn to
+  mud (the arranger's low-interval table). Smooth moves, leaps, parallel fifths and octaves, spread and a pull to the
+  range's middle (so a long play can't drift off) are costs a style sets, negative when it likes them; the choose
+  picks seeded among the smoothest few. First drafts: plain avoids parallels, synthwave glides as a block, power rock
+  likes parallel fifths, salsa likes octaves (montuno) and plays rootless, trap barely minds. `check_band` checks the
+  melody on top and mud across members; `explain` says each move in plain words. For DadCraft: the ranges and the
+  style drafts.
