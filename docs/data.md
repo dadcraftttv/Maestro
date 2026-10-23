@@ -81,10 +81,30 @@ Salsa and afrobeat have the least modern open audio. Expect them to lean most on
 1. **Synthetic music from other AI models** (e.g. ACE-Step output): **OUT, ideas only** ("lets stay legally safe").
 2. **Programmatic drum loops** (WaivOps HH-TRP, EDM-TR8, RTRO-DRM): **yes**, SAFE, as a supplement to GMD's human
    drumming, credited in `CREDITS.md`.
-3. **Theory fills the gaps** (his idea): for each gap style, the style book writes down that style's own theory, per
-   member (its rhythms, bass lines, chord habits, voicings, melody shapes, form and production habits that affect the
-   notes), from written sources. Practice MIDI made from it (4.2) is then the main training data for those members.
-   Describing a style's conventions is ideas, not copying anyone's song, so it stays SAFE.
+3. **Theory fills the gaps** (his idea): see "Filling the gaps with theory" below.
+
+## Filling the gaps with theory (DadCraft, Oct 23)
+
+DadCraft asked whether theory about the lacking genres can fill their gaps. Yes, and it is legally clean: describing
+how a style works (a trap hi-hat roll, a salsa bass that lands ahead of the beat) is an idea anyone can use. Only
+specific songs are protected. How it works:
+
+1. **The style book (bucket 3) writes down each style's own theory, member by member**, from written sources
+   (open textbooks, articles, our own listening notes). Examples of what an entry holds:
+   - **Trap drums:** hi-hat rolls in triplets, 32nds and faster, a half-time snare on beat 3, 808 kicks that also
+     carry the bass. **Trap bass:** long 808 notes that slide, mostly on the root and the fifth.
+   - **Salsa:** the clave pattern sets everything. The bass is a *tumbao*: it skips beat 1 and plays just ahead of
+     beats 3 and 4. The piano plays a repeating *montuno* figure in octaves.
+   - **Future bass:** wide 7th and 9th chords, often stacked over one held bass note, rhythmic chord stabs, and big
+     tension-and-release moments.
+   - **Synthwave:** steady eighth-note bass, simple minor chord loops, long held pads under singable leads.
+   - **Afrobeat:** guitar and keys play short interlocking parts, the bass repeats long riffs, the drummer keeps busy
+     on the hi-hat.
+2. **Each entry is tendencies and ranges, not fixed patterns**, so decision 9 holds: the music never plays the same
+   way twice.
+3. **The style book generates practice MIDI (task 4.2).** For the gap members (bass, pad and melody in every modern
+   style) this is their main training data. It is ours, so it is SAFE for the phone model.
+4. **DadCraft checks it by ear:** short clips per style and member in checkpoint 3.
 
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd

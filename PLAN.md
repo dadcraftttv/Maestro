@@ -81,7 +81,8 @@ For each chosen style, how each member plays it, written from sources.
 - [ ] 3.0 Plan approved (incl. what a style entry holds: tempo, swing, grid, chord vocabulary, register, default
       sound, all as tendencies and ranges with many variants, never a few fixed patterns: decision 9). Styles with no
       open data for a member (`docs/data.md` "Coverage and gaps") get that member's theory written out in full,
-      since practice MIDI made from it is their main training data (DadCraft, Oct 23). Check open textbooks as
+      since practice MIDI made from it is their main training data (DadCraft, Oct 23; the method and
+      examples: `docs/data.md` "Filling the gaps with theory"). Check open textbooks as
       sources (e.g. Open Music Theory, license to check).
 - [ ] 3.1 A PC clip player, so DadCraft can hear MIDI clips.
 - [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
