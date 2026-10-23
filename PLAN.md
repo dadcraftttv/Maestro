@@ -28,10 +28,12 @@ band member play, the way its style plays it?
 5. **Knowledge first, app last.** Maestro learns theory and styles on the PC before any Ouralia work. Each knowledge
    step is still checked by DadCraft's ears on short PC clips (only DadCraft judges sound).
 6. **Rules stay as guardrails.** The model suggests, the theory rules check, on the PC and on the phone.
-7. **Data must be openly licensed** (public domain, CC0, CC BY, ...). Ouralia won't be sold, so NC data
-   (non-commercial) may be used too, but every data set is tagged with its license and NC sets are kept apart, so a
-   model can be retrained on commercial-safe data alone. A model trained on NC-SA data is published under that license.
-   Never train on Lakh-style fan MIDI of copyrighted songs, or use weights trained on it (ideas only).
+7. **Data must be openly licensed** (public domain, CC0, CC BY, ...), every set tagged with its license and credited
+   in `CREDITS.md`. **The model that ships in Ouralia is trained only on data that allows commercial use** (NC
+   conflicts with Ouralia's GPL), released as CC BY-SA 4.0. NC data (Ouralia won't be sold, so it's allowed) is for
+   PC-side work only: experiments, research, the style judge; models trained with it stay on the PC, under
+   CC BY-NC-SA 4.0. Never train on Lakh-style fan MIDI of copyrighted songs, or use weights trained on it (ideas only).
+10. **Licenses:** code GPL-3.0-or-later (like Ouralia); docs and the style book CC BY-SA 4.0 (README "License").
 8. **The phone version is small** (target: tens of MB, around MIDI-GPT's ~20M parameters), shrunk from the PC model.
 9. **Free to drift, always making sense.** Maestro is never locked to fixed patterns: styles are written as
    tendencies and ranges, the model makes fresh choices each bar, and the rules only rule out what doesn't fit, never
@@ -56,6 +58,7 @@ Plan approved Oct 23.
       exists into `docs/format.md` ("Today in Ouralia").
 - [ ] 1.2 Data audit into `docs/data.md`: every candidate set with license, NC/commercial-safe tag, size, format and
       the styles and members it covers; mark the gaps. Start from `docs/research.md` and `docs/music-info.md`.
+      Start `CREDITS.md` with the attribution each chosen set requires.
 - [ ] 1.3 Check MidiTok (license, tokens, fit with 1.1) and write Maestro's format into `docs/format.md`: one shared
       timeline (tempo, meter, key, chord, section, energy), one part per member, controls per member (style vector,
       density, register...), sound kept separate.
@@ -112,3 +115,5 @@ Trained on this PC (RTX 2070, 8 GB).
 - Oct 23: research rounds 1 and 2 done (`docs/research.md`).
 - Oct 23: decision 9 added (DadCraft: compositions evolve as they go on, and never the same evolution from play to
   play; same key and scale share notes, but never identical run to run).
+- Oct 23: decision 7 refined and 10 added (DadCraft agreed): the phone model uses commercial-safe data only; code
+  GPLv3+, docs CC BY-SA 4.0.

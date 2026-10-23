@@ -18,8 +18,9 @@ commits and replies; never a real name. Public on GitHub: dadcraftttv/Maestro (s
   exactly what to listen for.
 
 ## Rules
-- Data: only openly licensed sets, each tagged with its license; NC sets kept apart (PLAN.md decision 7). Record
-  every set in `docs/data.md` before using it.
+- Data: only openly licensed sets, each tagged with its license; NC sets kept apart and never in the phone model
+  (PLAN.md decision 7). Record every set in `docs/data.md` and its credit in `CREDITS.md` before using it.
+- Licenses: code GPL-3.0-or-later, docs and style data CC BY-SA 4.0 (README "License").
 - Learn from other projects' ideas; don't copy their code wholesale, and check a license before using any code or
   weights.
 - Ouralia work (bucket 6) follows Ouralia's own CLAUDE.md.
