@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 1, task 1.1.
+**Next:** Bucket 1, task 1.2.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -53,7 +53,7 @@ added to the list above.
 
 ### 1. Groundwork — IN PROGRESS
 Plan approved Oct 23.
-- [ ] 1.1 Read how `dcs_composer` (Ouralia `app/src/main/cpp/`, grep it) represents key, scale, chords, sections,
+- [x] 1.1 Read how `dcs_composer` (Ouralia `dcs/src/dcs_composer.c`) represents key, scale, chords, sections,
       parts and timing, and where its randomness comes from (how it seeds, whether two plays can repeat). Write what
       exists into `docs/format.md` ("Today in Ouralia").
 - [ ] 1.2 Data audit into `docs/data.md`: every candidate set with license, NC/commercial-safe tag, size, format and
@@ -108,7 +108,8 @@ Trained on this PC (RTX 2070, 8 GB).
 - [ ] 6.0 Plan approved (follows Ouralia's CLAUDE.md).
 - [ ] 6.1 Shrink the model for the phone; measure CPU and battery.
 - [ ] 6.2 `dcs_composer` gains a style and a sound per member, swappable; rules as guardrails.
-- [ ] 6.3 The drift measures on the phone (fresh seed each play).
+- [ ] 6.3 The drift measures on the phone (fresh seed each play; the patch's Pd `[random]`s and `expr random` are
+      unseeded today, so they repeat after each app start: `docs/format.md`).
 - [ ] Checkpoint 6: trap drums with a synthwave bassist, on the phone; off and on again gives a new evolution.
 
 ## Verdicts and notes
@@ -117,3 +118,5 @@ Trained on this PC (RTX 2070, 8 GB).
   play; same key and scale share notes, but never identical run to run).
 - Oct 23: decision 7 refined and 10 added (DadCraft agreed): the phone model uses commercial-safe data only; code
   GPLv3+, docs CC BY-SA 4.0.
+- Oct 23: 1.1 done (`docs/format.md` "Today in Ouralia"). The composer seeds from the clock (a new piece each
+  start); the rest of the patch's randomness is unseeded and repeats per app start, to fix in bucket 6.
