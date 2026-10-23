@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 1, task 1.2.
+**Next:** Bucket 1, task 1.3.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -56,7 +56,7 @@ Plan approved Oct 23.
 - [x] 1.1 Read how `dcs_composer` (Ouralia `dcs/src/dcs_composer.c`) represents key, scale, chords, sections,
       parts and timing, and where its randomness comes from (how it seeds, whether two plays can repeat). Write what
       exists into `docs/format.md` ("Today in Ouralia").
-- [ ] 1.2 Data audit into `docs/data.md`: every candidate set with license, NC/commercial-safe tag, size, format and
+- [x] 1.2 Data audit into `docs/data.md`: every candidate set with license, NC/commercial-safe tag, size, format and
       the styles and members it covers; mark the gaps. Start from `docs/research.md` and `docs/music-info.md`.
       Start `CREDITS.md` with the attribution each chosen set requires.
 - [ ] 1.3 Check MidiTok (license, tokens, fit with 1.1) and write Maestro's format into `docs/format.md`: one shared
@@ -120,3 +120,6 @@ Trained on this PC (RTX 2070, 8 GB).
   GPLv3+, docs CC BY-SA 4.0.
 - Oct 23: 1.1 done (`docs/format.md` "Today in Ouralia"). The composer seeds from the clock (a new piece each
   start); the rest of the patch's randomness is unseeded and repeats per app start, to fix in bucket 6.
+- Oct 23: 1.2 done (`docs/data.md`, `CREDITS.md`). Drums are covered across many styles (GMD, E-GMD); bass, pad and
+  melody have no open data in any modern style, so the style book and transcribed open audio fill them. Two
+  questions for DadCraft in `data.md` (synthetic AI music as data; programmatic drum loops).
