@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.2 (keys, scales, chords and their functions).
+**Next:** Bucket 2, task 2.3 (voice leading).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -92,7 +92,7 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       Changes Maestro would want in C are listed in `docs/format.md` for bucket 6.
 - [x] 2.1 Skeleton and port: the package and tests, `composer.json` and the sync check, today's composer in Python
       (chords, cadences, phrase variation, sections and their memory, voicing, bass) passing the parity test.
-- [ ] 2.2 Keys, scales, chords and their functions: more scales (Phrygian, harmonic minor...), diminished,
+- [x] 2.2 Keys, scales, chords and their functions: more scales (Phrygian, harmonic minor...), diminished,
       sevenths, borrowed and secondary chords, names and roman numerals, function (home, away, tension); what the
       four styles need (trap's dark minor, synthwave's borrowed chords, salsa's ii–V and montuno, rock's power
       chords and bVII).
@@ -191,3 +191,10 @@ Trained on this PC (RTX 2070, 8 GB).
   drums, walking notes, cells), its tables in `data/composer.json` from Ouralia `933148d`; the parity test (16
   scenarios, every scale, ~7,400 outputs) passes against the real C, and fails if any of three compiler-chosen
   draw orders is flipped (noted for bucket 6 in `docs/format.md`). `tools/sync_check.py` reports when the C moves.
+- Oct 23: 2.2 done. `maestro/theory/pitch.py` (14 scales: the composer's 8 plus phrygian, locrian, harmonic and
+  melodic minor, phrygian dominant, blues; keys spelled properly) and `theory/chords.py` (root, quality, colour and
+  bass as in `docs/format.md`; diatonic, secondary, borrowed or chromatic; names, roman numerals that count from the
+  tonic's major scale so bVII reads the same in every key; function home, away or tension with the reason; a
+  vocabulary check that gives its reason and a seeded choose; `two_five` for salsa). Tests cover what the four styles
+  need (phrygian bII and harmonic minor V, synthwave's bVI bVII iv, salsa's ii-V and secondary ii-Vs, rock's power
+  chords and bVII).

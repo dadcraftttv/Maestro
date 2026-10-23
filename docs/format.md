@@ -148,7 +148,8 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
 - **Grid:** 12 steps a beat, so both 16ths (every 3rd step) and triplets (every 4th) land on it; today's `tick16`
   is steps 0, 3, 6 ... of each beat. Notes in the MIDI keep their exact ticks; the grid is what tokens round to.
 - **Key:** root 0–11 (C = 0) and **scale**: the composer's 8 (major, minor, major and minor pentatonic, dorian,
-  mixolydian, lydian, whole tone) and room to add more (harmonic minor, phrygian, blues: theory core, bucket 2).
+  mixolydian, lydian, whole tone), plus phrygian, locrian, harmonic and melodic minor, phrygian dominant and blues
+  (task 2.2, `maestro/theory/pitch.py`).
 - **Chord:** **root** in semitones from the key note, **quality** (maj, min, dim, aug, sus2, sus4, power), **colour**
   (7, maj7, add9, 9 ... or none) and **bass** note (semitones from the key; an inversion or pedal when it isn't the
   root). The scale degree follows from the root when the chord is in the scale; a root outside it is a borrowed
