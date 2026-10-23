@@ -3,7 +3,9 @@
 Every candidate set for Maestro: license, tag, size, format, and the styles and members it covers (task 1.2,
 Oct 23). Licenses were checked on each set's own page on Oct 23. Check them again when downloading (task 4.1).
 
-Members are Ouralia's band today (`format.md`): **melody**, **bass**, **pad** (chords) and **drums**.
+Members are Ouralia's band today (`format.md`): **melody**, **bass**, **pad** (chords) and **drums**. The first
+styles add **guitar**, **keys**, **horns** and **percussion** (PLAN.md decision 11), with no open data in these
+styles either, so the style book fills them the same way.
 
 **Tags** (PLAN.md decision 7):
 - **SAFE:** allows commercial use. Fine for the phone model.

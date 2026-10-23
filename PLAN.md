@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 1, checkpoint 1.
+**Next:** Bucket 2, task 2.0 (the plan).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -43,6 +43,10 @@ band member play, the way its style plays it?
    evolution is a new one. The same key and scale share notes, but the music is never identical run to run (a fresh
    random seed each play; no replaying a stored path). Measured before DadCraft listens: staleness within a play
    (how often bars and phrases repeat over ~20 minutes) and sameness between plays (two runs, same settings).
+11. **The band grows past today's four members** (drums, bass, pad, melody, plus the arp). The first styles need
+    more roles, planned from the style book on: **rhythm guitar** (power rock), **keys** (salsa's montuno piano),
+    **horns** (salsa) and **percussion** (congas, timbales, cowbell, clave; its own member, apart from the kit).
+    Ouralia gets a sound for each in bucket 6.
 
 ## How each bucket runs
 
@@ -52,7 +56,7 @@ added to the list above.
 
 ## Buckets
 
-### 1. Groundwork — IN PROGRESS
+### 1. Groundwork — DONE
 Plan approved Oct 23.
 - [x] 1.1 Read how `dcs_composer` (Ouralia `dcs/src/dcs_composer.c`) represents key, scale, chords, sections,
       parts and timing, and where its randomness comes from (how it seeds, whether two plays can repeat). Write what
@@ -65,7 +69,7 @@ Plan approved Oct 23.
       density, register...), sound kept separate.
 - [x] 1.4 With DadCraft: pick the first 3–4 far-apart styles, from what the data covers. Picked: trap,
       synthwave, salsa, power rock.
-- [ ] Checkpoint 1: DadCraft reads the summary of `data.md` and `format.md`.
+- [x] Checkpoint 1: DadCraft reads the summary of `data.md` and `format.md`.
 
 ### 2. Theory core (draft)
 A tested PC library: keys, chords, voice leading, rhythm, form.
@@ -83,7 +87,8 @@ For each chosen style, how each member plays it, written from sources.
       sound, all as tendencies and ranges with many variants, never a few fixed patterns: decision 9). Styles with no
       open data for a member (`docs/data.md` "Coverage and gaps") get that member's theory written out in full,
       since practice MIDI made from it is their main training data (DadCraft, Oct 23; the method and
-      examples: `docs/data.md` "Filling the gaps with theory"). Check open textbooks as
+      examples: `docs/data.md` "Filling the gaps with theory"). Each style's entry covers every role it uses,
+      the new ones too (decision 11). Check open textbooks as
       sources (e.g. Open Music Theory, license to check).
 - [ ] 3.1 A PC clip player, so DadCraft can hear MIDI clips.
 - [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
@@ -113,7 +118,8 @@ Trained on this PC (RTX 2070, 8 GB).
 ### 6. Into Ouralia (draft)
 - [ ] 6.0 Plan approved (follows Ouralia's CLAUDE.md).
 - [ ] 6.1 Shrink the model for the phone; measure CPU and battery.
-- [ ] 6.2 `dcs_composer` gains a style and a sound per member, swappable; rules as guardrails.
+- [ ] 6.2 `dcs_composer` gains a style and a sound per member, swappable; rules as guardrails; the new roles
+      (decision 11) get members and kits in Ouralia.
 - [ ] 6.3 The drift measures on the phone (fresh seed each play; the patch's Pd `[random]`s and `expr random` are
       unseeded today, so they repeat after each app start: `docs/format.md`).
 - [ ] Checkpoint 6: trap drums with a synthwave bassist, on the phone; off and on again gives a new evolution.
@@ -139,3 +145,7 @@ Trained on this PC (RTX 2070, 8 GB).
   tumbao, montuno; GMD latin drums, leans most on the style book) and **power rock** (human feel; GMD rock, FMA rock).
   They differ in grid (triplet, straight, clave), feel (programmed vs human) and harmony. Ambient was the other
   candidate for the fourth slot; DadCraft chose power rock.
+- Oct 23: checkpoint 1 passed; bucket 1 done. DadCraft's verdicts: (1) bass, pad and melody learn from the style
+  book's practice MIDI plus transcribed open audio, as planned (recording our own parts was offered as a third
+  source and declined for now; revisit if checkpoint 3 clips sound stiff); (2) plan the new roles now (decision 11);
+  (3) the format stands as written.

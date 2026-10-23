@@ -159,8 +159,11 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
 - **Energy** 0–1 (the room's intensity today), and **brightness** 0–1 (the room). Both lean every member.
 
 ### The members (one part each)
-- **Role:** what the member is for: drums, bass, pad (chords), melody (lead), arp (walking notes, today's `arp`).
-  More roles later from the style book (horns, guitar, keys comping, percussion). A role is the job, not the sound.
+- **Role:** what the member is for: drums, bass, pad (chords), melody (lead), arp (walking notes, today's `arp`),
+  and, for the first styles (PLAN.md decision 11): **guitar** (rhythm: power chords, riffs), **keys** (comping,
+  salsa's montuno), **horns** (a section: lines and stabs in two or three voices) and **percussion** (hand
+  percussion as its own member: congas, bongos, timbales, cowbell, clave, shaker; General MIDI percussion notes,
+  apart from the drum kit). A role is the job, not the sound.
 - **Notes:** start (ticks), length, pitch, velocity.
   - Pitch: MIDI note numbers in the file; for tokens, shifted so the key note is C (pitch − key root), the way the
     composer sends semitones from the key note and the patch adds the key back. A part learned in one key fits all
