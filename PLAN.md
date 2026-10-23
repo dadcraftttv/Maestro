@@ -211,3 +211,5 @@ Trained on this PC (RTX 2070, 8 GB).
   likes parallel fifths, salsa likes octaves (montuno) and plays rootless, trap barely minds. `check_band` checks the
   melody on top and mud across members; `explain` says each move in plain words. For DadCraft: the ranges and the
   style drafts.
+- Oct 23: DadCraft approved both 2.3 choices: the member ranges, and the first style drafts (power rock's parallel
+  fifths, synthwave's block glide, salsa's octaves and rootless keys, trap's wide pads, plain avoiding parallels).
