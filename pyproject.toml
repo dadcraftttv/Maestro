@@ -1,0 +1,23 @@
+[project]
+name = "maestro"
+version = "0.1.0"
+description = "The music brain behind Ouralia's generative music"
+license = "GPL-3.0-or-later"
+requires-python = ">=3.12"
+dependencies = ["mido"]
+
+[project.optional-dependencies]
+test = ["pytest", "numpy"]   # numpy: Ouralia's test engine (tools/pdtest.py), used by the parity test
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["maestro*"]
+
+[tool.setuptools.package-data]
+maestro = ["data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

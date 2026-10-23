@@ -209,3 +209,18 @@ does: each play draws a fresh one, as the composer already does.
 | swing in the drum engine | swing/feel control per member |
 | `rnd` seeded from the clock | seed stored per play |
 | no style | style, strength per member |
+
+## The port and the C (task 2.1, Oct 23)
+`maestro/port.py` is today's `dcs_composer` in Python, choice for choice: the same seed and messages give the same
+outputs (chords, sections, melody statements, drums, walking notes, cells), checked by the parity test
+(`tests/parity`), which drives the real C composer through Ouralia's test engine. Its tables live in
+`maestro/data/composer.json` with the Ouralia commit they came from (`933148d`); `tools/sync_check.py` says when the
+C file has moved on. To match bit for bit, the port rounds float maths to 32 bits at each step and keeps Pd's clock
+(the bar watch fires on DSP ticks, in Pd's own time units).
+
+### Changes Maestro would want in C (for bucket 6)
+- **Three draws in an unspecified order.** Three expressions call `rnd()` twice where C leaves the order to the
+  compiler: `nudge_motif` (`m->iv[1 + rnd()] += rnd() ? 1 : -1`), `vary_drums` (`(rnd() ? 1 : -1) * (1 + rnd())`)
+  and `new_statement` (the same shape). GCC draws the sign first in the last two and the right side first in the
+  first; the port does the same, and the parity test fails if either order is flipped. Clang (the Android NDK's
+  compiler) may choose otherwise, so the phone and the desktop could already differ. Split each into two statements.

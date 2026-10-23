@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.1 (skeleton and port).
+**Next:** Bucket 2, task 2.2 (keys, scales, chords and their functions).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -90,7 +90,7 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       Ouralia's test engine, read-only, its built lib) on the same seeds and needs the same chords and sections.
       Maestro's additions sit on top and can be switched off, so today's composer stays a mode to compare against.
       Changes Maestro would want in C are listed in `docs/format.md` for bucket 6.
-- [ ] 2.1 Skeleton and port: the package and tests, `composer.json` and the sync check, today's composer in Python
+- [x] 2.1 Skeleton and port: the package and tests, `composer.json` and the sync check, today's composer in Python
       (chords, cadences, phrase variation, sections and their memory, voicing, bass) passing the parity test.
 - [ ] 2.2 Keys, scales, chords and their functions: more scales (Phrygian, harmonic minor...), diminished,
       sevenths, borrowed and secondary chords, names and roman numerals, function (home, away, tension); what the
@@ -187,3 +187,7 @@ Trained on this PC (RTX 2070, 8 GB).
   bucket 6 (yes); Maestro grows from `dcs_composer` through an exact port with a parity test (yes); rhythm and form
   split into 2.4 and 2.5 (yes). New decision 12: Ouralia keeps its own development; Maestro integrates on a separate
   dev path tested privately or with beta testers, released into Ouralia proper only when he's good with it.
+- Oct 23: 2.1 done. `maestro/port.py` is today's `dcs_composer` choice for choice (chords, sections, melody,
+  drums, walking notes, cells), its tables in `data/composer.json` from Ouralia `933148d`; the parity test (16
+  scenarios, every scale, ~7,400 outputs) passes against the real C, and fails if any of three compiler-chosen
+  draw orders is flipped (noted for bucket 6 in `docs/format.md`). `tools/sync_check.py` reports when the C moves.

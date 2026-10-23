@@ -2,7 +2,7 @@
 
 The composer of the Orchestra: the music brain that will drive Ouralia's generative music.
 
-Status: planned (Oct 23); bucket 1 of 6 under way. Nothing built yet.
+Status: bucket 2 of 6 (the theory core) under way: today's Ouralia composer ported to Python, checked against the C.
 
 ## The idea
 
@@ -14,6 +14,15 @@ the computer, and a small version distilled from it runs on the phone.
 
 `PLAN.md` holds the goal, DadCraft's decisions and the buckets (checked off as they're done).
 `docs/research.md`: what other music AI projects teach us. `docs/dadcraft-brief.md`: how DadCraft wants it run.
+
+## Running it
+
+    python3 -m venv .venv && .venv/bin/pip install -e '.[test]'
+    .venv/bin/python -m pytest -q          # unit tests; parity with Ouralia's composer when ../Ouralia is built
+    python3 tools/sync_check.py            # is the port in step with Ouralia's dcs_composer.c?
+
+The parity test needs Ouralia beside this repo (or `MAESTRO_OURALIA`), with its test build: `tools/build_libpd.sh`
+and `make -C dcs` there. It only reads Ouralia, never changes it.
 
 ## License
 
