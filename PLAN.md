@@ -33,6 +33,7 @@ band member play, the way its style plays it?
    conflicts with Ouralia's GPL), released as CC BY-SA 4.0. NC data (Ouralia won't be sold, so it's allowed) is for
    PC-side work only: experiments, research, the style judge; models trained with it stay on the PC, under
    CC BY-NC-SA 4.0. Never train on Lakh-style fan MIDI of copyrighted songs, or use weights trained on it (ideas only).
+   Music made by other AI models is ideas only too (DadCraft, Oct 23: "lets stay legally safe").
 10. **Licenses:** code GPL-3.0-or-later (like Ouralia); docs and the style book CC BY-SA 4.0 (README "License").
 8. **The phone version is small** (target: tens of MB, around MIDI-GPT's ~20M parameters), shrunk from the PC model.
 9. **Free to drift, always making sense.** Maestro is never locked to fixed patterns: styles are written as
@@ -78,7 +79,10 @@ A tested PC library: keys, chords, voice leading, rhythm, form.
 ### 3. Style book (draft)
 For each chosen style, how each member plays it, written from sources.
 - [ ] 3.0 Plan approved (incl. what a style entry holds: tempo, swing, grid, chord vocabulary, register, default
-      sound, all as tendencies and ranges with many variants, never a few fixed patterns: decision 9).
+      sound, all as tendencies and ranges with many variants, never a few fixed patterns: decision 9). Styles with no
+      open data for a member (`docs/data.md` "Coverage and gaps") get that member's theory written out in full,
+      since practice MIDI made from it is their main training data (DadCraft, Oct 23). Check open textbooks as
+      sources (e.g. Open Music Theory, license to check).
 - [ ] 3.1 A PC clip player, so DadCraft can hear MIDI clips.
 - [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
 - [ ] 3.3 One task per style (list them here after 1.4).
@@ -123,3 +127,5 @@ Trained on this PC (RTX 2070, 8 GB).
 - Oct 23: 1.2 done (`docs/data.md`, `CREDITS.md`). Drums are covered across many styles (GMD, E-GMD); bass, pad and
   melody have no open data in any modern style, so the style book and transcribed open audio fill them. Two
   questions for DadCraft in `data.md` (synthetic AI music as data; programmatic drum loops).
+- Oct 23: DadCraft's data answers: AI-made music is ideas only (added to decision 7); the WaivOps drum loops are in;
+  the gap styles get their own theory per member in the style book, which drives their practice MIDI (3.0, 4.2).

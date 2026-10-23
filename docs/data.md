@@ -37,9 +37,9 @@ A recording has two rights: the composition and the recording. Both must be open
 | FMA (Free Music Archive) | metadata CC BY 4.0; audio per track (the artist's choice) | per track: CC0 and CC BY are SAFE, BY-NC is NC, ND is OUT | small 7.2 GiB, medium 22, large 93, full 879 GiB; 106,574 tracks, 161 genres | MP3, CSV | modern: electronic, hip hop, rock, pop, experimental... | **best modern candidate**; filter by each track's license (confirm the column in 4.1) |
 | SoundSafari Public-Domain-Music (HF) | tagged CC0, no dataset card | CHECK | ~5,180 MP3s | MP3 | mixed, said to come from FMA | check each track against FMA's own license before use |
 | MTG-Jamendo | metadata CC BY-NC-SA 4.0; audio per track; "solely for non-commercial research" | NC | 55K+ tracks, 195 tags; 156–508 GB | MP3, TSV | modern, many genres, instrument tags | PC only (the style judge, research) |
-| WaivOps HH-TRP | CC BY 4.0 | SAFE | 15,000 loops, 55 h, 22.3 GB | WAV + JSON labels | trap: drill, trapsoul, cloud rap, emo rap | candidate for trap drums (made by a program, not humans; MIDI not published) |
-| WaivOps EDM-TR8 | CC BY 4.0 | SAFE | 3,790 loops, 9 h, 4.4 GB | WAV, BPM labels | EDM, TR-808 | candidate for EDM drums (made by a program) |
-| WaivOps RTRO-DRM | CC BY 4.0 | SAFE | 2,138 clips | WAV | 1980s electronic (synthwave drums) | candidate (made by a program) |
+| WaivOps HH-TRP | CC BY 4.0 | SAFE | 15,000 loops, 55 h, 22.3 GB | WAV + JSON labels | trap: drill, trapsoul, cloud rap, emo rap | **chosen** (DadCraft), trap drums (made by a program, not humans; MIDI not published) |
+| WaivOps EDM-TR8 | CC BY 4.0 | SAFE | 3,790 loops, 9 h, 4.4 GB | WAV, BPM labels | EDM, TR-808 | **chosen**, EDM drums (made by a program) |
+| WaivOps RTRO-DRM | CC BY 4.0 | SAFE | 2,138 clips | WAV | 1980s electronic (synthwave drums) | **chosen**, synthwave drums (made by a program) |
 | Freesound | per file: CC0, CC BY, CC BY-NC | per file | huge | WAV etc., API filter by license | modern loops and stems, all kinds | candidate: CC0 and CC BY loops via the API |
 | ccMixter | per track, many NC | per track | | MP3, stems | modern, beat-driven | candidate, per track |
 | Musopen | per recording, many public domain | per track | | MP3/FLAC | classical | low priority (PDMX already has classical scores) |
@@ -48,7 +48,7 @@ A recording has two rights: the composition and the recording. Both must be open
 | MusicCaps | captions CC BY-SA 4.0; audio is YouTube clips (copyrighted) | OUT | 5,521 clips | captions only | all kinds | not "public domain" as `music-info.md` says; no audio to train on |
 
 Other tools: **MusicBrainz** (CC0 metadata, no music) can check dates and credits. **Synthetic music from an AI model**
-(e.g. ACE-Step output) is an open question, see below.
+(e.g. ACE-Step output) is OUT, ideas only (DadCraft, below).
 
 ## Coverage and gaps
 
@@ -68,19 +68,23 @@ Other tools: **MusicBrainz** (CC0 metadata, no music) can check dates and credit
 **The big gap:** no open symbolic data exists for bass, pad or melody in any modern or popular style. Every large
 MIDI set of pop music is fan MIDI or transcriptions of copyrighted songs (OUT). Drums are the only member covered
 across many styles. The gaps are filled by:
-1. **The style book** (bucket 3) and its practice MIDI (4.2): written from sources, labeled, ours (SAFE).
+1. **The style book** (bucket 3) and its practice MIDI (4.2): each gap style's own theory, per member, written from
+   sources, labeled, ours (SAFE). See DadCraft's answer 3 below.
 2. **Open audio turned into MIDI** (4.3): the FMA CC0 and CC BY tracks (electronic, hip hop, rock), CC0 and CC BY
    Freesound and ccMixter loops, transcribed with Demucs → Basic Pitch → Beat This!.
 3. **Theory and harmony** from PDMX and IMSLP, which carry over to every style (bucket 2).
 
 Salsa and afrobeat have the least modern open audio. Expect them to lean most on the style book.
 
-## Questions for DadCraft
+## DadCraft's answers (Oct 23)
 
-1. **Synthetic music from other AI models** (e.g. ACE-Step output) as training data: their own training data is
-   unknown, so the spirit of decision 7 says no. Proposed: OUT, ideas only.
-2. **Programmatic drum loops** (WaivOps): CC BY, but made by a program, and where its patterns came from isn't
-   stated. Proposed: SAFE by license, but only as a supplement to GMD's human drumming, credited.
+1. **Synthetic music from other AI models** (e.g. ACE-Step output): **OUT, ideas only** ("lets stay legally safe").
+2. **Programmatic drum loops** (WaivOps HH-TRP, EDM-TR8, RTRO-DRM): **yes**, SAFE, as a supplement to GMD's human
+   drumming, credited in `CREDITS.md`.
+3. **Theory fills the gaps** (his idea): for each gap style, the style book writes down that style's own theory, per
+   member (its rhythms, bass lines, chord habits, voicings, melody shapes, form and production habits that affect the
+   notes), from written sources. Practice MIDI made from it (4.2) is then the main training data for those members.
+   Describing a style's conventions is ideas, not copying anyone's song, so it stays SAFE.
 
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd

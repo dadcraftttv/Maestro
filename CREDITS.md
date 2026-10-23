@@ -16,6 +16,9 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
   Symbolic Music Processing", ICASSP 2025. https://zenodo.org/records/15571083
 - **imslp-midi-cc0-1.0**, compiled by TiMauzi from IMSLP, CC0 1.0 (no attribution required; credited with thanks).
   https://huggingface.co/datasets/TiMauzi/imslp-midi-cc0-1.0
+- **WaivOps HH-TRP, EDM-TR8 and RTRO-DRM**, by Patchbanks / WaivOps, CC BY 4.0.
+  https://zenodo.org/records/15734094 · https://zenodo.org/records/13257814 (RTRO-DRM: Zenodo record to add on
+  download)
 
 ## Non-commercial (PC only, never in the phone model)
 
