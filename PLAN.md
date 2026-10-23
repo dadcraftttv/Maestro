@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.0 (the plan).
+**Next:** Bucket 2, task 2.1 (skeleton and port).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -47,6 +47,10 @@ band member play, the way its style plays it?
     more roles, planned from the style book on: **rhythm guitar** (power rock), **keys** (salsa's montuno piano),
     **horns** (salsa) and **percussion** (congas, timbales, cowbell, clave; its own member, apart from the kit).
     Ouralia gets a sound for each in bucket 6.
+12. **Ouralia goes its own way until Maestro is ready** (DadCraft, Oct 23). Ouralia keeps developing on its own;
+    Maestro never changes it in buckets 2–5. Integration happens on a separate Ouralia + Maestro dev path that
+    DadCraft tests privately or with beta testers, and it goes into Ouralia proper only when he deems it ready.
+    So Maestro follows a moving `dcs_composer`: the sync check and the parity test (bucket 2) catch every change.
 
 ## How each bucket runs
 
@@ -71,14 +75,35 @@ Plan approved Oct 23.
       synthwave, salsa, power rock.
 - [x] Checkpoint 1: DadCraft reads the summary of `data.md` and `format.md`.
 
-### 2. Theory core (draft)
-A tested PC library: keys, chords, voice leading, rhythm, form.
-- [ ] 2.0 Plan approved (incl. language and layout, and how it stays in step with the C composer).
-- [ ] 2.1 Keys, scales, chords and their functions.
-- [ ] 2.2 Voice leading.
-- [ ] 2.3 Rhythm and meter; form, sections and energy; how a long play evolves (decision 9).
-- [ ] 2.4 A theory exam (our own, after MusicTheoryBench) and choices explained in plain words.
-- [ ] 2.5 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets.
+### 2. Theory core
+A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_composer` (decision 1).
+- [x] 2.0 Plan approved Oct 23. **Language:** Python 3.12 (buckets 4–5 are Python; Ouralia's tests already drive
+      the C composer from Python via `tools/pdtest`); the guardrail rules get a C port in 6.2, checked against the
+      same test cases. Deps: pytest, mido (MIT); no music21. **Layout:** `pyproject.toml`; `maestro/`
+      (`data/composer.json`: the composer's tables with the Ouralia commit they came from; `rng.py`: seeded
+      randomness incl. the composer's LCG; `port.py`: today's composer; `theory/` `pitch` `chords` `voicing`
+      `rhythm` `form`; `explain.py`); `tests/` (unit, `exam/`, `parity/`); `tools/` (`sync_check.py`, `drift.py`).
+      Each rule module has a **check** (rules out what doesn't fit, with the reason) and a **choose** (picks among
+      what's left, seeded): rules never say what to play (decision 9). **In step with C:** `sync_check.py` diffs
+      `composer.json` against `dcs_composer.c` at Ouralia's current commit (start of each bucket, and whenever
+      Ouralia's composer changes: decision 12); the **parity test** runs `port.py` and the real C composer (through
+      Ouralia's test engine, read-only, its built lib) on the same seeds and needs the same chords and sections.
+      Maestro's additions sit on top and can be switched off, so today's composer stays a mode to compare against.
+      Changes Maestro would want in C are listed in `docs/format.md` for bucket 6.
+- [ ] 2.1 Skeleton and port: the package and tests, `composer.json` and the sync check, today's composer in Python
+      (chords, cadences, phrase variation, sections and their memory, voicing, bass) passing the parity test.
+- [ ] 2.2 Keys, scales, chords and their functions: more scales (Phrygian, harmonic minor...), diminished,
+      sevenths, borrowed and secondary chords, names and roman numerals, function (home, away, tension); what the
+      four styles need (trap's dark minor, synthwave's borrowed chords, salsa's ii–V and montuno, rock's power
+      chords and bVII).
+- [ ] 2.3 Voice leading: smooth moves, a range per member (new roles too, decision 11), the melody on top
+      (`docs/taste.md`); parallels and the like as tendencies a style sets, not bans.
+- [ ] 2.4 Rhythm and meter: the 12-step grid, meters past 4/4, half-time, clave, swing and feel per member.
+- [ ] 2.5 Form, sections and energy; how a long play evolves over ~20 minutes (energy arc, key changes, motifs that
+      develop: decision 9).
+- [ ] 2.6 A theory exam (our own, after MusicTheoryBench, no copied questions) with a score, and choices explained
+      in plain words.
+- [ ] 2.7 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets.
 - [ ] Checkpoint 2: DadCraft spot-checks the explained choices.
 
 ### 3. Style book (draft)
@@ -117,13 +142,17 @@ Trained on this PC (RTX 2070, 8 GB).
 - [ ] Checkpoint 5: its parts next to the rule ones, by ear (can DadCraft tell which is which?); long plays.
 
 ### 6. Into Ouralia (draft)
-- [ ] 6.0 Plan approved (follows Ouralia's CLAUDE.md).
+- [ ] 6.0 Plan approved (follows Ouralia's CLAUDE.md). The separate dev path (decision 12): e.g. a long-lived
+      Ouralia branch kept up to date with main, and a beta build that installs beside the release; to settle here.
+      The C side gets its tables from a header generated from `composer.json` (one source).
 - [ ] 6.1 Shrink the model for the phone; measure CPU and battery.
 - [ ] 6.2 `dcs_composer` gains a style and a sound per member, swappable; rules as guardrails; the new roles
       (decision 11) get members and kits in Ouralia.
 - [ ] 6.3 The drift measures on the phone (fresh seed each play; the patch's Pd `[random]`s and `expr random` are
       unseeded today, so they repeat after each app start: `docs/format.md`).
-- [ ] Checkpoint 6: trap drums with a synthwave bassist, on the phone; off and on again gives a new evolution.
+- [ ] Checkpoint 6: trap drums with a synthwave bassist, on the phone (beta build); off and on again gives a new
+      evolution.
+- [ ] 6.4 DadCraft (and beta testers) play the beta; it goes into Ouralia proper only when DadCraft deems it ready.
 
 ## Verdicts and notes
 - Oct 23: research rounds 1 and 2 done (`docs/research.md`).
@@ -154,3 +183,7 @@ Trained on this PC (RTX 2070, 8 GB).
   Knowledge Base. Their musical lessons are in `docs/taste.md`, as ideas only (AI audio, copyrighted compositions):
   one style leads and others season it; far-apart styles stay in separate members; some styles fight some moods;
   the melody must stay on top. The logs themselves stay private, out of the repo.
+- Oct 23: 2.0 done, bucket 2 plan approved. DadCraft: Python for the PC core with the guardrails ported to C in
+  bucket 6 (yes); Maestro grows from `dcs_composer` through an exact port with a parity test (yes); rhythm and form
+  split into 2.4 and 2.5 (yes). New decision 12: Ouralia keeps its own development; Maestro integrates on a separate
+  dev path tested privately or with beta testers, released into Ouralia proper only when he's good with it.
