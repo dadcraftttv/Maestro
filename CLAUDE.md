@@ -1,7 +1,7 @@
 # Maestro — notes for Claude Code
 
 Maestro is the music brain for Ouralia (see `README.md`). Owner: **DadCraft**: always call him that, in files,
-commits and replies; never a real name. Not on GitHub yet: ask DadCraft before pushing.
+commits and replies; never a real name. Public on GitHub: dadcraftttv/Maestro (since Oct 23).
 
 ## Start of every session
 1. Read `PLAN.md`: the goal, DadCraft's decisions, the buckets and the **Next** line. It is the only status file.
