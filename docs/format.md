@@ -1,6 +1,6 @@
 # Maestro's format
 
-Two parts: what Ouralia has today (task 1.1), then Maestro's own format (task 1.3, to come).
+Two parts: what Ouralia has today (task 1.1), then Maestro's own format (task 1.3).
 
 ## Today in Ouralia
 
@@ -86,3 +86,123 @@ own (`rhythm.py`: mel, bass, pad, drums). The composer gives each of them rules-
 - Parts as scale steps or semitones from the key, a bar at a time (drums, walking notes, cell) or per note (melody).
 - Missing: meter other than 4/4, triplet/swing grids in the composer, a style per part, a part's register and
   density as controls (today they come from the section and the drive).
+
+## Maestro's format
+
+Written Oct 23 (task 1.3). One shared timeline for the whole band, one part per member, controls per member, and the
+sound kept out of it. It grows from the composer's own picture (above), so `dcs_composer` can speak it in bucket 6.
+
+### MidiTok (checked Oct 23)
+- **What:** Python library that turns MIDI into tokens for models and back (github.com/Natooz/MidiTok). v3.1.0,
+  Sep 30 2026, actively kept up. Python ≥3.10; needs numpy, symusic (MIT), Hugging Face `tokenizers` and
+  `huggingface_hub`.
+- **License:** MIT (symusic too). Works with our GPL-3.0-or-later code; keep its notice when we ship it.
+- **Tokenizers:** REMI, TSD, MIDI-Like, Structured, CPWord, Octuple, MuMIDI, PerTok, BEAT, and **MMM**: the
+  Multitrack Music Machine layout that MIDI-GPT uses (research.md). In MMM each track is its own run of tokens and
+  the runs are joined; `Bar_Fill` marks bars to rewrite, so one member (or a few bars of it) can be redone with the
+  others kept.
+- **Built-in controls** ("attribute controls", per track or per bar): note density, polyphony, note length, pitch
+  classes, repetition. More can be added (`add_attribute_control`), and new tokens too (`add_to_vocab`).
+- **Also:** tempo and time-signature tokens, a beat grid set per range (`beat_res`, so 16ths and triplets), drums
+  as their own track, BPE to shorten sequences.
+- **Where it doesn't fit 1.1, and what we do:**
+  - Its chord tokens are *guessed* from the notes. Ours are *given* by the composer (degree, colour), so chords are
+    our own timeline tokens.
+  - MMM only reads tempo and key back from the first track. The timeline is its own run, written once, not per
+    track (research.md said the same).
+  - No style, section, energy or register: our own tokens on top.
+  - Pitches are absolute MIDI notes; the composer thinks from the key note. We shift every piece to the key before
+    tokenizing (below).
+- **Verdict:** use MidiTok's MMM as the base for tokens (task 4.4), with our timeline and controls added. Our own
+  file format (below) stays the source of truth, so we aren't tied to MidiTok.
+
+### The song file
+One clip or song = a standard **MIDI file** (the notes, tempo, meter; one track per member, the track named after
+its member) plus a **JSON file** beside it with everything MIDI can't hold: the timeline, the members' controls,
+where it came from and its license. MIDI keeps the clips playable in any player (task 3.1); the JSON keeps the
+labels readable. Ticks: 480 a beat.
+
+```json
+{
+  "source": {"set": "groove-midi", "license": "CC BY 4.0", "commercial_safe": true, "seed": 81723},
+  "timeline": [
+    {"bar": 0, "tempo": 92, "meter": "4/4", "key": 9, "scale": "minor",
+     "chord": {"root": 0, "quality": "min", "color": null, "bass": 0},
+     "section": {"kind": "home", "bar": 0, "phrase_bar": 0, "cadence": false},
+     "energy": 0.4, "brightness": 0.5}
+  ],
+  "members": {
+    "drums": {"role": "drums", "style": {"trap": 1.0}, "strength": 0.9, "density": 0.6, "swing": 0.1},
+    "bass":  {"role": "bass", "style": {"synthwave": 0.7, "trap": 0.3}, "strength": 0.7,
+              "density": 0.4, "register": [28, 48]}
+  },
+  "sound": {"drums": "808", "bass": "analog-saw"}
+}
+```
+
+### The timeline (shared by the whole band)
+A list of changes, each from a bar (or a beat in that bar); anything not given carries on from before.
+- **Tempo:** BPM. In data, from the file; in Ouralia, from the walking clock as today.
+- **Meter:** `4/4` first; `3/4`, `6/8`, `12/8` allowed (salsa and afrobeat lean on 12/8 feels). Today's composer is
+  4/4 only.
+- **Grid:** 12 steps a beat, so both 16ths (every 3rd step) and triplets (every 4th) land on it; today's `tick16`
+  is steps 0, 3, 6 ... of each beat. Notes in the MIDI keep their exact ticks; the grid is what tokens round to.
+- **Key:** root 0–11 (C = 0) and **scale**: the composer's 8 (major, minor, major and minor pentatonic, dorian,
+  mixolydian, lydian, whole tone) and room to add more (harmonic minor, phrygian, blues: theory core, bucket 2).
+- **Chord:** **root** in semitones from the key note, **quality** (maj, min, dim, aug, sus2, sus4, power), **colour**
+  (7, maj7, add9, 9 ... or none) and **bass** note (semitones from the key; an inversion or pedal when it isn't the
+  root). The scale degree follows from the root when the chord is in the scale; a root outside it is a borrowed
+  chord, which real music has and the composer doesn't make yet.
+- **Section:** **kind** (home, lift, calm, turn: the composer's four; data gets the closest one: verse ≈ home,
+  chorus or drop ≈ lift, breakdown ≈ calm, bridge ≈ turn), the bar within the section and within the 4-bar phrase,
+  and whether this bar is a cadence.
+- **Energy** 0–1 (the room's intensity today), and **brightness** 0–1 (the room). Both lean every member.
+
+### The members (one part each)
+- **Role:** what the member is for: drums, bass, pad (chords), melody (lead), arp (walking notes, today's `arp`).
+  More roles later from the style book (horns, guitar, keys comping, percussion). A role is the job, not the sound.
+- **Notes:** start (ticks), length, pitch, velocity.
+  - Pitch: MIDI note numbers in the file; for tokens, shifted so the key note is C (pitch − key root), the way the
+    composer sends semitones from the key note and the patch adds the key back. A part learned in one key fits all
+    twelve.
+  - Drums: one track with General MIDI drum notes, grouped in lanes: kick, snare, clap, closed hat, open hat, toms,
+    crash/ride, percussion. Today's three lanes are kick, snare and hat (open hat as velocity + 2).
+- **Controls** (per member, per section or per bar; each optional, so a member can be left free):
+  - **style:** weights over styles, adding to 1 (`{"trap": 1.0}` is full trap; a blend is decision 4).
+  - **strength:** how strongly the style shows, 0–1 (0 = plain, the theory rules alone; the dropout knob, 5.3).
+  - **density:** notes a bar, 0–1 (MidiTok's density control, binned).
+  - **register:** lowest and highest note it should use.
+  - **polyphony** (pad, keys: notes at once), **note length**, **swing/feel** (how late the off-beats are).
+  - **repetition:** how much it repeats the bars before versus moves on (MidiTok's repetition control); with the
+    seed it is how decision 9 gets measured and steered.
+- **Sound is not here.** Each member's sound is a name in `sound` (an Ouralia kit), never in the notes or tokens,
+  so the model never learns it and it can be swapped freely (decision 3). A style's usual sound lives in its style
+  book entry (bucket 3). From data, a MIDI program only tells us the role (GM 32–39 → bass and so on).
+
+### Tokens (for the model, bucket 4)
+MidiTok MMM, laid out as: the timeline run (per bar: tempo, meter, key, scale, chord, section, energy), then one
+run per member, each opened with its role and controls (`Style_trap_10`, `Strength_9`, `Density_6`, `Register_..`,
+weights and levels binned), then its bars of notes on the 12-step grid. Drums last. `Bar_Fill` asks the model to
+write one member's bars seeing the timeline and the other members, which is how each member is "written seeing the
+others" (5.1). Commercial-safe and NC data are tokenized into separate sets (decision 7).
+
+### Seeds and drift (decision 9)
+Every generated play stores its **seed** (in `source`). Tests and the drift measures replay a seed; the app never
+does: each play draws a fresh one, as the composer already does.
+
+### From today's composer to this format
+| `dcs_composer` today | Maestro's format |
+|---|---|
+| key outside it (`mu_key_root`) | timeline key |
+| `scale <0-7>` | timeline scale (same 8, more later) |
+| chord degree + colour + voicing | chord root/quality/colour/bass; the voicing is the pad member's notes |
+| bass list (root or home note) | bass member's notes |
+| section kind + `KIND_*` tables | section kind; the tables become style and control defaults |
+| drive, `intensity` | energy, and each member's density |
+| `KIND_REG` (melody register) | melody member's register control |
+| melody motif statements, `cell` | melody member's notes (motif logic stays in the theory core, bucket 2) |
+| `drums` 3 lanes × 16 | drums member, more lanes, 12-step grid |
+| `tick16`, 4/4 | 12-step grid; 4/4 plus other meters |
+| swing in the drum engine | swing/feel control per member |
+| `rnd` seeded from the clock | seed stored per play |
+| no style | style, strength per member |

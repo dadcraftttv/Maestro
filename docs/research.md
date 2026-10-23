@@ -40,7 +40,7 @@ noted). Ideas only: check a license before using any code, weights or data. "→
 | FMA (CC0 subset), MTG-Jamendo, Musopen, Citizen DJ, Great 78 | per track | Open audio to transcribe → B4. See `music-info.md` |
 | imslp-midi-cc0 | CC0 | ~1,100 MIDI, mostly classical |
 | Lakh MIDI | fan MIDI of copyrighted songs | Not for training (decision 7) |
-| MidiTok | to check | MIDI ↔ tokens (REMI and others); keep tempo in the shared timeline, not per track → B1 |
+| MidiTok | MIT (checked Oct 23) | MIDI ↔ tokens; its MMM layout (MIDI-GPT's) is our token base, timeline and controls added: `docs/format.md` |
 | Basic Pitch (Spotify) | Apache 2.0 | Audio → MIDI, ~17k params, best one instrument at a time → B4 |
 | Demucs | to check | Split audio into stems before transcribing → B4 |
 | Beat This! | MIT (secondary sources) | Beats and downbeats; avoid madmom's non-commercial beat step → B4 |

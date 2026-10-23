@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 1, task 1.3.
+**Next:** Bucket 1, task 1.4.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -60,7 +60,7 @@ Plan approved Oct 23.
 - [x] 1.2 Data audit into `docs/data.md`: every candidate set with license, NC/commercial-safe tag, size, format and
       the styles and members it covers; mark the gaps. Start from `docs/research.md` and `docs/music-info.md`.
       Start `CREDITS.md` with the attribution each chosen set requires.
-- [ ] 1.3 Check MidiTok (license, tokens, fit with 1.1) and write Maestro's format into `docs/format.md`: one shared
+- [x] 1.3 Check MidiTok (license, tokens, fit with 1.1) and write Maestro's format into `docs/format.md`: one shared
       timeline (tempo, meter, key, chord, section, energy), one part per member, controls per member (style vector,
       density, register...), sound kept separate.
 - [ ] 1.4 With DadCraft: pick the first 3–4 far-apart styles, from what the data covers.
@@ -130,3 +130,6 @@ Trained on this PC (RTX 2070, 8 GB).
   questions for DadCraft in `data.md` (synthetic AI music as data; programmatic drum loops).
 - Oct 23: DadCraft's data answers: AI-made music is ideas only (added to decision 7); the WaivOps drum loops are in;
   the gap styles get their own theory per member in the style book, which drives their practice MIDI (3.0, 4.2).
+- Oct 23: 1.3 done (`docs/format.md` "Maestro's format"). MidiTok is MIT; its MMM layout is the token base. A song
+  is a MIDI file plus a JSON beside it (timeline, member controls, sound, license, seed); pitches shifted to the key
+  for tokens; a 12-step beat grid (16ths and triplets); sound never in the tokens. For DadCraft at checkpoint 1.
