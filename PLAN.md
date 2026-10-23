@@ -33,6 +33,13 @@ band member play, the way its style plays it?
    model can be retrained on commercial-safe data alone. A model trained on NC-SA data is published under that license.
    Never train on Lakh-style fan MIDI of copyrighted songs, or use weights trained on it (ideas only).
 8. **The phone version is small** (target: tens of MB, around MIDI-GPT's ~20M parameters), shrunk from the PC model.
+9. **Free to drift, always making sense.** Maestro is never locked to fixed patterns: styles are written as
+   tendencies and ranges, the model makes fresh choices each bar, and the rules only rule out what doesn't fit, never
+   say what to play. Compositions evolve over a long play (key, energy, density, how strongly each style shows,
+   motifs that develop). **No two plays are alike:** turn Ouralia off and on with the same settings and the
+   evolution is a new one. The same key and scale share notes, but the music is never identical run to run (a fresh
+   random seed each play; no replaying a stored path). Measured before DadCraft listens: staleness within a play
+   (how often bars and phrases repeat over ~20 minutes) and sameness between plays (two runs, same settings).
 
 ## How each bucket runs
 
@@ -45,7 +52,8 @@ added to the list above.
 ### 1. Groundwork — IN PROGRESS
 Plan approved Oct 23.
 - [ ] 1.1 Read how `dcs_composer` (Ouralia `app/src/main/cpp/`, grep it) represents key, scale, chords, sections,
-      parts and timing. Write what exists into `docs/format.md` ("Today in Ouralia").
+      parts and timing, and where its randomness comes from (how it seeds, whether two plays can repeat). Write what
+      exists into `docs/format.md` ("Today in Ouralia").
 - [ ] 1.2 Data audit into `docs/data.md`: every candidate set with license, NC/commercial-safe tag, size, format and
       the styles and members it covers; mark the gaps. Start from `docs/research.md` and `docs/music-info.md`.
 - [ ] 1.3 Check MidiTok (license, tokens, fit with 1.1) and write Maestro's format into `docs/format.md`: one shared
@@ -59,19 +67,21 @@ A tested PC library: keys, chords, voice leading, rhythm, form.
 - [ ] 2.0 Plan approved (incl. language and layout, and how it stays in step with the C composer).
 - [ ] 2.1 Keys, scales, chords and their functions.
 - [ ] 2.2 Voice leading.
-- [ ] 2.3 Rhythm and meter; form, sections and energy.
+- [ ] 2.3 Rhythm and meter; form, sections and energy; how a long play evolves (decision 9).
 - [ ] 2.4 A theory exam (our own, after MusicTheoryBench) and choices explained in plain words.
+- [ ] 2.5 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets.
 - [ ] Checkpoint 2: DadCraft spot-checks the explained choices.
 
 ### 3. Style book (draft)
 For each chosen style, how each member plays it, written from sources.
-- [ ] 3.0 Plan approved (incl. what a style entry holds: tempo, swing, grid, patterns, chord vocabulary, register,
-      default sound).
+- [ ] 3.0 Plan approved (incl. what a style entry holds: tempo, swing, grid, chord vocabulary, register, default
+      sound, all as tendencies and ranges with many variants, never a few fixed patterns: decision 9).
 - [ ] 3.1 A PC clip player, so DadCraft can hear MIDI clips.
 - [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
 - [ ] 3.3 One task per style (list them here after 1.4).
 - [ ] 3.4 The style judge (CLaMP 3, license checked) scores the clips first.
-- [ ] Checkpoint 3: each member in each style, by ear.
+- [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
+      drift measures passed first.
 
 ### 4. Training data (draft)
 - [ ] 4.0 Plan approved.
@@ -88,13 +98,17 @@ Trained on this PC (RTX 2070, 8 GB).
 - [ ] 5.2 Compare a GETMusic-style model; keep the better one.
 - [ ] 5.3 Style dropout for the "how much style" knob; style blends.
 - [ ] 5.4 Learn broadly, then specialize per style; improve against the judge (NotaGen's CLaMP-DPO idea).
-- [ ] Checkpoint 5: its parts next to the rule ones, by ear (can DadCraft tell which is which?).
+- [ ] 5.5 The drift measures on the model: within a play and between plays; check it doesn't copy its training data.
+- [ ] Checkpoint 5: its parts next to the rule ones, by ear (can DadCraft tell which is which?); long plays.
 
 ### 6. Into Ouralia (draft)
 - [ ] 6.0 Plan approved (follows Ouralia's CLAUDE.md).
 - [ ] 6.1 Shrink the model for the phone; measure CPU and battery.
 - [ ] 6.2 `dcs_composer` gains a style and a sound per member, swappable; rules as guardrails.
-- [ ] Checkpoint 6: trap drums with a synthwave bassist, on the phone.
+- [ ] 6.3 The drift measures on the phone (fresh seed each play).
+- [ ] Checkpoint 6: trap drums with a synthwave bassist, on the phone; off and on again gives a new evolution.
 
 ## Verdicts and notes
 - Oct 23: research rounds 1 and 2 done (`docs/research.md`).
+- Oct 23: decision 9 added (DadCraft: compositions evolve as they go on, and never the same evolution from play to
+  play; same key and scale share notes, but never identical run to run).
