@@ -198,3 +198,6 @@ Trained on this PC (RTX 2070, 8 GB).
   vocabulary check that gives its reason and a seeded choose; `two_five` for salsa). Tests cover what the four styles
   need (phrygian bII and harmonic minor V, synthwave's bVI bVII iv, salsa's ii-V and secondary ii-Vs, rock's power
   chords and bVII).
+- Oct 23: DadCraft approved both 2.2 choices: roman numerals count from the tonic's major scale (A minor reads i ii°
+  bIII iv v bVI bVII; bVII the same in every key), and the functions (tension: V, vii°, secondaries, phrygian's bII;
+  softer homes: vi, iii, the relative major; away: bVII and minor v).
