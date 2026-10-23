@@ -88,7 +88,8 @@ For each chosen style, how each member plays it, written from sources.
       open data for a member (`docs/data.md` "Coverage and gaps") get that member's theory written out in full,
       since practice MIDI made from it is their main training data (DadCraft, Oct 23; the method and
       examples: `docs/data.md` "Filling the gaps with theory"). Each style's entry covers every role it uses,
-      the new ones too (decision 11). Check open textbooks as
+      the new ones too (decision 11). DadCraft's taste notes (`docs/taste.md`, from his production logs) are a
+      source for synthwave and the blends, and for checks before he listens. Check open textbooks as
       sources (e.g. Open Music Theory, license to check).
 - [ ] 3.1 A PC clip player, so DadCraft can hear MIDI clips.
 - [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
@@ -149,3 +150,7 @@ Trained on this PC (RTX 2070, 8 GB).
   book's practice MIDI plus transcribed open audio, as planned (recording our own parts was offered as a third
   source and declined for now; revisit if checkpoint 3 clips sound stiff); (2) plan the new roles now (decision 11);
   (3) the format stands as written.
+- Oct 23: DadCraft shared four production logs (synthwave covers of game music, made with Suno) and his Suno
+  Knowledge Base. Their musical lessons are in `docs/taste.md`, as ideas only (AI audio, copyrighted compositions):
+  one style leads and others season it; far-apart styles stay in separate members; some styles fight some moods;
+  the melody must stay on top. The logs themselves stay private, out of the repo.
