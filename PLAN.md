@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 1, task 1.4.
+**Next:** Bucket 1, checkpoint 1.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -63,7 +63,8 @@ Plan approved Oct 23.
 - [x] 1.3 Check MidiTok (license, tokens, fit with 1.1) and write Maestro's format into `docs/format.md`: one shared
       timeline (tempo, meter, key, chord, section, energy), one part per member, controls per member (style vector,
       density, register...), sound kept separate.
-- [ ] 1.4 With DadCraft: pick the first 3–4 far-apart styles, from what the data covers.
+- [x] 1.4 With DadCraft: pick the first 3–4 far-apart styles, from what the data covers. Picked: trap,
+      synthwave, salsa, power rock.
 - [ ] Checkpoint 1: DadCraft reads the summary of `data.md` and `format.md`.
 
 ### 2. Theory core (draft)
@@ -86,7 +87,7 @@ For each chosen style, how each member plays it, written from sources.
       sources (e.g. Open Music Theory, license to check).
 - [ ] 3.1 A PC clip player, so DadCraft can hear MIDI clips.
 - [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
-- [ ] 3.3 One task per style (list them here after 1.4).
+- [ ] 3.3 One task per style: 3.3a trap, 3.3b synthwave, 3.3c salsa, 3.3d power rock.
 - [ ] 3.4 The style judge (CLaMP 3, license checked) scores the clips first.
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first.
@@ -133,3 +134,8 @@ Trained on this PC (RTX 2070, 8 GB).
 - Oct 23: 1.3 done (`docs/format.md` "Maestro's format"). MidiTok is MIT; its MMM layout is the token base. A song
   is a MIDI file plus a JSON beside it (timeline, member controls, sound, license, seed); pitches shifted to the key
   for tokens; a 12-step beat grid (16ths and triplets); sound never in the tokens. For DadCraft at checkpoint 1.
+- Oct 23: 1.4 done. DadCraft picked the first four styles: **trap** (half-time, triplet hat rolls, 808 bass; HH-TRP
+  loops, FMA hip hop), **synthwave** (straight 8ths, arps, pads; RTRO-DRM, FMA electronic), **salsa** (clave,
+  tumbao, montuno; GMD latin drums, leans most on the style book) and **power rock** (human feel; GMD rock, FMA rock).
+  They differ in grid (triplet, straight, clave), feel (programmed vs human) and harmony. Ambient was the other
+  candidate for the fourth slot; DadCraft chose power rock.
