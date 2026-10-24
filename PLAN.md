@@ -222,6 +222,9 @@ For each chosen style, how each member plays it, written from sources.
       go, but absolutely a good first run." The drummer "sounds steady, not restless" (Oct 24).
 - [ ] 3.4 One task per style, each entry covering every role it uses: 3.4a trap, 3.4b synthwave, 3.4c salsa,
       3.4d power rock.
+      Before 3.4a (DadCraft, Oct 24): a closer look at trap's data and theory, in `docs/data.md` ("Trap, a closer
+      look"): no open trap MIDI anywhere, so trap's training data is the entry's practice MIDI and open audio turned
+      into MIDI; six proposals for the entry, for DadCraft to choose from in 3.4a's plan.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

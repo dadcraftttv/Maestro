@@ -207,6 +207,61 @@ then the practice MIDI made from the book (task 4.2), as planned in "Filling the
 - Most of the list is off-target (classical, early, folk, regional traditions): kept for Maestro's reader
   (DadCraft, Oct 24), each still under its own tag.
 
+## Trap, a closer look (Oct 24, before 3.4a)
+DadCraft: "a deep dive on anything we can use for training and/or theory on trap, if only to help inform how 3.4a
+goes." Searched GitHub, Hugging Face, Kaggle, Zenodo, Freesound, FMA, ccMixter, Music Theory Online, Open Music
+Theory and Wikipedia; licenses from each source's own page, contents from samples.
+
+**Training data.** No open trap MIDI exists: every trap MIDI set found is a commercial pack (royalty-free for
+songs, no dataset rights: OUT), fan MIDI (Lakh and its offspring, MidiCaps, Los Angeles MIDI: OUT, decision 7) or
+NC. What there is:
+
+| Source | License | Tag | What | Use |
+|---|---|---|---|---|
+| GMD hip hop | CC BY 4.0 | SAFE | human hip hop grooves | in use: trap's drummer at half time (3.3) |
+| WaivOps HH-TRP | CC BY 4.0 | SAFE | 15,000 trap drum loops, audio, made by a program | chosen: trap drums (bucket 4) |
+| Freesound, "trap 808" | per sound (CC0, CC BY, some NC) | SAFE when CC0 or CC BY | 183 CC0 sounds alone: 808 and snare one-shots, some 808 bass loops and whole beats | 808 lines via audio to MIDI (4.3); the CC0 one-shots as Ouralia's 808 and kit sounds (bucket 6) |
+| FMA hip hop (CC0 and CC BY tracks) | per track | SAFE when CC0 or CC BY | whole tracks | stems and Basic Pitch (4.3) |
+| ccMixter | per upload (BY or BY-NC) | per upload | stems and remixes; no CC BY trap stems turned up in the search | check upload by upload (4.1) |
+| Kukedlc/suno-ai-music-dataset (HF) | CC BY 4.0 (says) | ideas only | AI-made (Suno) tracks, some trap | not training data (decision 7: AI-made music is ideas only) |
+| Lo-Fi Hip Hop MIDIs (Kaggle) | CC0 (says) | - | 41 KB, source not stated, lo-fi not trap | not usable (unknown source) |
+| WaivOps Lo-Fi Chords | CC BY 4.0 | SAFE | 8,000 piano chord loops, audio, soul and retro | off-target for trap |
+| Selektaudio "free 808 MIDI" | the vendor says its patterns come from CC0, PD and CC BY recordings | CHECK | 808 MIDI patterns, behind an account | not usable unless the claim can be checked |
+
+So trap's training data will be mostly **practice MIDI from its style book entry** (4.2) and **open audio turned
+into MIDI** (4.3), with GMD and HH-TRP for drums: the entry written in 3.4a is what the model learns trap from.
+
+**Theory.** No open textbook covers trap (Open Music Theory's "Drumbeats" chapter may touch it; the page refused
+the fetch, to check in 3.4a). What we have, all as ideas in our own words:
+- **Wikipedia** (CC BY-SA 4.0): "Trap music", "Drill music", "Roland TR-808". Felt around 70 BPM, counted 140
+  (range about 100-176) in half time; hats in double and triple time; the snare (or clap) rigidly on beat 3;
+  808 kicks tuned with a long decay so they are the bass; dark drones, thin or thick, and cinematic synth strings,
+  brass, woodwinds and keys. Drill (Chicago, UK, Brooklyn): skippy, syncopated hats (UK: a sped-up tresillo),
+  808 slides, more syncopated drums, synth brass and bells.
+- **Ben Duinker, "Good Things Come in Threes: Triplet Flow in Recent Hip-Hop Music"** (Popular Music 38/3, 2019;
+  (c) Cambridge University Press, an accepted manuscript on McGill's repository): triplet flow (the beat divided in
+  three over a beat divided in two or four), in three kinds: mixed, phrasal, total; tied to trap's sparse, slow
+  beats. For Maestro (no vocals) the idea is for the melody: triplet figures over the straight 16ths.
+- **Kyle Adams, "On the Metrical Techniques of Flow in Rap Music"** (Music Theory Online 15/5, 2009; (c) the
+  author): where the accented and rhyming notes fall in the beat, and phrases running across the bar line
+  (enjambment). Ideas for the melody's phrasing.
+- **Mitchell Ohriner, "Flow: The Rhythmic Voice in Rap Music"** (Oxford, 2019): not read; mostly older rap.
+- **Producers' guides** (copyrighted, ideas only, weakest): harmony mostly static (one or two chords, often
+  harmonic minor or phrygian colours); the 808 often the only clear harmony, so mostly roots, with slides between
+  notes and octave jumps; a verse of 16 bars, a hook of 8-16; the 808 and kick drop out before a hook, and beat
+  switches, for drama.
+
+**What it suggests for 3.4a** (proposals for DadCraft):
+1. The 808 is trap's bass member: long notes placed with the kick, mostly roots (and fifths, octave jumps), some
+   sliding into the next note (a pitch bend in the PC clips; a glide in Ouralia, bucket 6).
+2. Harmony nearly static: loops of one or two chords (i, i-VI, i-bII), a chord every one or two bars.
+3. The melody: a short dark motif repeated and varied (bell, pluck, flute, piano), with triplet figures over the
+   straight grid (from triplet flow); a counter-melody optional.
+4. The hats change rate inside the bar (16ths, triplets, 32nds), not only in rolls at a phrase's end; open hats
+   as accents; the snare or clap fixed on 3.
+5. For 3.6 (layering): the 808 and kick dropping out before a hook, hat-only openings, a beat switch.
+6. Subgenres (drill, rage, trapsoul) later, as their own entries or as seasoning.
+
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd
 - PDMX: https://zenodo.org/records/15571083
@@ -214,6 +269,11 @@ then the practice MIDI made from the book (task 4.2), as planned in "Filling the
 - Aria-MIDI: https://huggingface.co/datasets/loubb/aria-midi
 - FMA: https://github.com/mdeff/fma · MTG-Jamendo: https://github.com/MTG/mtg-jamendo-dataset
 - SoundSafari: https://huggingface.co/datasets/SoundSafari/Public-Domain-Music
-- WaivOps HH-TRP: https://zenodo.org/records/15734094 · EDM-TR8: https://zenodo.org/records/13257814
+- WaivOps HH-TRP: https://zenodo.org/records/15734094 · EDM-TR8: https://zenodo.org/records/13257814 · Lo-Fi Chords:
+  https://zenodo.org/records/17819350
+- Trap, a closer look: https://en.wikipedia.org/wiki/Trap_music · https://en.wikipedia.org/wiki/Drill_music ·
+  https://en.wikipedia.org/wiki/Roland_TR-808 · Duinker: https://mcgill.scholaris.ca/items/808db999-6a28-48f9-9422-392946339f35 ·
+  Adams: https://mtosmt.org/issues/mto.09.15.5/mto.09.15.5.adams.php · Freesound: https://freesound.org ·
+  https://huggingface.co/datasets/Kukedlc/suno-ai-music-dataset · https://www.kaggle.com/datasets/zakarii/lofi-hip-hop-midi
 - GiantSteps: https://github.com/GiantSteps/drum-pattern-datasets
 - GigaMIDI: https://www.metacreation.net/projects/gigamidi-dataset
