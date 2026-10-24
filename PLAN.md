@@ -4,7 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, task 3.0 (the style book's plan), carrying Checkpoint 2's verdict (`docs/verdicts.md`).
+**Next:** Bucket 3, task 3.0a (the source sort), once DadCraft's lists are in `inbox/`; then 3.0 (the style book's
+plan), carrying Checkpoint 2's verdict (`docs/verdicts.md`).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -71,9 +72,15 @@ band member play, the way its style plays it?
     becomes the evolution of `dcs_composer`. **The reader is as good as it can be** (DadCraft, Oct 24): the best
     local models this PC can run, several working as a team (skim, extract, cross-check), and free API calls as an
     optional boost when online, for public sources only (Conductor's rule). Offline it does the whole job alone. **Every source is license-checked before it's fed** (decision 7 still
-    holds): DadCraft can hand them to Claude for the check (the source page and the copyright or license notice,
-    not the whole text). Free to read isn't always free to reuse; the check decides commercial-safe, NC (PC only)
-    or not usable.
+    holds). Free to read isn't always free to reuse; the check decides commercial-safe, NC (PC only) or not
+    usable. **Maestro does the check itself** (DadCraft, Oct 24): its reader only finds the notice (footer,
+    license or terms page, CC badge, SPDX tag, LICENSE file) and quotes it with where it was found; a fixed rules
+    table, not a model, maps the license to the tier (CC0, public domain, CC BY, CC BY-SA, MIT, GPL and the like:
+    commercial-safe; any NC: PC only; ND, all rights reserved, no notice, or anything not in the table: not
+    usable). When in doubt it refuses: a missing, vague or contradicting notice ("except where noted", third-party
+    content) leaves the source not usable until DadCraft looks, or hands it to Claude (the notice and the source
+    page, not the whole text). Each verdict shows on the desk page with the notice and the reason, and DadCraft can
+    overrule it. Until the desk exists, Claude applies the same table (3.0a).
 
 ## How each bucket runs
 
@@ -144,6 +151,14 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
 
 ### 3. Style book (draft)
 For each chosen style, how each member plays it, written from sources.
+- [ ] 3.0a Source sort (DadCraft, Oct 24): his lists go in `inbox/` (gitignored, nothing public until checked):
+      `theory-sites.txt` (one URL a line), `named-refs.txt` (sites known only by name; Claude finds the URLs),
+      `ai-systems.txt` (checked against `docs/research.md`). Claude writes the rules table (decision 14) as a data
+      file Maestro's desk reuses, then sorts every source by license, the styles and members it covers and the gap
+      it fills (`docs/data.md` "Coverage and gaps"), into: style book now (the few key sources for 3.x),
+      Maestro's reader later (most of them, bucket D), training data (bucket 4), or not usable. Licenses and
+      contents from small samples, not whole sites; sweeps to `librarian`, reviewed by Opus. New ideas from the AI
+      systems go to `docs/research.md` and come to DadCraft as proposals. Results in `docs/data.md`.
 - [ ] 3.0 Plan approved (incl. what a style entry holds: tempo, swing, grid, chord vocabulary, register, default
       sound, all as tendencies and ranges with many variants, never a few fixed patterns: decision 9). Styles with no
       open data for a member (`docs/data.md` "Coverage and gaps") get that member's theory written out in full,
@@ -176,7 +191,8 @@ A local web page on this PC where DadCraft teaches Maestro without Claude Code.
       what fits the RTX 2070's 8 GB plus 62 GB of RAM (mixture-of-experts models with part of the weights in RAM
       run well beyond the 8 GB), the speed. The converters, the page, and the free APIs for the online boost.
 - [ ] D.1 Converters: any document to text, locally (PDF, DOCX, EPUB, web pages, Markdown, text; OCR for scans).
-      Each source recorded with its license and tier (decision 14) before it's read.
+      Each source recorded with its license and tier (decision 14) before it's read: the notice finder (quotes
+      the notice and where it was found) and the rules table from 3.0a; not usable unless the table says otherwise.
 - [ ] D.2 The reader, as a team of local models: a fast one sorts each part of a document (useful for music or
       not, which style and member), a stronger one writes the proposals, a second one cross-checks them against the
       passage; online, free APIs can add a vote. It reads every part, proposes style book changes in the data format of 3.1 with

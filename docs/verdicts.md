@@ -175,3 +175,7 @@ isn't reloaded every session; grep for the part a task needs.
   onsets, and a melody shaped over a phrase; (2) the melody is judged on long clips at checkpoint 3; (3) the
   per-bar explanation is too dense to listen against: a checkpoint needs a short summary per clip in plain words
   (the detailed one kept for debugging), to be agreed with DadCraft in 3.0.
+- Oct 24: DadCraft has lists of theory sites (some known only by name) and music AI systems to sort. Confirmed:
+  a source sort before the style book plan (3.0a, lists in a gitignored `inbox/`), and Maestro checks licenses
+  itself (decision 14): its reader finds and quotes the notice, a fixed rules table decides the tier, anything
+  unclear is not usable until he looks; Claude applies the same table until the desk exists.
