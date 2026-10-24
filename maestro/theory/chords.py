@@ -6,6 +6,7 @@ all in semitones from the key note.
 Roman numerals count from the tonic's major scale, so a minor key reads i ii° bIII iv v bVI bVII, and rock's flat
 seven is bVII in any key."""
 from dataclasses import dataclass, replace
+from functools import lru_cache
 
 from .pitch import SCALES, Key
 
@@ -264,45 +265,61 @@ def parse_roman(text, key=None):
     return Chord(root, quality, colour)
 
 
-# ---- the rule: check rules out, choose picks ----
+# ---- a style's vocabulary: a lean, never a ban ----
 
 @dataclass(frozen=True)
 class Vocabulary:
-    """What a style lets into its harmony (tendencies come as weights in choose; this only rules out)."""
+    """What a style usually lets into its harmony. Never a ban (decision 9: no style trait is a lock; DadCraft, Oct
+    23): a chord outside it is only rarer. `outside` is the % of choices that step out, near chords (borrowed,
+    secondary, other qualities and colours) more often than remote chromatic ones."""
     kinds: frozenset = frozenset(("diatonic",))
     qualities: frozenset = frozenset(("maj", "min", "dim"))
     colours: frozenset = frozenset((None,))
     borrow: tuple | None = None   # the scales it borrows from; None for any
+    outside: int = 5
 
 
-def check_chord(chord, key, vocab):
-    """None when the chord fits the vocabulary in this key, else the reason in plain words."""
+def outside(chord, key, vocab):
+    """None when the chord is in the style's usual vocabulary for this key, else why not, in plain words."""
     k = kind(chord, key)
     if k not in vocab.kinds:
         why = f" (from {borrowed_from(chord, key)[0].replace('_', ' ')})" if k == "borrowed" else ""
-        return f"{name(chord, key)} ({roman(chord, key)}) is {k}{why}, which this style doesn't use"
+        return f"{name(chord, key)} ({roman(chord, key)}) is {k}{why}, which this style rarely uses"
     if k == "borrowed" and vocab.borrow is not None and not set(borrowed_from(chord, key)) & set(vocab.borrow):
         src = borrowed_from(chord, key)[0].replace("_", " ")
-        return f"{name(chord, key)} is borrowed from {src}, not a scale this style borrows from"
+        return f"{name(chord, key)} is borrowed from {src}, not a scale this style usually borrows from"
     if chord.quality not in vocab.qualities:
-        return f"{name(chord, key)} is a {chord.quality} chord, not in this style"
+        return f"{name(chord, key)} is a {chord.quality} chord, rare in this style"
     if chord.colour not in vocab.colours:
-        return f"{name(chord, key)} has a {chord.colour} colour, not in this style"
+        return f"{name(chord, key)} has a {chord.colour} colour, rare in this style"
     return None
 
 
+def every_chord():
+    """Every root-position chord: each root, quality and colour that goes with it."""
+    return [Chord(root, q, c) for root in range(12) for q in QUALITIES for c in (None, *COLOURS)
+            if c is None or q in COLOURS[c][1]]
+
+
+@lru_cache(maxsize=256)
+def _split(key, vocab):
+    usual, rare = [], []
+    for ch in every_chord():
+        if outside(ch, key, vocab) is None:
+            usual.append(ch)
+        else:
+            rare.append((ch, 1 if kind(ch, key) == "chromatic" else 4))
+    return tuple(usual), tuple(rare)
+
+
 def pool(key, vocab):
-    """Every root-position chord the vocabulary lets in for this key."""
-    out = []
-    for root in range(12):
-        for q in QUALITIES:
-            for c in (None, *COLOURS):
-                if c is not None and q not in COLOURS[c][1]:
-                    continue
-                ch = Chord(root, q, c)
-                if check_chord(ch, key, vocab) is None:
-                    out.append(ch)
-    return out
+    """The chords the style usually plays in this key."""
+    return list(_split(key, vocab)[0])
+
+
+def beyond(key, vocab):
+    """The chords it only now and then reaches for, as (chord, weight): near ones 4, remote chromatic ones 1."""
+    return list(_split(key, vocab)[1])
 
 
 def choose_chord(rng, chords, weight=lambda ch: 1):
@@ -316,6 +333,20 @@ def choose_chord(rng, chords, weight=lambda ch: 1):
         r -= w
         if r < 0:
             return ch
+
+
+def choose_in_style(rng, key, vocab, weight=lambda ch: 1):
+    """A chord the style's way: from its usual pool, or `vocab.outside`% of the time from beyond it, seeded.
+    `weight` (a style's or the moment's tendencies) applies to both; if it leaves nothing on one side, the other."""
+    usual = [(ch, weight(ch)) for ch in pool(key, vocab)]
+    rare = [(ch, w * weight(ch)) for ch, w in beyond(key, vocab)]
+    sides = [rare, usual] if rng.rnd(100) < vocab.outside else [usual, rare]
+    for side in sides:
+        side = [(ch, w) for ch, w in side if w > 0]
+        if side:
+            ws = dict(side)
+            return choose_chord(rng, [ch for ch, _ in side], ws.__getitem__)
+    raise ValueError("no chord left to choose from")
 
 
 def two_five(target, minor=False, sevenths=True):

@@ -256,3 +256,14 @@ Trained on this PC (RTX 2070, 8 GB).
   (three times as often), never a ban; added to decision 9. (2) The semitone key lift: he judges it by ear, at the
   first clips. And "music gets heavier as zone progresses" was one S3&K zone, not a rule: how much a section grows
   is now a style setting (`docs/taste.md` corrected); he'll hear how it comes across.
+- Oct 23: DadCraft pointed at Ouralia's **Calm builds** as maybe what "heavier as zone progresses" meant. Compared
+  (`docs/format.md`): it is closer to Maestro's energy waves than to a section growing. Both swell over minutes; Calm
+  builds is set off by the listener standing still in a calm room, with fixed timings (30 s wait, 180 rise, 60 hold,
+  120 fall, 180 rest) and ends within 5 s when they move, and it builds by **layers joining** (pad, room notes, chimes,
+  harmony and reverb) and levels lifted, not by changing notes. Maestro's waves run always, drawn fresh (3-7 minutes,
+  peaks 0.6-1.0), and lean what every member plays; it has no layering yet (which members play when). The two would
+  stack in bucket 6 (noted there).
+- Oct 23: DadCraft: handle the borrowed chords now, so it isn't lost. The 2.2 chord vocabulary was a ban (a chord
+  outside a style's list was ruled out); now it's a lean (decision 9): `choose_in_style` picks from the style's usual
+  chords, and `outside`% of the time (5 by default) from beyond them, near chords (borrowed, secondary, other
+  qualities and colours) four times as often as remote chromatic ones; `outside()` says why a chord is unusual.

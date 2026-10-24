@@ -41,6 +41,12 @@ libpd's `pure-data/src/x_misc.c` (`pdscenes`). The composer runs when Song Shape
 - **Out:** kind and melody register when a section starts (Java's `AudioService` shows it).
 - No energy curve of its own beyond this: the room's `intensity` (energy) and brightness lean the choices; "The Band
   Plays" (`rhythm.py`, `BAND_*`) adds an 8-bar build-and-drop on the drum drive.
+- **Calm builds** (outside the composer, in Java: `CalmBuild.java`, a Music switch, off by default): once the
+  listener has stood still in a calm room for 30 s, a build rises over 180 s, holds 60, eases back over 120, then rests
+  180 before the next; walking or a lively room ends it within 5 s. It builds by layers joining in turn (pad from the
+  start, room notes from a quarter of the way, standing-still chimes from halfway, harmony and reverb from three
+  quarters), each lifted up to +40% at the top. It changes the mix and the chime chance, not the composer's notes, so
+  the port never sees it.
 
 ### Parts (members)
 The band today is **melody** (chimes), **bass**, **pad** and **drums**, each with a kit (its sound) picked on its
@@ -246,6 +252,9 @@ C file has moved on. To match bit for bit, the port rounds float maths to 32 bit
 (the bar watch fires on DSP ticks, in Pd's own time units).
 
 ### Changes Maestro would want in C (for bucket 6)
+- **Calm builds and Maestro's arc would stack.** Both swell over minutes; run together, a calm room would get two
+  builds at once. Bucket 6 picks one: the listener's stillness feeding Maestro's arc (a longer, deeper wave while
+  they stand still) is the natural fit, with the layers becoming members joining (Maestro's arrangement).
 - **Three draws in an unspecified order.** Three expressions call `rnd()` twice where C leaves the order to the
   compiler: `nudge_motif` (`m->iv[1 + rnd()] += rnd() ? 1 : -1`), `vary_drums` (`(rnd() ? 1 : -1) * (1 + rnd())`)
   and `new_statement` (the same shape). GCC draws the sign first in the last two and the right side first in the

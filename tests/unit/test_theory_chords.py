@@ -3,8 +3,8 @@ import pytest
 
 from maestro.port import MODES, PARENT, SCALE_IV, SCALE_N
 from maestro.rng import ComposerRng
-from maestro.theory.chords import (Chord, Vocabulary, borrowed_from, check_chord, choose_chord, diatonic, function,
-                                   kind, name, parse_roman, pool, roman, two_five)
+from maestro.theory.chords import (Chord, Vocabulary, beyond, borrowed_from, choose_chord, choose_in_style, diatonic,
+                                   function, kind, name, outside, parse_roman, pool, roman, two_five)
 from maestro.theory.pitch import COMPOSER_SCALES, SCALES, Key, check_note, choose_scale
 
 C, A = Key(0, "major"), Key(9, "minor")
@@ -121,14 +121,14 @@ def test_rock_power_chords():
     assert name(Chord(7, "power"), e) == "B5" and function(Chord(7, "power"), e)[0] == "tension"
 
 
-# ---- the rule: check and choose ----
+# ---- a style's vocabulary: a lean, never a ban ----
 
-def test_check_gives_the_reason():
+def test_outside_gives_the_reason():
     v = Vocabulary()
-    assert check_chord(Chord(0), C, v) is None
-    assert check_chord(parse_roman("bVII"), C, v) == "Bb (bVII) is borrowed (from minor), which this style doesn't use"
+    assert outside(Chord(0), C, v) is None
+    assert outside(parse_roman("bVII"), C, v) == "Bb (bVII) is borrowed (from minor), which this style rarely uses"
     v = Vocabulary(kinds=frozenset(("diatonic", "borrowed")), borrow=("dorian",))
-    assert "not a scale this style borrows from" in check_chord(parse_roman("bVI"), C, v)
+    assert "not a scale this style usually borrows from" in outside(parse_roman("bVI"), C, v)
 
 
 def test_pool_and_choose():
@@ -140,3 +140,23 @@ def test_pool_and_choose():
     assert seq(3) == seq(3) and seq(3) != seq(4)
     no_minor = choose_chord(ComposerRng(9), p, lambda c: 0 if c.quality == "min" else 1)
     assert no_minor.quality != "min"
+
+
+def test_nothing_is_locked_out():
+    v = Vocabulary()
+    rare = dict(beyond(C, v))
+    assert parse_roman("bVII") in rare and parse_roman("bVI") in rare and Chord(0) not in rare
+    assert rare[parse_roman("bVII")] > rare[Chord(1, "aug")]          # near chords before remote ones
+    r = ComposerRng(5)
+    picks = [choose_in_style(r, C, v) for _ in range(2000)]
+    out = sum(outside(ch, C, v) is not None for ch in picks)
+    assert 50 < out < 150                                             # about 5% step outside, never 0
+    locked = Vocabulary(outside=0)
+    assert all(outside(choose_in_style(r, C, locked), C, locked) is None for _ in range(200))
+
+
+def test_choose_in_style_takes_the_moments_weights():
+    r = ComposerRng(2)
+    v = Vocabulary(outside=50)
+    only_iv = lambda ch: 1 if ch == Chord(5) or ch == parse_roman("bVII") else 0
+    assert {choose_in_style(r, C, v, only_iv) for _ in range(100)} == {Chord(5), parse_roman("bVII")}
