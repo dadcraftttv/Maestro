@@ -96,7 +96,7 @@ def test_key_change_checks_give_their_reasons():
     assert "belong on a Lift" in check_key_change(A_MIN, Key(10, "minor"), "step_up", "calm", 200, 1, f, bpm)
     assert check_key_change(A_MIN, Key(10, "minor"), "step_up", "lift", 200, 1, f, bpm) is None
     assert "too far" in check_key_change(A_MIN, C_MAJ, "relative", "home", 200, 3, f, bpm)
-    assert "mode" in check_key_change(A_MIN, Key(9, "phrygian"), "relative", "home", 200, 1, f, bpm)
+    assert check_key_change(A_MIN, Key(9, "phrygian"), "relative", "home", 200, 1, f, bpm) is None   # no mode locked
 
 
 def test_key_changes_in_a_play_follow_the_rules():
@@ -116,10 +116,15 @@ def test_key_changes_in_a_play_follow_the_rules():
     assert moved > 0
 
 
-def test_trap_keeps_to_its_dark_modes():
-    for _, p, ss in plays():
-        if p.form is FORM["trap"]:
-            assert all(s.key.scale in FORM["trap"].scales for s in ss)
+def test_a_style_leans_to_its_modes_without_locking_them():
+    own = other = 0
+    for seed in range(1, 200):
+        p = Play(rng(seed), A_MIN, FORM["trap"])
+        for s in p.plan(20):
+            if s.move:
+                own += s.key.scale in FORM["trap"].modes
+                other += s.key.scale not in FORM["trap"].modes
+    assert own > other > 0          # mostly dark, but a bright key over trap stays possible (DadCraft, Oct 23)
 
 
 def test_no_two_plays_alike():

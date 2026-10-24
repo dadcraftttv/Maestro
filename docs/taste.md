@@ -37,8 +37,9 @@ how a style should feel, not exact numbers.
 - **Pads:** supersaw pads stand in for an orchestra. Chillwave pads float.
 - **Arps:** a high sparkle arp for glint; cold new-wave arps for icy dread.
 - **Mode:** minor gives urgency; major can turn "too hopeful" for a dark target.
-- **Energy:** heaviness grows through a section ("Music gets heavier as zone progresses"). Fast tracks start at full
-  energy from the first beat; slow swells suit calm openings only.
+- **Energy:** in one S3&K zone, heaviness grew through it ("Music gets heavier as zone progresses"): a choice for
+  that zone, not a rule for every section (DadCraft, Oct 23). Fast tracks start at full energy from the first beat;
+  slow swells suit calm openings only.
 
 ## Failures to check for (before DadCraft listens)
 - **The melody gets lost:** the melody must stay on top, with the rest of the band thinner or lower under it.

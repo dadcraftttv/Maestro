@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's verdict on the 2.5 choices; then bucket 2, task 2.6 (the theory exam).
+**Next:** Bucket 2, task 2.6 (the theory exam).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -37,12 +37,14 @@ band member play, the way its style plays it?
 10. **Licenses:** code GPL-3.0-or-later (like Ouralia); docs and the style book CC BY-SA 4.0 (README "License").
 8. **The phone version is small** (target: tens of MB, around MIDI-GPT's ~20M parameters), shrunk from the PC model.
 9. **Free to drift, always making sense.** Maestro is never locked to fixed patterns: styles are written as
-   tendencies and ranges, the model makes fresh choices each bar, and the rules only rule out what doesn't fit, never
-   say what to play. Compositions evolve over a long play (key, energy, density, how strongly each style shows,
-   motifs that develop). **No two plays are alike:** turn Ouralia off and on with the same settings and the
-   evolution is a new one. The same key and scale share notes, but the music is never identical run to run (a fresh
-   random seed each play; no replaying a stored path). Measured before DadCraft listens: staleness within a play
-   (how often bars and phrases repeat over ~20 minutes) and sameness between plays (two runs, same settings).
+   tendencies and ranges, the model makes fresh choices each bar, and the rules only rule out what doesn't fit,
+   never say what to play. Compositions evolve over a long play (key, energy, density, how strongly each style
+   shows, motifs that develop). **No style trait is ever a lock** (DadCraft, Oct 23): the drafts are starting
+   points, and an unexpected mix can work (something bright and happy over trap has, for him). **No two plays are
+   alike:** turn Ouralia off and on with the same settings and the evolution is a new one. The same key and scale
+   share notes, but the music is never identical run to run (a fresh random seed each play; no replaying a stored
+   path). Measured before DadCraft listens: staleness within a play (how often bars and phrases repeat over ~20
+   minutes) and sameness between plays (two runs, same settings).
 11. **The band grows past today's four members** (drums, bass, pad, melody, plus the arp). The first styles need
     more roles, planned from the style book on: **rhythm guitar** (power rock), **keys** (salsa's montuno piano),
     **horns** (salsa) and **percussion** (congas, timbales, cowbell, clave; its own member, apart from the kit).
@@ -249,3 +251,8 @@ Trained on this PC (RTX 2070, 8 GB).
   every check; 30,000 motif statements break none. For DadCraft: the style drafts (trap stays in one dark key, full
   energy from the start; synthwave long swells and key lifts; salsa full from the start, relative and fifth moves;
   power rock shorter waves, key lifts), and a key lift up a semitone (the "truck driver" change) allowed at all.
+- Oct 23: DadCraft on the 2.5 choices: (1) the style drafts are fine to test, but never hard locked: he has put
+  something bright and happy over trap and it worked. So a style's modes are now what its key changes lean to
+  (three times as often), never a ban; added to decision 9. (2) The semitone key lift: he judges it by ear, at the
+  first clips. And "music gets heavier as zone progresses" was one S3&K zone, not a rule: how much a section grows
+  is now a style setting (`docs/taste.md` corrected); he'll hear how it comes across.

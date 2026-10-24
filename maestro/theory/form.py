@@ -3,14 +3,15 @@
 
 A play is planned one section at a time, as it goes, so the room (Ouralia's energy) keeps leaning it. Under the room
 runs an energy arc of waves, each a few minutes of build and release, drawn fresh: no two plays rise and fall alike.
-Each section sits on the arc by its kind (the composer's four: Home, Lift, Calm, Turn), grows a little heavier as it
-goes (`docs/taste.md`), and may move the key at its start. Motifs live in scale steps, so they carry across key
+Each section sits on the arc by its kind (the composer's four: Home, Lift, Calm, Turn), may grow heavier as it goes
+(a style's tendency, a draft from one S3&K zone in `docs/taste.md`, not a rule), and may move the key at its start. Motifs live in scale steps, so they carry across key
 changes, and develop each time they come back: early statements stay close, later ones travel further, and an old
 motif is reborn from its own fragment.
 
 The checks rule out what doesn't fit, with the reason (a Lift that doesn't lift, a Calm too loud for a calm moment,
 a key change too soon or too far from home, a motif off the grid or no longer heard as itself). Everything else is a
-tendency a style sets; the choose picks among what's left, seeded."""
+tendency a style sets, never a lock: a style's modes are the ones it leans to, and a bright key over trap stays
+possible (DadCraft, Oct 23). The choose picks among what's left, seeded."""
 from dataclasses import dataclass, field
 
 from .pitch import PARENT, Key
@@ -18,7 +19,6 @@ from .rhythm import METERS, STEPS, VALUES
 
 KINDS = ("home", "lift", "calm", "turn")
 SHIFT = {"home": 0.0, "lift": 0.15, "calm": -0.25, "turn": 0.05}   # energy against the arc: the composer's KIND_DRIVE
-GROW = {"home": 0.05, "lift": 0.1, "calm": 0.0, "turn": 0.05}       # how much heavier a section ends than it starts
 
 CALM_MAX = 0.65      # a Calm above this is too loud for a calm moment
 JUMP_MAX = 0.35      # a rise this big hits too hard, unless it's into a Lift
@@ -113,7 +113,9 @@ class Form:
     opening: str = "swell"                  # "swell": starts low and builds; "full": full energy from the first beat
     change: int = 20                        # % chance of a key change at a section start, when one may happen
     moves: dict = field(default_factory=lambda: {"relative": 2, "fifth_up": 1, "fifth_down": 1})
-    scales: tuple = ("major", "minor")      # the modes a key change may land in
+    modes: tuple = ("major", "minor")       # the modes its key changes lean to (others stay possible, less often)
+    grow: dict = field(default_factory=lambda: {"home": 0.05, "lift": 0.1, "calm": 0.0, "turn": 0.05})   # how much
+    #                                         heavier each kind of section ends than it starts
     gap: float = 3.0                        # minutes between key changes, at least
     hops: int = 2                           # key changes away from home before it has to come back
     life: int = 8                           # statements before a motif is reborn from its own fragment
@@ -123,13 +125,13 @@ class Form:
 FORM = {
     "plain": Form(),
     "trap": Form(phrase=8, phrases={1: 1, 2: 3}, depth=0.4, opening="full", change=8,    # one dark key, mostly
-                 moves={"parallel": 1, "fifth_down": 1}, scales=("minor", "phrygian", "harmonic_minor"), hops=1),
+                 moves={"parallel": 1, "fifth_down": 1}, modes=("minor", "phrygian", "harmonic_minor"), hops=1),
     "synthwave": Form(phrase=8, phrases={2: 3, 3: 1}, wave=(4, 7), depth=0.6, change=25,   # long swells, a key lift
-                      moves={"step_up": 2, "tone_up": 1, "relative": 2, "fifth_down": 1}, scales=("minor", "major", "dorian")),
+                      moves={"step_up": 2, "tone_up": 1, "relative": 2, "fifth_down": 1}, modes=("minor", "major", "dorian")),
     "salsa": Form(phrase=8, phrases={2: 2, 3: 1}, depth=0.5, opening="full", change=20,    # son into montuno
-                  moves={"relative": 2, "fifth_up": 2, "fifth_down": 1, "parallel": 1}, scales=("minor", "major")),
+                  moves={"relative": 2, "fifth_up": 2, "fifth_down": 1, "parallel": 1}, modes=("minor", "major")),
     "power_rock": Form(phrase=8, phrases={2: 3, 3: 1}, wave=(3, 5), depth=0.6, opening="full", change=20,
-                       moves={"step_up": 2, "tone_up": 2, "fifth_down": 1, "relative": 1}, scales=("minor", "major", "mixolydian")),
+                       moves={"step_up": 2, "tone_up": 2, "fifth_down": 1, "relative": 1}, modes=("minor", "major", "mixolydian")),
 }
 
 
@@ -172,8 +174,6 @@ def check_section(kind, energy, prev=None):
 def check_key_change(old, new, move, kind, bars_since, hops, form, bars_a_minute):
     """None when the key may move from `old` to `new` at the start of a `kind` section, else the reason. `hops`
     counts the changes since the play was last in its home key (this one included)."""
-    if new.scale not in form.scales and PARENT.get(new.scale) not in form.scales:
-        return f"{new} is a mode this style doesn't move to"
     if bars_since < form.gap * bars_a_minute:
         return f"a key change {bars_since} bars after the last: too soon"
     if move in LIFTS and kind != "lift":
@@ -236,6 +236,9 @@ class Play:
         moves = dict(f.moves)
         if self.key != self.home:
             moves["home"] = 2 + 2 * self.hops    # the further away, the stronger home pulls
+        for m in f.moves:                        # its own modes three times as often; the rest stay possible
+            new = MOVES[m](self.key)
+            moves[m] *= 3 if new.scale in f.modes or PARENT.get(new.scale) in f.modes else 1
         if self.rng.rnd(100) >= f.change + 15 * self.hops:
             return None, self.key
         while True:
@@ -255,7 +258,7 @@ class Play:
         kind = self._kind(bar, room)
         move, self.key = self._key_move(kind, bar)
         bars = _draw(self.rng, self.form.phrases) * self.form.phrase
-        s = Section(kind, bar, bars, self.key, self._energy(kind, bar, room), GROW[kind], move)
+        s = Section(kind, bar, bars, self.key, self._energy(kind, bar, room), self.form.grow[kind], move)
         self.sections.append(s)
         return s
 
