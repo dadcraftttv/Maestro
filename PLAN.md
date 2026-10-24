@@ -54,7 +54,9 @@ band member play, the way its style plays it?
 13. **Every note lands on point on the grid** (DadCraft, Oct 23). The band members are machines, not human
     players: nothing early, late or out of sync, no member ahead or behind the beat, no random looseness. Swing is a
     choice of grid point (the off-beat on a later step), never an offset between steps. Human-played data is
-    rounded to the grid.
+    rounded to the grid. **In reserve** (DadCraft, Oct 23), if the band sounds too robotic: the shared pocket from
+    commit `56888cc` (`rhythm.py`): one small timing draw per step that every member shares, so the band moves
+    together and stays in sync, held under a ms limit. Only DadCraft brings it back, after hearing clips.
 
 ## How each bucket runs
 
@@ -125,7 +127,8 @@ For each chosen style, how each member plays it, written from sources.
 - [ ] 3.3 One task per style: 3.3a trap, 3.3b synthwave, 3.3c salsa, 3.3d power rock.
 - [ ] 3.4 The style judge (CLaMP 3, license checked) scores the clips first.
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
-      drift measures passed first.
+      drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
+      pocket (decision 13) can be played to him next to the on-grid version.
 
 ### 4. Training data (draft)
 - [ ] 4.0 Plan approved.
