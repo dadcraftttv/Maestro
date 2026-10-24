@@ -4,8 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, Checkpoint 2: DadCraft listens to `clips/checkpoint2` (`python -m maestro.sketch`, then
-`python -m maestro.play clips/checkpoint2`) and reads each clip's `.txt`.
+**Next:** Bucket 3, task 3.0 (the style book's plan), carrying Checkpoint 2's verdict (`docs/verdicts.md`).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -137,10 +136,11 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       (today's composer, two 20-minute plays per preset) or `python -m maestro.drift a.mid [b.mid]`. Bars compared by
       their notes (loudness left out), held notes included. Today's composer meets every target: no band phrase
       copied, worst 2-minute window 83-93% new bars, melody 4-14% copies, nothing shared between two plays.
-- [ ] Checkpoint 2: DadCraft spot-checks the explained choices, and hears a few bars per style.
+- [x] Checkpoint 2: DadCraft spot-checks the explained choices, and hears a few bars per style.
       Clips (Oct 24): `maestro/sketch.py` plays `explain.py`'s choices (same draws: what's heard is what the
       words say), 8 bars, two seeds per style, at trap 140, synthwave 100, salsa 180, power rock 130, all
       in A minor; a bare drum guide (salsa: clave and cowbell), not explained.
+      Heard Oct 24: rough approximations, no style and no flow; carried into 3.0 (`docs/verdicts.md`).
 
 ### 3. Style book (draft)
 For each chosen style, how each member plays it, written from sources.

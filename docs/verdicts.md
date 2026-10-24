@@ -164,3 +164,14 @@ isn't reloaded every session; grep for the part a task needs.
   the pad is drawn again, up to 10 times); a 9th chord left the 3-note pad silent (now 4 notes then); the motif
   ignored the clave (now a statement moves a bar later to sit with it, said in the words). Still in: about 1 bar
   in 300 stays muddy after 10 draws ("ruled out" in the words), and salsa's draft piles up secondary dominants.
+- Oct 24: DadCraft heard the checkpoint 2 clips: "that sounded rough, but i guess that's supposed to be the case";
+  the chords don't move the way the styles do ("i can hear how each one is *supposed* to be indicative of it's
+  respective style, but it's a long way off"); the melody "very short and it's hard to judge from just those short
+  runs". On the explanations: "i'm having trouble digesting that ... none of them really sounded like what they
+  should be for their respective styles ... very rough and there didn't seem to be any flow". Checkpoint 2 closed
+  (his choice). Carried into 3.0: (1) no flow: the core draws each chord one bar at a time from the vocabulary,
+  with no idea of a progression; a style needs its progressions and loops (as families of tendencies with many
+  variants, decision 9), a bass line built on its pattern (tumbao, 808 slides, root eighths) rather than random
+  onsets, and a melody shaped over a phrase; (2) the melody is judged on long clips at checkpoint 3; (3) the
+  per-bar explanation is too dense to listen against: a checkpoint needs a short summary per clip in plain words
+  (the detailed one kept for debugging), to be agreed with DadCraft in 3.0.
