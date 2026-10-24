@@ -2,7 +2,8 @@
 """A song file (`docs/format.md`, "The song file"): a standard MIDI file, one track per member named after it, and a
 JSON file beside it with what MIDI can't hold (the timeline, each member's role and sound, where the clip came from
 and what to listen for). Ticks: 480 a beat. Notes are kept in grid steps (24 a beat, `theory/rhythm.py`), so every
-note starts and ends on point on the grid (decision 13); a note that isn't on a step can't be written."""
+note starts and ends on point on the grid (decision 13); a note that isn't on a step can't be written. A member's
+slides (trap's 808) are pitch bends, the bend range set to an octave; the bend is back at rest by the next note."""
 import json
 from dataclasses import dataclass, field
 
@@ -11,6 +12,8 @@ import mido
 from .theory.rhythm import STEPS, TICK, TICKS
 
 DRUMS_CHANNEL = 9   # General MIDI's kit channel (10, counted from 1)
+BEND_RANGE = 12     # semitones a full pitch bend reaches, set on a member that slides
+BEND_EVERY = 2      # steps between the points of a slide's bend
 
 
 @dataclass(frozen=True)
@@ -35,9 +38,16 @@ class Member:
     program: int = 0          # its sound: a General MIDI program (decision 3: the sound is kept apart from the style)
     kit: bool = False         # a drum kit (plays on the kit channel)
     notes: list = field(default_factory=list)
+    slides: list = field(default_factory=list)   # (step, steps, semitones): a bend from step, reached at its end
 
     def add(self, step, steps, pitch, velocity=96):
         self.notes.append(Note(step, steps, pitch, velocity))
+
+    def slide(self, step, steps, semitones):
+        if not all(isinstance(x, int) for x in (step, steps, semitones)) or step < 0 or steps < 1 \
+                or not 0 < abs(semitones) <= BEND_RANGE:
+            raise ValueError(f"slide out of range: {step, steps, semitones}")
+        self.slides.append((step, steps, semitones))
 
 
 @dataclass
@@ -73,10 +83,19 @@ class Song:
             tr.append(mido.MetaMessage("track_name", name=m.name, time=0))
             if not m.kit:
                 tr.append(mido.Message("program_change", channel=ch, program=m.program, time=0))
-            ev = []   # (tick, 0 = off before 1 = on at the same tick, message)
+            if m.slides:   # RPN 0, the bend range, then the RPN closed
+                for c, v in ((101, 0), (100, 0), (6, BEND_RANGE), (38, 0), (101, 127), (100, 127)):
+                    tr.append(mido.Message("control_change", channel=ch, control=c, value=v, time=0))
+            ev = []   # (tick, 0 = off before 1 = a bend before 2 = on at the same tick, message)
             for n in m.notes:
-                ev.append((n.step * TICK, 1, mido.Message("note_on", channel=ch, note=n.pitch, velocity=n.velocity)))
+                ev.append((n.step * TICK, 2, mido.Message("note_on", channel=ch, note=n.pitch, velocity=n.velocity)))
                 ev.append(((n.step + n.steps) * TICK, 0, mido.Message("note_off", channel=ch, note=n.pitch)))
+            for at, steps, semis in m.slides:
+                full = round(8191 * semis / BEND_RANGE)
+                for k in range(BEND_EVERY, steps + 1, BEND_EVERY):
+                    ev.append(((at + k) * TICK - (k == steps), 1,
+                               mido.Message("pitchwheel", channel=ch, pitch=round(full * k / steps))))
+                ev.append(((at + steps) * TICK, 1, mido.Message("pitchwheel", channel=ch, pitch=0)))
             now = 0
             for t, _, msg in sorted(ev, key=lambda e: (e[0], e[1])):
                 tr.append(msg.copy(time=t - now))

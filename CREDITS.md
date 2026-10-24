@@ -31,6 +31,11 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
   families, task 3.2). https://viva.pressbooks.pub/openmusictheory
 - **jazznet**, by its authors, MIT: the ii-V progressions (task 3.2). https://github.com/tosiron/jazznet
 - **Wikipedia**, "Tumbao", CC BY-SA 4.0: salsa's anticipated bass (task 3.2). https://en.wikipedia.org/wiki/Tumbao
+- **Wikipedia**, "Trap music", "Drill music", "Roland TR-808", CC BY-SA 4.0: trap's entry (task 3.4a).
+  https://en.wikipedia.org/wiki/Trap_music
+- **Ben Duinker**, "Good Things Come in Threes: Triplet Flow in Recent Hip-Hop Music", Popular Music 38/3 (2019),
+  (c) Cambridge University Press: the idea of triplet figures over a duple beat (the motif's `triplet`, task 3.4a),
+  ideas only.
 
 ## Non-commercial (PC only, never in the phone model)
 

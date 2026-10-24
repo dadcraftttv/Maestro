@@ -3,7 +3,7 @@
 holds each chord of the progression, the bass plays its pattern, the melody is shaped over the phrase, above the
 pad; the clip's `.txt` opens with a short summary. `--no-flow` plays Checkpoint 2's bar-by-bar draws (the pad holds
 its voicing for the bar, the bass plays its note on the drawn rhythm, the melody states the motif every two bars).
-The drummer and the percussion member (task 3.3) play under them, as `explain` says: salsa has no kit, its
+Trap's 808 (task 3.4a) slides by pitch bend. The drummer and the percussion member (task 3.3) play under them, as `explain` says: salsa has no kit, its
 percussion keeps time. `--no-flow` keeps Checkpoint 2's bare drum guide (from the style's rhythm draft with its own
 seed, unexplained; salsa's is the clave and a cowbell). Sounds are GM stand-ins.
 
@@ -98,6 +98,9 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
         member, feel = song.member(role, role, program), feel_for(style, role)
         for st, length, m in take[role]:
             member.add(st, length, m, level if role == "pad" else velocity(st % met.bar, met, feel, level))
+        if role == "bass":                   # trap's 808 slides, as pitch bends
+            for sl in take["slides"]:
+                member.slide(*sl)
     for r in take["bars"]:
         song.timeline.append({"bar": r["bar"], "tempo": bpm, "meter": met.name, "key": str(r["key"]),
                               "chord": name(r["chord"], r["key"]), "section": {"kind": r["section"].kind},

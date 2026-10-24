@@ -220,3 +220,6 @@ isn't reloaded every session; grep for the part a task needs.
   checkpoint 3.
 - Oct 24: on the drummer's variety (it copies one of its last 16 bars only 1-12% of the time): "the drummer sounds
   steady, not restless." GMD's odds stay as they are; no longer a checkpoint 3 question.
+- Oct 24: 3.4a's plan approved. DadCraft chose: proposals 1-4 now (the 808, near-static harmony, the motif with
+  triplets, the hats changing rate), the drop-outs and beat switches in 3.6, the subgenres later; the 808 slides
+  "now and then" (about 1 note in 6); a bell lead; dark strings for the pad.

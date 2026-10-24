@@ -126,7 +126,9 @@ sound kept out of it. It grows from the composer's own picture (above), so `dcs_
 One clip or song = a standard **MIDI file** (the notes, tempo, meter; one track per member, the track named after
 its member) plus a **JSON file** beside it with everything MIDI can't hold: the timeline, the members' controls,
 where it came from and its license. MIDI keeps the clips playable in any player (task 2.7); the JSON keeps the
-labels readable. Ticks: 480 a beat.
+labels readable. Ticks: 480 a beat. A member that slides (trap's 808, task 3.4a) carries pitch bends: its track
+opens by setting the bend range to an octave (RPN 0), each slide bends over its last 8th to the next note's pitch,
+and the bend is back at rest when the next note starts (a glide in Ouralia, bucket 6).
 
 ```json
 {
@@ -260,10 +262,12 @@ part may carry a `"why"` in plain words.
 | `harmony.vocabulary` | kinds, qualities, colours, borrowed scales, how often it steps out | `chords.Vocabulary` |
 | `harmony.leading` | voice-leading costs and rules | `voicing.Leading` |
 | `form` | phrases, waves, key changes, motif life | `form.Form` |
-| `harmony.progressions` | `families` (each a loop in roman numerals with its bar lines, `"i iv \| V7 iv"`, and a weight), `variants` (weights: again, swap, colour, approach, turnaround), `stay` | `flow.Flow` (3.2) |
+| `harmony.progressions` | `families` (each a loop in roman numerals with its bar lines, `"i iv \| V7 iv"`, and a weight), `variants` (weights: again, swap, colour, approach, turnaround), `stay`, `cadence` (% of phrases made to land home, 100 by default; trap 25), `still` (a loop of one chord allowed) | `flow.Flow` (3.2, 3.4a) |
 | `members.<role>` | `sound` (GM program), `level` (velocity), for drums `kicks` and `hats` | the sketch |
+| `members.bass` (an 808) | `with`: `"pattern"` (the default) or `"kick"`: no pattern, a note on each of the drummer's kicks and each chord change, held to the next; `tones` (weights: root, third, fifth, octave; a chord's first note is its root), `slides` (% of the notes sliding into the next over their last 8th, a pitch bend in the clip) | `flow.bass_808` (3.4a) |
+| `members.melody.develop` | weights added to the motif's development (again, nudge, invert, back, shorter, longer, augment, diminish, triplet: two notes filling a beat played as three 8th triplets) | `form.Theme` (3.4a) |
 | `members.bass.patterns` | pattern families: notes as `[at, length, tone, which]` in 16ths (length `null`: held to the next note; tone root, third, fifth or octave; which `now` or `ahead`, the chord at the next half bar), `bars`, `weight`; `variants` (again, drop, approach, octave) | `flow.Pattern` (3.2) |
-| `members.drums` | `grooves` (the GMD styles it draws on, with weights), `time` (weights for its timekeeping, `"hat 8th"`, `"ride quarter"`, `"crash 8th"`, leaning GMD's own), `busy` (% of GMD's small-hit odds played), `fills` (% of phrases ending in a fill), `rolls` (% ending in a hat roll instead); no `grooves`: no kit | `drums.Drummer` (3.3) |
+| `members.drums` | `grooves` (the GMD styles it draws on, with weights), `time` (weights for its timekeeping, `"hat 8th"`, `"ride quarter"`, `"crash 8th"`, leaning GMD's own), `busy` (% of GMD's small-hit odds played), `fills` (% of phrases ending in a fill), `rolls` (% ending in a hat roll instead), `backbeat` (`"fixed"`: only grooves with the plain backbeat, no extra snares; trap's snare on 3), `turns` (% of beats the hats change rate, at energy 0.5) with `turn rates` (weights: 8th_triplet, 16th, 16th_triplet, 32nd, 32nd_triplet); no `grooves`: no kit | `drums.Drummer` (3.3, 3.4a) |
 | `members.percussion.parts` | each part's pattern families: hits as `[16th, voice, velocity]` over `bars` 1 or 2 (two-bar ones in the clave's cycle), `weight`, `when` (low, high or any energy); `variants` (again, drop); `abanico` (% of section ends) | `percussion.Part` (3.3) |
 
 Roles are the band's members (decision 11). The loader says where a file goes wrong (`trap: form.moves: unknown key

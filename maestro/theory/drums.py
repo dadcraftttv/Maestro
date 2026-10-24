@@ -6,14 +6,17 @@ they play (kick and snare on the 8ths), how often a bar keeps the one before, th
 16th (kick pickups, ghost notes, open hats), what keeps time and how fast, how loud each hit is, and their fills.
 A style's entry (members.drums) names the GMD styles it draws on, with weights, and may lean the timekeeping its own
 way (trap's 16th hats), make the drummer busier or plainer, and set how often a phrase ends in a fill or (trap) a
-hat roll.
+hat roll. Trap's also fixes the snare on the backbeat (on 3, at half time) and lets the hats turn: a beat at
+another rate (triplets, 32nds) inside the bar (task 3.4a).
 
 The choose: a section picks its timekeeping; each bar keeps its groove or draws another, by GMD's odds; the odds add
 the small hits, more of them as the energy rises; a phrase's last bar may end in a fill (its length, pace and drums
 drawn from GMD's fills, the toms mostly going down), and a crash marks each section's start and the bar after a
-fill. Half-time (trap) spreads a groove over two bars. Every hit is on the grid (decision 13); the velocities are
+fill. Half-time (trap) spreads a groove over two bars; a turning hat changes its rate for a beat, more often with
+more energy. Every hit is on the grid (decision 13); the velocities are
 GMD's, as a drummer's dynamics. The check rules out a hit off the grid or outside the clip, two of one drum on one
-step, more than two hands at once and a groove without its backbeat. Tendencies, never a fixed part (decision 9)."""
+step, more than two hands at once and a groove without its backbeat (with a fixed backbeat: a snare anywhere
+else). Tendencies, never a fixed part (decision 9)."""
 import json, os
 from dataclasses import dataclass
 
@@ -35,6 +38,8 @@ LOUD = {"kick": 100, "snare": 105, "ghost": 40, "hat": 75, "open": 85, "crash": 
         "high tom": 95, "mid tom": 95, "floor tom": 100}
 TIMES = tuple(f"{v} {r}" for v in ("hat", "ride", "crash") for r in ("quarter", "8th", "16th"))
 SMALL = ("kick", "snare", "ghost", "open")   # the odds the drummer plays (crashes and toms belong to fills)
+TURN_RATES = ("8th_triplet", "16th", "16th_triplet", "32nd", "32nd_triplet")   # what a hat may turn to for a beat
+BACKBEAT = (4, 12)   # the snare on 2 and 4 of a groove: on 3 of each bar at half time
 BLOCKS = {"kick": {"kick"}, "snare": {"snare", "ghost"}, "ghost": {"snare", "ghost"}, "open": {"open"}}
 
 
@@ -64,6 +69,9 @@ class Drummer:
     busy: int = 100    # % of GMD's odds played
     every: int = 70    # % of phrases ending in a fill
     rolls: int = 0     # % of phrases ending in a hat roll instead (trap)
+    fixed: bool = False   # the snare only on the backbeat (trap: on 3 at half time)
+    turns: int = 0     # % of beats the hats turn to another rate, at energy 0.5 (trap)
+    turn_rates: tuple = ()   # ((rate, weight), ...)
 
 
 def _mix(parts):
@@ -110,6 +118,19 @@ def _drummer(style):
             raise StyleError(f"{where}.grooves.{s}: a whole-number weight from 1")
         parts.append((s, w))
     grooves, stay, odds, time, loud, fills = _mix(parts)
+    backbeat = d.get("backbeat", "free")
+    if backbeat not in ("free", "fixed"):
+        raise StyleError(f"{where}.backbeat: \"free\" or \"fixed\"")
+    if backbeat == "fixed":
+        grooves = tuple(g for g in grooves if g.snare == BACKBEAT)
+        if not grooves:
+            raise StyleError(f"{where}: none of its grooves keeps a plain backbeat")
+    rates = {k: w for k, w in d.get("turn rates", {}).items() if k != "why"}
+    for k, w in rates.items():
+        if k not in TURN_RATES or not isinstance(w, int) or w < 0:
+            raise StyleError(f"{where}.turn rates.{k}: one of {', '.join(TURN_RATES)}, a whole-number weight")
+    if d.get("turns", 0) and not any(rates.values()):
+        raise StyleError(f"{where}: turns need their \"turn rates\"")
     time = {k: max(0, round(v)) for k, v in time.items()}
     for k, w in d.get("time", {}).items():
         if k == "why":
@@ -118,7 +139,8 @@ def _drummer(style):
             raise StyleError(f"{where}.time.{k}: one of {', '.join(TIMES)}, a whole-number weight")
         time[k] = w
     return Drummer(grooves, stay, odds, time, loud, fills, tuple(s for s, _ in parts),
-                   d.get("busy", 100), d.get("fills", 70), d.get("rolls", 0))
+                   d.get("busy", 100), d.get("fills", 70), d.get("rolls", 0), backbeat == "fixed",
+                   d.get("turns", 0), tuple(rates.items()))
 
 
 DRUMMER = {s: _drummer(s) for s in STYLES}   # None: the style's band has no kit (salsa)
@@ -169,7 +191,7 @@ def drum_part(rng, dr, recs, met, phrase, end, half=False):
     scale = SIXTEENTH * span                     # steps a groove 16th covers
     unit = span * met.bar
     hits, lines = [], []
-    groove, sec, keeper, after_fill = None, None, None, False
+    groove, sec, keeper, after_fill, turned = None, None, None, False, {}
     for r in recs[::span]:
         b, s, e = r["bar"], r["section"], r["energy"]
         at = b * met.bar
@@ -198,13 +220,22 @@ def drum_part(rng, dr, recs, met, phrase, end, half=False):
                 if at + p * scale < fill_at:
                     add(at + p * scale, v, _vel(dr, v, p, e))
         for v in SMALL:                          # the small hits, by GMD's odds, more with more energy
+            if v == "snare" and dr.fixed:
+                continue
             for p in range(16):
                 step = at + p * scale
                 taken = BLOCKS[v] & set(cells.get(step, {}))
                 if step < fill_at and not taken and \
                         _chance(rng, dr.odds[v][p] * dr.busy / 100 * (0.5 + e)):
                     add(step, v, _vel(dr, v, p, e))
-        for step in range(at, fill_at, VALUES[keeper[1]]):   # the timekeeping, at its rate in the real bar
+        keeps = []                               # the timekeeping, at its rate in the real bar, a beat at a time
+        for beat in range(at, fill_at, VALUES["quarter"]):
+            rate = keeper[1]
+            if keeper[0] == "hat" and dr.turns and _chance(rng, dr.turns * (0.5 + e)):
+                rate = _draw(rng, dict(dr.turn_rates))
+                turned[id(s)] = (s, turned.get(id(s), (s, 0))[1] + 1)
+            keeps += range(beat, min(beat + VALUES["quarter"], fill_at), VALUES[rate])
+        for step in keeps:
             cell = cells.get(step, {})
             if keeper[0] != "hat":
                 cell.pop("open", None)
@@ -228,12 +259,17 @@ def drum_part(rng, dr, recs, met, phrase, end, half=False):
         for step in sorted(cells):
             if step < end:
                 hits += [(step, SIXTEENTH, KIT[v], vel, v) for v, vel in cells[step].items()]
+    for s, n in turned.values():                 # said with the section's timekeeping
+        i = next(i for i, (x, _) in enumerate(lines) if x is s)
+        rates = " or ".join(r.replace("_", " ") + "s" for r, w in dr.turn_rates if w)
+        lines[i] = (s, f"{lines[i][1]}; the hats turn to {rates} on {n} beat{'s' * (n > 1)}")
     return hits, lines
 
 
-def check_drums(hits, met, end, half=False):
+def check_drums(hits, met, end, half=False, fixed=False):
     """None when the drums fit, else the reason: on the grid and inside the clip, one of each drum a step, two hands
-    at most, and every groove keeping its backbeat (a bar with a fill aside)."""
+    at most, and every groove keeping its backbeat (a bar with a fill aside); `fixed`: the snare on the backbeat
+    every time and nowhere else."""
     at = {}
     for step, _, note, _, voice in hits:
         if step != int(step) or not 0 <= step < end:
@@ -253,4 +289,13 @@ def check_drums(hits, met, end, half=False):
             continue
         if "snare" not in cells:
             return f"bar {u // met.bar + 1}: no backbeat"
+    if fixed:
+        scale = unit // 16
+        on = {u + p * scale for u in range(0, end - unit + 1, unit) for p in BACKBEAT}
+        for step, cell in sorted(at.items()):
+            if "snare" in cell and step not in on:
+                return f"a snare off the backbeat on {met.count(step)} (bar {step // met.bar + 1})"
+        for step in sorted(on):
+            if "snare" not in at.get(step, []) and not any(v in TOMS for v in at.get(step, [])):
+                return f"no snare on {met.count(step)} (bar {step // met.bar + 1})"
     return None

@@ -101,6 +101,8 @@ class Flow:
     families: tuple = FAMILIES
     variants: dict = field(default_factory=lambda: dict(VARIANT_WEIGHTS))
     stay: int = 3
+    cadence: int = 100   # % of phrases whose last pass is made to land home (trap: few, its loops just go round)
+    still: bool = False  # a loop of one chord allowed (trap)
 
 
 def _families(d, where):
@@ -132,19 +134,25 @@ def _weights(d, known, where):
 
 def _flow(style):
     d, where = part(style, "harmony", "progressions"), f"{style}: harmony.progressions"
-    extra = set(d) - {"why", "families", "variants", "stay"}
+    known = ("families", "variants", "stay", "cadence", "still")
+    extra = set(d) - {"why", *known}
     if extra:
-        raise StyleError(f"{where}: unknown part {sorted(extra)[0]!r} (known: families, variants, stay)")
+        raise StyleError(f"{where}: unknown part {sorted(extra)[0]!r} (known: {', '.join(known)})")
+    cad, still = d.get("cadence", 100), d.get("still", False)
+    if not isinstance(cad, int) or isinstance(cad, bool) or not 0 <= cad <= 100:
+        raise StyleError(f"{where}.cadence: a share in %, 0 to 100")
+    if not isinstance(still, bool):
+        raise StyleError(f"{where}.still: true or false")
     fams = _families(d["families"], f"{where}.families") if "families" in d else FAMILIES
     variants = {**VARIANT_WEIGHTS, **_weights(d.get("variants", {}), VARIANT_WEIGHTS, f"{where}.variants")}
-    return Flow(fams, variants, d.get("stay", 3))
+    return Flow(fams, variants, d.get("stay", 3), cad, still)
 
 
 FLOW = {s: _flow(s) for s in STYLES}
 
 
-def check_family(fam, key, vocab):
-    """None when the family fits this key and style, else the reason."""
+def check_family(fam, key, vocab, still=False):
+    """None when the family fits this key and style, else the reason. `still`: a loop of one chord is allowed."""
     if fam.mode and (fam.mode == "minor") != key.minorish:
         return f"a {fam.mode} loop; the key is {'minor' if key.minorish else 'major'}"
     chords = [parse_roman(c, key) for b in fam.bars for c in b]
@@ -152,7 +160,7 @@ def check_family(fam, key, vocab):
         why = outside(ch, key, vocab)
         if why:
             return why
-    if len({c.root for c in chords}) < 2:
+    if len({c.root for c in chords}) < 2 and not still:
         return "one chord: it doesn't move"
     return None
 
@@ -298,7 +306,7 @@ def progression(rng, flow, key, vocab, start, bars, met, phrase, prev=None):
     weighs `stay` times more); its first pass plays as written, later ones may vary, a phrase's last pass lands."""
     lines, fits = [], []
     for f in flow.families:
-        why = "its loop doesn't divide the phrase" if phrase % f.loop else check_family(f, key, vocab)
+        why = "its loop doesn't divide the phrase" if phrase % f.loop else check_family(f, key, vocab, flow.still)
         if why is None:
             fits.append(f)
         else:
@@ -315,7 +323,7 @@ def progression(rng, flow, key, vocab, start, bars, met, phrase, prev=None):
         if p:
             sp, w = vary(rng, sp, key, vocab, met, flow.variants)
             words += [w] if w else []
-        if (p + 1) * fam.loop % phrase == 0:
+        if (p + 1) * fam.loop % phrase == 0 and (flow.cadence == 100 or rng.rnd(100) < flow.cadence):
             sp, w = cadence(sp, key, vocab, met)
             words += [w] if w else []
         out += sp
@@ -368,10 +376,27 @@ class BassFlow:
     patterns: tuple = PATTERNS
     variants: dict = field(default_factory=lambda: dict(BASS_VARIANTS))
     stay: int = 3
+    kick: bool = False      # an 808: no pattern of its own, a note on every kick (trap, task 3.4a)
+    tones: tuple = ()       # the 808's tones, ((tone, weight), ...)
+    slides: int = 0         # % of the 808's notes sliding into the next
+
+
+SLIDE = 12                  # steps: an 808 slides over the last 8th of its note, and only a note that long slides
 
 
 def _bass_flow(style):
     d, where = part(style, "members", "bass"), f"{style}: members.bass"
+    if d.get("with", "pattern") == "kick":
+        tones = {k: w for k, w in d.get("tones", {"root": 1}).items() if k != "why"}
+        for k, w in tones.items():
+            if k not in TONES or not isinstance(w, int) or w < 0:
+                raise StyleError(f"{where}.tones.{k}: one of {', '.join(TONES)}, a whole-number weight")
+        slides = d.get("slides", 0)
+        if not isinstance(slides, int) or not 0 <= slides <= 100:
+            raise StyleError(f"{where}.slides: a share in %, 0 to 100")
+        return BassFlow(kick=True, tones=tuple(tones.items()), slides=slides)
+    if d.get("with", "pattern") != "pattern":
+        raise StyleError(f"{where}.with: \"pattern\" (its own) or \"kick\" (an 808 on the drummer's kicks)")
     pats = []
     for n, p in d.get("patterns", {}).items():
         if n == "why":
@@ -493,6 +518,67 @@ def bass_part(rng, bf, spans, key_at, start, bars, met, energy, prev=None, clave
             up = rng.rnd(3) == 0 and nxt + 2 <= r.high
             n.append(nxt + 2 if up else max(r.low, nxt - 1))
     return [(s, length, m) for s, length, _, _, m in out], pat, lines
+
+
+def _chance(rng, pct):
+    return rng.rnd(1000) < round(10 * pct)
+
+
+def bass_808(rng, bf, spans, key_at, kicks, start, bars, met, energy, near=None):
+    """One section's 808 (trap): (notes as [step, None, MIDI note], slides as [(step, steps, semitones)], lines). A
+    note on each of the drummer's `kicks` and on each chord change, held to the next; the first note of a chord its
+    root, the others drawn from the style's tones (roots mostly, fifths, octave jumps up). The style's share of the
+    notes (more with more energy) slide into the next over their last 8th, drawn among the notes an 8th or longer
+    with another note after them."""
+    lo, hi = start * met.bar, (start + bars) * met.bar
+    changes = {sp.at for sp in spans if lo <= sp.at < hi}
+    steps = sorted({k for k in kicks if lo <= k < hi} | changes)
+    r, out = member_range("bass"), []
+    if near is None:
+        near = round(r.mid) - 4
+    home = None
+    for st in steps:
+        sp = chord_at(spans, st)
+        tone = "root" if st == sp.at or home is None else _draw(rng, dict(bf.tones)) or "root"
+        m = _nearest(key_at(st).tonic + _tone(sp.chord, tone), near if home is None else home, r)
+        if st == sp.at or home is None:
+            home = m                               # the chord's root: the octave the 808 jumps from
+        if tone == "octave" and m + 12 <= r.high:
+            m += 12
+        out.append([st, None, m])
+        near = home
+    # the slides: `slides` % of all the notes, drawn among those that can (another note next, an 8th of room)
+    can = [i for i in range(len(out) - 1) if out[i + 1][2] != out[i][2] and abs(out[i + 1][2] - out[i][2]) <= 12
+           and out[i + 1][0] - out[i][0] >= SLIDE]
+    pct = min(100, bf.slides * (0.5 + energy) * len(out) / len(can)) if can else 0
+    slides = [(out[i + 1][0] - SLIDE, SLIDE, out[i + 1][2] - out[i][2]) for i in can if _chance(rng, pct)]
+    words = "a note on every kick, held to the next"
+    if slides:
+        words += f"; {len(slides)} slide{'s' * (len(slides) > 1)} into the next note"
+    return out, slides, [f"  bass: an 808, {words}"]
+
+
+def check_808(notes, slides, kicks, spans, key_at):
+    """None when the 808 fits, else the reason: every note on a kick or a chord change, and every slide ending on
+    the next note, a tone of its chord."""
+    on = set(kicks) | {sp.at for sp in spans}
+    for s, _, _ in notes:
+        if s not in on:
+            return f"an 808 note at step {s}, on no kick or chord change"
+    starts = {s: m for s, _, m in notes}
+    order = [s for s, _, _ in notes]
+    for at, length, semis in slides:
+        nxt = at + length
+        if nxt not in starts:
+            return f"a slide at step {at} lands on no note"
+        prev = max(s for s in order if s < nxt)
+        m = starts[prev] + semis
+        if m != starts[nxt]:
+            return f"a slide at step {at} lands on {m}, not the note {starts[nxt]}"
+        ch = chord_at(spans, nxt).chord
+        if (m - key_at(nxt).tonic) % 12 not in {(ch.root + i) % 12 for i in ch.intervals} | {ch.low % 12}:
+            return f"a slide at step {at} lands off its chord"
+    return None
 
 
 def check_bass(notes, met, clave=None):

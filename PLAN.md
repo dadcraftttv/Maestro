@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, task 3.4a (trap's entry, every role it uses).
+**Next:** Bucket 3, the listen after 3.4a (`clips/trap/trap_2222573989`), then 3.4b (synthwave's entry).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -225,6 +225,23 @@ For each chosen style, how each member plays it, written from sources.
       Before 3.4a (DadCraft, Oct 24): a closer look at trap's data and theory, in `docs/data.md` ("Trap, a closer
       look"): no open trap MIDI anywhere, so trap's training data is the entry's practice MIDI and open audio turned
       into MIDI; six proposals for the entry, for DadCraft to choose from in 3.4a's plan.
+      3.4a done Oct 24 (plan approved; DadCraft chose: proposals 1-4 now, the drop-outs and beat switches in 3.6,
+      the subgenres later; the 808 slides now and then, about 1 note in 6; a bell lead; dark strings under it).
+      The 808 (`flow.bass_808`): no pattern, a note on each of the drummer's kicks and each chord change, held to the
+      next, mostly roots, some fifths and octave jumps, 16% of its notes sliding into the next (a pitch bend over the
+      last 8th, the bend range an octave; `song.py`); its check: every note on a kick or a change, every slide
+      landing on the next note, a chord tone. So trap's drums are drawn before its bass. Harmony: six loops of one
+      or two chords (one chord, i-bVI, i-bII, i-iv, i-V and a bright I-vi for a major key), a chord every one or two
+      bars, a phrase made to land home only 25% of the time (`cadence`), one-chord loops allowed (`still`). The
+      melody: a motif move `triplet` (two notes filling a beat played as three 8th triplets, after Duinker's
+      triplet flow), weighted per style (`members.melody.develop`). The drums: the snare fixed on 3 (`backbeat`,
+      only GMD's plain-backbeat grooves, no extra snares; checked), the hats turning for a beat to 16th triplets,
+      32nds or 8th triplets (`turns`, 12% of beats at energy 0.5). Sounds: glockenspiel lead, slow strings, a synth
+      bass for the 808. `tests/unit/test_trap.py`; 189 tests, exam 106/106. Drift (20 minutes, two plays): every
+      target met in all five styles (trap's melody copies 4%, pad 93% as its harmony stays put). Open Music Theory's
+      "Drumbeats" refused the fetch again (HTTP 403): left out.
+- [ ] Listen after 3.4a: `clips/trap/trap_2222573989` (32 bars, i-bVI throughout), with its summary and "listen
+      for" line.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

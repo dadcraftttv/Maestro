@@ -232,7 +232,7 @@ So trap's training data will be mostly **practice MIDI from its style book entry
 into MIDI** (4.3), with GMD and HH-TRP for drums: the entry written in 3.4a is what the model learns trap from.
 
 **Theory.** No open textbook covers trap (Open Music Theory's "Drumbeats" chapter may touch it; the page refused
-the fetch, to check in 3.4a). What we have, all as ideas in our own words:
+the fetch, to check in 3.4a; it refused again in 3.4a, HTTP 403, so it is left out). What we have, all as ideas in our own words:
 - **Wikipedia** (CC BY-SA 4.0): "Trap music", "Drill music", "Roland TR-808". Felt around 70 BPM, counted 140
   (range about 100-176) in half time; hats in double and triple time; the snare (or clap) rigidly on beat 3;
   808 kicks tuned with a long decay so they are the bass; dark drones, thin or thick, and cinematic synth strings,

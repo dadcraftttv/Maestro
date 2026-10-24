@@ -1,7 +1,12 @@
 {
   "style": "trap",
   "license": "CC BY-SA 4.0",
-  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)", "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)"],
+  "sources": [
+    "Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)",
+    "Tempo: DadCraft, Oct 24 (Checkpoint 2)",
+    "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)",
+    "Trap's entry (task 3.4a, DadCraft's choices Oct 24): ideas in our own words from Wikipedia's \"Trap music\", \"Drill music\" and \"Roland TR-808\" (CC BY-SA 4.0), Ben Duinker's \"Good Things Come in Threes: Triplet Flow in Recent Hip-Hop Music\" (Popular Music 38/3, 2019) and producers' guides (ideas only); docs/data.md, \"Trap, a closer look\""
+  ],
   "time": {
     "tempo": 140,
     "rhythm": {
@@ -25,14 +30,66 @@
   "harmony": {
     "vocabulary": {
       "why": "Dark minor: harmonic minor's V, the bII.",
-      "kinds": ["borrowed", "diatonic"],
-      "borrow": ["harmonic_minor", "phrygian"]
+      "kinds": [
+        "borrowed",
+        "diatonic"
+      ],
+      "borrow": [
+        "harmonic_minor",
+        "phrygian"
+      ]
     },
     "leading": {
       "why": "Dark, wide, sparse pads; little fuss.",
       "fifths": 2,
       "octaves": 4,
       "spread": 14
+    },
+    "progressions": {
+      "why": "Harmony barely moves: one or two chords, a chord every one or two bars; the 808 carries it. A section keeps its loop, and a phrase mostly just goes round rather than closing on V to i.",
+      "families": {
+        "one chord": {
+          "chords": "i | i",
+          "weight": 2,
+          "why": "a single dark chord: the 808 and the melody do the moving"
+        },
+        "i to VI": {
+          "chords": "i | i | bVI | bVI",
+          "weight": 4,
+          "why": "home and the chord a semitone over its fifth, two bars each: trap's commonest pair"
+        },
+        "phrygian pair": {
+          "chords": "i | i | bII | bII",
+          "weight": 2,
+          "why": "home and the bII a semitone above: phrygian's darkest colour"
+        },
+        "minor plagal": {
+          "chords": "i | iv",
+          "weight": 2,
+          "why": "home and its subdominant, a bar each"
+        },
+        "harmonic minor": {
+          "chords": "i | i | V | V",
+          "weight": 2,
+          "why": "home and harmonic minor's major V, its leading tone a semitone under home"
+        },
+        "bright pair": {
+          "chords": "I | I | vi | vi",
+          "weight": 1,
+          "why": "for a bright key (melodic trap): home and its relative minor, two bars each"
+        }
+      },
+      "variants": {
+        "why": "Rounds mostly come back as they were.",
+        "again": 10,
+        "swap": 1,
+        "colour": 0,
+        "approach": 0,
+        "turnaround": 0
+      },
+      "stay": 6,
+      "cadence": 25,
+      "still": true
     }
   },
   "form": {
@@ -49,29 +106,65 @@
       "parallel": 1,
       "fifth_down": 1
     },
-    "modes": ["minor", "phrygian", "harmonic_minor"],
+    "modes": [
+      "minor",
+      "phrygian",
+      "harmonic_minor"
+    ],
     "hops": 1
   },
   "members": {
-    "why": "Warm pad, synth bass (an 808 stand-in), music box.",
+    "why": "Dark strings, an 808, a bell lead (DadCraft, Oct 24: the bell and the strings).",
     "pad": {
-      "sound": 89
+      "sound": 49,
+      "why": "slow strings (GM's String Ensemble 2), holding each chord"
     },
     "bass": {
-      "sound": 38
+      "sound": 38,
+      "why": "The 808: no pattern of its own, a note on every kick held to the next, mostly roots, some fifths and octave jumps; now and then a slide into the next note (DadCraft, Oct 24: about 1 in 6). A synth bass stands in for the 808.",
+      "with": "kick",
+      "tones": {
+        "root": 8,
+        "fifth": 2,
+        "octave": 2
+      },
+      "slides": 16
     },
     "melody": {
-      "sound": 10
+      "sound": 9,
+      "why": "a bell (GM's glockenspiel): a short dark motif, repeated and varied, a beat of it often in triplets over the straight grid (triplet flow)",
+      "develop": {
+        "why": "Triplet figures over the 16ths; the motif comes back close.",
+        "triplet": 4,
+        "again": 4
+      }
     },
     "drums": {
-      "why": "Half-time: hip hop's kick and snare over two bars, the hats in 16ths with rolls into each phrase, no tom fills.",
+      "why": "Half-time: hip hop's kick over two bars, the snare fixed on 3, the hats in 16ths turning to triplets or 32nds for a beat, rolls into each phrase, no tom fills.",
       "kicks": 3,
       "hats": "16th",
-      "grooves": {"hiphop": 1},
-      "time": {"hat 16th": 60, "hat 8th": 25, "hat quarter": 0, "ride quarter": 0, "ride 8th": 0, "ride 16th": 0, "crash quarter": 0},
+      "grooves": {
+        "hiphop": 1
+      },
+      "time": {
+        "hat 16th": 60,
+        "hat 8th": 25,
+        "hat quarter": 0,
+        "ride quarter": 0,
+        "ride 8th": 0,
+        "ride 16th": 0,
+        "crash quarter": 0
+      },
       "busy": 70,
       "fills": 0,
-      "rolls": 60
+      "rolls": 60,
+      "backbeat": "fixed",
+      "turns": 12,
+      "turn rates": {
+        "16th_triplet": 3,
+        "32nd": 2,
+        "8th_triplet": 1
+      }
     }
   }
 }

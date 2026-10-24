@@ -65,8 +65,8 @@ def test_fills_and_rolls_come_only_at_a_phrases_end():
         half = style == "trap"
         for seed in range(1, 21):
             hits, _ = drum_part(_rng(seed), DRUMMER[style], recs, MET, 4, end, half)
-            for step, _, _, _, v in hits:
-                if v in D.TOMS or step % 6:   # a tom or a roll's note between 16ths
+            for step, _, _, _, v in hits:   # a tom, or a roll's note between 16ths (trap's hats also turn mid-bar)
+                if v in D.TOMS or step % 6 and not DRUMMER[style].turns:
                     assert step // MET.bar % 4 == 3, (style, seed, step, v)
 
 

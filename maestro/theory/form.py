@@ -14,7 +14,7 @@ tendency a style sets, never a lock: a style's modes are the ones it leans to, a
 possible (DadCraft, Oct 23). The choose picks among what's left, seeded."""
 from dataclasses import dataclass, field
 
-from ..stylebook import table
+from ..stylebook import STYLES, StyleError, part, table
 from .pitch import PARENT, SCALES, Key
 from .rhythm import METERS, STEPS, VALUES
 
@@ -361,6 +361,24 @@ def _nudge(rng, m):
     return _from(s, m.lengths)
 
 
+def _triplet(rng, m):
+    """Two notes filling a beat played as three in 8th triplets, a note put between them (Duinker's triplet flow:
+    the beat in three over a line in twos)."""
+    beat, at, slots = VALUES["quarter"], 0, []
+    for i in range(len(m.lengths) - 1):
+        if at % beat == 0 and m.lengths[i] + m.lengths[i + 1] == beat:
+            slots.append(i)
+        at += m.lengths[i]
+    if not slots:
+        return m
+    i = slots[rng.rnd(len(slots))]
+    a, b = m.steps[i], m.steps[i + 1]
+    mid = a + (b - a) // 2 if abs(b - a) >= 2 else a + (1 if rng.rnd(2) else -1)
+    third = VALUES["8th_triplet"]
+    return _from(m.steps[:i + 1] + (mid,) + m.steps[i + 1:],
+                 m.lengths[:i] + (third, third, third) + m.lengths[i + 2:])
+
+
 DEVELOP = {
     "again": lambda rng, m: m,
     "nudge": _nudge,                                                            # one note a step off
@@ -371,12 +389,14 @@ DEVELOP = {
                                    m.lengths + (m.lengths[-1],)),              # one more step the way it was going
     "augment": lambda rng, m: _from(m.steps, [n * 2 for n in m.lengths]),      # twice as slow
     "diminish": lambda rng, m: _from(m.steps, [n // 2 for n in m.lengths]),    # twice as fast
+    "triplet": _triplet,                                                        # a beat in triplets
 }
 
 WORDS = {
     "again": "the motif again", "nudge": "the motif with one note moved", "invert": "the motif upside down",
     "back": "the motif backwards", "shorter": "the motif cut short", "longer": "the motif stretched by a note",
     "augment": "the motif twice as slow", "diminish": "the motif twice as fast",
+    "triplet": "the motif with a beat in triplets",
     "reborn": "a new motif grown from the old one's opening",
 }
 
@@ -386,15 +406,31 @@ def _develop_weights(age):
     near = max(1, 6 - age)
     far = min(4, 1 + age // 2)
     return {"again": near, "nudge": 3, "invert": far, "back": far, "shorter": 2, "longer": 2,
-            "augment": far, "diminish": far}
+            "augment": far, "diminish": far, "triplet": 0}
+
+
+def _develop(style):
+    """A style's own leanings for the motif's development (members.melody.develop): {move: weight}, added to the
+    usual ones (trap: triplets)."""
+    d, where = part(style, "members", "melody").get("develop", {}), f"{style}: members.melody.develop"
+    w = {k: v for k, v in d.items() if k != "why"}
+    for k, v in w.items():
+        if k not in DEVELOP:
+            raise StyleError(f"{where}.{k}: unknown move (known: {', '.join(DEVELOP)})")
+        if not isinstance(v, int) or isinstance(v, bool) or v < 0:
+            raise StyleError(f"{where}.{k}: a weight is a whole number, 0 or more")
+    return w
+
+
+DEVELOPS = {s: _develop(s) for s in STYLES}
 
 
 class Theme:
     """A motif living through a play: each statement develops it a little more, checked against the motif it grew
     from and the statements before; after `life` statements it's reborn from its own opening."""
 
-    def __init__(self, rng, motif=None, life=FORM["plain"].life):
-        self.rng, self.life = rng, life
+    def __init__(self, rng, motif=None, life=FORM["plain"].life, develop=None):
+        self.rng, self.life, self.develop = rng, life, develop or {}
         self.origin = motif or make_motif(rng)
         self.current, self.age, self.recent = self.origin, 0, []
 
@@ -421,7 +457,7 @@ class Theme:
         if self.age >= self.life:
             how, m = "reborn", self._reborn()
         else:
-            weights = _develop_weights(self.age)
+            weights = {**_develop_weights(self.age), **self.develop}
             while True:
                 how = _draw(self.rng, weights)
                 if how is None:

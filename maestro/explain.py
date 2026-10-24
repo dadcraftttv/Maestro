@@ -10,13 +10,14 @@ shaped over the phrase. `--no-flow` gives Checkpoint 2's bar-by-bar draws, to co
 
     python -m maestro.explain salsa --seed 7 --bars 16 [--no-flow]"""
 import argparse, re
+from itertools import groupby
 
 from .rng import ComposerRng, fresh_seed
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
-from .theory.flow import BASS, FLOW, bass_part, chart, check_bass, check_phrase, chord_at, held, phrase_melody, \
-    progression
+from .theory.flow import BASS, FLOW, bass_808, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
+    held, phrase_melody, progression
 from .theory.drums import DRUMMER, check_drums, drum_part
-from .theory.form import FORM, WORDS, Play, Theme, explain_section
+from .theory.form import DEVELOPS, FORM, WORDS, Play, Theme, explain_section
 from .theory.percussion import PERCUSSION, check_percussion, percussion_part
 from .theory.pitch import Key
 from .theory.rhythm import CLAVES, METERS, RHYTHM, check_clave, check_onsets, choose_onsets, explain_feel, explain_onsets, \
@@ -163,7 +164,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     play = Play(rng, home, form, bpm, met)
     while play.bar < bars:
         play.next_section(room)
-    theme = Theme(rng, life=form.life)
+    theme = Theme(rng, life=form.life, develop=DEVELOPS[style])
 
     def key_at(step):
         return play.section_at(min(step, play.bar * met.bar - 1) // met.bar).key
@@ -175,17 +176,40 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         spans += sp
         plan.append({"section": s, "family": fam, "lines": lines,
                      "passes": [ln.split(": ", 2)[-1] for ln in lines if ln.startswith("  bars ")]})
-    # the bass on its pattern, carrying on from section to section
-    bass, pat, near = [], None, None
+    every = [{"bar": b, "section": play.section_at(b), "energy": play.section_at(b).energy_at(b)}
+             for b in range(play.bar)]
+    whole, half = play.bar * met.bar, feel_for(style, "drums").pulse == "half"
+    kit_why = []
+    for p in plan:
+        p["drums"], p["percussion"] = [], []
+
+    def draw_drums():
+        if not DRUMMER[style]:
+            return []
+        hits, said = drum_part(rng, DRUMMER[style], every, met, form.phrase, whole, half)
+        for s, line in said:
+            next(p for p in plan if p["section"] is s)["drums"].append(line)
+        kit_why.append(("drums", check_drums(hits, met, whole, half, DRUMMER[style].fixed)))
+        return hits
+    # the bass on its pattern, carrying on from section to section; an 808 (trap) on the drummer's kicks, so the
+    # drums come first
+    bass, slides, pat, near, bf = [], [], None, None, BASS[style]
+    drums = draw_drums() if bf.kick else []
+    kicks = sorted({h[0] for h in drums if h[4] == "kick"})
     for p in plan:
         s = p["section"]
-        notes, pat, lines = bass_part(rng, BASS[style], spans, key_at, s.start, s.bars, met, s.energy, pat, clave,
-                                      [n[0] for n in bass], near)
+        if bf.kick:
+            notes, sl, lines = bass_808(rng, bf, spans, key_at, kicks, s.start, s.bars, met, s.energy, near)
+            slides += sl
+            pat = None
+        else:
+            notes, pat, lines = bass_part(rng, bf, spans, key_at, s.start, s.bars, met, s.energy, pat, clave,
+                                          [n[0] for n in bass], near)
         bass += notes
         near = notes[-1][2] if notes else near
-        p["pattern"], p["lines"] = pat, p["lines"] + lines
+        p["pattern"], p["bass"], p["lines"] = pat, lines[0].split(": ", 1)[1], p["lines"] + lines
     bass = held(bass, play.bar * met.bar)
-    why = check_bass(bass, met, clave)
+    why = check_bass(bass, met, clave) or (check_808(bass, slides, kicks, spans, key_at) if bf.kick else None)
     # the pad: each chord voiced under the melody's room, moving smoothly, not muddy with the bass under it
     pad, prev, again, rests = [], None, 0, 0
     for sp in spans:
@@ -216,17 +240,9 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
             p["phrases"].append(lines)
             melody += notes
     # the drums and the percussion over the whole play (task 3.3), their words with each section
-    every = [{"bar": b, "section": play.section_at(b), "energy": play.section_at(b).energy_at(b)}
-             for b in range(play.bar)]
-    whole, half = play.bar * met.bar, feel_for(style, "drums").pulse == "half"
-    drums, percussion, kit_why = [], [], []
-    for p in plan:
-        p["drums"], p["percussion"] = [], []
-    if DRUMMER[style]:
-        drums, said = drum_part(rng, DRUMMER[style], every, met, form.phrase, whole, half)
-        for s, line in said:
-            next(p for p in plan if p["section"] is s)["drums"].append(line)
-        kit_why.append(("drums", check_drums(drums, met, whole, half)))
+    if not bf.kick:
+        drums = draw_drums()
+    percussion = []
     if PERCUSSION[style]:
         percussion, said = percussion_part(rng, PERCUSSION[style], every, met, whole, clave)
         for s, line in said:
@@ -256,6 +272,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         recs.append({"bar": b, "section": s, "key": s.key, "energy": s.energy_at(b),
                      "chord": chord_at(spans, b * met.bar).chord})
     take = {"pad": cut(pad), "bass": cut(bass), "melody": cut(melody), "bars": recs,
+            "slides": [sl for sl in slides if sl[0] + sl[1] < end],
             "drums": [h for h in drums if h[0] < end], "percussion": [h for h in percussion if h[0] < end],
             "plan": [p for p in plan if p["section"].start < bars], "spans": [s for s in spans if s.at < end]}
     return out, take
@@ -281,7 +298,11 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         s, f = p["section"], p["family"]
         a, b = s.start + 1, min(s.end, bars)
         per = {len(x) for x in f.bars}
-        pace = ("a chord a bar" if per == {1} else "two chords a bar" if per == {2} else
+        runs = [len(list(g)) for _, g in groupby(" ".join(x) for x in f.bars)]
+        pace = ("one chord throughout" if len(runs) == 1 and per == {1} else
+                "a chord a bar" if per == {1} and set(runs) == {1} else
+                f"a chord every {runs[0]} bars" if per == {1} and len(set(runs)) == 1 else
+                "a chord every bar or two" if per == {1} else "two chords a bar" if per == {2} else
                 "chords changing every bar or half bar")
         passes = p["passes"][:(b - s.start) // f.loop]
         varied = [w for w in passes if w != "as written"]
@@ -291,7 +312,11 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         line += (f"{len(varied)} of its {len(passes)} rounds vary: " + "; ".join(varied) + "."
                  if varied else "Every round as written.")
         out.append(line)
-        out.append(f"Bass, bars {a}-{b}: {p['pattern'].name}" + (f": {p['pattern'].why}." if p['pattern'].why else "."))
+        if p["pattern"] is None:
+            out.append(f"Bass, bars {a}-{b}: {p['bass']}.")
+        else:
+            out.append(f"Bass, bars {a}-{b}: {p['pattern'].name}"
+                       + (f": {p['pattern'].why}." if p['pattern'].why else "."))
         if p.get("drums"):
             said = _bars_said(p["drums"][1:], b)
             out.append(f"Drums, bars {a}-{b}: {p['drums'][0].split('drums: ', 1)[1]}"
@@ -317,7 +342,11 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
                + ("; does the drummer feel like the style, its fills leading into the next phrase"
                   if take.get("drums") else "")
                + ("; does the percussion sit with the clave and lift in the loud sections"
-                  if take.get("percussion") else "") + ".")
+                  if take.get("percussion") else "")
+               + ("; does the 808 feel like the bass and the kick at once, and do its slides land as a gesture, not a "
+                  "habit; does the snare stay put on 3 while the hats turn to triplets and 32nds; do the lead's "
+                  "triplets sit over the grid; does the harmony staying put feel like trap rather than stuck"
+                  if BASS[style].kick else "") + ".")
     return out
 
 def main(argv=None):
