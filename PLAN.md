@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.7 (the two drift measures).
+**Next:** Bucket 2, task 2.7 (the clip player, moved up from 3.1 so every checkpoint from here is heard).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -59,6 +59,18 @@ band member play, the way its style plays it?
     rounded to the grid. **In reserve** (DadCraft, Oct 23), if the band sounds too robotic: the shared pocket from
     commit `56888cc` (`rhythm.py`): one small timing draw per step that every member shares, so the band moves
     together and stays in sync, held under a ms limit. Only DadCraft brings it back, after hearing clips.
+14. **Maestro is DadCraft's own local model** (DadCraft, Oct 24). He teaches it away from Claude Code, and neither
+    using nor training it spends his Claude budget. He gives it documents in any format; a local reader (a small
+    openly licensed language model on this PC) reads each one in full, proposes what to add to the style book in
+    its own words, with the passage it came from and what it skipped and why, and he accepts or rejects that on a
+    local web page. Music he gives it becomes training data, and the PC model trains on this PC. Documents don't
+    train the network directly: they become style book knowledge, which drives the rules and the practice MIDI the
+    model learns from. Claude builds these tools once; it doesn't do the reading or the training. The PC model is
+    the big one; the phone model is distilled from it (decision 8), carries the same rules, theory and styles, and
+    becomes the evolution of `dcs_composer`. **Every source is license-checked before it's fed** (decision 7 still
+    holds): DadCraft can hand them to Claude for the check (the source page and the copyright or license notice,
+    not the whole text). Free to read isn't always free to reuse; the check decides commercial-safe, NC (PC only)
+    or not usable.
 
 ## How each bucket runs
 
@@ -111,8 +123,10 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       develop: decision 9).
 - [x] 2.6 A theory exam (our own, after MusicTheoryBench, no copied questions) with a score, and choices explained
       in plain words.
-- [ ] 2.7 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets.
-- [ ] Checkpoint 2: DadCraft spot-checks the explained choices.
+- [ ] 2.7 A PC clip player (moved up from 3.1, DadCraft, Oct 24), so DadCraft can hear MIDI clips: the
+      checkpoints from here on are listened to, not read.
+- [ ] 2.8 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets.
+- [ ] Checkpoint 2: DadCraft spot-checks the explained choices, and hears a few bars per style.
 
 ### 3. Style book (draft)
 For each chosen style, how each member plays it, written from sources.
@@ -124,7 +138,9 @@ For each chosen style, how each member plays it, written from sources.
       the new ones too (decision 11). DadCraft's taste notes (`docs/taste.md`, from his production logs) are a
       source for synthwave and the blends, and for checks before he listens. Check open textbooks as
       sources (e.g. Open Music Theory, license to check).
-- [ ] 3.1 A PC clip player, so DadCraft can hear MIDI clips.
+- [ ] 3.1 The style book as data files (one per style, in a plain format the desk can write too); the theory
+      modules load them instead of the Python tables in `chords.py`, `voicing.py`, `rhythm.py` and `form.py`. Same
+      behaviour: the tests and the exam pass unchanged. (The clip player moved to 2.7.)
 - [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
 - [ ] 3.3 One task per style: 3.3a trap, 3.3b synthwave, 3.3c salsa, 3.3d power rock.
 - [ ] 3.4 The style judge (CLaMP 3, license checked) scores the clips first.
@@ -139,12 +155,26 @@ For each chosen style, how each member plays it, written from sources.
       pocket (decision 13) can be played to him next to the on-grid version. Also for his ear, from 2.5: the
       semitone key lift, how sections growing heavier comes across, and the layering (3.5).
 
+### D. Maestro's own desk (draft; between buckets 3 and 4, decision 14)
+A local web page on this PC where DadCraft teaches Maestro without Claude Code.
+- [ ] D.0 Plan approved: the reader model (license, size that fits the RTX 2070's 8 GB), the converters, the page.
+- [ ] D.1 Converters: any document to text, locally (PDF, DOCX, EPUB, web pages, Markdown, text; OCR for scans).
+      Each source recorded with its license and tier (decision 14) before it's read.
+- [ ] D.2 The reader: reads every part of a document, proposes style book changes in the data format of 3.1 with
+      the passage each came from, and lists what it skipped and why. The theory checks and the exam run on each
+      proposal before DadCraft sees it.
+- [ ] D.3 The page: drop files in, see what was taken away, accept, edit or reject; accepted changes go into the
+      style book, with the source credited.
+- [ ] Checkpoint D: DadCraft feeds an open textbook chapter through the page, away from Claude Code, and judges
+      what it took away.
+
 ### 4. Training data (draft)
 - [ ] 4.0 Plan approved.
 - [ ] 4.1 Download the clean sets, each tagged with its license.
 - [ ] 4.2 Practice MIDI made from the style book, labeled.
 - [ ] 4.3 Open audio to MIDI: stems, Basic Pitch, Beat This! on CC0 modern tracks.
 - [ ] 4.4 Label (style, member, attributes), tokenize; commercial-safe and NC kept apart.
+- [ ] 4.5 The desk takes music: drop MIDI or audio on the page (audio through 4.3's tools), tagged and licensed.
 - [ ] Checkpoint 4: counts, and random samples by ear.
 
 ### 5. The model (draft)
@@ -155,6 +185,7 @@ Trained on this PC (RTX 2070, 8 GB).
 - [ ] 5.3 Style dropout for the "how much style" knob; style blends.
 - [ ] 5.4 Learn broadly, then specialize per style; improve against the judge (NotaGen's CLaMP-DPO idea).
 - [ ] 5.5 The drift measures on the model: within a play and between plays; check it doesn't copy its training data.
+- [ ] 5.6 Train from the desk: one button rebuilds the practice MIDI and retrains the PC model on this PC.
 - [ ] Checkpoint 5: its parts next to the rule ones, by ear (can DadCraft tell which is which?); long plays.
 
 ### 6. Into Ouralia (draft)
@@ -289,3 +320,8 @@ Trained on this PC (RTX 2070, 8 GB).
   borrowing from mixolydian and minor). In the passage a section leans to open on its tonic and a tension chord to
   land where it points (12 times as often), never a must. For DadCraft: the style vocabularies, and the passages.
 - Oct 23: DadCraft approved the 2.6 style vocabularies ("vocabularies look good").
+- Oct 24: look back on Maestro with DadCraft. Nothing had been heard yet, so the clip player moves up to 2.7 (drift
+  measures 2.8). Decision 14: Maestro is his own local model, taught away from Claude Code through a local web page
+  (bucket D, after the style book becomes data files in 3.1), no Claude budget to use or train it; sources
+  license-checked first, which he can hand to Claude. He confirmed the PC model is the big one and the phone model
+  its distilled form, the evolution of `dcs_composer`.
