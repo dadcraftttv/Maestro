@@ -128,9 +128,16 @@ For each chosen style, how each member plays it, written from sources.
 - [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
 - [ ] 3.3 One task per style: 3.3a trap, 3.3b synthwave, 3.3c salsa, 3.3d power rock.
 - [ ] 3.4 The style judge (CLaMP 3, license checked) scores the clips first.
+- [ ] 3.5 Layering (arrangement): which members play when. Members join one after another along a build and drop
+      out as it eases (after Ouralia's Calm builds: pad, room notes, chimes, then harmony and reverb, each joining
+      further along the rise; `docs/format.md`), and sections thin or fill the band. Each style's entry says who
+      comes in first and who sits out (trap might drop its drums for a breakdown), as tendencies, never a fixed
+      order (decision 9). Driven by `form.py`'s energy, with the check and choose like the other theory modules.
+      In bucket 6 it becomes the way Calm builds and Maestro's arc stop stacking (DadCraft, Oct 23).
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
-      pocket (decision 13) can be played to him next to the on-grid version.
+      pocket (decision 13) can be played to him next to the on-grid version. Also for his ear, from 2.5: the
+      semitone key lift, how sections growing heavier comes across, and the layering (3.5).
 
 ### 4. Training data (draft)
 - [ ] 4.0 Plan approved.
@@ -267,3 +274,5 @@ Trained on this PC (RTX 2070, 8 GB).
   outside a style's list was ruled out); now it's a lean (decision 9): `choose_in_style` picks from the style's usual
   chords, and `outside`% of the time (5 by default) from beyond them, near chords (borrowed, secondary, other
   qualities and colours) four times as often as remote chromatic ones; `outside()` says why a chord is unusual.
+- Oct 23: DadCraft: layering goes in the style book, so it gets done there: task 3.5 added. Checkpoint 3 also
+  carries the 2.5 items he wants to hear (the semitone key lift, sections growing heavier).
