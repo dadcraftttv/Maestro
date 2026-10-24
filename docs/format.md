@@ -151,7 +151,8 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
   into triplets (Oct 23). Notes in the MIDI keep their exact ticks; the grid is what tokens round to.
 - **Rhythm** (task 2.4, `maestro/theory/rhythm.py`): meters with their beat grouping (7/8 as 2+2+3), metric weight
   per step, the backbeat, half-time and double-time as a pulse, and the claves (son and rumba in 3-2 and 2-3, the 6/8
-  bell) that salsa members line up with; a part crossing its clave is ruled out.
+  bell); a clave on the timeline (`"clave": "son_2-3"`) binds every member, whatever its style, and a part
+  crossing it is ruled out.
 - **Key:** root 0–11 (C = 0) and **scale**: the composer's 8 (major, minor, major and minor pentatonic, dorian,
   mixolydian, lydian, whole tone), plus phrygian, locrian, harmonic and melodic minor, phrygian dominant and blues
   (task 2.2, `maestro/theory/pitch.py`).
@@ -182,8 +183,11 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
   - **density:** notes a bar, 0–1 (MidiTok's density control, binned).
   - **register:** lowest and highest note it should use.
   - **polyphony** (pad, keys: notes at once), **note length**, **swing/feel**: swing 0-1 (0 straight, 2/3
-    triplet swing, 1 hard 75:25) on 8ths or 16ths, push (the whole member ahead or behind, in ticks), jitter
-    (human looseness, seeded), accents, and pulse (full, half, double).
+    triplet swing, 1 hard 75:25) on 8ths or 16ths, push (the whole member laid back or pushing, steady, in ms),
+    its own looseness (ms, seeded), accents, and pulse (full, half, double). Human timing is one **pocket** the
+    whole band shares (a draw per step, sized by the drummer's style), so members breathe together. The guardrail
+    (DadCraft, Oct 23: "nothing should ever sound early, late or out of sync"): every note within 15 ms of its
+    place, members on the same step within 10 ms of each other, swing included.
     Each style has a feel per member (`rhythm.py` `FEEL`), so trap's tight half-time and rock's laid-back bass can
     share one beat.
   - **repetition:** how much it repeats the bars before versus moves on (MidiTok's repetition control); with the

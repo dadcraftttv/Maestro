@@ -3,11 +3,13 @@
 steps on a grid of 24 a beat (a quarter note), so 16ths, 32nds and both kinds of triplet land on it (DadCraft,
 Oct 23: 24 rather than 12, for trap's 32nd rolls). MIDI keeps 480 ticks a beat: 20 ticks a step.
 
-The check rules out what doesn't fit (off the grid, outside the bar, a part crossing the clave). Everything else is a
-tendency a style sets: which subdivisions it uses, how much it leans on strong beats or plays across them. The feel
-(swing, ahead or behind, human looseness, accents, half-time) is per member, so trap hats and a laid-back rock bass
-can share one beat. The choose picks onsets seeded, so a pattern is never locked (decision 9)."""
+The check rules out what doesn't fit (off the grid, outside the bar, a part crossing the clave, a note heard early
+or late, two members out of sync). Everything else is a tendency a style sets: which subdivisions it uses, how much
+it leans on strong beats or plays across them. The feel (swing, laid back, looseness, accents, half-time) is per
+member, so trap hats and a laid-back rock bass can share one beat; human timing is one pocket the whole band shares.
+The choose picks onsets seeded, so a pattern is never locked (decision 9)."""
 from dataclasses import dataclass, replace
+from itertools import combinations
 
 STEPS = 24                 # grid steps a beat (quarter note)
 TICKS = 480                # MIDI ticks a beat
@@ -286,13 +288,24 @@ def roll(start, steps, rate):
 
 # ---- feel: how a member plays the grid ----
 
+# DadCraft (Oct 23): "nothing should ever sound early, late or out of sync"; laid back is fine. Human timing is in
+# milliseconds (what the ear hears, at any tempo), held under two limits the check enforces. First values, to
+# confirm by ear at checkpoint 3.
+LATE_MS = 15       # a note from where the grid (and its swing) puts it: push, the band's pocket and its own looseness
+TOGETHER_MS = 10   # two members starting on the same step: more apart than this is heard as two hits (a flam)
+
+
+def ms_to_ticks(ms, tempo):
+    return ms * tempo * TICKS / 60000
+
+
 @dataclass(frozen=True)
 class Feel:
-    """How one member plays against the grid. Ticks are MIDI ticks (480 a beat; at 120 BPM a tick is ~1 ms)."""
+    """How one member plays against the grid."""
     swing: float = 0.0   # 0 straight to 1 hard (75:25); 2/3 is triplet swing. How late the off-beats are
     unit: int = 12       # the swung note in steps: 12 swings 8ths, 6 swings 16ths
-    push: int = 0        # the whole member late (+, laid back) or early (-, pushing), in ticks
-    jitter: int = 0      # human looseness: each note up to this many ticks either way, seeded
+    push_ms: int = 0     # the whole member laid back (+) or pushing (-), steady, never random
+    loose_ms: int = 0    # its own looseness on top of the band's pocket: each note up to this either way, seeded
     accent: int = 16     # velocity between the strongest step and the weakest
     pulse: str = "full"  # full, half (half-time) or double
 
@@ -301,17 +314,38 @@ class Feel:
         return 0.5 + 0.25 * self.swing
 
 
-def place(rng, step, feel=Feel()):
-    """The tick a step is played on, with the member's feel. Swing stretches the first half of each swung pair and
-    squeezes the second, so the off-beat lands late and everything between moves with it."""
+class Pocket:
+    """The band's shared human timing: one draw per step (from the piece's start), the same for every member, so a
+    played band breathes together and the kick and bass never drift apart (they did when each member drew its own).
+    `jitter_ms` comes from the drummer's style (POCKET): the drummer leads the time. 0: programmed, on the grid."""
+
+    def __init__(self, rng, jitter_ms=0):
+        self.rng, self.jitter_ms, self._at = rng, jitter_ms, {}
+
+    def offset(self, step):
+        if not self.jitter_ms:
+            return 0
+        if step not in self._at:
+            self._at[step] = self.rng.rnd(2 * self.jitter_ms + 1) - self.jitter_ms
+        return self._at[step]
+
+
+def _swung(step, feel):
+    """Where swing puts a step, in steps. Swing stretches the first half of each swung pair and squeezes the second,
+    so the off-beat lands late and everything between moves with it. Swing is the style's grid, not lateness."""
     pair = 2 * feel.unit
     base, s = divmod(step, pair)
     split = feel.ratio * pair
     t = s * split / feel.unit if s < feel.unit else split + (s - feel.unit) * (pair - split) / feel.unit
-    tick = round((base * pair + t) * TICK) + feel.push
-    if feel.jitter:
-        tick += rng.rnd(2 * feel.jitter + 1) - feel.jitter
-    return tick
+    return base * pair + t
+
+
+def place(rng, step, feel=Feel(), tempo=120, pocket=None):
+    """The tick a step is played on: swing, then the member's push, the band's pocket and its own looseness."""
+    ms = feel.push_ms + (pocket.offset(step) if pocket else 0)
+    if feel.loose_ms:
+        ms += rng.rnd(2 * feel.loose_ms + 1) - feel.loose_ms
+    return round(_swung(step, feel) * TICK + ms_to_ticks(ms, tempo))
 
 
 def velocity(step, met, feel=Feel(), level=96):
@@ -323,23 +357,55 @@ def velocity(step, met, feel=Feel(), level=96):
 # First feel drafts per style: "*" for every member, then a role's own. The style book (bucket 3) refines them.
 FEEL = {
     "plain": {"*": Feel()},
-    "trap": {"*": Feel(pulse="half"),                     # programmed: tight, half-time
+    "trap": {"*": Feel(pulse="half"),                     # programmed: on the grid, half-time
              "drums": Feel(pulse="half", accent=28)},     # hats ride 16ths under a half-time kick and snare
     "synthwave": {"*": Feel(accent=10)},                  # programmed, straight, even
-    "salsa": {"*": Feel(jitter=3, accent=20),             # played, tight; percussion a touch looser
-              "percussion": Feel(jitter=5, accent=24)},
-    "power_rock": {"*": Feel(jitter=4, accent=20),        # played: human feel
-                   "drums": Feel(jitter=6, accent=24),
-                   "bass": Feel(push=4, jitter=4, accent=16)},   # sits just behind the kick
+    "salsa": {"*": Feel(accent=20),                       # played, tight; percussion a touch looser
+              "percussion": Feel(loose_ms=2, accent=24)},
+    "power_rock": {"*": Feel(accent=20),                  # played: the pocket gives the human feel
+                   "drums": Feel(accent=24),
+                   "bass": Feel(push_ms=4, accent=16),    # just laid back from the kick, always by the same
+                   "guitar": Feel(loose_ms=2, accent=20)},
 }
+
+# The band's pocket (ms either way) by the drummer's style: programmed styles sit on the grid.
+POCKET = {"plain": 0, "trap": 0, "synthwave": 0, "salsa": 3, "power_rock": 5}
 
 
 def feel_for(style, role, **override):
     """A member's feel: its style's draft for that role (or the style's "*"), with any control overriding it
     (`swing=0.3`)."""
     table = FEEL[style]
-    f = table.get(role, table["*"])
-    return replace(f, **override)
+    return replace(table.get(role, table["*"]), **override)
+
+
+def check_band_rhythm(parts, met, tempo, pocket_ms=0, clave=None):
+    """What's wrong with the band's timing over the same bars, as a list of reasons (empty: fine). `parts` is
+    {role: (onsets, feel)}. Every note stays within LATE_MS of its place; members starting on the same step stay
+    within TOGETHER_MS of each other, swing included (a swung part on top of a straight one); with a two-sided
+    clave on the timeline, every member lines up with it, whatever its style."""
+    out = []
+    step_ms = 60000 / tempo / STEPS
+    for role, (_, f) in parts.items():
+        worst = abs(f.push_ms) + pocket_ms + f.loose_ms
+        if worst > LATE_MS:
+            way = "late" if f.push_ms >= 0 else "early"
+            out.append(f"the {role} can land {worst} ms off the beat, more than {LATE_MS}: it would sound {way}")
+    for (ra, (oa, fa)), (rb, (ob, fb)) in combinations(parts.items(), 2):
+        gap, at = 0, None
+        for s in set(oa) & set(ob):
+            d = abs((_swung(s, fa) - _swung(s, fb)) * step_ms + fa.push_ms - fb.push_ms) + fa.loose_ms + fb.loose_ms
+            if d > gap:
+                gap, at = d, s
+        if gap > TOGETHER_MS:
+            out.append(f"the {ra} and the {rb} can be {round(gap)} ms apart on {met.count(at)}, more than "
+                       f"{TOGETHER_MS}: out of sync")
+    if clave is not None:
+        for role, (on, _) in parts.items():
+            why = check_clave(on, clave)
+            if why:
+                out.append(f"the {role} is {why}")
+    return out
 
 
 def explain_feel(feel):
@@ -350,9 +416,9 @@ def explain_feel(feel):
         parts.append(f"swung {what} ({round(feel.ratio * 100)}:{round((1 - feel.ratio) * 100)})")
     else:
         parts.append("straight")
-    if feel.push:
-        parts.append(f"{abs(feel.push)} ticks {'behind' if feel.push > 0 else 'ahead of'} the beat")
-    parts.append(f"loose by up to {feel.jitter} ticks" if feel.jitter else "tight to the grid")
+    if feel.push_ms:
+        parts.append(f"{abs(feel.push_ms)} ms {'laid back' if feel.push_ms > 0 else 'pushing'}")
+    parts.append(f"loose by up to {feel.loose_ms} ms" if feel.loose_ms else "with the band")
     if feel.pulse != "full":
         parts.append(f"{feel.pulse}-time")
     return ", ".join(parts)

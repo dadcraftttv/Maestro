@@ -225,3 +225,11 @@ Trained on this PC (RTX 2070, 8 GB).
   accents, pulse. First drafts: trap programmed and half-time, synthwave straight and even, salsa tight with looser
   percussion and the son 2-3 clave, power rock human with the bass 4 ticks behind. For DadCraft: the style drafts,
   and son 2-3 as salsa's default clave.
+- Oct 23: DadCraft approved both 2.4 choices (the style drafts, son 2-3), then asked whether it would make a
+  coherent song. Not yet: each member's timing was drawn on its own and in ticks (kick and bass could flam, worse at
+  slow tempos), and nothing checked the band as a whole. His rule: "nothing should ever sound early, late or out of
+  sync" (laid back is fine). Fixed in 2.4: timing in ms; one pocket the band shares (the drummer's style sizes it);
+  `check_band_rhythm` holds every note within 15 ms of its place and members on the same step within 10 ms of each
+  other, swing included (a swung part over a straight one is caught), and binds every member to the timeline's
+  clave. Every style draft passes at 60-180 BPM. The two limits are first values, for his ears at checkpoint 3.
+  Rhythms that groove (repetition, variation) come in 2.5 and bucket 3.

@@ -2,9 +2,9 @@
 import pytest
 
 from maestro.rng import ComposerRng
-from maestro.theory.rhythm import (CLAVES, FEEL, METERS, RHYTHM, STEPS, TICK, VALUES, Feel, Meter, check_clave,
-                                   check_onsets, choose_onsets, explain_feel, explain_onsets, feel_for,
-                                   from_tick16, meter, place, roll, to_step, velocity)
+from maestro.theory.rhythm import (CLAVES, FEEL, METERS, POCKET, RHYTHM, STEPS, TICK, VALUES, Feel, Meter, Pocket,
+                                   check_band_rhythm, check_clave, check_onsets, choose_onsets, explain_feel,
+                                   explain_onsets, feel_for, from_tick16, meter, place, roll, to_step, velocity)
 
 M44, M34, M68, M128, M78 = (METERS[m] for m in ("4/4", "3/4", "6/8", "12/8", "7/8"))
 
@@ -152,11 +152,53 @@ def test_swing_moves_the_off_beat_late():
     assert place(rng(), 6, Feel(swing=1)) == 180               # a 16th inside a swung 8th moves with it
 
 
-def test_push_and_jitter():
-    assert place(rng(), 24, Feel(push=4)) == 484
-    ticks = [place(rng(s), 24, Feel(jitter=6)) for s in range(100)]
+def test_push_and_the_pocket():
+    assert place(rng(), 24, Feel(push_ms=4), tempo=120) == 484               # 4 ms at 120 BPM: ~4 ticks
+    assert place(rng(), 24, Feel(push_ms=4), tempo=60) == 482                # ms, not ticks: the same 4 ms
+    ticks = [place(rng(), 24, pocket=Pocket(rng(s), 6)) for s in range(100)]
     assert min(ticks) >= 474 and max(ticks) <= 486 and len(set(ticks)) > 5
-    assert place(rng(5), 24, Feel(jitter=6)) == place(rng(5), 24, Feel(jitter=6))
+    p = Pocket(rng(5), 6)
+    kick, bass = place(rng(), 24, Feel(), pocket=p), place(rng(), 24, Feel(push_ms=4), pocket=p)
+    assert bass - kick == 4                                                  # locked: the same draw, the bass just behind
+    assert Pocket(rng(5), 0).offset(24) == 0
+
+
+def test_band_timing_limits():
+    on = [0, 24, 48, 72]
+    rock = {r: (on, feel_for("power_rock", r)) for r in ("drums", "bass", "guitar")}
+    assert check_band_rhythm(rock, M44, 80, POCKET["power_rock"]) == []
+    late = check_band_rhythm({"bass": (on, Feel(push_ms=12))}, M44, 120, pocket_ms=5)
+    assert late and "late" in late[0]
+    early = check_band_rhythm({"keys": (on, Feel(push_ms=-16))}, M44, 120)
+    assert early and "early" in early[0]
+    apart = check_band_rhythm({"drums": (on, Feel()), "bass": (on, Feel(push_ms=12))}, M44, 120)
+    assert any("out of sync" in w for w in apart)
+
+
+def test_swung_on_straight_is_out_of_sync():
+    eighths = list(range(0, 96, 12))
+    band = {"drums": (eighths, Feel(swing=0.5)), "bass": (eighths, Feel())}
+    why = check_band_rhythm(band, M44, 100)
+    assert why and "out of sync" in why[0] and "and" in why[0]
+    same = {"drums": (eighths, Feel(swing=0.5)), "bass": (eighths, Feel(swing=0.5))}
+    assert check_band_rhythm(same, M44, 100) == []
+    apart = {"drums": ([12, 36], Feel(swing=0.5)), "bass": ([0, 24], Feel())}   # never on the same step: fine
+    assert check_band_rhythm(apart, M44, 100) == []
+
+
+def test_every_member_lines_up_with_the_songs_clave():
+    son = CLAVES["son_2-3"]
+    band = {"percussion": (list(son.onsets), Feel()), "drums": (list(CLAVES["son_3-2"].onsets), Feel())}
+    why = check_band_rhythm(band, M44, 180, clave=son)
+    assert len(why) == 1 and why[0].startswith("the drums is crossed")
+
+
+def test_every_style_draft_stays_in_sync():
+    on = [0, 12, 24, 36, 48, 60, 72, 84]
+    for style, table in FEEL.items():
+        band = {r: (on, feel_for(style, r)) for r in ("drums", "bass", "guitar", "keys", "percussion", "pad")}
+        for tempo in (60, 90, 140, 180):
+            assert check_band_rhythm(band, M44, tempo, POCKET[style]) == [], (style, tempo)
 
 
 def test_accents():
@@ -169,14 +211,14 @@ def test_accents():
 def test_feel_drafts_per_member():
     for style, table in FEEL.items():
         assert "*" in table, style
-    assert feel_for("trap", "bass").pulse == "half" and feel_for("trap", "bass").jitter == 0     # programmed
-    assert feel_for("power_rock", "drums").jitter > 0                                          # human
-    assert feel_for("power_rock", "bass").push > 0                                             # laid back
+    assert feel_for("trap", "bass").pulse == "half" and POCKET["trap"] == 0                  # programmed
+    assert POCKET["power_rock"] > 0                                                            # human
+    assert feel_for("power_rock", "bass").push_ms > 0                                          # laid back
     assert feel_for("synthwave", "drums", swing=0.3).swing == 0.3                              # a control overrides
     assert RHYTHM["salsa"].clave in CLAVES
 
 
 def test_explain_feel():
-    assert explain_feel(Feel()) == "straight, tight to the grid"
-    assert explain_feel(feel_for("power_rock", "bass")) == "straight, 4 ticks behind the beat, loose by up to 4 ticks"
-    assert explain_feel(Feel(swing=2 / 3, unit=6, pulse="half")) == "swung 16ths (67:33), tight to the grid, half-time"
+    assert explain_feel(Feel()) == "straight, with the band"
+    assert explain_feel(feel_for("power_rock", "bass")) == "straight, 4 ms laid back, with the band"
+    assert explain_feel(Feel(swing=2 / 3, unit=6, pulse="half")) == "swung 16ths (67:33), with the band, half-time"
