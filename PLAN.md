@@ -4,8 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, the listen after 3.2: DadCraft hears `clips/flow/salsa_23` (16 bars, the montuno vamp and the
-tumbao), made with `python -m maestro.sketch salsa --seed 23 --seeds 1`.
+**Next:** Bucket 3, task 3.3 (the drummer from the Groove MIDI Dataset, and the percussion member).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -200,8 +199,11 @@ For each chosen style, how each member plays it, written from sources.
       (`--no-flow`: Checkpoint 2's draws). Drift (`python -m maestro.drift --flow ...`, 20 minutes, two plays a style):
       every target met in all five styles (melody 2-11% copies; bass ~45% and pad 62-78% repeat, as loops do).
       No chapter text used, only the ideas, so no chapter's note needed checking; the Rock Corpus waits for 3.4d.
-- [ ] Listen after 3.2 (DadCraft, Oct 24): one style, a 16-bar clip with its progression, bass pattern and a phrased
+- [x] Listen after 3.2 (DadCraft, Oct 24): one style, a 16-bar clip with its progression, bass pattern and a phrased
       melody, with its summary (3.7's shape), before the four entries are written.
+      Heard Oct 24 (`clips/flow/salsa_23`): more like salsa, the clave and bass a nice feel, the lead goes round and
+      comes home, question and answer heard; "a big step in the right direction ... still a long way to go". How
+      much the rounds change he couldn't tell: asked again at checkpoint 3 (`docs/verdicts.md`).
 - [ ] 3.3 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0), and the **percussion** member (congas,
       timbales, cowbell, clave), written from theory (El Bongosero's data license is still unclear).
 - [ ] 3.4 One task per style, each entry covering every role it uses: 3.4a trap, 3.4b synthwave, 3.4c salsa,
@@ -221,7 +223,8 @@ For each chosen style, how each member plays it, written from sources.
       for" line). The detailed per-bar explanation stays, for debugging.
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
-      pocket (decision 13) can be played to him next to the on-grid version. Also for his ear, from 2.5: the
+      pocket (decision 13) can be played to him next to the on-grid version. Ask too whether the chord rounds change
+      too much or too little, on the long clip (open from the listen after 3.2). Also for his ear, from 2.5: the
       semitone key lift, how sections growing heavier comes across, and the layering (3.6).
 
 ### D. Maestro's own desk (draft; between buckets 3 and 4, decision 14)

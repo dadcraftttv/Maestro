@@ -200,3 +200,8 @@ isn't reloaded every session; grep for the part a task needs.
   the bass on its style's pattern family, the melody shaped over the phrase; `theory/flow.py`, switchable). DadCraft
   chose salsa for the listen after 3.2, and an 8-bar phrase (statement, answer left open, the opening again,
   answer landing home).
+- Oct 24: the listen after 3.2 (`clips/flow/salsa_23`, 16 bars). DadCraft: "it feels more like salsa! the clave
+  and bass are a nice feel, and it sounds like the lead does go round and come home. yes, it feels like it's going
+  through a question and answer or call and response." On too much or too little change from round to round: "i
+  can't tell" (asked again at checkpoint 3, on a long clip). "this was big step in the right direction for salsa,
+  but there's still a long way to go."
