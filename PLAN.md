@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.4 (rhythm and meter).
+**Next:** Bucket 2, task 2.5 (form, sections and energy; the long play).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -98,7 +98,7 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       chords and bVII).
 - [x] 2.3 Voice leading: smooth moves, a range per member (new roles too, decision 11), the melody on top
       (`docs/taste.md`); parallels and the like as tendencies a style sets, not bans.
-- [ ] 2.4 Rhythm and meter: the 12-step grid, meters past 4/4, half-time, clave, swing and feel per member.
+- [x] 2.4 Rhythm and meter: the beat grid (24 steps, was 12), meters past 4/4, half-time, clave, swing and feel per member.
 - [ ] 2.5 Form, sections and energy; how a long play evolves over ~20 minutes (energy arc, key changes, motifs that
       develop: decision 9).
 - [ ] 2.6 A theory exam (our own, after MusicTheoryBench, no copied questions) with a score, and choices explained
@@ -213,3 +213,15 @@ Trained on this PC (RTX 2070, 8 GB).
   style drafts.
 - Oct 23: DadCraft approved both 2.3 choices: the member ranges, and the first style drafts (power rock's parallel
   fifths, synthwave's block glide, salsa's octaves and rootless keys, trap's wide pads, plain avoiding parallels).
+- Oct 23: DadCraft moved the beat grid from 12 to 24 steps a beat, so trap's 32nd hat rolls land on it as well as
+  triplets (`docs/format.md` updated).
+- Oct 23: 2.4 done. `maestro/theory/rhythm.py`: the 24-step grid (20 ticks a step; today's `tick16` is every 6th),
+  meters with their grouping (4/4, 3/4, 2/4, 5/4, 6/8, 12/8, 7/8 as 2+2+3, any other n/d), metric weight per step,
+  the backbeat and the pulse (half-time puts trap's snare on 3; double-time), counting in players' words ("2 and",
+  "1 trip"). The claves: son and rumba in 3-2 and 2-3, and the 6/8 bell; the check rules out a part that lines up
+  with the other direction (crossed), while a part the same each bar (a tumbao) passes. The choose draws onsets
+  seeded by a style's weights (which subdivisions it uses, how much it leans on the beat); trap rolls at 16ths,
+  32nds and both triplets. Feel per member: swing (8ths or 16ths), push ahead or behind, seeded human jitter,
+  accents, pulse. First drafts: trap programmed and half-time, synthwave straight and even, salsa tight with looser
+  percussion and the son 2-3 clave, power rock human with the bass 4 ticks behind. For DadCraft: the style drafts,
+  and son 2-3 as salsa's default clave.

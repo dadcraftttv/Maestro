@@ -145,8 +145,13 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
 - **Tempo:** BPM. In data, from the file; in Ouralia, from the walking clock as today.
 - **Meter:** `4/4` first; `3/4`, `6/8`, `12/8` allowed (salsa and afrobeat lean on 12/8 feels). Today's composer is
   4/4 only.
-- **Grid:** 12 steps a beat, so both 16ths (every 3rd step) and triplets (every 4th) land on it; today's `tick16`
-  is steps 0, 3, 6 ... of each beat. Notes in the MIDI keep their exact ticks; the grid is what tokens round to.
+- **Grid:** 24 steps a beat (a quarter note; 20 MIDI ticks a step), so 16ths (every 6th step), 32nds (every 3rd),
+  8th and 16th triplets (every 8th and 4th) and 32nd triplets (every 2nd) all land on it; today's `tick16` is steps
+  0, 6, 12 ... of the bar. It was 12 until task 2.4, when DadCraft chose 24 so trap's 32nd hat rolls aren't rounded
+  into triplets (Oct 23). Notes in the MIDI keep their exact ticks; the grid is what tokens round to.
+- **Rhythm** (task 2.4, `maestro/theory/rhythm.py`): meters with their beat grouping (7/8 as 2+2+3), metric weight
+  per step, the backbeat, half-time and double-time as a pulse, and the claves (son and rumba in 3-2 and 2-3, the 6/8
+  bell) that salsa members line up with; a part crossing its clave is ruled out.
 - **Key:** root 0–11 (C = 0) and **scale**: the composer's 8 (major, minor, major and minor pentatonic, dorian,
   mixolydian, lydian, whole tone), plus phrygian, locrian, harmonic and melodic minor, phrygian dominant and blues
   (task 2.2, `maestro/theory/pitch.py`).
@@ -176,7 +181,11 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
   - **strength:** how strongly the style shows, 0–1 (0 = plain, the theory rules alone; the dropout knob, 5.3).
   - **density:** notes a bar, 0–1 (MidiTok's density control, binned).
   - **register:** lowest and highest note it should use.
-  - **polyphony** (pad, keys: notes at once), **note length**, **swing/feel** (how late the off-beats are).
+  - **polyphony** (pad, keys: notes at once), **note length**, **swing/feel**: swing 0-1 (0 straight, 2/3
+    triplet swing, 1 hard 75:25) on 8ths or 16ths, push (the whole member ahead or behind, in ticks), jitter
+    (human looseness, seeded), accents, and pulse (full, half, double).
+    Each style has a feel per member (`rhythm.py` `FEEL`), so trap's tight half-time and rock's laid-back bass can
+    share one beat.
   - **repetition:** how much it repeats the bars before versus moves on (MidiTok's repetition control); with the
     seed it is how decision 9 gets measured and steered.
 - **Sound is not here.** Each member's sound is a name in `sound` (an Ouralia kit), never in the notes or tokens,
@@ -186,7 +195,7 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
 ### Tokens (for the model, bucket 4)
 MidiTok MMM, laid out as: the timeline run (per bar: tempo, meter, key, scale, chord, section, energy), then one
 run per member, each opened with its role and controls (`Style_trap_10`, `Strength_9`, `Density_6`, `Register_..`,
-weights and levels binned), then its bars of notes on the 12-step grid. Drums last. `Bar_Fill` asks the model to
+weights and levels binned), then its bars of notes on the 24-step grid. Drums last. `Bar_Fill` asks the model to
 write one member's bars seeing the timeline and the other members, which is how each member is "written seeing the
 others" (5.1). Commercial-safe and NC data are tokenized into separate sets (decision 7).
 
@@ -205,8 +214,8 @@ does: each play draws a fresh one, as the composer already does.
 | drive, `intensity` | energy, and each member's density |
 | `KIND_REG` (melody register) | melody member's register control |
 | melody motif statements, `cell` | melody member's notes (motif logic stays in the theory core, bucket 2) |
-| `drums` 3 lanes × 16 | drums member, more lanes, 12-step grid |
-| `tick16`, 4/4 | 12-step grid; 4/4 plus other meters |
+| `drums` 3 lanes × 16 | drums member, more lanes, 24-step grid |
+| `tick16`, 4/4 | 24-step grid; 4/4 plus other meters |
 | swing in the drum engine | swing/feel control per member |
 | `rnd` seeded from the clock | seed stored per play |
 | no style | style, strength per member |
