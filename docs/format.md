@@ -243,6 +243,31 @@ does: each play draws a fresh one, as the composer already does. The measures an
 | `rnd` seeded from the clock | seed stored per play |
 | no style | style, strength per member |
 
+## The style book (task 3.1, Oct 24)
+One JSON file a style in `maestro/data/styles/` (`trap.json`, ...), CC BY-SA 4.0 with its sources cited, and
+`book.json` listing the styles in order (plain first: the theory core's defaults, the baseline). `maestro/stylebook.py`
+reads and checks every file when Maestro starts; the theory modules build their tables from it (`VOCAB`, `LEADING`,
+`RHYTHM`, `FEEL`, `FORM`, the sketch's tempo, sounds and drum guide). A file names only what differs from the theory
+core's defaults: a field left out keeps its default (the defaults are the dataclasses in the theory modules). Any
+part may carry a `"why"` in plain words.
+
+| Part | Holds | Built into |
+|---|---|---|
+| `style`, `license`, `sources`, `why` | the file's name, CC BY-SA 4.0, where it comes from, what it is | (checked) |
+| `time.tempo` | the felt tempo, BPM (required) | the sketch's tempo |
+| `time.rhythm` | grid weights, the clave | `rhythm.Rhythm` |
+| `time.feel` | `"*"` for every member, then a role's own | `rhythm.Feel` |
+| `harmony.vocabulary` | kinds, qualities, colours, borrowed scales, how often it steps out | `chords.Vocabulary` |
+| `harmony.leading` | voice-leading costs and rules | `voicing.Leading` |
+| `form` | phrases, waves, key changes, motif life | `form.Form` |
+| `members.<role>` | `sound` (GM program), `level` (velocity), for drums `kicks` and `hats` | the sketch |
+
+Roles are the band's members (decision 11). The loader says where a file goes wrong (`trap: form.moves: unknown key
+move 'leap'`): unknown parts and fields, the wrong kind of value, a missing source or the wrong license, and any name
+the theory doesn't know (a quality, a scale, a clave, a key move). Lists become tuples or sets, and phrase counts
+become whole numbers, as the theory expects. Bucket 3's later tasks add parts (progression and pattern families in
+3.2, fit and form in 3.4), each with its check.
+
 ## The port and the C (task 2.1, Oct 23)
 `maestro/port.py` is today's `dcs_composer` in Python, choice for choice: the same seed and messages give the same
 outputs (chords, sections, melody statements, drums, walking notes, cells), checked by the parity test

@@ -14,7 +14,8 @@ tendency a style sets, never a lock: a style's modes are the ones it leans to, a
 possible (DadCraft, Oct 23). The choose picks among what's left, seeded."""
 from dataclasses import dataclass, field
 
-from .pitch import PARENT, Key
+from ..stylebook import table
+from .pitch import PARENT, SCALES, Key
 from .rhythm import METERS, STEPS, VALUES
 
 KINDS = ("home", "lift", "calm", "turn")
@@ -120,19 +121,18 @@ class Form:
     hops: int = 2                           # key changes away from home before it has to come back
     life: int = 8                           # statements before a motif is reborn from its own fragment
 
+    def __post_init__(self):
+        if self.opening not in ("swell", "full"):
+            raise ValueError(f"unknown opening {self.opening!r}")
+        for what, names, known in (("key move", self.moves, MOVES), ("mode", self.modes, SCALES),
+                                   ("section kind", self.grow, KINDS)):
+            for n in names:
+                if n not in known:
+                    raise ValueError(f"unknown {what} {n!r}")
 
-# First drafts for the four styles; the style book (bucket 3) refines them.
-FORM = {
-    "plain": Form(),
-    "trap": Form(phrase=8, phrases={1: 1, 2: 3}, depth=0.4, opening="full", change=8,    # one dark key, mostly
-                 moves={"parallel": 1, "fifth_down": 1}, modes=("minor", "phrygian", "harmonic_minor"), hops=1),
-    "synthwave": Form(phrase=8, phrases={2: 3, 3: 1}, wave=(4, 7), depth=0.6, change=25,   # long swells, a key lift
-                      moves={"step_up": 2, "tone_up": 1, "relative": 2, "fifth_down": 1}, modes=("minor", "major", "dorian")),
-    "salsa": Form(phrase=8, phrases={2: 2, 3: 1}, depth=0.5, opening="full", change=20,    # son into montuno
-                  moves={"relative": 2, "fifth_up": 2, "fifth_down": 1, "parallel": 1}, modes=("minor", "major")),
-    "power_rock": Form(phrase=8, phrases={2: 3, 3: 1}, wave=(3, 5), depth=0.6, opening="full", change=20,
-                       moves={"step_up": 2, "tone_up": 2, "fifth_down": 1, "relative": 1}, modes=("minor", "major", "mixolydian")),
-}
+
+# The style book's files hold each style's form.
+FORM = table(Form, "form")
 
 
 # ---- sections ----

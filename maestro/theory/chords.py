@@ -8,6 +8,7 @@ seven is bVII in any key."""
 from dataclasses import dataclass, replace
 from functools import lru_cache
 
+from ..stylebook import table
 from .pitch import SCALES, Key
 
 QUALITIES = {
@@ -278,20 +279,16 @@ class Vocabulary:
     borrow: tuple | None = None   # the scales it borrows from; None for any
     outside: int = 5
 
+    def __post_init__(self):
+        for what, names, known in (("kind", self.kinds, KINDS), ("quality", self.qualities, QUALITIES),
+                                   ("colour", self.colours - {None}, COLOURS), ("scale", self.borrow or (), SCALES)):
+            for n in names:
+                if n not in known:
+                    raise ValueError(f"unknown {what} {n!r}")
 
-_F = frozenset
 
-# First drafts for the four styles, from 2.2's notes; the style book (bucket 3) refines them.
-VOCAB = {
-    "plain": Vocabulary(),
-    "trap": Vocabulary(kinds=_F(("diatonic", "borrowed")), qualities=_F(("min", "maj", "dim")),
-                       borrow=("harmonic_minor", "phrygian")),             # dark minor: harmonic minor's V, the bII
-    "synthwave": Vocabulary(kinds=_F(("diatonic", "borrowed")), qualities=_F(("maj", "min", "sus2", "sus4")),
-                            colours=_F((None, "add9", "maj7", "7")), borrow=("minor", "major", "dorian")),  # bVI bVII iv
-    "salsa": Vocabulary(kinds=_F(("diatonic", "secondary")), colours=_F((None, "7", "maj7", "6"))),  # ii-Vs, sevenths
-    "power_rock": Vocabulary(kinds=_F(("diatonic", "borrowed")), qualities=_F(("power", "maj", "min")),
-                             borrow=("mixolydian", "minor")),             # power chords and the bVII
-}
+# The style book's files hold each style's vocabulary (harmony.vocabulary).
+VOCAB = table(Vocabulary, "harmony", "vocabulary")
 
 
 def outside(chord, key, vocab):

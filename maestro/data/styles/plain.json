@@ -1,0 +1,34 @@
+{
+  "style": "plain",
+  "license": "CC BY-SA 4.0",
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)"],
+  "why": "No style: the theory core's defaults, the baseline the others lean away from.",
+  "time": {
+    "tempo": 100,
+    "rhythm": {},
+    "feel": {
+      "*": {}
+    }
+  },
+  "harmony": {
+    "vocabulary": {},
+    "leading": {}
+  },
+  "form": {},
+  "members": {
+    "why": "Warm pad, synth bass, vibraphone.",
+    "pad": {
+      "sound": 89
+    },
+    "bass": {
+      "sound": 38
+    },
+    "melody": {
+      "sound": 11
+    },
+    "drums": {
+      "kicks": 2,
+      "hats": "8th"
+    }
+  }
+}

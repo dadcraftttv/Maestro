@@ -11,6 +11,8 @@ choose picks onsets seeded, so a pattern is never locked (decision 9)."""
 from dataclasses import dataclass, replace
 from itertools import combinations
 
+from ..stylebook import STYLES, make, part, table
+
 STEPS = 24                 # grid steps a beat (quarter note)
 TICKS = 480                # MIDI ticks a beat
 TICK = TICKS // STEPS      # 20 ticks a step
@@ -231,6 +233,10 @@ class Rhythm:
     lift: int = 2
     clave: str | None = None   # the clave its members line up with
 
+    def __post_init__(self):
+        if self.clave is not None and self.clave not in CLAVES:
+            raise ValueError(f"unknown clave {self.clave!r}")
+
     def weigh(self, step, met, pulse="full"):
         s = step % met.bar
         if s % 6 == 0:
@@ -244,14 +250,8 @@ class Rhythm:
         return g * (self.base + self.lift * met.weight(s, pulse))
 
 
-# First drafts for the four styles; the style book (bucket 3) refines them.
-RHYTHM = {
-    "plain": Rhythm(),
-    "trap": Rhythm(triplet=2, fine=1, base=2, lift=1),       # 16ths with triplet and 32nd turns; sparse kicks
-    "synthwave": Rhythm(lift=3),                              # straight 8ths and 16ths, on the beat
-    "salsa": Rhythm(base=3, lift=1, clave="son_2-3"),         # anticipations; everything sits with the clave
-    "power_rock": Rhythm(triplet=1, lift=3),                  # driving 8ths, the odd triplet fill
-}
+# The style book's files hold each style's rhythm (time.rhythm).
+RHYTHM = table(Rhythm, "time", "rhythm")
 
 
 def _draw(rng, items):
@@ -304,6 +304,8 @@ class Feel:
     def __post_init__(self):
         if not 0 <= self.swing <= self.unit // 2:
             raise ValueError(f"swing goes from 0 to {self.unit // 2} steps for this unit")
+        if self.pulse not in ("full", "half", "double"):
+            raise ValueError(f"unknown pulse {self.pulse!r}")
 
     @property
     def ratio(self):
@@ -332,18 +334,9 @@ def velocity(step, met, feel=Feel(), level=96):
     return max(1, min(127, level - feel.accent * (5 - w) // 5))
 
 
-# First feel drafts per style: "*" for every member, then a role's own. The style book (bucket 3) refines them.
-FEEL = {
-    "plain": {"*": Feel()},
-    "trap": {"*": Feel(pulse="half"),                     # half-time
-             "drums": Feel(pulse="half", accent=28)},     # hats ride 16ths under a half-time kick and snare
-    "synthwave": {"*": Feel(accent=10)},                  # straight, even
-    "salsa": {"*": Feel(accent=20),                       # straight, with the clave
-              "percussion": Feel(accent=24)},
-    "power_rock": {"*": Feel(accent=20),                  # straight, driving: big accents on the beat
-                   "drums": Feel(accent=24),
-                   "bass": Feel(accent=16)},
-}
+# Each style's feel from the style book (time.feel): "*" for every member, then a role's own.
+FEEL = {s: {"*": Feel(), **{role: make(Feel, d, f"{s}: time.feel.{role}")
+                            for role, d in part(s, "time", "feel").items() if role != "why"}} for s in STYLES}
 
 
 def feel_for(style, role, **override):

@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, task 3.1 (the style book format: the theory tables move into one JSON file a style, same
-behaviour).
+**Next:** Bucket 3, task 3.2 (Flow: progressions as families with variants, the bass on its style's pattern
+family, the melody shaped over a phrase).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -179,9 +179,13 @@ For each chosen style, how each member plays it, written from sources.
       (`docs/data.md` "Filling the gaps with theory"); sources from 3.0a's sort (`docs/data.md`, "For the four
       styles now"). Carries from Checkpoint 2 (`docs/verdicts.md`): flow (3.2), the melody heard on long clips
       (checkpoint 3), a short summary per clip (3.7).
-- [ ] 3.1 The style book format: the tables in `chords.py`, `voicing.py`, `rhythm.py`, `form.py` and `sketch.py`
+- [x] 3.1 The style book format: the tables in `chords.py`, `voicing.py`, `rhythm.py`, `form.py` and `sketch.py`
       move into one JSON file a style, with a loader that checks each file. Same behaviour: the tests and the exam
       pass unchanged.
+      Done Oct 24: `maestro/data/styles/` (a file a style, `book.json` for the order), `maestro/stylebook.py` (the
+      loader and its checks, `tests/unit/test_stylebook.py`), the format in `docs/format.md` ("The style book").
+      Same behaviour, checked: the tables identical value for value, 136 tests and the exam (106/106) unchanged,
+      explain's text and the sketch clips byte for byte.
 - [ ] 3.2 Flow (Checkpoint 2's "no flow"): progressions drawn as families with variants over 4 or 8 bars, not one
       chord a bar; the bass built on its style's pattern family; the melody shaped over a phrase (a statement and
       an answer landing on the cadence). Check and choose like the other theory modules. Sources: Open Music Theory

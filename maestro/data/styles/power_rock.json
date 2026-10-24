@@ -1,0 +1,67 @@
+{
+  "style": "power_rock",
+  "license": "CC BY-SA 4.0",
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)"],
+  "time": {
+    "tempo": 130,
+    "rhythm": {
+      "why": "Driving 8ths, the odd triplet fill.",
+      "triplet": 1,
+      "lift": 3
+    },
+    "feel": {
+      "why": "Straight, driving: big accents on the beat.",
+      "*": {
+        "accent": 20
+      },
+      "drums": {
+        "accent": 24
+      },
+      "bass": {}
+    }
+  },
+  "harmony": {
+    "vocabulary": {
+      "why": "Power chords and the bVII.",
+      "kinds": ["borrowed", "diatonic"],
+      "qualities": ["maj", "min", "power"],
+      "borrow": ["mixolydian", "minor"]
+    },
+    "leading": {
+      "why": "Power chords slide as one shape.",
+      "fifths": -4,
+      "octaves": -2,
+      "max_step": 7,
+      "leap": 1
+    }
+  },
+  "form": {
+    "phrase": 8,
+    "wave": [3, 5],
+    "depth": 0.6,
+    "opening": "full",
+    "moves": {
+      "step_up": 2,
+      "tone_up": 2,
+      "fifth_down": 1,
+      "relative": 1
+    },
+    "modes": ["minor", "major", "mixolydian"]
+  },
+  "members": {
+    "why": "Distortion guitar, picked bass, overdriven guitar.",
+    "pad": {
+      "sound": 30
+    },
+    "bass": {
+      "sound": 34
+    },
+    "melody": {
+      "sound": 29
+    },
+    "drums": {
+      "kicks": 3,
+      "hats": "8th"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "style": "salsa",
+  "license": "CC BY-SA 4.0",
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)"],
+  "time": {
+    "tempo": 180,
+    "rhythm": {
+      "why": "Anticipations; everything sits with the clave.",
+      "base": 3,
+      "lift": 1,
+      "clave": "son_2-3"
+    },
+    "feel": {
+      "why": "Straight, with the clave.",
+      "*": {
+        "accent": 20
+      },
+      "percussion": {
+        "accent": 24
+      }
+    }
+  },
+  "harmony": {
+    "vocabulary": {
+      "why": "ii-Vs and sevenths.",
+      "kinds": ["diatonic", "secondary"],
+      "colours": [null, "6", "7", "maj7"]
+    },
+    "leading": {
+      "why": "The montuno moves in octaves; smooth inside.",
+      "octaves": -4,
+      "max_step": 3,
+      "rootless": true
+    }
+  },
+  "form": {
+    "why": "Son into montuno.",
+    "phrase": 8,
+    "phrases": {
+      "2": 2,
+      "3": 1
+    },
+    "opening": "full",
+    "moves": {
+      "relative": 2,
+      "fifth_up": 2,
+      "fifth_down": 1,
+      "parallel": 1
+    },
+    "modes": ["minor", "major"]
+  },
+  "members": {
+    "why": "Piano, acoustic bass, trumpet. The sketch's drum guide is clave and cowbell, so no kicks or hats.",
+    "pad": {
+      "sound": 0
+    },
+    "bass": {
+      "sound": 32
+    },
+    "melody": {
+      "sound": 56
+    }
+  }
+}

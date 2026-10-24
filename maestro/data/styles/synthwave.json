@@ -1,0 +1,66 @@
+{
+  "style": "synthwave",
+  "license": "CC BY-SA 4.0",
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)"],
+  "time": {
+    "tempo": 100,
+    "rhythm": {
+      "why": "Straight 8ths and 16ths, on the beat.",
+      "lift": 3
+    },
+    "feel": {
+      "why": "Straight, even.",
+      "*": {
+        "accent": 10
+      }
+    }
+  },
+  "harmony": {
+    "vocabulary": {
+      "why": "Borrowed bVI, bVII and iv; added ninths and sevenths.",
+      "kinds": ["borrowed", "diatonic"],
+      "qualities": ["maj", "min", "sus2", "sus4"],
+      "colours": [null, "7", "add9", "maj7"],
+      "borrow": ["minor", "major", "dorian"]
+    },
+    "leading": {
+      "why": "Pads that glide as a block are fine.",
+      "fifths": 0,
+      "octaves": 0,
+      "spread": 12
+    }
+  },
+  "form": {
+    "why": "Long swells, a key lift.",
+    "phrase": 8,
+    "wave": [4, 7],
+    "depth": 0.6,
+    "change": 25,
+    "moves": {
+      "step_up": 2,
+      "tone_up": 1,
+      "relative": 2,
+      "fifth_down": 1
+    },
+    "modes": ["minor", "major", "dorian"]
+  },
+  "members": {
+    "why": "Polysynth, synth bass 2, saw lead; the saw lead and polysynth are loud, so their levels are lower.",
+    "pad": {
+      "sound": 90,
+      "level": 48
+    },
+    "bass": {
+      "sound": 39,
+      "level": 76
+    },
+    "melody": {
+      "sound": 81,
+      "level": 58
+    },
+    "drums": {
+      "kicks": 4,
+      "hats": "8th"
+    }
+  }
+}

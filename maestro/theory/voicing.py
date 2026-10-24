@@ -9,6 +9,7 @@ seeded, so the voicing is never locked to one path (decision 9)."""
 from dataclasses import dataclass
 from itertools import combinations
 
+from ..stylebook import table
 from .chords import QUALITIES
 
 
@@ -66,14 +67,8 @@ class Leading:
     slack: int = 3           # choose picks among voicings up to this much costlier than the smoothest (0: always it)
 
 
-# First drafts for the four styles; the style book (bucket 3) refines them.
-LEADING = {
-    "plain": Leading(),
-    "trap": Leading(fifths=2, octaves=4, spread=14),                  # dark, wide, sparse pads; little fuss
-    "synthwave": Leading(fifths=0, octaves=0, spread=12),             # pads that glide as a block are fine
-    "salsa": Leading(fifths=6, octaves=-4, max_step=3, rootless=True),  # montuno moves in octaves; smooth inside
-    "power_rock": Leading(fifths=-4, octaves=-2, max_step=7, leap=1),  # power chords slide as one shape
-}
+# The style book's files hold each style's voice leading (harmony.leading).
+LEADING = table(Leading, "harmony", "leading")
 
 
 def note_name(key, m):

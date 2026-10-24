@@ -12,6 +12,7 @@ import argparse, os
 from .explain import SAY, choices
 from .rng import ComposerRng, fresh_seed
 from .song import Song
+from .stylebook import STYLES, StyleError, part
 from .theory.chords import name
 from .theory.form import FORM
 from .theory.pitch import Key
@@ -19,17 +20,18 @@ from .theory.rhythm import CLAVES, METERS, RHYTHM, VALUES, check_band_rhythm, ch
     velocity
 from .theory.voicing import RANGES
 
-TEMPO = {"plain": 100, "trap": 140, "synthwave": 100, "salsa": 180, "power_rock": 130}   # DadCraft, Oct 24
-SOUNDS = {   # GM programs: pad, bass, melody
-    "plain": (89, 38, 11),        # warm pad, synth bass, vibraphone
-    "trap": (89, 38, 10),         # warm pad, synth bass (808 stand-in), music box
-    "synthwave": (90, 39, 81),    # polysynth, synth bass 2, saw lead
-    "salsa": (0, 32, 56),         # piano, acoustic bass, trumpet
-    "power_rock": (30, 34, 29),   # distortion guitar, picked bass, overdriven guitar
-}
-LEVELS = {"synthwave": (48, 76, 58)}   # velocities: pad, bass, melody (the saw lead and polysynth are loud)
-KICKS = {"plain": 2, "trap": 3, "synthwave": 4, "power_rock": 3}   # kicks a bar, the downbeat included
-HATS = {"plain": "8th", "trap": "16th", "synthwave": "8th", "power_rock": "8th"}
+# From the style book: each style's felt tempo (DadCraft, Oct 24) and its members' sounds (GM programs) and levels
+# (velocities: pad, bass, melody), and the drum guide's kicks a bar (the downbeat included) and hats.
+_PLAYED = ("pad", "bass", "melody")
+TEMPO = {s: part(s, "time", "tempo") for s in STYLES}
+SOUNDS = {s: tuple(part(s, "members", r)["sound"] for r in _PLAYED) for s in STYLES}
+LEVELS = {s: tuple(part(s, "members", r)["level"] for r in _PLAYED) for s in STYLES
+          if all("level" in part(s, "members", r) for r in _PLAYED)}
+KICKS = {s: part(s, "members", "drums")["kicks"] for s in STYLES if "kicks" in part(s, "members", "drums")}
+HATS = {s: part(s, "members", "drums")["hats"] for s in STYLES if "hats" in part(s, "members", "drums")}
+for _s, _h in HATS.items():
+    if _h not in VALUES:
+        raise StyleError(f"{_s}: members.drums.hats: unknown note value {_h!r}")
 KICK, SNARE, HAT, CRASH, COWBELL, CLAVES_NOTE = 36, 38, 42, 49, 56, 75
 
 

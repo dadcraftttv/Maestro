@@ -1,0 +1,71 @@
+{
+  "style": "trap",
+  "license": "CC BY-SA 4.0",
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)"],
+  "time": {
+    "tempo": 140,
+    "rhythm": {
+      "why": "16ths with triplet and 32nd turns; sparse kicks.",
+      "triplet": 2,
+      "fine": 1,
+      "base": 2,
+      "lift": 1
+    },
+    "feel": {
+      "why": "Half-time: hats ride 16ths under a half-time kick and snare.",
+      "*": {
+        "pulse": "half"
+      },
+      "drums": {
+        "accent": 28,
+        "pulse": "half"
+      }
+    }
+  },
+  "harmony": {
+    "vocabulary": {
+      "why": "Dark minor: harmonic minor's V, the bII.",
+      "kinds": ["borrowed", "diatonic"],
+      "borrow": ["harmonic_minor", "phrygian"]
+    },
+    "leading": {
+      "why": "Dark, wide, sparse pads; little fuss.",
+      "fifths": 2,
+      "octaves": 4,
+      "spread": 14
+    }
+  },
+  "form": {
+    "why": "One dark key, mostly.",
+    "phrase": 8,
+    "phrases": {
+      "1": 1,
+      "2": 3
+    },
+    "depth": 0.4,
+    "opening": "full",
+    "change": 8,
+    "moves": {
+      "parallel": 1,
+      "fifth_down": 1
+    },
+    "modes": ["minor", "phrygian", "harmonic_minor"],
+    "hops": 1
+  },
+  "members": {
+    "why": "Warm pad, synth bass (an 808 stand-in), music box.",
+    "pad": {
+      "sound": 89
+    },
+    "bass": {
+      "sound": 38
+    },
+    "melody": {
+      "sound": 10
+    },
+    "drums": {
+      "kicks": 3,
+      "hats": "16th"
+    }
+  }
+}
