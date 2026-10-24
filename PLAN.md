@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.7 (the clip player, moved up from 3.1 so every checkpoint from here is heard).
+**Next:** Bucket 2, task 2.8 (the two drift measures). DadCraft listens to the baseline clips from 2.7 first.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -126,8 +126,10 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       develop: decision 9).
 - [x] 2.6 A theory exam (our own, after MusicTheoryBench, no copied questions) with a score, and choices explained
       in plain words.
-- [ ] 2.7 A PC clip player (moved up from 3.1, DadCraft, Oct 24), so DadCraft can hear MIDI clips: the
-      checkpoints from here on are listened to, not read.
+- [x] 2.7 A PC clip player (moved up from 3.1, DadCraft, Oct 24), so DadCraft can hear MIDI clips: the
+      checkpoints from here on are listened to, not read. Song files (`maestro/song.py`: MIDI + JSON, notes kept
+      on the grid), the player (`python -m maestro.play <clip or folder>`: FluidSynth through ctypes, FluidR3 GM from
+      `tools/get_sounds.sh`, offline) and the baseline: today's composer as four clips (`python -m maestro.baseline`).
 - [ ] 2.8 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets.
 - [ ] Checkpoint 2: DadCraft spot-checks the explained choices, and hears a few bars per style.
 

@@ -130,3 +130,9 @@ isn't reloaded every session; grep for the part a task needs.
   shaping Maestro as it's used. The reader should be as good as it can be: the best local models, a team of them,
   free APIs as an optional online boost (decision 14, D.0, D.2). The verdict log moved here from PLAN.md;
   Conductor's `items.md` keeps being updated per task as before.
+- Oct 24: task 2.7, the clip player. DadCraft chose FluidR3 GM (MIT) for the sounds over the thin TimGM6mb and
+  Ouralia's own Pd sounds (the player judges the notes; Ouralia's sounds come in bucket 6), and the baseline first:
+  today's composer as clips now, the style clips with checkpoint 2. On the phone the melody and walking notes come
+  from the listener (chimes standing, walking notes walking), so a baseline clip stands for its first half and walks
+  for its second. Measured before he listens: every note on the grid, melody and walking notes in the key, bass in
+  the patch's 65-131 Hz, the WAV the clip's length and about 5 dB under clipping.

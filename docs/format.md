@@ -125,7 +125,7 @@ sound kept out of it. It grows from the composer's own picture (above), so `dcs_
 ### The song file
 One clip or song = a standard **MIDI file** (the notes, tempo, meter; one track per member, the track named after
 its member) plus a **JSON file** beside it with everything MIDI can't hold: the timeline, the members' controls,
-where it came from and its license. MIDI keeps the clips playable in any player (task 3.1); the JSON keeps the
+where it came from and its license. MIDI keeps the clips playable in any player (task 2.7); the JSON keeps the
 labels readable. Ticks: 480 a beat.
 
 ```json

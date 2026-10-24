@@ -20,6 +20,11 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
   https://zenodo.org/records/15734094 · https://zenodo.org/records/13257814 (RTRO-DRM: Zenodo record to add on
   download)
 
+## Tools (not data; never trained on)
+
+- **FluidR3 GM** soundfont, by Frank Wen (Toby Smithe and contributors), MIT license: the clip player's sounds
+  (`tools/get_sounds.sh`, from Ubuntu's `fluid-soundfont-gm`). **FluidSynth** (LGPL-2.1), used as the system library.
+
 ## Non-commercial (PC only, never in the phone model)
 
 - **Aria-MIDI**, CC BY-NC-SA 4.0. Louis Bradshaw, Simon Colton, "Aria-MIDI: A Dataset of Piano MIDI Files for
