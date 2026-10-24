@@ -7,7 +7,7 @@ from maestro.theory.form import FORM
 def test_a_sketch_plays_what_the_explanation_says():
     for style in FORM:
         song, lines = sketch(style, seed=4, bars=8)
-        assert lines == passage(style, seed=4, bars=8, bpm=TEMPO[style]), style   # no band check failed
+        assert lines == passage(style, seed=4, bars=8, bpm=TEMPO[style], flow=False), style   # no band check failed
         parts = {m.name: m.notes for m in song.members}
         assert all(parts[n] for n in ("pad", "bass", "melody", "drums")), style
 

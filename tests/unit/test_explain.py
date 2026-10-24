@@ -5,7 +5,7 @@ from maestro.theory.form import FORM
 
 def test_every_style_explains_a_passage():
     for style in FORM:
-        lines = passage(style, seed=3, bars=16)
+        lines = passage(style, seed=3, bars=16, flow=False)
         assert sum(line.startswith("bar ") and "(" in line for line in lines) >= 16
         assert not any("ruled out" in line or "still crossed" in line for line in lines), style
 

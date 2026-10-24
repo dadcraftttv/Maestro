@@ -260,13 +260,17 @@ part may carry a `"why"` in plain words.
 | `harmony.vocabulary` | kinds, qualities, colours, borrowed scales, how often it steps out | `chords.Vocabulary` |
 | `harmony.leading` | voice-leading costs and rules | `voicing.Leading` |
 | `form` | phrases, waves, key changes, motif life | `form.Form` |
+| `harmony.progressions` | `families` (each a loop in roman numerals with its bar lines, `"i iv \| V7 iv"`, and a weight), `variants` (weights: again, swap, colour, approach, turnaround), `stay` | `flow.Flow` (3.2) |
 | `members.<role>` | `sound` (GM program), `level` (velocity), for drums `kicks` and `hats` | the sketch |
+| `members.bass.patterns` | pattern families: notes as `[at, length, tone, which]` in 16ths (length `null`: held to the next note; tone root, third, fifth or octave; which `now` or `ahead`, the chord at the next half bar), `bars`, `weight`; `variants` (again, drop, approach, octave) | `flow.Pattern` (3.2) |
 
 Roles are the band's members (decision 11). The loader says where a file goes wrong (`trap: form.moves: unknown key
 move 'leap'`): unknown parts and fields, the wrong kind of value, a missing source or the wrong license, and any name
 the theory doesn't know (a quality, a scale, a clave, a key move). Lists become tuples or sets, and phrase counts
-become whole numbers, as the theory expects. Bucket 3's later tasks add parts (progression and pattern families in
-3.2, fit and form in 3.4), each with its check.
+become whole numbers, as the theory expects. Bucket 3's later tasks add parts (fit and form in 3.4), each with its
+check. A style that names no progressions or bass patterns plays `theory/flow.py`'s defaults (common loops and
+schemas; roots, root and fifth, root eighths); the families that don't fit a key or the style's vocabulary are
+ruled out, with the reason.
 
 ## The port and the C (task 2.1, Oct 23)
 `maestro/port.py` is today's `dcs_composer` in Python, choice for choice: the same seed and messages give the same

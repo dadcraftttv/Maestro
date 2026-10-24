@@ -14,8 +14,10 @@ import types
 HERE = os.path.join(os.path.dirname(__file__), "data", "styles")
 LICENSE = "CC BY-SA 4.0"
 ROLES = ("drums", "percussion", "bass", "keys", "guitar", "horns", "pad", "arp", "melody")   # decision 11
-PARTS = {"time": ("tempo", "rhythm", "feel"), "harmony": ("vocabulary", "leading"), "form": None, "members": None}
-MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str}   # a member's fields, beside the theory's
+PARTS = {"time": ("tempo", "rhythm", "feel"), "harmony": ("vocabulary", "leading", "progressions"), "form": None,
+         "members": None}
+# a member's fields, beside the theory's; patterns and their variants are checked by `theory/flow.py`
+MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "patterns": dict, "variants": dict}
 TEMPO = (20, 400)
 
 
@@ -64,9 +66,9 @@ def check(entry, name):
         _keys(m, tuple(MEMBER), f"{name}: members.{role}")
         for k, v in m.items():
             rule = MEMBER.get(k)
-            if rule is str and not isinstance(v, str) or isinstance(rule, tuple) and not (
+            if rule in (str, dict) and not isinstance(v, rule) or isinstance(rule, tuple) and not (
                     isinstance(v, int) and not isinstance(v, bool) and rule[0] <= v <= rule[1]):
-                want = "words" if rule is str else f"a whole number from {rule[0]} to {rule[1]}"
+                want = {str: "words", dict: "an object"}.get(rule) or f"a whole number from {rule[0]} to {rule[1]}"
                 raise StyleError(f"{name}: members.{role}.{k} must be {want}, got {v!r}")
 
 

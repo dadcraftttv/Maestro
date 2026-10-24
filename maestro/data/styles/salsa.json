@@ -1,7 +1,12 @@
 {
   "style": "salsa",
   "license": "CC BY-SA 4.0",
-  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)"],
+  "sources": [
+    "Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)",
+    "Tempo: DadCraft, Oct 24 (Checkpoint 2)",
+    "Progressions: Open Music Theory's loops and schemas (CC BY-SA 4.0) and jazznet's ii-V (MIT), as ideas in our own words (task 3.2)",
+    "Tumbao: Wikipedia, \"Tumbao\" (CC BY-SA 4.0), in our own words (task 3.2)"
+  ],
   "time": {
     "tempo": 180,
     "rhythm": {
@@ -22,15 +27,75 @@
   },
   "harmony": {
     "vocabulary": {
-      "why": "ii-Vs and sevenths.",
-      "kinds": ["diatonic", "secondary"],
-      "colours": [null, "6", "7", "maj7"]
+      "why": "ii-Vs and sevenths; the minor key's V7 from harmonic minor.",
+      "kinds": [
+        "diatonic",
+        "secondary",
+        "borrowed"
+      ],
+      "colours": [
+        null,
+        "6",
+        "7",
+        "maj7"
+      ],
+      "borrow": [
+        "harmonic_minor"
+      ]
     },
     "leading": {
       "why": "The montuno moves in octaves; smooth inside.",
       "octaves": -4,
       "max_step": 3,
       "rootless": true
+    },
+    "progressions": {
+      "why": "Vamps that loop under the montuno, and ii-V cadences; a section keeps its vamp a long time.",
+      "families": {
+        "montuno vamp": {
+          "chords": "i iv | V7 iv",
+          "weight": 4,
+          "why": "the son montuno's two-bar vamp: home, its subdominant, the dominant, back through iv"
+        },
+        "minor ii-V": {
+          "chords": "iiø7 V7 | i7",
+          "weight": 3,
+          "why": "the ii-V into home, salsa's cadence, over and over"
+        },
+        "andalusian": {
+          "chords": "i | bVII | bVI | V7",
+          "weight": 2,
+          "why": "four steps down to the dominant"
+        },
+        "minor circle": {
+          "chords": "i7 | iv7 | bVII7 | bIIImaj7 | bVImaj7 | iiø7 | V7 | i7",
+          "weight": 2,
+          "why": "down by fifths through the whole key: the long road home"
+        },
+        "major montuno": {
+          "chords": "I IV | V7 IV",
+          "weight": 4,
+          "why": "the vamp in a major key"
+        },
+        "major ii-V": {
+          "chords": "ii7 V7 | Imaj7",
+          "weight": 3,
+          "why": "the ii-V into a major home"
+        },
+        "major turnaround": {
+          "chords": "I | vi7 | ii7 | V7",
+          "weight": 2,
+          "why": "home, then round the circle back to it"
+        }
+      },
+      "variants": {
+        "again": 4,
+        "swap": 1,
+        "colour": 2,
+        "approach": 2,
+        "turnaround": 2
+      },
+      "stay": 4
     }
   },
   "form": {
@@ -47,7 +112,10 @@
       "fifth_down": 1,
       "parallel": 1
     },
-    "modes": ["minor", "major"]
+    "modes": [
+      "minor",
+      "major"
+    ]
   },
   "members": {
     "why": "Piano, acoustic bass, trumpet. The sketch's drum guide is clave and cowbell, so no kicks or hats.",
@@ -55,7 +123,77 @@
       "sound": 0
     },
     "bass": {
-      "sound": 32
+      "sound": 32,
+      "patterns": {
+        "why": "The tumbao: the bass skips the one and plays ahead of the chord.",
+        "tumbao": {
+          "notes": [
+            [
+              6,
+              null,
+              "root",
+              "ahead"
+            ],
+            [
+              12,
+              null,
+              "root",
+              "ahead"
+            ]
+          ],
+          "weight": 3,
+          "why": "on the and of 2 and on 4, each the root of the chord about to sound, held over the one"
+        },
+        "tumbao with the fifth": {
+          "notes": [
+            [
+              6,
+              null,
+              "fifth",
+              "ahead"
+            ],
+            [
+              12,
+              null,
+              "root",
+              "ahead"
+            ]
+          ],
+          "weight": 3,
+          "why": "the and of 2 on the coming chord's fifth, 4 on its root"
+        },
+        "tumbao on the one": {
+          "notes": [
+            [
+              0,
+              6,
+              "root",
+              "now"
+            ],
+            [
+              6,
+              null,
+              "fifth",
+              "ahead"
+            ],
+            [
+              12,
+              null,
+              "root",
+              "ahead"
+            ]
+          ],
+          "weight": 1,
+          "why": "the one as well: heavier and plainer"
+        }
+      },
+      "variants": {
+        "why": "Never drop a tumbao note: two is already lean.",
+        "again": 5,
+        "drop": 0,
+        "approach": 3,
+        "octave": 1
+      }
     },
     "melody": {
       "sound": 56

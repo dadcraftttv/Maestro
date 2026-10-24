@@ -1,0 +1,639 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+"""Flow (task 3.2, Checkpoint 2's "no flow"): music that goes somewhere over a phrase, instead of one draw a bar.
+
+- **Progressions** come in families: a loop of chords over 1, 2, 4 or 8 bars, in roman numerals with the bar lines
+  ("i iv | V7 iv": two chords a bar, so the harmonic rhythm belongs to the family). A section keeps one family and
+  plays it pass after pass. After the first pass, a pass may come back as a variant (a chord swapped for one doing
+  the same job, a colour, a dominant leading into a chord, a ii-V turnaround), and a phrase's last pass ends on a
+  cadence.
+- **The bass** plays its style's pattern family (a tumbao, root eighths). Each note says where it falls (in 16ths),
+  which chord tone it plays and whether it plays the chord sounding or the one coming ("ahead": salsa's anticipated
+  bass). A pass may drop a note, add an approach note or jump an octave.
+- **The melody** is shaped over the phrase: the motif's statements rise to a peak two-thirds in, the first half ends
+  open (a chord tone that isn't home) and the second half lands home on the cadence. Notes on the beat lean to the
+  chord's tones.
+
+Like the other theory modules, each part has a check (what doesn't fit, and why) and a choose (seeded, among what
+fits). Families and patterns are tendencies with weights, never fixed (decision 9); a style's file names its own
+(harmony.progressions, members.bass) and the defaults here stand in for the rest. Sources (`docs/data.md`): Open
+Music Theory (loops and schemas), jazznet (the ii-V), Wikipedia's tumbao, all in our own words."""
+import re
+from bisect import bisect_right
+from collections import namedtuple
+from dataclasses import dataclass, field
+
+from ..stylebook import STYLES, StyleError, part
+from .chords import Chord, _resolves_to, function, name, outside, parse_roman, pool, two_five
+from .form import WORDS, _draw
+from .rhythm import check_clave
+from .voicing import member_range
+
+SIXTEENTH = 6        # grid steps in a 16th
+Span = namedtuple("Span", "at length chord")   # a chord sounding from step `at` for `length` steps
+
+
+# ---- progressions ----
+
+_TONIC = re.compile(r"^[iI](?![iIvV])")
+
+
+@dataclass(frozen=True)
+class Family:
+    """A progression family: its loop in roman numerals, bars split by "|", a bar's chords sharing it evenly."""
+    name: str
+    chords: str
+    weight: int = 1
+    why: str = ""
+
+    def __post_init__(self):
+        bars = self.bars
+        if len(bars) not in (1, 2, 4, 8):
+            raise ValueError(f"{self.name}: a loop is 1, 2, 4 or 8 bars, not {len(bars)}")
+        for b in bars:
+            if not 1 <= len(b) <= 4:
+                raise ValueError(f"{self.name}: 1 to 4 chords a bar, not {len(b)}")
+            for c in b:
+                parse_roman(c)   # raises on a numeral it can't read
+        if self.weight < 1:
+            raise ValueError(f"{self.name}: weight must be at least 1")
+
+    @property
+    def bars(self):
+        return [b.split() for b in self.chords.split("|")]
+
+    @property
+    def loop(self):
+        return len(self.bars)
+
+    @property
+    def mode(self):
+        """'minor' or 'major' from its tonic chord (the first i or I), None when it has none."""
+        for b in self.bars:
+            for c in b:
+                if "/" not in c and _TONIC.match(c):
+                    return "minor" if c[0] == "i" else "major"
+        return None
+
+    def spans(self, key, at, met):
+        out = []
+        for i, b in enumerate(self.bars):
+            n = met.bar // len(b)
+            out += [Span(at + i * met.bar + j * n, n, parse_roman(c, key)) for j, c in enumerate(b)]
+        return out
+
+
+# Common loops and schemas (Open Music Theory, "popular music" part; jazznet's ii-V), for styles that name none.
+FAMILIES = (
+    Family("doo-wop", "I | vi | IV | V", 2, "home, its softer twin, away, the pull back"),
+    Family("axis", "I | V | vi | IV", 2, "the four-chord loop of a thousand pop songs"),
+    Family("ii-V-I", "ii | V | I | I", 1, "the jazz cadence, settled for two bars"),
+    Family("aeolian loop", "i | bVI | bIII | bVII", 2, "natural minor's own loop: no leading tone, it just circles"),
+    Family("andalusian", "i | bVII | bVI | V", 1, "four steps down to the dominant"),
+    Family("minor plagal", "i | iv | i | iv", 1, "home and its subdominant, rocking"),
+)
+VARIANT_WEIGHTS = {"again": 4, "swap": 2, "colour": 1, "approach": 2, "turnaround": 1}
+
+
+@dataclass(frozen=True)
+class Flow:
+    """A style's progression tendencies: its families, how often a pass varies and how, and how much more often a
+    section keeps the family of the section before (`stay`)."""
+    families: tuple = FAMILIES
+    variants: dict = field(default_factory=lambda: dict(VARIANT_WEIGHTS))
+    stay: int = 3
+
+
+def _families(d, where):
+    out = []
+    for n, f in d.items():
+        if n == "why":
+            continue
+        if not isinstance(f, dict) or not isinstance(f.get("chords"), str):
+            raise StyleError(f"{where}.{n}: a family needs its \"chords\", like \"i iv | V7 iv\"")
+        extra = set(f) - {"chords", "weight", "why"}
+        if extra:
+            raise StyleError(f"{where}.{n}: unknown part {sorted(extra)[0]!r} (known: chords, weight, why)")
+        try:
+            out.append(Family(n, f["chords"], f.get("weight", 1), f.get("why", "")))
+        except (ValueError, TypeError, IndexError) as e:
+            raise StyleError(f"{where}.{n}: {e}") from None
+    return tuple(out)
+
+
+def _weights(d, known, where):
+    w = {k: v for k, v in d.items() if k != "why"}
+    for k, v in w.items():
+        if k not in known:
+            raise StyleError(f"{where}.{k}: unknown variant (known: {', '.join(known)})")
+        if not isinstance(v, int) or isinstance(v, bool) or v < 0:
+            raise StyleError(f"{where}.{k}: a weight is a whole number, 0 or more")
+    return w
+
+
+def _flow(style):
+    d, where = part(style, "harmony", "progressions"), f"{style}: harmony.progressions"
+    extra = set(d) - {"why", "families", "variants", "stay"}
+    if extra:
+        raise StyleError(f"{where}: unknown part {sorted(extra)[0]!r} (known: families, variants, stay)")
+    fams = _families(d["families"], f"{where}.families") if "families" in d else FAMILIES
+    variants = {**VARIANT_WEIGHTS, **_weights(d.get("variants", {}), VARIANT_WEIGHTS, f"{where}.variants")}
+    return Flow(fams, variants, d.get("stay", 3))
+
+
+FLOW = {s: _flow(s) for s in STYLES}
+
+
+def check_family(fam, key, vocab):
+    """None when the family fits this key and style, else the reason."""
+    if fam.mode and (fam.mode == "minor") != key.minorish:
+        return f"a {fam.mode} loop; the key is {'minor' if key.minorish else 'major'}"
+    chords = [parse_roman(c, key) for b in fam.bars for c in b]
+    for ch in chords:
+        why = outside(ch, key, vocab)
+        if why:
+            return why
+    if len({c.root for c in chords}) < 2:
+        return "one chord: it doesn't move"
+    return None
+
+
+def chart(spans, key, met):
+    """The chords by bar: "Am Dm | E7 Dm"."""
+    bars = {}
+    for s in spans:
+        bars.setdefault(s.at // met.bar, []).append(name(s.chord, key))
+    return " | ".join(" ".join(b) for _, b in sorted(bars.items()))
+
+
+def _fits(ch, key, vocab):
+    return outside(ch, key, vocab) is None
+
+
+def _swap(rng, sp, key, vocab, met):
+    i = 1 + rng.rnd(len(sp) - 1)
+    old = sp[i].chord
+    job = function(old, key)[0]
+    near = {sp[i - 1].chord.root, sp[(i + 1) % len(sp)].chord.root, old.root}
+    cands = [c for c in pool(key, vocab) if c.root not in near and c.colour == old.colour and c.bass is None
+             and c.quality in ("maj", "min", "dim") and function(c, key)[0] == job
+             and (job != "tension" or _resolves_to(c) == _resolves_to(old))]   # tension still leads the same way
+    if not cands:
+        return None
+    new = cands[rng.rnd(len(cands))]
+    return (sp[:i] + [sp[i]._replace(chord=new)] + sp[i + 1:],
+            f"{name(old, key)} swapped for {name(new, key)} (the same job: {job})")
+
+
+def _colour(rng, sp, key, vocab, met):
+    i = rng.rnd(len(sp))
+    old = sp[i].chord
+    cands = []
+    for col in sorted(vocab.colours, key=str):
+        if col == old.colour:
+            continue
+        try:
+            c = Chord(old.root, old.quality, col, old.bass)
+        except ValueError:
+            continue
+        if _fits(c, key, vocab):
+            cands.append(c)
+    if not cands:
+        return None
+    new = cands[rng.rnd(len(cands))]
+    return sp[:i] + [sp[i]._replace(chord=new)] + sp[i + 1:], f"{name(old, key)} coloured as {name(new, key)}"
+
+
+def _dominant(target, key, vocab):
+    for col in ("7", None):
+        d = Chord(target + 7, "maj", col)
+        if _fits(d, key, vocab):
+            return d
+    return None
+
+
+def _approach(rng, sp, key, vocab, met):
+    """A dominant of the next chord takes the second half of the chord before it (the loop's last chord leads into
+    the next pass's first)."""
+    slots = [j for j in range(1, len(sp) + 1) if sp[j % len(sp)].chord.quality in ("maj", "min")
+             and sp[j - 1].length >= 2 * met.unit and sp[j - 1].length % 2 == 0]
+    while slots:
+        j = slots.pop(rng.rnd(len(slots)))
+        target = sp[j % len(sp)].chord
+        dom = _dominant(target.root, key, vocab)
+        if dom is None or sp[j - 1].chord.root == dom.root:
+            continue
+        before, half = sp[j - 1], sp[j - 1].length // 2
+        split = [before._replace(length=half), Span(before.at + half, half, dom)]
+        return sp[:j - 1] + split + sp[j:], f"{name(dom, key)} leads into {name(target, key)}"
+    return None
+
+
+def _turnaround(rng, sp, key, vocab, met):
+    last, first = sp[-1], sp[0].chord
+    if last.length < 2 * met.unit or last.length % 2:
+        return None
+    for sevenths in (True, False):
+        two, five = two_five(first.root, first.quality == "min", sevenths)
+        if _fits(two, key, vocab) and _fits(five, key, vocab):
+            break
+    else:
+        return None
+    if last.chord.root in (two.root, five.root):
+        return None
+    half = last.length // 2
+    return (sp[:-1] + [Span(last.at, half, two), Span(last.at + half, half, five)],
+            f"a ii-V turnaround ({name(two, key)} {name(five, key)}) back to {name(first, key)}")
+
+
+VARIANTS = {"swap": _swap, "colour": _colour, "approach": _approach, "turnaround": _turnaround}
+
+
+def vary(rng, sp, key, vocab, met, weights):
+    """(the pass, in words how it varies, or None when it plays as written): a variant drawn by weight, among
+    those that fit."""
+    weights = dict(weights)
+    while True:
+        v = _draw(rng, weights)
+        if v is None or v == "again":
+            return sp, None
+        got = VARIANTS[v](rng, sp, key, vocab, met)
+        if got is not None:
+            return got
+        weights[v] = 0
+
+
+def _home(c):
+    return c.root == 0 and c.quality in ("maj", "min")
+
+
+def _pulls_home(c):
+    return _resolves_to(c) == 0
+
+
+# What can take a cadence home, strongest first: V7, V, bVII, iv, IV; the first the style plays wins.
+PULLS = (Chord(7, "maj", "7"), Chord(7, "maj"), Chord(10, "maj"), Chord(5, "min"), Chord(5, "maj"))
+
+
+def cadence(sp, key, vocab, met):
+    """The pass that ends a phrase, landing home: (spans, the cadence in words, or None when it lands already)."""
+    last, prev = sp[-1], sp[-2]
+    if _home(last.chord) and (_pulls_home(prev.chord) or prev.chord.root in (5, 10)):
+        return sp, None
+    own = next((s.chord for s in sp if _home(s.chord)), None)
+    tonic = own if own is not None and _fits(own, key, vocab) else Chord(0, "min" if key.minorish else "maj")
+    if _pulls_home(prev.chord):
+        out, pull = sp[:-1] + [last._replace(chord=tonic)], prev.chord
+    else:
+        pull = next((c for c in PULLS if _fits(c, key, vocab)), PULLS[0])
+        if last.length >= 2 * met.unit and last.length % 2 == 0:
+            half = last.length // 2
+            out = sp[:-1] + [Span(last.at, half, pull), Span(last.at + half, half, tonic)]
+        else:
+            out = sp[:-2] + [prev._replace(chord=pull), last._replace(chord=tonic)]
+    return out, f"lands home: {name(pull, key)} to {name(tonic, key)}"
+
+
+def progression(rng, flow, key, vocab, start, bars, met, phrase, prev=None):
+    """One section's chords: (spans, its family, lines). The family is drawn among those that fit (the one before
+    weighs `stay` times more); its first pass plays as written, later ones may vary, a phrase's last pass lands."""
+    lines, fits = [], []
+    for f in flow.families:
+        why = "its loop doesn't divide the phrase" if phrase % f.loop else check_family(f, key, vocab)
+        if why is None:
+            fits.append(f)
+        else:
+            lines.append(f"  ruled out: {f.name} ({why})")
+    if not fits:
+        raise ValueError(f"no progression family fits {key} in this style")
+    fam = fits[_draw(rng, {i: f.weight * (flow.stay if f == prev else 1) for i, f in enumerate(fits)})]
+    lines.insert(0, f"  progression: {fam.name}, {fam.chords} ({chart(fam.spans(key, 0, met), key, met)})"
+                    + (f": {fam.why}" if fam.why else "") + (" (kept from the section before)" if fam == prev else ""))
+    out = []
+    for p in range(bars // fam.loop):
+        at = start + p * fam.loop
+        sp, words = fam.spans(key, at * met.bar, met), []
+        if p:
+            sp, w = vary(rng, sp, key, vocab, met, flow.variants)
+            words += [w] if w else []
+        if (p + 1) * fam.loop % phrase == 0:
+            sp, w = cadence(sp, key, vocab, met)
+            words += [w] if w else []
+        out += sp
+        lines.append(f"  bars {at + 1}-{at + fam.loop}: {chart(sp, key, met)}: {'; '.join(words) or 'as written'}")
+    return out, fam, lines
+
+
+def chord_at(spans, step):
+    """The span sounding at a step (the last one past the end)."""
+    return spans[max(0, bisect_right([s.at for s in spans], step) - 1)]
+
+
+# ---- the bass ----
+
+TONES = ("root", "third", "fifth", "octave")
+
+
+@dataclass(frozen=True)
+class Pattern:
+    """A bass pattern: its notes as (at, length, tone, which), at and length in 16ths (length None: held to the
+    next note), tone one of TONES, which "now" (the chord sounding) or "ahead" (the chord at the next half bar)."""
+    name: str
+    notes: tuple
+    bars: int = 1
+    weight: int = 1
+    why: str = ""
+
+    def __post_init__(self):
+        if self.bars not in (1, 2) or self.weight < 1:
+            raise ValueError(f"{self.name}: 1 or 2 bars, weight at least 1")
+        ats = [n[0] for n in self.notes]
+        if not ats or ats != sorted(set(ats)) or ats[0] < 0 or ats[-1] >= 16 * self.bars:
+            raise ValueError(f"{self.name}: notes go in order, one a 16th, inside its {self.bars} bar(s) of 4/4")
+        for at, length, tone, which in self.notes:
+            if length is not None and length < 1 or tone not in TONES or which not in ("now", "ahead"):
+                raise ValueError(f"{self.name}: bad note {[at, length, tone, which]}")
+
+
+# Plain bass lines (any style that names none): roots on the strong beats, root and fifth, driving eighths.
+PATTERNS = (
+    Pattern("roots on 1 and 3", ((0, 8, "root", "now"), (8, 8, "root", "now")), 1, 2, "the root on the strong beats"),
+    Pattern("root and fifth", ((0, 8, "root", "now"), (8, 8, "fifth", "now")), 1, 2, "root, then its fifth"),
+    Pattern("root eighths", tuple((i, 2, "root", "now") for i in range(0, 16, 2)), 1, 1, "eighths on the root"),
+)
+BASS_VARIANTS = {"again": 6, "drop": 1, "approach": 2, "octave": 1}
+
+
+@dataclass(frozen=True)
+class BassFlow:
+    patterns: tuple = PATTERNS
+    variants: dict = field(default_factory=lambda: dict(BASS_VARIANTS))
+    stay: int = 3
+
+
+def _bass_flow(style):
+    d, where = part(style, "members", "bass"), f"{style}: members.bass"
+    pats = []
+    for n, p in d.get("patterns", {}).items():
+        if n == "why":
+            continue
+        try:
+            extra = set(p) - {"notes", "bars", "weight", "why"}
+            if extra:
+                raise ValueError(f"unknown part {sorted(extra)[0]!r} (known: notes, bars, weight, why)")
+            pats.append(Pattern(n, tuple(tuple(x) for x in p["notes"]), p.get("bars", 1), p.get("weight", 1),
+                                p.get("why", "")))
+        except (ValueError, TypeError, KeyError) as e:
+            raise StyleError(f"{where}.patterns.{n}: {e}") from None
+    variants = {**BASS_VARIANTS, **_weights(d.get("variants", {}), BASS_VARIANTS, f"{where}.variants")}
+    return BassFlow(tuple(pats) or PATTERNS, variants)
+
+
+BASS = {s: _bass_flow(s) for s in STYLES}
+
+
+def _tone(chord, tone):
+    """The tone's pitch class from the key note."""
+    iv = chord.intervals
+    if tone in ("root", "octave"):
+        return chord.low
+    if tone == "third":
+        return chord.root + next((i for i in iv if i in (3, 4)), iv[1])
+    return chord.root + next((i for i in iv if i in (6, 7, 8)), 7)
+
+
+def _nearest(pc, near, r):
+    """The bass note of pitch class `pc` (absolute) nearest `near`, inside the range `r`."""
+    cands = [m for m in range(r.low, r.high + 1) if m % 12 == pc % 12]
+    return min(cands, key=lambda m: (abs(m - near), m))
+
+
+def _bass_vary(rng, notes, weights):
+    """(the pass's notes, the variant in words or None)."""
+    weights = dict(weights)
+    while True:
+        v = _draw(rng, weights)
+        if v is None or v == "again":
+            return notes, None
+        if v == "drop" and len(notes) > 1:
+            i = 1 + rng.rnd(len(notes) - 1)
+            return notes[:i] + notes[i + 1:], "one note left out"
+        if v == "octave":
+            roots = [i for i, n in enumerate(notes) if n[2] == "root"]
+            if roots:
+                i = roots[rng.rnd(len(roots))]
+                return notes[:i] + [(notes[i][0], notes[i][1], "octave", notes[i][3])] + notes[i + 1:], \
+                    "one root jumps up an octave"
+        if v == "approach":
+            slots = [i for i in range(1, len(notes)) if notes[i][0] - notes[i - 1][0] >= 4]
+            if slots:
+                i = slots[rng.rnd(len(slots))]
+                at = notes[i][0] - 2
+                return notes[:i] + [(at, 2, "approach", "now")] + notes[i:], "an approach note into the next"
+        weights[v] = 0
+
+
+def bass_part(rng, bf, spans, key_at, start, bars, met, energy, prev=None, clave=None, placed=(), near=None):
+    """One section's bass: (notes as [step, length or None, MIDI note], its pattern, lines). `placed`: the onsets
+    already played, so a pass is checked against the clave with what came before it in the cycle; `near`: the
+    last bass note, so the line carries on from it. `key_at(step)`: the key there (a note ahead may fall in the
+    next section, after a key change)."""
+    fits = [p for p in bf.patterns if bars % p.bars == 0]
+    pat = fits[_draw(rng, {i: p.weight * (bf.stay if p == prev else 1) for i, p in enumerate(fits)})]
+    weights = dict(bf.variants)
+    for k in ("approach", "octave"):
+        weights[k] = weights.get(k, 0) * (1 + round(2 * energy))
+    if energy >= 0.5:
+        weights["drop"] = 0
+    lines = [f"  bass: {pat.name}" + (f": {pat.why}" if pat.why else "") + (" (kept)" if pat == prev else "")]
+    out, onsets = [], list(placed)
+    for p in range(bars // pat.bars):
+        base = (start + p * pat.bars) * met.bar
+        notes, w = list(pat.notes), None
+        if p:
+            notes, w = _bass_vary(rng, notes, weights)
+        if clave is not None:
+            cycle = base - base % clave.length
+            rest = range(base + pat.bars * met.bar, cycle + clave.length, pat.bars * met.bar)
+
+            def crossed(ns):   # the whole cycle: what's played, this pass, the passes still to come as written
+                on = [s for s in onsets if s >= cycle] + [base + n[0] * SIXTEENTH for n in ns] + \
+                     [r + n[0] * SIXTEENTH for r in rest for n in pat.notes]
+                return check_clave([s % clave.length for s in on], clave)
+            if w and crossed(notes):
+                notes, w = list(pat.notes), None
+                lines.append(f"  bass, bar {start + p * pat.bars + 1}: the variant crossed the clave; as written")
+            why = crossed(notes)
+            if why:
+                lines.append(f"  bass, bar {start + p * pat.bars + 1}: {why}")
+        if w:
+            lines.append(f"  bass, bar {start + p * pat.bars + 1}: {w}")
+        for at, length, tone, which in notes:
+            step = base + at * SIXTEENTH
+            onsets.append(step)
+            out.append([step, None if length is None else length * SIXTEENTH, tone, which])
+    # the pitches: each tone of its chord, the nearest note to the one before; an approach note a half step under
+    # (or a step over) the note it leads into
+    r = member_range("bass")
+    for n in out:
+        step, _, tone, which = n
+        if tone == "approach":
+            continue
+        probe = step if which == "now" else (step // (met.bar // 2) + 1) * (met.bar // 2)
+        pc = key_at(probe).tonic + _tone(chord_at(spans, probe).chord, tone)
+        if near is None:
+            near = round(r.mid) - 4
+        m = _nearest(pc, near, r)
+        if tone == "octave" and m + 12 <= r.high:
+            m += 12
+        n.append(m)
+        near = m if tone != "octave" else m - 12
+    for i, n in enumerate(out):
+        if n[2] == "approach":
+            nxt = next((x[4] for x in out[i + 1:] if len(x) == 5), None) or near
+            up = rng.rnd(3) == 0 and nxt + 2 <= r.high
+            n.append(nxt + 2 if up else max(r.low, nxt - 1))
+    return [(s, length, m) for s, length, _, _, m in out], pat, lines
+
+
+def check_bass(notes, met, clave=None):
+    """None when the bass line fits, else the reason: in its range, on the grid, one note a step, with the clave."""
+    r = member_range("bass")
+    for s, _, m in notes:
+        if not r.low <= m <= r.high:
+            return f"{m} is outside the bass range"
+        if s % SIXTEENTH:
+            return f"step {s} isn't on a 16th"
+    steps = [s for s, _, _ in notes]
+    if len(set(steps)) != len(steps):
+        return "two bass notes start together"
+    if clave is not None:
+        for c in range(0, max(steps, default=0) + 1, clave.length):
+            why = check_clave([s % clave.length for s in steps if c <= s < c + clave.length], clave)
+            if why:
+                return f"bars {c // met.bar + 1}-{c // met.bar + 2}: {why}"
+    return None
+
+
+def held(notes, end):
+    """The bass notes with every length set: a held note (None) lasts to the next note, none past `end`."""
+    out = []
+    for i, (s, length, m) in enumerate(notes):
+        nxt = notes[i + 1][0] if i + 1 < len(notes) else end
+        out.append((s, max(1, min(length or nxt - s, nxt - s, end - s)), m))
+    return out
+
+
+# ---- the melody over a phrase ----
+
+ARC = (0, 1, 2, 1, 2, 3, 4, 2)   # where each bar of an 8-bar phrase centres, in scale steps over the tonic: up to
+#                                  a peak two-thirds in, down to the cadence
+CHORD_TONES = 0.6                # the share of notes on the beat that should be chord tones
+TRIES = 3                        # starts an 8th apart a statement may try, to sit with the clave
+
+
+def _degree_near(key, pcs, near):
+    """The scale degree nearest `near` whose pitch class is one of `pcs`."""
+    cands = [d for d in range(near - 7, near + 8) if key.degree(d) % 12 in pcs]
+    return min(cands, key=lambda d: (abs(d - near), d)) if cands else near
+
+
+def phrase_melody(rng, theme, spans, key, start, bars, met, floor, clave=None, sung=()):
+    """One phrase's melody: (notes as [step, length, MIDI note], lines). Statements of the theme fill the bars;
+    the bar at the half lands open, the last lands home on the cadence, the bar after the half brings the phrase's
+    opening back, higher; the line follows ARC. `floor`: the melody stays above it (the pad's top)."""
+    half = bars // 2
+    arc = [ARC[i * len(ARC) // bars] for i in range(bars)]
+    notes, words, first, onsets = [], [], None, list(sung)
+    prev = 0
+    for i in range(bars):
+        b0 = (start + i) * met.bar
+        if i == half and first is not None:
+            m, how = first, "the phrase's opening again, higher"
+        else:
+            m, how = theme.next()
+            how = WORDS[how]
+        if i == 0:
+            first = m
+        landing = i in (half - 1, bars - 1)
+        land_at = None
+        if landing:
+            last = [s for s in spans if b0 <= s.at < b0 + met.bar] or [chord_at(spans, b0)]
+            land_at = max(last[-1].at, b0 + met.bar // 2)
+        stop = land_at if landing else b0 + met.bar
+        shift = arc[i] - round(sum(m.steps) / len(m.steps))
+        degs = [d + shift for d in m.steps]
+        best = None
+        for t in range(TRIES if clave is not None else 1):
+            at, line = b0 + t * met.unit // 2, []
+            for d, length in zip(degs, m.lengths):
+                if at >= stop:
+                    break
+                line.append([at, min(length, stop - at), d])
+                at += length
+            if not line:
+                continue
+            if best is None:
+                best = line
+            if clave is None:
+                break
+            cyc = line[0][0] - line[0][0] % clave.length
+            if check_clave([s % clave.length for s in [x for x in onsets if x >= cyc] + [x[0] for x in line]],
+                           clave) is None:
+                best = line
+                break
+        line = best or []
+        for n in line:   # a note on the beat leans to the chord's tones, a step at most
+            if n[0] % met.unit == 0:
+                tones = {t % 12 for t in chord_at(spans, n[0]).chord.tones}
+                if key.degree(n[2]) % 12 not in tones:
+                    for d in ((n[2] + 1, n[2] - 1) if rng.rnd(2) else (n[2] - 1, n[2] + 1)):
+                        if key.degree(d) % 12 in tones:
+                            n[2] = d
+                            break
+        if landing:
+            ch = chord_at(spans, land_at).chord
+            near = line[-1][2] if line else prev
+            if i == bars - 1:
+                d = _degree_near(key, {0}, near)
+                word = "lands home"
+            else:
+                d = _degree_near(key, {t % 12 for t in ch.tones} - {0}, near)
+                word = "ends open"
+            line.append([land_at, b0 + met.bar - land_at, d])
+            words.append(f"bar {start + i + 1}: {how}, then {word} on {key.name(key.degree(d) % 12)} "
+                         f"over {name(ch, key)}")
+        else:
+            words.append(f"bar {start + i + 1}: {how}")
+        if line:
+            prev = line[-1][2]
+        notes += line
+        onsets += [n[0] for n in line]
+    # the register: the lowest octave that keeps the phrase over the floor
+    lo, hi = min(key.degree(n[2]) for n in notes), max(key.degree(n[2]) for n in notes)
+    top = member_range("melody").high
+    base = next((b for b in range(key.tonic, 128, 12) if b + lo > floor and b + hi <= top),
+                next(b for b in range(key.tonic, 128, 12) if b + lo > floor))
+    out = [(s, length, base + key.degree(d)) for s, length, d in notes]
+    peak = max(range(len(out)), key=lambda j: out[j][2])
+    lines = [f"  melody, bars {start + 1}-{start + bars}: a phrase of {bars}, its peak in bar "
+             f"{out[peak][0] // met.bar + 1}"] + ["    " + w for w in words]
+    return out, lines
+
+
+def check_phrase(notes, spans, key, met, bars, start):
+    """None when the phrase is shaped, else the reason: it ends home, its half ends open, and most notes on the
+    beat are chord tones."""
+    if not notes:
+        return "no melody"
+    if (notes[-1][2] - key.tonic) % 12:
+        return "the phrase doesn't end home"
+    half = (start + bars // 2) * met.bar
+    before = [n for n in notes if n[0] < half]
+    if before and (before[-1][2] - key.tonic) % 12 == 0:
+        return "the first half ends home already: no question for the answer"
+    on = [n for n in notes if n[0] % met.unit == 0]
+    good = sum((n[2] - key.tonic) % 12 in {t % 12 for t in chord_at(spans, n[0]).chord.tones} for n in on)
+    if on and good / len(on) < CHORD_TONES:
+        return f"only {good} of {len(on)} notes on the beat are chord tones"
+    return None
+

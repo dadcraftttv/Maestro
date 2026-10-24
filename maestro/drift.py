@@ -18,6 +18,7 @@ Between two plays (same settings, fresh seeds):
 Repeats are allowed: a theme coming back and a groove holding are musical. The targets only flag too much.
 
     python -m maestro.drift [--minutes 20] [--seed N]      # today's composer, two plays per baseline preset
+    python -m maestro.drift --flow salsa [trap ...]        # task 3.2's flow sketch, two plays per style
     python -m maestro.drift a.mid [b.mid]                  # song files (the JSON beside each gives tempo and roles)
 """
 import argparse, json, os, random
@@ -186,6 +187,7 @@ def main(argv=None):
     ap.add_argument("files", nargs="*", help="one song file (staleness) or two (and sameness)")
     ap.add_argument("--minutes", type=float, default=20)
     ap.add_argument("--seed", type=int, help="the first play's seed; fresh by default")
+    ap.add_argument("--flow", nargs="+", metavar="STYLE", help="measure task 3.2's flow sketch for these styles")
     a = ap.parse_args(argv)
     if a.files:
         plays = [from_file(f) for f in a.files[:2]]
@@ -194,8 +196,20 @@ def main(argv=None):
             m.update(sameness(*plays))
         print("\n".join(table([(os.path.basename(a.files[0]), m)])))
         return
-    from . import baseline
     seed = a.seed if a.seed is not None else random.SystemRandom().randrange(1, 1 << 24)
+    if a.flow:
+        from .sketch import TEMPO, flow_sketch
+        rows = []
+        for i, style in enumerate(a.flow):
+            bars = round(a.minutes * TEMPO[style] / 4)
+            p, q = (from_song(flow_sketch(style, s, bars)[0]) for s in (seed + 2 * i, seed + 2 * i + 1))
+            m = staleness(p)
+            m.update(sameness(p, q))
+            rows.append((style, m))
+        print(f"flow sketch, {a.minutes:g} minutes a play, seeds from {seed} (two plays per style)")
+        print("\n".join(table(rows)))
+        return
+    from . import baseline
     rows = []
     for i, (scale, key, bpm) in enumerate(baseline.PRESETS):
         bars = round(a.minutes * bpm / 4)

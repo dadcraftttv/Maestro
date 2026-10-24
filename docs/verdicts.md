@@ -196,3 +196,7 @@ isn't reloaded every session; grep for the part a task needs.
   tempo; the chord loop and how it varies; bass; pad; the melody's phrase; a "listen for" line); and two round-3
   proposals into bucket 3: a style per section (HeartMuLa, in 3.6) and TinyMU as a second judge (3.5, license
   first). The other round-3 proposals come up in buckets 4-6's plans.
+- Oct 24: task 3.2's plan approved as presented (progressions as families with variants and a cadence a phrase,
+  the bass on its style's pattern family, the melody shaped over the phrase; `theory/flow.py`, switchable). DadCraft
+  chose salsa for the listen after 3.2, and an 8-bar phrase (statement, answer left open, the opening again,
+  answer landing home).

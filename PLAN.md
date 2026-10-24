@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, task 3.2 (Flow: progressions as families with variants, the bass on its style's pattern
-family, the melody shaped over a phrase).
+**Next:** Bucket 3, the listen after 3.2: DadCraft hears `clips/flow/salsa_23` (16 bars, the montuno vamp and the
+tumbao), made with `python -m maestro.sketch salsa --seed 23 --seeds 1`.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -186,11 +186,20 @@ For each chosen style, how each member plays it, written from sources.
       loader and its checks, `tests/unit/test_stylebook.py`), the format in `docs/format.md` ("The style book").
       Same behaviour, checked: the tables identical value for value, 136 tests and the exam (106/106) unchanged,
       explain's text and the sketch clips byte for byte.
-- [ ] 3.2 Flow (Checkpoint 2's "no flow"): progressions drawn as families with variants over 4 or 8 bars, not one
+- [x] 3.2 Flow (Checkpoint 2's "no flow"): progressions drawn as families with variants over 4 or 8 bars, not one
       chord a bar; the bass built on its style's pattern family; the melody shaped over a phrase (a statement and
       an answer landing on the cadence). Check and choose like the other theory modules. Sources: Open Music Theory
       (loops, schemas; each chapter's own note checked), the Rock Corpus (statistics in our words), jazznet (ii-V).
       The drift measures run first (loops repeat, bars must still stay under the staleness targets).
+      Done Oct 24 (plan approved; DadCraft chose salsa for the listen and an 8-bar phrase): `maestro/theory/flow.py`
+      (families with variants and a cadence each phrase; bass patterns with notes ahead of the chord; the phrase:
+      statements on an arc, the half left open, the end home, chord tones on the beat), each with its check,
+      `tests/unit/test_flow.py`. Salsa's entry has 7 families (montuno vamp, ii-V, andalusian, the minor circle and
+      three major ones) and 3 tumbaos, and now borrows harmonic minor's V7 (which also changes the old path's salsa
+      draws). Other styles play the defaults until 3.4. Flow is the default in `explain` and `sketch`
+      (`--no-flow`: Checkpoint 2's draws). Drift (`python -m maestro.drift --flow ...`, 20 minutes, two plays a style):
+      every target met in all five styles (melody 2-11% copies; bass ~45% and pad 62-78% repeat, as loops do).
+      No chapter text used, only the ideas, so no chapter's note needed checking; the Rock Corpus waits for 3.4d.
 - [ ] Listen after 3.2 (DadCraft, Oct 24): one style, a 16-bar clip with its progression, bass pattern and a phrased
       melody, with its summary (3.7's shape), before the four entries are written.
 - [ ] 3.3 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0), and the **percussion** member (congas,
