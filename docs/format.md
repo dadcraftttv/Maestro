@@ -182,14 +182,14 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
   - **strength:** how strongly the style shows, 0–1 (0 = plain, the theory rules alone; the dropout knob, 5.3).
   - **density:** notes a bar, 0–1 (MidiTok's density control, binned).
   - **register:** lowest and highest note it should use.
-  - **polyphony** (pad, keys: notes at once), **note length**, **swing/feel**: swing 0-1 (0 straight, 2/3
-    triplet swing, 1 hard 75:25) on 8ths or 16ths, push (the whole member laid back or pushing, steady, in ms),
-    its own looseness (ms, seeded), accents, and pulse (full, half, double). Human timing is one **pocket** the
-    whole band shares (a draw per step, sized by the drummer's style), so members breathe together. The guardrail
-    (DadCraft, Oct 23: "nothing should ever sound early, late or out of sync"): every note within 15 ms of its
-    place, members on the same step within 10 ms of each other, swing included.
-    Each style has a feel per member (`rhythm.py` `FEEL`), so trap's tight half-time and rock's laid-back bass can
-    share one beat.
+  - **polyphony** (pad, keys: notes at once), **note length**, **feel**: swing as a grid choice (the steps
+    the off-beat moves to a later step: for 8ths 4 is triplet swing, 6 hard 75:25; for 16ths 2 is triplet swing),
+    accents, and pulse (full, half, double). Each style has a feel per member (`rhythm.py` `FEEL`), so trap's
+    half-time drums and a straight synthwave bass can share one beat. **Every generated note lands on point on a
+    grid step** (PLAN.md decision 13): no member plays ahead or behind, nothing is loosened at random, and members
+    playing the same step land on it together (a swung part over a straight one is ruled out). Human-played data
+    (the Groove MIDI drums) gets its notes rounded to the grid when it's tokenized, so the model never learns to
+    drift.
   - **repetition:** how much it repeats the bars before versus moves on (MidiTok's repetition control); with the
     seed it is how decision 9 gets measured and steered.
 - **Sound is not here.** Each member's sound is a name in `sound` (an Ouralia kit), never in the notes or tokens,

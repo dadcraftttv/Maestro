@@ -51,6 +51,10 @@ band member play, the way its style plays it?
     Maestro never changes it in buckets 2–5. Integration happens on a separate Ouralia + Maestro dev path that
     DadCraft tests privately or with beta testers, and it goes into Ouralia proper only when he deems it ready.
     So Maestro follows a moving `dcs_composer`: the sync check and the parity test (bucket 2) catch every change.
+13. **Every note lands on point on the grid** (DadCraft, Oct 23). The band members are machines, not human
+    players: nothing early, late or out of sync, no member ahead or behind the beat, no random looseness. Swing is a
+    choice of grid point (the off-beat on a later step), never an offset between steps. Human-played data is
+    rounded to the grid.
 
 ## How each bucket runs
 
@@ -221,15 +225,13 @@ Trained on this PC (RTX 2070, 8 GB).
   "1 trip"). The claves: son and rumba in 3-2 and 2-3, and the 6/8 bell; the check rules out a part that lines up
   with the other direction (crossed), while a part the same each bar (a tumbao) passes. The choose draws onsets
   seeded by a style's weights (which subdivisions it uses, how much it leans on the beat); trap rolls at 16ths,
-  32nds and both triplets. Feel per member: swing (8ths or 16ths), push ahead or behind, seeded human jitter,
-  accents, pulse. First drafts: trap programmed and half-time, synthwave straight and even, salsa tight with looser
-  percussion and the son 2-3 clave, power rock human with the bass 4 ticks behind. For DadCraft: the style drafts,
-  and son 2-3 as salsa's default clave.
+  32nds and both triplets. Feel per member: swing, accents, pulse (first drafts had human timing too; see below).
+  For DadCraft: the style drafts, and son 2-3 as salsa's default clave.
 - Oct 23: DadCraft approved both 2.4 choices (the style drafts, son 2-3), then asked whether it would make a
-  coherent song. Not yet: each member's timing was drawn on its own and in ticks (kick and bass could flam, worse at
-  slow tempos), and nothing checked the band as a whole. His rule: "nothing should ever sound early, late or out of
-  sync" (laid back is fine). Fixed in 2.4: timing in ms; one pocket the band shares (the drummer's style sizes it);
-  `check_band_rhythm` holds every note within 15 ms of its place and members on the same step within 10 ms of each
-  other, swing included (a swung part over a straight one is caught), and binds every member to the timeline's
-  clave. Every style draft passes at 60-180 BPM. The two limits are first values, for his ears at checkpoint 3.
-  Rhythms that groove (repetition, variation) come in 2.5 and bucket 3.
+  coherent song. Not yet: the drafts gave members human timing (rock's bass behind the beat, random looseness), each
+  drawn on its own, so kick and bass could flam; and nothing checked the band as a whole. A first fix kept human
+  timing inside ms limits; DadCraft set it straight: "nothing should ever be late ... none of our band members is
+  human. all parts should land on point on the grid" (decision 13). Now in 2.4: no push, no looseness; swing is a
+  number of grid steps; `check_band_rhythm` rules out any note between grid steps, members playing the same step
+  apart (a swung part over a straight one), and any member crossing the timeline's clave, whatever its style.
+  Every style draft passes. Rhythms that groove (repetition, variation) come in 2.5 and bucket 3.
