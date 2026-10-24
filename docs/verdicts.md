@@ -155,3 +155,12 @@ isn't reloaded every session; grep for the part a task needs.
   within a play, band 4-bar phrases copied <= 10%, longest exact copy <= 8 bars, melody bars copying one of the
   last 16 <= 30%, new band bars >= 25% in every 2-minute window; between two plays, same bar in the same place
   <= 1%, 4-bar phrases shared <= 5%, longest shared run <= 4 bars. Drums, bass (and pad) are shown, never capped.
+- Oct 24: checkpoint 2 started. DadCraft chose a sketch player for the style clips (the theory core's choices
+  played, with a bare drum guide, over reading only or no drums) and style tempos in one key (trap 140, synthwave
+  100, salsa 180, power rock 130, all A minor). Measured on 1,200 sketches before he listens: every note on the
+  grid, the melody above the pad, no part crossing the clave unless the words say so, the WAVs 3-7 dB under
+  clipping. Fixed on the way: the pad had no ceiling and climbed into the melody (now under F5, and the melody
+  keeps one register a clip); the pad was voiced without the bass and could be muddy (now the bass comes first and
+  the pad is drawn again, up to 10 times); a 9th chord left the 3-note pad silent (now 4 notes then); the motif
+  ignored the clave (now a statement moves a bar later to sit with it, said in the words). Still in: about 1 bar
+  in 300 stays muddy after 10 draws ("ruled out" in the words), and salsa's draft piles up secondary dominants.
