@@ -148,3 +148,6 @@ isn't reloaded every session; grep for the part a task needs.
   the lead's sound alone isn't it. In the baseline clips the lead always starts a bar on the downbeat and nearly
   every note lands on a kick or snare. Next: four versions of clip 1's first 16 bars (`clips/ab`: as heard, no
   pad, xylophone lead, no breath bar) to find what in the mix makes it feel late. `baseline.clip` gained `breath`.
+- Oct 24: DadCraft on the A/B clips: "they both now sound in sync. i'm not sure what i heard before, if nothing
+  changed." Nothing had: the baseline WAVs he first heard are the same renders. Closed with no change; if a lag
+  shows up again, he notes the clip and the second, and that spot gets measured. 2.7's listen done.
