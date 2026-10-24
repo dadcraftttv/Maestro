@@ -288,3 +288,4 @@ Trained on this PC (RTX 2070, 8 GB).
   iv, sus and add9, maj7; salsa: diatonic plus secondary dominants, sevenths and sixths; power rock: power chords,
   borrowing from mixolydian and minor). In the passage a section leans to open on its tonic and a tension chord to
   land where it points (12 times as often), never a must. For DadCraft: the style vocabularies, and the passages.
+- Oct 23: DadCraft approved the 2.6 style vocabularies ("vocabularies look good").
