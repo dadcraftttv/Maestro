@@ -20,6 +20,8 @@ the computer, and a small version distilled from it runs on the phone.
     python3 -m venv .venv && .venv/bin/pip install -e '.[test]'
     .venv/bin/python -m pytest -q          # unit tests; parity with Ouralia's composer when ../Ouralia is built
     python3 tools/sync_check.py            # is the port in step with Ouralia's dcs_composer.c?
+    .venv/bin/python tests/exam/exam.py    # the theory exam's score card (--all: every question and why)
+    .venv/bin/python -m maestro.explain salsa --seed 7   # a few bars of choices, in plain words
 
 The parity test needs Ouralia beside this repo (or `MAESTRO_OURALIA`), with its test build: `tools/build_libpd.sh`
 and `make -C dcs` there. It only reads Ouralia, never changes it.

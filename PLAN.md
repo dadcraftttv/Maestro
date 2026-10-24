@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.6 (the theory exam).
+**Next:** Bucket 2, task 2.7 (the two drift measures).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -109,7 +109,7 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
 - [x] 2.4 Rhythm and meter: the beat grid (24 steps, was 12), meters past 4/4, half-time, clave, swing and feel per member.
 - [x] 2.5 Form, sections and energy; how a long play evolves over ~20 minutes (energy arc, key changes, motifs that
       develop: decision 9).
-- [ ] 2.6 A theory exam (our own, after MusicTheoryBench, no copied questions) with a score, and choices explained
+- [x] 2.6 A theory exam (our own, after MusicTheoryBench, no copied questions) with a score, and choices explained
       in plain words.
 - [ ] 2.7 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets.
 - [ ] Checkpoint 2: DadCraft spot-checks the explained choices.
@@ -276,3 +276,15 @@ Trained on this PC (RTX 2070, 8 GB).
   qualities and colours) four times as often as remote chromatic ones; `outside()` says why a chord is unusual.
 - Oct 23: DadCraft: layering goes in the style book, so it gets done there: task 3.5 added. Checkpoint 3 also
   carries the 2.5 items he wants to hear (the semitone key lift, sections growing heavier).
+- Oct 23: 2.6 done. `tests/exam/exam.py`: our own theory exam, 106 questions over pitch, chords, voicing, rhythm and
+  form, as knowledge or reasoning (MusicTheoryBench's split, none of its questions), each answer worked out by hand
+  and given with why in plain words; `python tests/exam/exam.py` prints the score card (`--all` every question). It
+  found one slip, now fixed: the blues scale's blue note was spelled D# in A, now Eb (the flat five). Score 106/106;
+  the test fails on any wrong answer (a question the library can't answer yet is marked as a gap). `maestro/explain.py`:
+  a few bars drawn one choice at a time (section and energy, chord and its function, pad and bass moves, the bass
+  rhythm against the clave, the motif's development), each in plain words, for checkpoint 2's spot check
+  (`python -m maestro.explain salsa --seed 7`). It needed a chord vocabulary per style, which 2.2 hadn't drafted:
+  `chords.VOCAB` (trap: dark minor, borrowing harmonic minor's V and phrygian's bII; synthwave: borrowed bVI bVII
+  iv, sus and add9, maj7; salsa: diatonic plus secondary dominants, sevenths and sixths; power rock: power chords,
+  borrowing from mixolydian and minor). In the passage a section leans to open on its tonic and a tension chord to
+  land where it points (12 times as often), never a must. For DadCraft: the style vocabularies, and the passages.

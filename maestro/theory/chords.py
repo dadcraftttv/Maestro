@@ -279,6 +279,21 @@ class Vocabulary:
     outside: int = 5
 
 
+_F = frozenset
+
+# First drafts for the four styles, from 2.2's notes; the style book (bucket 3) refines them.
+VOCAB = {
+    "plain": Vocabulary(),
+    "trap": Vocabulary(kinds=_F(("diatonic", "borrowed")), qualities=_F(("min", "maj", "dim")),
+                       borrow=("harmonic_minor", "phrygian")),             # dark minor: harmonic minor's V, the bII
+    "synthwave": Vocabulary(kinds=_F(("diatonic", "borrowed")), qualities=_F(("maj", "min", "sus2", "sus4")),
+                            colours=_F((None, "add9", "maj7", "7")), borrow=("minor", "major", "dorian")),  # bVI bVII iv
+    "salsa": Vocabulary(kinds=_F(("diatonic", "secondary")), colours=_F((None, "7", "maj7", "6"))),  # ii-Vs, sevenths
+    "power_rock": Vocabulary(kinds=_F(("diatonic", "borrowed")), qualities=_F(("power", "maj", "min")),
+                             borrow=("mixolydian", "minor")),             # power chords and the bVII
+}
+
+
 def outside(chord, key, vocab):
     """None when the chord is in the style's usual vocabulary for this key, else why not, in plain words."""
     k = kind(chord, key)

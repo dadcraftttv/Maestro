@@ -84,7 +84,7 @@ class Key:
         degree up from the tonic's letter, as a chord's roman numeral says."""
         t = self.tonic_name()[0]
         if number is None:
-            number = _number_of(pc % 12, self.steps)
+            number = _WRITTEN.get(self.scale, {}).get(pc % 12) or _number_of(pc % 12, self.steps)
         letter = LETTERS[(LETTERS.index(t) + number - 1) % 7]
         return spell(letter, (self.tonic + pc) % 12)
 
@@ -94,6 +94,8 @@ class Key:
 
 # For a chromatic pitch class, the scale number it is written as (b3 is a 3, #4 a 4): from the major scale.
 _NUMBER = {0: 1, 1: 2, 2: 2, 3: 3, 4: 3, 5: 4, 6: 4, 7: 5, 8: 6, 9: 6, 10: 7, 11: 7}
+# Scales that write a note on another number: the blues' blue note is a flat five (Eb in A), not a sharp four.
+_WRITTEN = {"blues": {6: 5}}
 
 
 def _number_of(pc, steps):
