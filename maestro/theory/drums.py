@@ -14,7 +14,14 @@ the small hits, more of them as the energy rises; a phrase's last bar may end in
 drawn from GMD's fills, the toms mostly going down), and a crash marks each section's start and the bar after a
 fill. Half-time (trap) spreads a groove over two bars; a turning hat changes its rate for a beat, more often with
 more energy. Every hit is on the grid (decision 13); the velocities are
-GMD's, as a drummer's dynamics. The check rules out a hit off the grid or outside the clip, two of one drum on one
+GMD's, as a drummer's dynamics.
+
+A programmed drummer (trap, task 3.4a's second round: GMD's human hip hop wasn't trap, DadCraft, Oct 24) plays the
+entry's own written patterns instead (members.drums.patterns): kick patterns over two bars (the 808 follows them),
+hat patterns an 8th at a time with the rolls written in, louder as they run, the clap fixed on 3; machine-steady
+velocities. A section draws a kick and a hat pattern by its energy and mostly keeps them; the kick may vary a note
+from round to round. The kick and clap drop out for the end of a section before the next one, and the play may open
+on the hats alone (the 808 rests with them). The check rules out a hit off the grid or outside the clip, two of one drum on one
 step, more than two hands at once and a groove without its backbeat (with a fixed backbeat: a snare anywhere
 else). Tendencies, never a fixed part (decision 9)."""
 import json, os
@@ -143,7 +150,193 @@ def _drummer(style):
                    d.get("turns", 0), tuple(rates.items()))
 
 
-DRUMMER = {s: _drummer(s) for s in STYLES}   # None: the style's band has no kit (salsa)
+@dataclass(frozen=True)
+class KickPattern:
+    """Two bars of kicks, as the 16ths of each bar."""
+    name: str
+    bars: tuple
+    weight: int = 1
+    when: str = "any"
+    why: str = ""
+
+
+@dataclass(frozen=True)
+class HatPattern:
+    """Two bars of hats, an 8th at a time (HAT_CELLS)."""
+    name: str
+    bars: tuple
+    weight: int = 1
+    when: str = "any"
+    why: str = ""
+
+
+# an 8th of hats: (16ths... as steps into the 8th, a roll's rate or None); "o" an open hat
+HAT_CELLS = {"-": (), "x": (0,), "xx": (0, 6), "o": (0,), "3": (0, 4, 8), "4": (0, 3, 6, 9), "6": (0, 2, 4, 6, 8, 10)}
+ROLLS = ("3", "4", "6")
+STEADY = {"kick": 118, "snare": 112, "beat": 96, "eighth": 86, "sixteenth": 70, "open": 88}
+
+
+@dataclass(frozen=True)
+class Programmed:
+    """A drummer playing the style's own written patterns (trap)."""
+    kicks: tuple
+    hats: tuple
+    stay: int = 4        # times more likely a section keeps the patterns of the one before
+    vary: int = 25       # % of rounds the kick moves, adds or drops a note
+    drop: int = 50       # % of section ends where the kick and clap (and the 808) drop out for the last bar
+    intro: int = 4       # bars of hats alone at the play's start (0: none)
+    fixed: bool = True   # the clap only on 3 (the check)
+    turns: int = 0
+
+
+def _programmed(style, d, where):
+    p = d["patterns"]
+    kicks, hats = [], []
+    for kind, out, cls in (("kicks", kicks, KickPattern), ("hats", hats, HatPattern)):
+        for n, x in p.get(kind, {}).items():
+            if n == "why":
+                continue
+            w = f"{where}.patterns.{kind}.{n}"
+            bars = x.get("bars")
+            if not isinstance(bars, list) or len(bars) != 2:
+                raise StyleError(f"{w}: two bars")
+            if kind == "kicks":
+                if any(not isinstance(b, list) or b != sorted(set(b)) or any(not 0 <= i < 16 for i in b) for b in bars):
+                    raise StyleError(f"{w}: each bar the kick's 16ths, 0-15, in order")
+                bars = tuple(tuple(b) for b in bars)
+            else:
+                cells = [b.split() if isinstance(b, str) else None for b in bars]
+                if any(c is None or len(c) != 8 or any(t not in HAT_CELLS for t in c) for c in cells):
+                    raise StyleError(f"{w}: each bar eight 8ths, each one of {' '.join(HAT_CELLS)}")
+                bars = tuple(tuple(c) for c in cells)
+            if x.get("when", "any") not in ("low", "high", "any") or not isinstance(x.get("weight", 1), int):
+                raise StyleError(f"{w}: when low, high or any; a whole-number weight")
+            out.append(cls(n, bars, x.get("weight", 1), x.get("when", "any"), x.get("why", "")))
+    if not kicks or not hats:
+        raise StyleError(f"{where}.patterns: both kicks and hats")
+    return Programmed(tuple(kicks), tuple(hats), p.get("stay", 4), p.get("vary", 25), p.get("drop", 50),
+                      p.get("intro", 4))
+
+
+def _fit(rng, pats, energy, prev, stay):
+    """A pattern for the section: by energy (low under 0.5), the one before `stay` times likelier."""
+    ok = [x for x in pats if x.when == "any" or (x.when == "low") == (energy < 0.5)] or list(pats)
+    return ok[_draw(rng, {i: x.weight * (stay if x == prev else 1) for i, x in enumerate(ok)})]
+
+
+def _vary_kick(rng, bars):
+    """A kick pattern with one note moved a 16th, added (a pickup) or left out (never the bar's first)."""
+    b = [list(x) for x in bars]
+    i = rng.rnd(2)
+    r = rng.rnd(3)
+    spare = [p for p in range(1, 16) if p not in b[i] and p not in (7, 8, 9)]   # the clap's 16th stays clear
+    if r == 0 and len(b[i]) > 1:
+        b[i].pop(1 + rng.rnd(len(b[i]) - 1))
+        how = "a kick left out"
+    elif r == 1 and spare:
+        b[i] = sorted(b[i] + [spare[rng.rnd(len(spare))]])
+        how = "a kick added"
+    else:
+        moves = [(j, p + d) for j, p in enumerate(b[i]) if j for d in (-1, 1)
+                 if 0 < p + d < 16 and p + d not in b[i] and p + d not in (7, 8, 9)]
+        if not moves:
+            return bars, None
+        j, q = moves[rng.rnd(len(moves))]
+        b[i][j] = q
+        b[i].sort()
+        how = "a kick moved a 16th"
+    return tuple(tuple(x) for x in b), how
+
+
+def programmed_part(rng, dr, recs, met, phrase, end):
+    """The programmed drummer over `recs` (a record a bar), up to step `end`: ([(step, length, MIDI note,
+    velocity, voice)], [(section, line)]). Two bars a round; the clap on 3 of each bar."""
+    hits, lines = [], []
+    sec, kick, hat, drops = None, None, None, 0
+    first = recs[0]["section"] if recs else None
+    intro = dr.intro if first and first.end - first.start >= 2 * max(1, dr.intro) else 0
+    for r in recs[::2]:
+        b, s, e = r["bar"], r["section"], r["energy"]
+        at = b * met.bar
+        if s is not sec:
+            sec = s
+            kick, hat = _fit(rng, dr.kicks, e, kick, dr.stay), _fit(rng, dr.hats, e, hat, dr.stay)
+            lines.append((s, f"  drums: programmed; kick {kick.name}, hats {hat.name}, the clap on 3"))
+            dropping = s.end - s.start >= 4 and _chance(rng, dr.drop)
+            if dropping:
+                drops += 1
+                lines.append((s, f"  drums, bar {s.end}: the kick and clap (and the 808) drop out for the last bar"))
+        bars = kick.bars
+        if b > s.start and _chance(rng, dr.vary):
+            bars, how = _vary_kick(rng, kick.bars)
+        cells = {}
+
+        def add(step, voice, vel):
+            if step < end:
+                cells.setdefault(step, {})[voice] = max(1, min(127, round(vel * (0.9 + 0.2 * e))))
+        for i in range(2):
+            bar = b + i
+            if bar >= s.end:
+                break
+            b0 = at + i * met.bar
+            quiet = bar < intro or (dropping and bar == s.end - 1)
+            if not quiet:
+                for p in bars[i]:
+                    add(b0 + p * SIXTEENTH, "kick", STEADY["kick"])
+                add(b0 + met.beats[2], "snare", STEADY["snare"])
+            row = list(hat.bars[i])
+            run = []
+            for c, tok in enumerate(row):
+                s8 = b0 + c * 2 * SIXTEENTH
+                if tok in ROLLS:
+                    run.append((s8, tok))
+                    continue
+                if run:
+                    _roll(add, run)
+                    run = []
+                for k, off in enumerate(HAT_CELLS[tok]):
+                    v = "open" if tok == "o" else "hat"
+                    add(s8 + off, v, STEADY["open"] if v == "open" else
+                        STEADY["beat"] if c % 2 == 0 and k == 0 else STEADY["eighth"] if k == 0 else STEADY["sixteenth"])
+            if run:
+                _roll(add, run)
+        for step in sorted(cells):
+            hits += [(step, SIXTEENTH, KIT[v], vel, v) for v, vel in cells[step].items()]
+    if intro:
+        lines.insert(1 if lines else 0, (recs[0]["section"], f"  drums, bar 1: the hats alone for {intro} bars, the "
+                                                            f"kick, clap and 808 come in on bar {intro + 1}"))
+    return hits, lines
+
+
+def _roll(add, run):
+    """A roll over consecutive 8ths: its hits, louder as it runs (55 up to 100)."""
+    steps = [s8 + off for s8, tok in run for off in HAT_CELLS[tok]]
+    for k, st in enumerate(steps):
+        add(st, "hat", 55 + 45 * k / max(1, len(steps) - 1))
+
+
+def quiet_spans(hits, met, end):
+    """The half bars with neither kick nor snare (an intro, a drop-out): [(start, end)] steps, joined up."""
+    half = met.bar // 2
+    busy = {h[0] // half for h in hits if h[4] in ("kick", "snare")}
+    out = []
+    for i in range(end // half):
+        if i not in busy:
+            if out and out[-1][1] == i * half:
+                out[-1] = (out[-1][0], (i + 1) * half)
+            else:
+                out.append((i * half, (i + 1) * half))
+    return out
+
+
+def _drummer_for(style):
+    d = part(style, "members", "drums")
+    if "patterns" in d:
+        return _programmed(style, d, f"{style}: members.drums")
+    return _drummer(style)
+
+
+DRUMMER = {s: _drummer_for(s) for s in STYLES}   # None: the style's band has no kit (salsa)
 
 
 def _chance(rng, pct):
@@ -187,6 +380,8 @@ def _fill(rng, dr, at, end, energy, big):
 def drum_part(rng, dr, recs, met, phrase, end, half=False):
     """The drums over the bars of `recs` (a record a bar: bar, section, energy), up to step `end`: ([(step, length,
     MIDI note, velocity, voice)], [(section, line in words)]). `half`: half-time, a groove over two bars."""
+    if isinstance(dr, Programmed):
+        return programmed_part(rng, dr, recs, met, phrase, end)
     span = 2 if half else 1                      # bars a groove covers
     scale = SIXTEENTH * span                     # steps a groove 16th covers
     unit = span * met.bar
@@ -285,7 +480,7 @@ def check_drums(hits, met, end, half=False, fixed=False):
     unit = met.bar * (2 if half else 1)
     for u in range(0, end - unit + 1, unit):
         cells = [v for s, c in at.items() if u <= s < u + unit for v in c]
-        if any(v in TOMS for v in cells):
+        if any(v in TOMS for v in cells) or not {"kick", "snare"} & set(cells):   # a fill, or a drop-out
             continue
         if "snare" not in cells:
             return f"bar {u // met.bar + 1}: no backbeat"
@@ -295,7 +490,11 @@ def check_drums(hits, met, end, half=False, fixed=False):
         for step, cell in sorted(at.items()):
             if "snare" in cell and step not in on:
                 return f"a snare off the backbeat on {met.count(step)} (bar {step // met.bar + 1})"
+        half_bar = met.bar // 2
+        loud = {s // half_bar for s, c in at.items() if {"kick", "snare"} & set(c)}
         for step in sorted(on):
+            if step // half_bar not in loud:                   # a drop-out
+                continue
             if "snare" not in at.get(step, []) and not any(v in TOMS for v in at.get(step, [])):
                 return f"no snare on {met.count(step)} (bar {step // met.bar + 1})"
     return None

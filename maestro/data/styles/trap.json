@@ -80,9 +80,9 @@
         }
       },
       "variants": {
-        "why": "Rounds mostly come back as they were.",
+        "why": "Rounds come back as they were: no swapped chords (a Bdim for the bVI isn't trap).",
         "again": 10,
-        "swap": 1,
+        "swap": 0,
         "colour": 0,
         "approach": 0,
         "turnaround": 0
@@ -117,10 +117,11 @@
     "why": "Dark strings, an 808, a bell lead (DadCraft, Oct 24: the bell and the strings).",
     "pad": {
       "sound": 49,
-      "why": "slow strings (GM's String Ensemble 2), holding each chord"
+      "why": "slow strings (GM's String Ensemble 2), holding each chord",
+      "level": 48
     },
     "bass": {
-      "sound": 38,
+      "sound": "808",
       "why": "The 808: no pattern of its own, a note on every kick held to the next, mostly roots, some fifths and octave jumps; now and then a slide into the next note (DadCraft, Oct 24: about 1 in 6). A synth bass stands in for the 808.",
       "with": "kick",
       "tones": {
@@ -128,42 +129,194 @@
         "fifth": 2,
         "octave": 2
       },
-      "slides": 16
+      "slides": 16,
+      "level": 112
     },
     "melody": {
       "sound": 9,
-      "why": "a bell (GM's glockenspiel): a short dark motif, repeated and varied, a beat of it often in triplets over the straight grid (triplet flow)",
-      "develop": {
-        "why": "Triplet figures over the 16ths; the motif comes back close.",
-        "triplet": 4,
-        "again": 4
+      "why": "a bell (GM's glockenspiel): a one- or two-bar riff going round the section, its beat notes fitted to each chord, a beat of it often in triplets over the straight grid (triplet flow); not shaped over the phrase (DadCraft, Oct 24: it felt stuck, not trap)",
+      "level": 110,
+      "shape": "loop",
+      "loop": {
+        "why": "Trap's lead is a short riff on repeat; it changes between sections, not inside them.",
+        "bars": {
+          "1": 1,
+          "2": 3
+        },
+        "cells": {
+          "8 8": 4,
+          "t t t": 3,
+          "8 r": 2,
+          "r 8": 2,
+          "16 16 8": 2,
+          "8 16 16": 1,
+          "q": 2,
+          "r": 1
+        },
+        "stay": 1,
+        "vary": 15
       }
     },
     "drums": {
-      "why": "Half-time: hip hop's kick over two bars, the snare fixed on 3, the hats in 16ths turning to triplets or 32nds for a beat, rolls into each phrase, no tom fills.",
+      "why": "Programmed, as trap is (DadCraft, Oct 24: GMD's human hip hop wasn't trap): written kick patterns the 808 follows, written hat patterns with their rolls, the clap fixed on 3, machine-steady; the kick and clap drop out before a new section, and the play opens on the hats.",
+      "sound": "808 kit",
       "kicks": 3,
       "hats": "16th",
-      "grooves": {
-        "hiphop": 1
-      },
-      "time": {
-        "hat 16th": 60,
-        "hat 8th": 25,
-        "hat quarter": 0,
-        "ride quarter": 0,
-        "ride 8th": 0,
-        "ride 16th": 0,
-        "crash quarter": 0
-      },
-      "busy": 70,
-      "fills": 0,
-      "rolls": 60,
-      "backbeat": "fixed",
-      "turns": 12,
-      "turn rates": {
-        "16th_triplet": 3,
-        "32nd": 2,
-        "8th_triplet": 1
+      "patterns": {
+        "why": "Kicks as each bar's 16ths (the clap is on 8); hats an 8th at a time: - none, x an 8th, xx two 16ths, o an open hat, 3 16th triplets, 4 32nds, 6 32nd triplets (a run of 3, 4 and 6 is a roll, louder as it goes).",
+        "kicks": {
+          "home": {
+            "bars": [
+              [
+                0,
+                10
+              ],
+              [
+                0,
+                3,
+                10
+              ]
+            ],
+            "weight": 3,
+            "why": "the one, the a of 3; then a pickup after the one"
+          },
+          "sparse": {
+            "bars": [
+              [
+                0
+              ],
+              [
+                0,
+                11
+              ]
+            ],
+            "weight": 2,
+            "when": "low",
+            "why": "room for the 808 to ring"
+          },
+          "bounce": {
+            "bars": [
+              [
+                0,
+                6,
+                10
+              ],
+              [
+                0,
+                14
+              ]
+            ],
+            "weight": 3,
+            "why": "the and of 2 before the clap; a late kick into the next round"
+          },
+          "push": {
+            "bars": [
+              [
+                0,
+                3,
+                11
+              ],
+              [
+                0,
+                6,
+                11,
+                14
+              ]
+            ],
+            "weight": 2,
+            "when": "high",
+            "why": "busier, pushing across the clap"
+          },
+          "late": {
+            "bars": [
+              [
+                0,
+                11,
+                14
+              ],
+              [
+                3,
+                10
+              ]
+            ],
+            "weight": 2,
+            "when": "high",
+            "why": "the second bar skips its one: a hiccup"
+          },
+          "double": {
+            "bars": [
+              [
+                0,
+                2,
+                10
+              ],
+              [
+                0,
+                2,
+                11
+              ]
+            ],
+            "weight": 2,
+            "why": "a doubled one, then the a of 3"
+          }
+        },
+        "hats": {
+          "eighths": {
+            "bars": [
+              "x x x x x x x x",
+              "x x x x x x 3 3"
+            ],
+            "weight": 2,
+            "when": "low",
+            "why": "plain 8ths, a triplet roll at the end"
+          },
+          "sixteenths": {
+            "bars": [
+              "xx xx xx xx xx xx xx xx",
+              "xx xx xx xx xx xx xx 4"
+            ],
+            "weight": 3,
+            "why": "straight 16ths, 32nds into the next round"
+          },
+          "roll on 2": {
+            "bars": [
+              "xx xx xx 3 xx xx xx xx",
+              "xx xx xx 3 xx xx 4 4"
+            ],
+            "weight": 4,
+            "why": "a triplet turn before the clap, every bar; 32nds at the end"
+          },
+          "skippy": {
+            "bars": [
+              "xx x xx 3 xx x 4 xx",
+              "xx x xx xx xx o 3 3"
+            ],
+            "weight": 3,
+            "when": "high",
+            "why": "gaps and turns, an open hat before the end"
+          },
+          "gallop": {
+            "bars": [
+              "x 3 x 3 x 3 x xx",
+              "x 3 x 3 xx xx 6 6"
+            ],
+            "weight": 2,
+            "when": "high",
+            "why": "triplets on every off 8th; a fast roll at the end"
+          },
+          "open lift": {
+            "bars": [
+              "xx xx o xx xx xx o xx",
+              "xx xx o xx xx 3 3 4"
+            ],
+            "weight": 2,
+            "why": "open hats on the and of 2 and 4, a long roll"
+          }
+        },
+        "stay": 4,
+        "vary": 25,
+        "drop": 50,
+        "intro": 4
       }
     }
   }

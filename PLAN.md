@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, 3.4a's second round (trap "not even close", DadCraft, Oct 24): its plan first.
+**Next:** Bucket 3, the listen after 3.4a's second round (`clips/trap2/trap_74`), then 3.4b (synthwave's entry).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -244,7 +244,22 @@ For each chosen style, how each member plays it, written from sources.
       for" line. Heard Oct 24: "not what i would call trap. not even close": the 808 not felt as bass and kick at
       once, the slides buried under the pad and bells, the hats stiff and not rolling, the whole a little stuck
       (`docs/verdicts.md`).
-- [ ] 3.4a, second round: its plan first.
+- [x] 3.4a, second round. Plan (Oct 24): the sound and the mix, written hat and kick patterns, a loop melody, the
+      drop-outs pulled forward from 3.6. DadCraft: trap is 2 Chainz, Future, Travis Scott ("a cleaner trap sound
+      and not the fuzzy distortion"), Atlanta and others; the sounds "what would get us closest"; "try everything".
+      Done Oct 24: `maestro/synth.py`, Maestro's own sounds made the TR-808's way (a clean sine 808 with a long
+      decay and real glides, a punchy kick, a clap, square-wave hats), mixed in by the clip player with FluidSynth's
+      GM members (numpy now a dependency); a member's sound may be `"808"` or `"808 kit"`. Trap's mix: the 808 and
+      kick loudest, the strings thin (48), the bell over them (110). A programmed drummer (`drums.Programmed`):
+      six written kick patterns and six hat patterns with their rolls (louder as they run), the clap on 3,
+      machine-steady; the kick varies a note 25% of rounds; the kick, clap and 808 drop out for a section's last
+      bar half the time, and the play opens on 4 bars of hats alone (the 808 rests with them; checked). The melody
+      a loop (`flow.loop_melody`): a 1- or 2-bar riff of rhythm cells (triplets among them) going round the section,
+      its beat notes fitted to each chord, a phrase's last round landing home. No chord swaps. 189 tests, exam
+      106/106. Drift: every band target met; the melody's own (copies of its last 16 bars <= 30%) not: 77%, as a
+      riff repeats; asked of DadCraft, the target unchanged until he says.
+- [ ] Listen after 3.4a's second round: `clips/trap2/trap_74` (32 bars; hats alone, the drop at bar 16, three
+      kinds of section).
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

@@ -524,15 +524,19 @@ def _chance(rng, pct):
     return rng.rnd(1000) < round(10 * pct)
 
 
-def bass_808(rng, bf, spans, key_at, kicks, start, bars, met, energy, near=None):
+def bass_808(rng, bf, spans, key_at, kicks, start, bars, met, energy, near=None, quiet=()):
     """One section's 808 (trap): (notes as [step, None, MIDI note], slides as [(step, steps, semitones)], lines). A
     note on each of the drummer's `kicks` and on each chord change, held to the next; the first note of a chord its
     root, the others drawn from the style's tones (roots mostly, fifths, octave jumps up). The style's share of the
     notes (more with more energy) slide into the next over their last 8th, drawn among the notes an 8th or longer
-    with another note after them."""
+    with another note after them. `quiet`: the (start, end) steps where the drums drop out; the 808 rests there,
+    its note before cut at the drop."""
     lo, hi = start * met.bar, (start + bars) * met.bar
     changes = {sp.at for sp in spans if lo <= sp.at < hi}
-    steps = sorted({k for k in kicks if lo <= k < hi} | changes)
+
+    def hush(st):
+        return next((q0 for q0, q1 in quiet if q0 <= st < q1), None)
+    steps = sorted(st for st in {k for k in kicks if lo <= k < hi} | changes if hush(st) is None)
     r, out = member_range("bass"), []
     if near is None:
         near = round(r.mid) - 4
@@ -545,26 +549,31 @@ def bass_808(rng, bf, spans, key_at, kicks, start, bars, met, energy, near=None)
             home = m                               # the chord's root: the octave the 808 jumps from
         if tone == "octave" and m + 12 <= r.high:
             m += 12
-        out.append([st, None, m])
+        drop = next((q0 for q0, _ in quiet if q0 > st), None)
+        nxt = next((x for x in steps if x > st), None)
+        out.append([st, drop - st if drop is not None and (nxt is None or drop < nxt) else None, m])
         near = home
     # the slides: `slides` % of all the notes, drawn among those that can (another note next, an 8th of room)
     can = [i for i in range(len(out) - 1) if out[i + 1][2] != out[i][2] and abs(out[i + 1][2] - out[i][2]) <= 12
-           and out[i + 1][0] - out[i][0] >= SLIDE]
+           and out[i + 1][0] - out[i][0] >= SLIDE and out[i][1] is None]
     pct = min(100, bf.slides * (0.5 + energy) * len(out) / len(can)) if can else 0
     slides = [(out[i + 1][0] - SLIDE, SLIDE, out[i + 1][2] - out[i][2]) for i in can if _chance(rng, pct)]
-    words = "a note on every kick, held to the next"
+    words = "a note on every kick, held to the next" + ("; resting where the drums drop out" if any(
+        lo <= q0 < hi for q0, _ in quiet) else "")
     if slides:
         words += f"; {len(slides)} slide{'s' * (len(slides) > 1)} into the next note"
     return out, slides, [f"  bass: an 808, {words}"]
 
 
-def check_808(notes, slides, kicks, spans, key_at):
-    """None when the 808 fits, else the reason: every note on a kick or a chord change, and every slide ending on
-    the next note, a tone of its chord."""
+def check_808(notes, slides, kicks, spans, key_at, quiet=()):
+    """None when the 808 fits, else the reason: every note on a kick or a chord change, none sounding where the
+    drums drop out (`quiet`), and every slide ending on the next note, a tone of its chord."""
     on = set(kicks) | {sp.at for sp in spans}
-    for s, _, _ in notes:
+    for s, length, _ in notes:
         if s not in on:
             return f"an 808 note at step {s}, on no kick or chord change"
+        if any(s < q1 and s + length > q0 for q0, q1 in quiet):
+            return f"an 808 note at step {s} sounds where the drums drop out"
     starts = {s: m for s, _, m in notes}
     order = [s for s, _, _ in notes]
     for at, length, semis in slides:
@@ -723,3 +732,127 @@ def check_phrase(notes, spans, key, met, bars, start):
         return f"only {good} of {len(on)} notes on the beat are chord tones"
     return None
 
+
+
+# ---- the melody as a loop (trap, task 3.4a's second round) ----
+
+# a beat of the loop's rhythm: (at, length) in steps; triplets are 8th triplets (Duinker's triplet flow)
+CELLS = {"q": ((0, 24),), "8 8": ((0, 12), (12, 12)), "8 r": ((0, 12),), "r 8": ((12, 12),),
+         "16 16 8": ((0, 6), (6, 6), (12, 12)), "8 16 16": ((0, 12), (12, 6), (18, 6)),
+         "t t t": ((0, 8), (8, 8), (16, 8)), "r": ()}
+LOOP_SPAN = (-2, 7)              # scale steps over the tonic the loop keeps to
+
+
+@dataclass(frozen=True)
+class LoopFlow:
+    bars: tuple = ((1, 1), (2, 3))       # (bars, weight)
+    cells: tuple = tuple((c, 1) for c in CELLS)
+    stay: int = 2                        # times likelier a section keeps the loop before
+    vary: int = 20                       # % of rounds with one note moved a step
+
+
+def _loop_flow(style):
+    d, where = part(style, "members", "melody"), f"{style}: members.melody"
+    shape = d.get("shape", "phrase")
+    if shape not in ("phrase", "loop"):
+        raise StyleError(f"{where}.shape: \"phrase\" (shaped over the phrase) or \"loop\" (a riff going round)")
+    if shape == "phrase":
+        return None
+    lp = d.get("loop", {})
+    extra = set(lp) - {"why", "bars", "cells", "stay", "vary"}
+    if extra:
+        raise StyleError(f"{where}.loop: unknown part {sorted(extra)[0]!r} (known: bars, cells, stay, vary)")
+    bars = tuple((int(k), w) for k, w in lp.get("bars", {"2": 1}).items() if k != "why")
+    cells = tuple((k, w) for k, w in lp.get("cells", {c: 1 for c in CELLS}).items() if k != "why")
+    if any(b not in (1, 2) for b, _ in bars) or any(c not in CELLS for c, _ in cells):
+        raise StyleError(f"{where}.loop: bars 1 or 2; cells among {', '.join(CELLS)}")
+    return LoopFlow(bars, cells, lp.get("stay", 2), lp.get("vary", 20))
+
+
+LOOPS = {s: _loop_flow(s) for s in STYLES}   # None: the melody is shaped over the phrase
+
+
+def make_loop(rng, lf, met):
+    """A new loop: [(at, length, scale step)] over 1 or 2 bars, mostly steps, narrow, starting on a chord tone of
+    home; the last beat may breathe."""
+    n = _draw(rng, dict(lf.bars))
+    beats = n * len(met.beats)
+    out, d = [], (0, 2, 4)[rng.rnd(3)]
+    for b in range(beats):
+        cell = _draw(rng, dict(lf.cells))
+        if not CELLS[cell] and b == 0:
+            cell = "8 8"
+        for at, length in CELLS[cell]:
+            if out:
+                r = rng.rnd(10)
+                step = 0 if r < 3 else (1 if r < 8 else 2) * (1 if rng.rnd(2) else -1)
+                d = min(LOOP_SPAN[1], max(LOOP_SPAN[0], d + step))
+            out.append((b * met.unit + at, length, d))
+    return n, tuple(out)
+
+
+def _loop_words(n, loop, met):
+    cells = []
+    for b in range(n * len(met.beats)):
+        ats = [at - b * met.unit for at, _, _ in loop if b * met.unit <= at < (b + 1) * met.unit]
+        cells.append(next((c for c, v in CELLS.items() if [a for a, _ in v] == ats), "?"))
+    return " | ".join(" ".join(f"[{c}]" for c in cells[i:i + len(met.beats)])
+                      for i in range(0, len(cells), len(met.beats)))
+
+
+def loop_melody(rng, lf, spans, key, start, bars, met, floor, prev=None, phrase=8):
+    """One section's melody as a loop going round: (notes as [step, length, MIDI note], the loop, lines). Each
+    round the notes on the beat move to the nearest tone of the chord under them; now and then a round moves one
+    note a step; the last round of each phrase lands home on its last note."""
+    if prev is not None and rng.rnd(lf.stay + 1):
+        n, loop = prev
+        kept = True
+    else:
+        n, loop = make_loop(rng, lf, met)
+        kept = False
+    lines = [f"  melody: a {n}-bar loop{' (kept)' if kept else ''}, {_loop_words(n, loop, met)}"]
+    lo_deg = min(min(d for _, _, d in loop), 0) - 1       # room for the chord fitting and the landing
+    hi_deg = max(d for _, _, d in loop) + 1
+    base = next((12 * o + key.tonic for o in range(3, 8)
+                 if 12 * o + key.tonic + key.degree(lo_deg) > floor
+                 and 12 * o + key.tonic + key.degree(hi_deg) <= member_range("melody").high),
+                12 * 5 + key.tonic)
+    notes, rounds = [], bars // n
+    for k in range(rounds):
+        at0 = (start + k * n) * met.bar
+        ds = [d for _, _, d in loop]
+        if k and _chance(rng, lf.vary):
+            i = 1 + rng.rnd(len(ds) - 1) if len(ds) > 1 else 0
+            ds[i] = min(LOOP_SPAN[1], max(LOOP_SPAN[0], ds[i] + (1 if rng.rnd(2) else -1)))
+            lines.append(f"  melody, bar {start + k * n + 1}: one note moved a step")
+        last = (k + 1) * n % phrase == 0 or k == rounds - 1
+        for j, ((at, length, _), d) in enumerate(zip(loop, ds)):
+            st = at0 + at
+            if st % met.unit == 0:
+                pcs = {t % 12 for t in chord_at(spans, st).chord.tones}
+                d = _degree_near(key, pcs, d)
+            if last and j == len(loop) - 1:
+                d = 0 if abs(d) < abs(d - 7) else 7
+            m = base + key.degree(d)
+            while m <= floor and m + 12 <= member_range("melody").high:   # never down in the pad
+                m += 12
+            notes.append([st, length, m])
+        if last and k != rounds - 1:
+            lines.append(f"  melody, bar {start + k * n + n}: the round lands home")
+    return notes, (n, loop), lines
+
+
+def check_loop(notes, spans, key, floor):
+    """None when the loop's melody fits, else the reason: on the grid, above the pad, in range, and most notes on
+    the beat chord tones."""
+    r = member_range("melody")
+    for st, length, m in notes:
+        if not r.low <= m <= r.high:
+            return f"{m} is outside the melody's range"
+        if m <= floor:
+            return f"{m} sinks into the pad"
+    on = [n for n in notes if n[0] % 24 == 0]
+    good = sum((n[2] - key.tonic) % 12 in {t % 12 for t in chord_at(spans, n[0]).chord.tones} for n in on)
+    if on and good / len(on) < CHORD_TONES:
+        return f"only {good} of {len(on)} notes on the beat are chord tones"
+    return None

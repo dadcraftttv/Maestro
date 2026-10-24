@@ -128,7 +128,8 @@ its member) plus a **JSON file** beside it with everything MIDI can't hold: the 
 where it came from and its license. MIDI keeps the clips playable in any player (task 2.7); the JSON keeps the
 labels readable. Ticks: 480 a beat. A member that slides (trap's 808, task 3.4a) carries pitch bends: its track
 opens by setting the bend range to an octave (RPN 0), each slide bends over its last 8th to the next note's pitch,
-and the bend is back at rest when the next note starts (a glide in Ouralia, bucket 6).
+and the bend is back at rest when the next note starts (a glide in Ouralia, bucket 6). A member's sound in the JSON
+may name one of Maestro's own (`"808"`, `"808 kit"`): the player renders that track itself (`synth.py`).
 
 ```json
 {
@@ -263,7 +264,9 @@ part may carry a `"why"` in plain words.
 | `harmony.leading` | voice-leading costs and rules | `voicing.Leading` |
 | `form` | phrases, waves, key changes, motif life | `form.Form` |
 | `harmony.progressions` | `families` (each a loop in roman numerals with its bar lines, `"i iv \| V7 iv"`, and a weight), `variants` (weights: again, swap, colour, approach, turnaround), `stay`, `cadence` (% of phrases made to land home, 100 by default; trap 25), `still` (a loop of one chord allowed) | `flow.Flow` (3.2, 3.4a) |
-| `members.<role>` | `sound` (GM program), `level` (velocity), for drums `kicks` and `hats` | the sketch |
+| `members.<role>` | `sound` (GM program, or one of Maestro's own: `"808"`, `"808 kit"`, played by `synth.py`), `level` (velocity), for drums `kicks` and `hats` | the sketch |
+| `members.drums.patterns` | a programmed drummer (trap) instead of GMD's: `kicks` (each `bars`: two lists of a bar's 16ths), `hats` (each `bars`: two strings of eight 8ths, `-` `x` `xx` `o` and the rolls `3` `4` `6`), each with `weight` and `when` (low, high, any); `stay`, `vary` (% of rounds the kick changes a note), `drop` (% of section ends where the kick, clap and 808 drop out), `intro` (bars of hats alone at the start) | `drums.Programmed` (3.4a) |
+| `members.melody.shape` | `"phrase"` (the default: shaped over the phrase) or `"loop"` with `loop`: `bars` (weights for 1 or 2), `cells` (weights for a beat's rhythm: `q`, `8 8`, `8 r`, `r 8`, `16 16 8`, `8 16 16`, `t t t`, `r`), `stay`, `vary` | `flow.LoopFlow` (3.4a) |
 | `members.bass` (an 808) | `with`: `"pattern"` (the default) or `"kick"`: no pattern, a note on each of the drummer's kicks and each chord change, held to the next; `tones` (weights: root, third, fifth, octave; a chord's first note is its root), `slides` (% of the notes sliding into the next over their last 8th, a pitch bend in the clip) | `flow.bass_808` (3.4a) |
 | `members.melody.develop` | weights added to the motif's development (again, nudge, invert, back, shorter, longer, augment, diminish, triplet: two notes filling a beat played as three 8th triplets) | `form.Theme` (3.4a) |
 | `members.bass.patterns` | pattern families: notes as `[at, length, tone, which]` in 16ths (length `null`: held to the next note; tone root, third, fifth or octave; which `now` or `ahead`, the chord at the next half bar), `bars`, `weight`; `variants` (again, drop, approach, octave) | `flow.Pattern` (3.2) |

@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 
 import mido
 
+from .synth import SYNTHS
 from .theory.rhythm import STEPS, TICK, TICKS
 
 DRUMS_CHANNEL = 9   # General MIDI's kit channel (10, counted from 1)
@@ -35,7 +36,8 @@ class Note:
 class Member:
     name: str                 # the track's name
     role: str                 # what it is for: drums, bass, pad, melody, arp, guitar, keys, horns, percussion
-    program: int = 0          # its sound: a General MIDI program (decision 3: the sound is kept apart from the style)
+    program: int | str = 0    # its sound: a General MIDI program, or one of Maestro's own (`synth.SYNTHS`: "808")
+    #                           (decision 3: the sound is kept apart from the style)
     kit: bool = False         # a drum kit (plays on the kit channel)
     notes: list = field(default_factory=list)
     slides: list = field(default_factory=list)   # (step, steps, semitones): a bend from step, reached at its end
@@ -60,6 +62,8 @@ class Song:
     listen: str = ""                               # what DadCraft listens for (said before the clip plays)
 
     def member(self, name, role, program=0, kit=False):
+        if isinstance(program, str) and program not in SYNTHS:
+            raise ValueError(f"{name}: no sound {program!r} (Maestro's own: {', '.join(SYNTHS)})")
         m = Member(name, role, program, kit)
         self.members.append(m)
         return m
@@ -81,7 +85,7 @@ class Song:
             ch = DRUMS_CHANNEL if m.kit else next(chan)
             tr = mido.MidiTrack()
             tr.append(mido.MetaMessage("track_name", name=m.name, time=0))
-            if not m.kit:
+            if not m.kit and isinstance(m.program, int):
                 tr.append(mido.Message("program_change", channel=ch, program=m.program, time=0))
             if m.slides:   # RPN 0, the bend range, then the RPN closed
                 for c, v in ((101, 0), (100, 0), (6, BEND_RANGE), (38, 0), (101, 127), (100, 127)):
@@ -104,7 +108,8 @@ class Song:
         mid.save(f"{stem}.mid")
         info = {"tempo": self.tempo, "meter": f"{self.meter[0]}/{self.meter[1]}", "source": self.source,
                 "listen": self.listen,
-                "members": {m.name: {"role": m.role, "sound": "kit" if m.kit else m.program} for m in self.members},
+                "members": {m.name: {"role": m.role, "sound": m.program if isinstance(m.program, str) else
+                                     "kit" if m.kit else m.program} for m in self.members},
                 "timeline": self.timeline}
         with open(f"{stem}.json", "w") as f:
             json.dump(info, f, indent=1)

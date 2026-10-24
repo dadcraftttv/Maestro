@@ -4,10 +4,10 @@ version = "0.1.0"
 description = "The music brain behind Ouralia's generative music"
 license = "GPL-3.0-or-later"
 requires-python = ">=3.12"
-dependencies = ["mido"]
+dependencies = ["mido", "numpy"]   # numpy: the clip player's own sounds (synth.py)
 
 [project.optional-dependencies]
-test = ["pytest", "numpy"]   # numpy: Ouralia's test engine (tools/pdtest.py), used by the parity test
+test = ["pytest"]
 
 [build-system]
 requires = ["setuptools>=68"]

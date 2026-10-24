@@ -15,8 +15,8 @@ from itertools import groupby
 from .rng import ComposerRng, fresh_seed
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
 from .theory.flow import BASS, FLOW, bass_808, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
-    held, phrase_melody, progression
-from .theory.drums import DRUMMER, check_drums, drum_part
+    check_loop, held, loop_melody, LOOPS, phrase_melody, progression
+from .theory.drums import DRUMMER, check_drums, drum_part, quiet_spans
 from .theory.form import DEVELOPS, FORM, WORDS, Play, Theme, explain_section
 from .theory.percussion import PERCUSSION, check_percussion, percussion_part
 from .theory.pitch import Key
@@ -196,10 +196,12 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     bass, slides, pat, near, bf = [], [], None, None, BASS[style]
     drums = draw_drums() if bf.kick else []
     kicks = sorted({h[0] for h in drums if h[4] == "kick"})
+    quiet = quiet_spans(drums, met, whole) if bf.kick else []
     for p in plan:
         s = p["section"]
         if bf.kick:
-            notes, sl, lines = bass_808(rng, bf, spans, key_at, kicks, s.start, s.bars, met, s.energy, near)
+            notes, sl, lines = bass_808(rng, bf, spans, key_at, kicks, s.start, s.bars, met, s.energy, near,
+                                           quiet)
             slides += sl
             pat = None
         else:
@@ -209,7 +211,8 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         near = notes[-1][2] if notes else near
         p["pattern"], p["bass"], p["lines"] = pat, lines[0].split(": ", 1)[1], p["lines"] + lines
     bass = held(bass, play.bar * met.bar)
-    why = check_bass(bass, met, clave) or (check_808(bass, slides, kicks, spans, key_at) if bf.kick else None)
+    why = check_bass(bass, met, clave) or (check_808(bass, slides, kicks, spans, key_at, quiet) if bf.kick
+                                          else None)
     # the pad: each chord voiced under the melody's room, moving smoothly, not muddy with the bass under it
     pad, prev, again, rests = [], None, 0, 0
     for sp in spans:
@@ -227,9 +230,19 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         except ValueError:
             rests, prev = rests + 1, None
     # the melody, a phrase at a time, over the pad
-    melody = []
+    melody, loop = [], None
     for p in plan:
         s, p["phrases"] = p["section"], []
+        if LOOPS[style]:                         # a riff going round (trap), not shaped over the phrase
+            lo, hi = s.start * met.bar, s.end * met.bar
+            floor = max((m for st, length, m in pad if st < hi and st + length > lo), default=UNDER)
+            notes, loop, lines = loop_melody(rng, LOOPS[style], spans, s.key, s.start, s.bars, met, floor, loop,
+                                             form.phrase)
+            bad = check_loop(notes, spans, s.key, floor)
+            p["lines"] += lines + ([f"    ruled out: {bad}"] if bad else [])
+            p["loop"] = lines[0].split(": ", 1)[1]
+            melody += notes
+            continue
         for at in range(s.start, s.end, form.phrase):
             lo, hi = at * met.bar, (at + form.phrase) * met.bar
             floor = max((m for st, length, m in pad if st < hi and st + length > lo), default=UNDER)
@@ -329,14 +342,25 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
     out.append("Pad: holds each chord, its voices moving the shortest way, under the melody.")
     phrases = [ph for p in plan for ph in p["phrases"]][:max(1, bars // FORM[style].phrase)]
     n = FORM[style].phrase
-    out.append(f"Melody: {len(phrases)} phrase{'s' * (len(phrases) > 1)} of {n} bars. Each states the motif, "
-               f"climbs to a peak about two-thirds in, ends its first half open and lands home on the cadence: "
-               + "; ".join(ln.strip() for ph in phrases for ln in ph[1:] if "then" in ln) + ".")
+    if LOOPS[style]:
+        out.append("Melody: " + "; ".join(f"bars {p['section'].start + 1}-{min(p['section'].end, bars)}, {p['loop']}"
+                                          for p in plan) + "; each round fitted to its chord, a phrase's last "
+                   "round landing home.")
+    else:
+        out.append(f"Melody: {len(phrases)} phrase{'s' * (len(phrases) > 1)} of {n} bars. Each states the motif, "
+                   f"climbs to a peak about two-thirds in, ends its first half open and lands home on the cadence: "
+                   + "; ".join(ln.strip() for ph in phrases for ln in ph[1:] if "then" in ln) + ".")
     if take.get("drums"):
         kicks = {h[0] for h in take["drums"] if h[4] == "kick"}
         locked = sum(1 for n in take["bass"] if n[0] in kicks)
         out.append(f"Kick and bass: the kick lands with {round(100 * locked / max(1, len(take['bass'])))}% of the bass "
                    f"notes.")
+    if BASS[style].kick:                        # trap's own questions (DadCraft's, after the first round)
+        out.append("Listen for: does the 808 feel like the bass and the kick at once, and do its slides come through; "
+                   "do the hats roll rather than tick, the clap staying put on 3; does the bell's riff go round like "
+                   "trap's, its triplets over the grid; do the hats-alone opening and the drop before a section "
+                   "keep it from feeling stuck.")
+        return out
     out.append("Listen for: does it flow, chords going round and coming home rather than wandering; does the bass "
                "feel like the style; does each phrase sound like a question and its answer"
                + ("; does the drummer feel like the style, its fills leading into the next phrase"

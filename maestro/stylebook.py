@@ -11,6 +11,8 @@ import json
 import os
 import types
 
+from .synth import SYNTHS
+
 HERE = os.path.join(os.path.dirname(__file__), "data", "styles")
 LICENSE = "CC BY-SA 4.0"
 ROLES = ("drums", "percussion", "bass", "keys", "guitar", "horns", "pad", "arp", "melody")   # decision 11
@@ -21,7 +23,7 @@ PARTS = {"time": ("tempo", "rhythm", "feel"), "harmony": ("vocabulary", "leading
 MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "patterns": dict, "variants": dict,
           "grooves": dict, "time": dict, "busy": (0, 200), "fills": (0, 100), "rolls": (0, 100), "parts": dict,
           "with": str, "tones": dict, "slides": (0, 100), "develop": dict, "backbeat": str, "turns": (0, 100),
-          "turn rates": dict}
+          "turn rates": dict, "shape": str, "loop": dict}
 TEMPO = (20, 400)
 
 
@@ -70,6 +72,11 @@ def check(entry, name):
         _keys(m, tuple(MEMBER), f"{name}: members.{role}")
         for k, v in m.items():
             rule = MEMBER.get(k)
+            if k == "sound" and isinstance(v, str):     # one of Maestro's own sounds (synth.py), else GM
+                if v not in SYNTHS:
+                    raise StyleError(f"{name}: members.{role}.sound: no sound {v!r} (Maestro's own: "
+                                     f"{', '.join(SYNTHS)}; else a GM program)")
+                continue
             if rule in (str, dict) and not isinstance(v, rule) or isinstance(rule, tuple) and not (
                     isinstance(v, int) and not isinstance(v, bool) and rule[0] <= v <= rule[1]):
                 want = {str: "words", dict: "an object"}.get(rule) or f"a whole number from {rule[0]} to {rule[1]}"

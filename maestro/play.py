@@ -2,13 +2,18 @@
 """The clip player: renders MIDI clips to WAV with FluidSynth on this PC and plays them, saying first what to listen
 for (the clip's JSON). Everything runs offline. FluidSynth (LGPL-2.1) is used as the system library through ctypes,
 so Maestro needs no extra Python package; the sounds come from a General MIDI soundfont, FluidR3 GM (MIT) in
-`sounds/` (`tools/get_sounds.sh`), else TimGM6mb from the system. Only DadCraft judges sound.
+`sounds/` (`tools/get_sounds.sh`), else TimGM6mb from the system. A member whose sound is one of Maestro's own
+(`synth.py`: trap's 808 and its kit) is left out of FluidSynth's part and mixed in from `synth.py`. Only DadCraft
+judges sound.
 
     python -m maestro.play clips/baseline            # every clip in the folder, in order
     python -m maestro.play clip.mid --wav-only       # render only (the WAV lands beside the MIDI)"""
-import argparse, ctypes, ctypes.util, json, os, shutil, subprocess, sys
+import argparse, ctypes, ctypes.util, json, os, shutil, subprocess, sys, tempfile, wave
 
 import mido
+import numpy as np
+
+from . import synth
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOUNDFONTS = (os.environ.get("MAESTRO_SF2", ""), os.path.join(HERE, "sounds", "FluidR3_GM.sf2"),
@@ -48,8 +53,69 @@ def _lib():
     return lib
 
 
+def _own(mid):
+    """{track name: Maestro's own sound} from the clip's JSON."""
+    info = mid[:-4] + ".json"
+    if not os.path.exists(info):
+        return {}
+    members = json.load(open(info)).get("members", {})
+    return {n: m["sound"] for n, m in members.items() if m.get("sound") in synth.SYNTHS}
+
+
+def _synth_tracks(midi, own, length):
+    """Maestro's own sounds for the tracks named in `own`, mixed, mono, `length` samples."""
+    sec = 60 / mido.tempo2bpm(next((m.tempo for m in midi.tracks[0] if m.type == "set_tempo"), 500000))
+    out = np.zeros(length)
+    for tr in midi.tracks:
+        if tr.name not in own:
+            continue
+        now, held, notes, hits, bends = 0, {}, [], [], []
+        for m in tr:
+            now += m.time
+            t = now / midi.ticks_per_beat * sec
+            if m.type == "note_on" and m.velocity:
+                held[m.note] = (t, m.velocity)
+                hits.append((t, m.note, m.velocity))
+            elif m.type in ("note_on", "note_off") and m.note in held:
+                on, v = held.pop(m.note)
+                notes.append((on, t, m.note, v))
+            elif m.type == "pitchwheel":
+                bends.append((t, m.pitch / 8192 * 12))
+        out += synth.bass_808(notes, bends, length) if own[tr.name] == "808" else synth.kit_808(hits, length)
+    return out
+
+
 def render(mid, wav, sf2=None):
-    """Renders a MIDI file to a 16-bit WAV, faster than real time."""
+    """Renders a MIDI file to a 16-bit WAV, faster than real time; Maestro's own sounds mixed in."""
+    own = _own(mid)
+    if not own:
+        return _fluid(mid, wav, sf2)
+    midi = mido.MidiFile(mid)
+    with tempfile.TemporaryDirectory() as tmp:
+        rest = mido.MidiFile(type=1, ticks_per_beat=midi.ticks_per_beat)
+        rest.tracks = [t for t in midi.tracks if t.name not in own]
+        part = os.path.join(tmp, "gm.mid")
+        rest.save(part)
+        _fluid(part, os.path.join(tmp, "gm.wav"), sf2, midi.length)
+        with wave.open(os.path.join(tmp, "gm.wav")) as w:
+            ch, frames = w.getnchannels(), w.readframes(w.getnframes())
+    gm = np.frombuffer(frames, dtype="<i2").reshape(-1, ch).astype(float) / 32768
+    mono = _synth_tracks(midi, own, len(gm))
+    mix = gm + mono[:, None]
+    peak = np.max(np.abs(mix))
+    if peak > 0:                         # its peak at about -1 dB
+        mix *= 0.89 / peak
+    with wave.open(wav, "wb") as w:
+        w.setnchannels(ch)
+        w.setsampwidth(2)
+        w.setframerate(RATE)
+        w.writeframes((mix * 32767).astype("<i2").tobytes())
+    return wav
+
+
+def _fluid(mid, wav, sf2=None, length=None):
+    """FluidSynth's render of a MIDI file to a 16-bit WAV. `length` (s): the clip's own, when `mid` holds only some
+    of its tracks."""
     lib, sf2 = _lib(), sf2 or soundfont()
     s = lib.new_fluid_settings()
     lib.fluid_settings_setstr(s, b"audio.file.name", wav.encode())
@@ -71,7 +137,7 @@ def render(mid, wav, sf2=None):
             raise RuntimeError("FluidSynth can't write WAV files here")
         lib.fluid_player_play(player)
         # the clip's own length and a tail (the player's status stays "playing" for seconds after the last note)
-        for _ in range(int((mido.MidiFile(mid).length + TAIL_S) * RATE / PERIOD)):
+        for _ in range(int(((length or mido.MidiFile(mid).length) + TAIL_S) * RATE / PERIOD)):
             if lib.fluid_file_renderer_process_block(renderer) != 0:
                 break
     finally:

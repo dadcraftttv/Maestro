@@ -110,7 +110,7 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
              "melody": ([n[0] for n in take["melody"]], feel_for(style, "melody"))}
     for role in ("drums", "percussion"):     # the drummer and the percussion (task 3.3), each on the kit channel
         if take[role]:
-            kit = song.member(role, role, kit=True)
+            kit = song.member(role, role, part(style, "members", role).get("sound", 0), kit=True)
             for st, length, note, vel, _ in take[role]:
                 kit.add(st, length, note, vel)
     if take["drums"]:

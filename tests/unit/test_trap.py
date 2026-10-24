@@ -1,7 +1,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Trap's entry (task 3.4a): the 808 on the kicks and its slides, the snare fixed on 3, the hats turning, harmony
-that barely moves, the motif's triplets, and the slides written as pitch bends."""
+"""Trap's entry (task 3.4a, two rounds): the 808 on the kicks and its slides, the programmed drums (the clap on 3,
+written rolls, the hats-alone opening and the drop-outs, the 808 resting with them), harmony that barely moves, the
+loop melody, the motif's triplets, the slides written as pitch bends, and Maestro's own sounds."""
+import json
+
 import mido
+import numpy as np
 import pytest
 
 from maestro.explain import flow_choices
@@ -9,9 +13,10 @@ from maestro.rng import ComposerRng
 from maestro.sketch import flow_sketch
 from maestro.stylebook import StyleError, part
 from maestro.theory.chords import VOCAB, Chord
-from maestro.theory.drums import BACKBEAT, DRUMMER, KIT, _drummer, check_drums
-from maestro.theory.flow import BASS, FLOW, SLIDE, Family, Span, check_808, check_family
-from maestro.theory.form import DEVELOPS, VALUES, Motif, _develop, _triplet, check_motif
+from maestro import play, synth
+from maestro.theory.drums import DRUMMER, Programmed, _programmed, check_drums, quiet_spans
+from maestro.theory.flow import BASS, FLOW, LOOPS, SLIDE, Family, Span, check_808, check_family, check_loop
+from maestro.theory.form import DEVELOPS, VALUES, Motif, _triplet, check_motif
 from maestro.theory.pitch import Key
 from maestro.theory.rhythm import METERS
 
@@ -53,27 +58,46 @@ def test_the_808_check_says_what_is_wrong():
     assert "off its chord" in check_808([(0, 48, 45), (48, 48, 50)], [(36, 12, 5)], [0, 48], spans, key_at)
 
 
-def test_the_snare_stays_on_3_and_the_hats_turn():
+def test_the_programmed_drums_keep_the_clap_on_3_and_roll():
     dr = DRUMMER["trap"]
-    assert dr.fixed and all(g.snare == BACKBEAT for g in dr.grooves)
-    turned = 0
+    assert isinstance(dr, Programmed) and dr.fixed
+    end = 32 * MET.bar
+    rolls = 0
     for take in _takes(6):
-        end = 32 * MET.bar
-        assert check_drums(take["drums"], MET, end, True, True) is None
-        for h in take["drums"]:
+        hits = take["drums"]
+        assert check_drums(hits, MET, end, True, True) is None
+        quiet = quiet_spans(hits, MET, end)
+        assert quiet and quiet[0] == (0, dr.intro * MET.bar)            # the hats alone at the start
+        assert any(h[4] == "hat" for h in hits if h[0] < dr.intro * MET.bar)
+        for h in hits:
             if h[4] == "snare":
-                assert h[0] % MET.bar == 48, h                  # beat 3 of its bar
-        turned += sum(1 for h in take["drums"] if h[4] == "hat" and h[0] % 6 and h[0] % MET.bar < 72)
-    assert turned > 0                                          # off the 16ths before the last beat: a turn, not a roll
-    snare_on_2 = [(0, 6, KIT["kick"], 100, "kick"), (24, 6, KIT["snare"], 100, "snare"),
-                  (48, 6, KIT["snare"], 100, "snare")]
-    assert "off the backbeat" in check_drums(snare_on_2, MET, 2 * MET.bar, True, True)
+                assert h[0] % MET.bar == 48, h                          # beat 3 of its bar
+        for q0, q1 in quiet:                                            # the 808 rests with the kick and clap
+            assert not any(st < q1 and st + n > q0 for st, n, _ in take["bass"]), (q0, q1)
+        hats = sorted((h[0], h[3]) for h in hits if h[4] == "hat")
+        runs = [(a, b) for a, b in zip(hats, hats[1:]) if b[0] - a[0] < 6]
+        rolls += len(runs)
+        assert any(b[1] > a[1] for a, b in runs)                        # a roll gets louder as it runs
+    assert rolls > 0
 
 
-def test_turn_rates_are_checked(monkeypatch):
-    monkeypatch.setitem(part("trap", "members", "drums"), "turn rates", {"quarter": 1})
-    with pytest.raises(StyleError, match="turn rates.quarter"):
-        _drummer("trap")
+def test_kick_and_hat_patterns_are_checked():
+    d = json.loads(json.dumps(part("trap", "members", "drums")))
+    d["patterns"]["hats"]["eighths"]["bars"][0] = "x x x"
+    with pytest.raises(StyleError, match="eight 8ths"):
+        _programmed("trap", d, "trap: members.drums")
+    d = json.loads(json.dumps(part("trap", "members", "drums")))
+    d["patterns"]["kicks"]["home"]["bars"][0] = [10, 0]
+    with pytest.raises(StyleError, match="in order"):
+        _programmed("trap", d, "trap: members.drums")
+
+
+def test_the_melody_is_a_loop_going_round():
+    assert LOOPS["trap"] is not None and LOOPS["salsa"] is None
+    for take in _takes(6):
+        for p in take["plan"]:
+            assert "loop" in p["loop"]
+        assert check_loop(take["melody"], take["spans"], A_MINOR, 0) is None
 
 
 def test_trap_harmony_barely_moves():
@@ -95,15 +119,9 @@ def test_the_motif_turns_a_beat_into_triplets():
     third = VALUES["8th_triplet"]
     assert len(t.steps) == 5 and sum(t.lengths) == sum(m.lengths) and t.lengths.count(third) == 3
     assert _triplet(_rng(1), Motif((0, 1), (24, 24))) == Motif((0, 1), (24, 24))   # no two notes fill a beat
-    assert DEVELOPS["trap"]["triplet"] > 0 and "triplet" not in DEVELOPS["salsa"]
+    assert "triplet" not in DEVELOPS["salsa"]
     passed = sum(check_motif(_triplet(_rng(s), m), m) is None for s in range(20))
     assert passed > 0
-
-
-def test_develop_weights_are_checked(monkeypatch):
-    monkeypatch.setitem(part("trap", "members", "melody"), "develop", {"twirl": 1})
-    with pytest.raises(StyleError, match="unknown move"):
-        _develop("trap")
 
 
 def test_slides_are_written_as_pitch_bends(tmp_path):
@@ -129,3 +147,19 @@ def test_slides_are_written_as_pitch_bends(tmp_path):
     for at, steps, _ in bass.slides:                         # back at rest when the next note starts
         rest = [p for t, p in bends if t <= (at + steps) * 20]
         assert rest[-1] == 0
+
+
+def test_the_808_and_its_kit_are_rendered(tmp_path):
+    song, _ = flow_sketch("trap", 300, 8)
+    stem = str(tmp_path / "t")
+    song.write(stem)
+    assert play._own(stem + ".mid") == {"bass": "808", "drums": "808 kit"}
+    midi = mido.MidiFile(stem + ".mid")
+    n = int(midi.length * synth.RATE)
+    bass = play._synth_tracks(midi, {"bass": "808"}, n)
+    kit = play._synth_tracks(midi, {"drums": "808 kit"}, n)
+    assert np.max(np.abs(bass)) > 0.05 and np.max(np.abs(kit)) > 0.05
+    assert np.all(np.isfinite(bass)) and np.all(np.isfinite(kit))
+    spec = np.abs(np.fft.rfft(bass))                     # the 808 lives low: most of its energy under 150 Hz
+    hz = np.fft.rfftfreq(len(bass), 1 / synth.RATE)
+    assert spec[hz < 150].sum() > spec[hz >= 150].sum()

@@ -228,3 +228,7 @@ isn't reloaded every session; grep for the part a task needs.
   notes at 68-84, and the 808 is GM's Synth Bass 1 at C1-A2, thin that low. The hats carry GMD's human dynamics
   (43 to 110 in two bars); their turns fall on random beats, and rolls come only at the phrase's end. 3.4a reopened
   for a second round.
+- Oct 24: 3.4a's second round. DadCraft on what trap is: "artists like 2Chainz, Future, Travis Scott (although i
+  personally prefer a cleaner trap sound and not the fuzzy distortion) and the Atlanta and other styles"; on the
+  sounds: "what would get us closest to the sound i'm thinking of?" (answered: our own synthesized 808 and kit, the
+  TR-808's way, clean); on the order: "try everything".
