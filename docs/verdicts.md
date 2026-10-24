@@ -218,3 +218,5 @@ isn't reloaded every session; grep for the part a task needs.
   the drums and percussion. both feel like they should. still a long way to go, but absolutely a good first run."
   The drummer's variety (it almost never repeats a bar: steady or restless?) wasn't answered: asked again at
   checkpoint 3.
+- Oct 24: on the drummer's variety (it copies one of its last 16 bars only 1-12% of the time): "the drummer sounds
+  steady, not restless." GMD's odds stay as they are; no longer a checkpoint 3 question.
