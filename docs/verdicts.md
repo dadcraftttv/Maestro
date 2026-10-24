@@ -136,3 +136,11 @@ isn't reloaded every session; grep for the part a task needs.
   from the listener (chimes standing, walking notes walking), so a baseline clip stands for its first half and walks
   for its second. Measured before he listens: every note on the grid, melody and walking notes in the key, bass in
   the patch's 65-131 Hz, the WAV the clip's length and about 5 dB under clipping.
+- Oct 24: DadCraft heard the baseline clips: "they all sound like a theme that evolves and comes back changed to
+  some degree. the chords feel like they do move and eventually come back home. the timing overall feels ok", but
+  the chime/lead seems to come in "just a hair after the drums", and at points each part seemed to slow down, which
+  made the small desync more noticeable. Measured: in the WAV every part starts within ~7 ms of its grid time (the
+  drums 2-7 ms), one tempo, no drift from the start of a clip to its end; so not a timing error in the file. Likely
+  causes: the vibraphone's soft attack is heard later than a drum hit, and the clip's own melody pacing (a silent
+  breath bar every 4th bar, then long dotted notes) feels like slowing. Three sync test clips (`clips/sync`: drums
+  and the lead in unison on vibraphone, xylophone, square lead) to tell them apart.
