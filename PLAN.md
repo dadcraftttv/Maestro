@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.5 (form, sections and energy; the long play).
+**Next:** DadCraft's verdict on the 2.5 choices; then bucket 2, task 2.6 (the theory exam).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -105,7 +105,7 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
 - [x] 2.3 Voice leading: smooth moves, a range per member (new roles too, decision 11), the melody on top
       (`docs/taste.md`); parallels and the like as tendencies a style sets, not bans.
 - [x] 2.4 Rhythm and meter: the beat grid (24 steps, was 12), meters past 4/4, half-time, clave, swing and feel per member.
-- [ ] 2.5 Form, sections and energy; how a long play evolves over ~20 minutes (energy arc, key changes, motifs that
+- [x] 2.5 Form, sections and energy; how a long play evolves over ~20 minutes (energy arc, key changes, motifs that
       develop: decision 9).
 - [ ] 2.6 A theory exam (our own, after MusicTheoryBench, no copied questions) with a score, and choices explained
       in plain words.
@@ -238,3 +238,14 @@ Trained on this PC (RTX 2070, 8 GB).
   number of grid steps; `check_band_rhythm` rules out any note between grid steps, members playing the same step
   apart (a swung part over a straight one), and any member crossing the timeline's clave, whatever its style.
   Every style draft passes. Rhythms that groove (repetition, variation) come in 2.5 and bucket 3.
+- Oct 23: 2.5 done. `maestro/theory/form.py`: a play planned a section at a time (the room leans each one), over an
+  energy arc of waves (3-7 minutes of build and release each, peaks 0.6-1.0, drawn fresh each play); a section's
+  energy is the room plus the arc plus its kind's shift (the composer's), growing a little through it
+  (`docs/taste.md`). Key changes at section starts: relative, parallel, a fifth, or a lift up a semitone or tone
+  (on a Lift only), at least a few minutes apart, at most a few hops from home, home pulling harder the further away.
+  Motifs in scale steps with grid lengths develop each statement (again, nudged, inverted, backwards, shorter,
+  longer, twice as slow or fast; young ones stay close) and are reborn from their own opening after a while. Checks
+  with reasons for sections, key changes and motifs; plain-word `explain_section`. A 20-minute plan per style passes
+  every check; 30,000 motif statements break none. For DadCraft: the style drafts (trap stays in one dark key, full
+  energy from the start; synthwave long swells and key lifts; salsa full from the start, relative and fifth moves;
+  power rock shorter waves, key lifts), and a key lift up a semitone (the "truck driver" change) allowed at all.

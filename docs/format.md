@@ -164,6 +164,18 @@ A list of changes, each from a bar (or a beat in that bar); anything not given c
   chorus or drop ≈ lift, breakdown ≈ calm, bridge ≈ turn), the bar within the section and within the 4-bar phrase,
   and whether this bar is a cadence.
 - **Energy** 0–1 (the room's intensity today), and **brightness** 0–1 (the room). Both lean every member.
+- **Form** (task 2.5, `maestro/theory/form.py`): a play is planned a section at a time as it goes, so the room keeps
+  leaning it. Under the room's energy runs an arc of waves (each a few minutes of build and release, drawn fresh each
+  play); a section's energy is the room plus the arc (scaled by the style's depth) plus its kind's shift (the
+  composer's `KIND_DRIVE`), and grows a little through the section. The key may move at a section start (relative,
+  parallel, a fifth, or a lift up a semitone or tone, which only a Lift takes), never sooner than the style's gap,
+  never more hops from home than it allows, home pulling harder the further away it is. Motifs are scale steps with
+  grid lengths, so they carry across key changes; each statement develops the last (again, a note moved, inverted,
+  backwards, shorter, longer, twice as slow or fast), young motifs staying closer, and after the style's `life` a
+  motif is reborn from its own opening. The checks rule out a play not opening at Home, an away section twice
+  running, a Lift that doesn't lift, a Calm above 0.65, a rise over 0.35 into anything but a Lift, motifs off the
+  grid, wider than an octave, leaping past a fifth, stale (3 the same running) or no longer related to what they grew
+  from. The composer resets its memory on a scale change; Maestro keeps its motifs through key changes.
 
 ### The members (one part each)
 - **Role:** what the member is for: drums, bass, pad (chords), melody (lead), arp (walking notes, today's `arp`),
