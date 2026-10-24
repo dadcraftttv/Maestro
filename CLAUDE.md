@@ -7,8 +7,8 @@ commits and replies; never a real name. Public on GitHub: dadcraftttv/Maestro (s
 1. Read `PLAN.md`: the goal, DadCraft's decisions, the buckets and the **Next** line. It is the only status file.
 2. Do one task (DadCraft wants it task by task to keep token cost low). Don't read `docs/research.md` or other docs
    whole: grep the part the task needs.
-3. In the same commit that finishes a task: tick it in `PLAN.md`, move **Next**, note any verdict of DadCraft's under
-   "Verdicts and notes", and update Maestro's entry in Conductor's `docs/items.md`.
+3. In the same commit that finishes a task: tick it in `PLAN.md`, move **Next**, note any verdict of DadCraft's in
+   `docs/verdicts.md`, and update Maestro's entry in Conductor's `docs/items.md`.
 
 ## How DadCraft wants it run (his brief, `docs/dadcraft-brief.md`)
 - Small agile buckets, one at a time: present a plan for each, then a checkpoint where he reviews the output.
