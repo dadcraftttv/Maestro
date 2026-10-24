@@ -39,7 +39,7 @@ def _bass(key, semis):
     return p
 
 
-def clip(seed, scale=1, key=9, bpm=92, bars=32, energy=0.5, bright=0.5, color=1, brk=0.3):
+def clip(seed, scale=1, key=9, bpm=92, bars=32, energy=0.5, bright=0.5, color=1, brk=0.3, breath=True):
     """One baseline clip as a Song."""
     from .song import Song
     song = Song(tempo=bpm, source={"set": "maestro baseline (today's composer, port.py)",
@@ -111,7 +111,7 @@ def clip(seed, scale=1, key=9, bpm=92, bars=32, energy=0.5, bright=0.5, color=1,
             owed += blocks16
             c.tick(int(owed))
             owed -= int(owed)
-            if not walking and cell and cell[i] and b % 4 != 3:   # (every 4th bar a breath)
+            if not walking and cell and cell[i] and not (breath and b % 4 == 3):   # (every 4th bar a breath)
                 c.send("note", n, anchor, n)
                 d = c.out.pop()[1] + KIND_REG[kind]
                 mel.add(at + i * S16, cell[i] * S16, 60 + key + _deg(scale, d), 84)

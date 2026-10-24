@@ -144,3 +144,7 @@ isn't reloaded every session; grep for the part a task needs.
   causes: the vibraphone's soft attack is heard later than a drum hit, and the clip's own melody pacing (a silent
   breath bar every 4th bar, then long dotted notes) feels like slowing. Three sync test clips (`clips/sync`: drums
   and the lead in unison on vibraphone, xylophone, square lead) to tell them apart.
+- Oct 24: DadCraft on the sync test clips: "they all sound like they're in sync with the drums" (vibraphone too), so
+  the lead's sound alone isn't it. In the baseline clips the lead always starts a bar on the downbeat and nearly
+  every note lands on a kick or snare. Next: four versions of clip 1's first 16 bars (`clips/ab`: as heard, no
+  pad, xylophone lead, no breath bar) to find what in the mix makes it feel late. `baseline.clip` gained `breath`.
