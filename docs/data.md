@@ -183,7 +183,8 @@ material only if DadCraft wants those styles later.
   and NC pop and rock harmony (CoCoPops) for ideas on the PC side. Trap, synthwave and salsa still have no open
   harmony data: their entries are written from theory (as planned, "Filling the gaps with theory").
 - Hip hop's only sources (MCFlow, Regional Hip-Hop) have no license; asking the lab would open them.
-- Most of the list is off-target (classical, early, folk, regional traditions): reader material at most.
+- Most of the list is off-target (classical, early, folk, regional traditions): kept for Maestro's reader
+  (DadCraft, Oct 24), each still under its own tag.
 
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd

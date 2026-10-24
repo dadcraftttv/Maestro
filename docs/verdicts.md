@@ -186,3 +186,5 @@ isn't reloaded every session; grep for the part a task needs.
   sets don't exist under those names (TIV drumming, choro, Balinese gamelan); most of the list is off-target.
   Open for DadCraft: the off-target sources (keep for the reader or drop), asking the CCML lab to license MCFlow
   (rap flow), and the research proposals.
+- Oct 24: DadCraft: keep the off-target sources for Maestro's reader ("i want as much training data for it
+  later"). Then, before 3.0: find the theory and open data the four styles need now.
