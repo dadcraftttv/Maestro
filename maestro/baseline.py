@@ -39,8 +39,8 @@ def _bass(key, semis):
     return p
 
 
-def clip(seed, scale=1, key=9, bpm=92, bars=32, energy=0.5, bright=0.5, color=1, brk=0.3, breath=True):
-    """One baseline clip as a Song."""
+def clip(seed, scale=1, key=9, bpm=92, bars=32, energy=0.5, bright=0.5, color=1, brk=0.3, breath=True, walk_from=None):
+    """One baseline clip as a Song. It walks from bar `walk_from` on (halfway by default; `bars` never walks)."""
     from .song import Song
     song = Song(tempo=bpm, source={"set": "maestro baseline (today's composer, port.py)",
                                    "license": "GPL-3.0-or-later", "commercial_safe": True, "seed": seed})
@@ -103,7 +103,7 @@ def clip(seed, scale=1, key=9, bpm=92, bars=32, energy=0.5, bright=0.5, color=1,
                     if vel >= 2:
                         pitch, vel = OPEN_HAT, vel - 2
                     drums.add(at + i * S16, S16, pitch, max(1, min(127, round(vel * 127))))
-        walking = b >= bars // 2
+        walking = b >= (bars // 2 if walk_from is None else walk_from)
         if walking and figure:
             for i, s in enumerate(figure):
                 arp.add(at + i * 2 * S16, 2 * S16, 60 + key + _deg(scale, anchor + s), 80)

@@ -224,7 +224,7 @@ others" (5.1). Commercial-safe and NC data are tokenized into separate sets (dec
 
 ### Seeds and drift (decision 9)
 Every generated play stores its **seed** (in `source`). Tests and the drift measures replay a seed; the app never
-does: each play draws a fresh one, as the composer already does.
+does: each play draws a fresh one, as the composer already does. The measures and their targets: `maestro/drift.py`.
 
 ### From today's composer to this format
 | `dcs_composer` today | Maestro's format |

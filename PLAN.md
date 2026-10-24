@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 2, task 2.8 (the two drift measures). DadCraft listens to the baseline clips from 2.7 first.
+**Next:** Bucket 2, Checkpoint 2 (DadCraft spot-checks the explained choices and hears a few bars per style).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -105,7 +105,8 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       same test cases. Deps: pytest, mido (MIT); no music21. **Layout:** `pyproject.toml`; `maestro/`
       (`data/composer.json`: the composer's tables with the Ouralia commit they came from; `rng.py`: seeded
       randomness incl. the composer's LCG; `port.py`: today's composer; `theory/` `pitch` `chords` `voicing`
-      `rhythm` `form`; `explain.py`); `tests/` (unit, `exam/`, `parity/`); `tools/` (`sync_check.py`, `drift.py`).
+      `rhythm` `form`; `explain.py`); `tests/` (unit, `exam/`, `parity/`); `tools/` (`sync_check.py`;
+      the drift measures became `maestro/drift.py` in 2.8).
       Each rule module has a **check** (rules out what doesn't fit, with the reason) and a **choose** (picks among
       what's left, seeded): rules never say what to play (decision 9). **In step with C:** `sync_check.py` diffs
       `composer.json` against `dcs_composer.c` at Ouralia's current commit (start of each bucket, and whenever
@@ -130,7 +131,11 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
       checkpoints from here on are listened to, not read. Song files (`maestro/song.py`: MIDI + JSON, notes kept
       on the grid), the player (`python -m maestro.play <clip or folder>`: FluidSynth through ctypes, FluidR3 GM from
       `tools/get_sounds.sh`, offline) and the baseline: today's composer as four clips (`python -m maestro.baseline`).
-- [ ] 2.8 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets.
+- [x] 2.8 The two drift measures (decision 9): staleness within a play, sameness between plays, with targets
+      (DadCraft confirmed them Oct 24; drums, bass and pad shown but never capped). `python -m maestro.drift`
+      (today's composer, two 20-minute plays per preset) or `python -m maestro.drift a.mid [b.mid]`. Bars compared by
+      their notes (loudness left out), held notes included. Today's composer meets every target: no band phrase
+      copied, worst 2-minute window 83-93% new bars, melody 4-14% copies, nothing shared between two plays.
 - [ ] Checkpoint 2: DadCraft spot-checks the explained choices, and hears a few bars per style.
 
 ### 3. Style book (draft)

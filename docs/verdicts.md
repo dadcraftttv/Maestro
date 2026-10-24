@@ -151,3 +151,7 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 24: DadCraft on the A/B clips: "they both now sound in sync. i'm not sure what i heard before, if nothing
   changed." Nothing had: the baseline WAVs he first heard are the same renders. Closed with no change; if a lag
   shows up again, he notes the clip and the second, and that spot gets measured. 2.7's listen done.
+- Oct 24: task 2.8's drift targets, confirmed by DadCraft ("targets look good, keep drums and bass uncapped"):
+  within a play, band 4-bar phrases copied <= 10%, longest exact copy <= 8 bars, melody bars copying one of the
+  last 16 <= 30%, new band bars >= 25% in every 2-minute window; between two plays, same bar in the same place
+  <= 1%, 4-bar phrases shared <= 5%, longest shared run <= 4 bars. Drums, bass (and pad) are shown, never capped.
