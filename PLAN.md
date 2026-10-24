@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, the listen after 3.4a (`clips/trap/trap_2222573989`), then 3.4b (synthwave's entry).
+**Next:** Bucket 3, 3.4a's second round (trap "not even close", DadCraft, Oct 24): its plan first.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -240,8 +240,11 @@ For each chosen style, how each member plays it, written from sources.
       bass for the 808. `tests/unit/test_trap.py`; 189 tests, exam 106/106. Drift (20 minutes, two plays): every
       target met in all five styles (trap's melody copies 4%, pad 93% as its harmony stays put). Open Music Theory's
       "Drumbeats" refused the fetch again (HTTP 403): left out.
-- [ ] Listen after 3.4a: `clips/trap/trap_2222573989` (32 bars, i-bVI throughout), with its summary and "listen
-      for" line.
+- [x] Listen after 3.4a: `clips/trap/trap_2222573989` (32 bars, i-bVI throughout), with its summary and "listen
+      for" line. Heard Oct 24: "not what i would call trap. not even close": the 808 not felt as bass and kick at
+      once, the slides buried under the pad and bells, the hats stiff and not rolling, the whole a little stuck
+      (`docs/verdicts.md`).
+- [ ] 3.4a, second round: its plan first.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

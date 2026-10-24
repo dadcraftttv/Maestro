@@ -223,3 +223,8 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 24: 3.4a's plan approved. DadCraft chose: proposals 1-4 now (the 808, near-static harmony, the motif with
   triplets, the hats changing rate), the drop-outs and beat switches in 3.6, the subgenres later; the 808 slides
   "now and then" (about 1 note in 6); a bell lead; dark strings for the pad.
+- Oct 24: the listen after 3.4a (`clips/trap/trap_2222573989`). DadCraft: "no, it does not feel like bass and kick at once. it's hard to hear the slides over the loudness of the pads and bells. i can hear them, but not much. the hihats do not feel like the roll, they feel very stiff. it did kind of feel stuck. in general, this is not what i would call trap. not even close."
+  Measured after: the strings hold three voices all the time (velocity 70, about 4 beats a note), the bell plays 172
+  notes at 68-84, and the 808 is GM's Synth Bass 1 at C1-A2, thin that low. The hats carry GMD's human dynamics
+  (43 to 110 in two bars); their turns fall on random beats, and rolls come only at the phrase's end. 3.4a reopened
+  for a second round.
