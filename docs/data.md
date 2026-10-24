@@ -177,6 +177,27 @@ material only if DadCraft wants those styles later.
 | MusicXML repository (W3C) | the format's samples, no license on the repo | a format reference, not data |
 | TIV African Drumming Dataset, Choro Music Symbolic Dataset, Balinese Gamelan Notation Archive | **not found**: no dataset by these names (a choro corpus exists in one 2025 paper, unreleased; El Bongosero is a hand-percussion set to check instead) | - |
 
+### For the four styles now (searched Oct 24, DadCraft: "how much can you find for those things we need now?")
+| Need | Found | Tag | Use |
+|---|---|---|---|
+| Progressions, loops, pop schemas (all four styles) | Open Music Theory (viva.pressbooks.pub/openmusictheory): popular music part with loops and four-chord schemas | CHECK: reported CC BY-SA; its site refuses automated fetches, so the notice needs a look in a browser | book, once the notice is seen |
+| Progressions in folk and pop | Chord Progression Handbook (Matney, Niemuth, KU ScholarWorks 2019) | NC (CC BY-NC 4.0) | reader; ideas for the book |
+| Tumbao, guajeo (montuno), clave, salsa's sections | Wikipedia's articles on them | SAFE (CC BY-SA 4.0, text) | book: theory in our own words, credited |
+| Rock progressions | the Rock Corpus (above) | statistics only | book |
+| Sevenths, ii-V, progressions | jazznet (above) | SAFE | book, data |
+| Drums: rock, hip hop, latin, afrocuban, funk | Groove MIDI and E-GMD (chosen, above) | SAFE | data (3.2) |
+| Afro-Cuban drums | ClaveNet (2024): GMD grooves with Afro-Cuban seed patterns swapped in; no data release found | - | ideas: the same trick on our own grooves |
+| Hand percussion (congas, bongos) | El Bongosero (ISMIR 2024): paper CC BY 4.0, data license not stated | CHECK | percussion, once its license is found |
+| Pop and rock drum timing | Drum Groove Corpora: the article says "CC 4.0", its footer CC BY-NC 4.0 | CHECK (likely NC) | - |
+| Trap (808 lines, hat rolls) | only commercial MIDI packs (royalty-free for songs, no dataset rights) | OUT | none: written from theory |
+| Synthwave (progressions, arps, bass) | blog guides only (eMastered, Unison), all rights reserved | OUT | ideas only; DadCraft's own logs (`taste.md`) stay the best source |
+| EDM multitrack | Extended GigaMIDI (CC BY-NC 4.0) holds scraped MIDI | OUT (decision 7) | none |
+
+**So:** open *data* for the four styles is close to none beyond drums (GMD) and jazznet's generated chords. Open
+*written theory* covers the basics (progressions, schemas, tumbao, clave, montuno) well enough for the style book.
+Trap and synthwave rest on theory written from what's known about them and on DadCraft's own production notes,
+then the practice MIDI made from the book (task 4.2), as planned in "Filling the gaps with theory".
+
 ### What it adds up to
 - For the four styles, one openly licensed source of real rock progressions (statistics for the book, not training
   data), one with sevenths and ii-V habits (jazznet, generated, SAFE),
