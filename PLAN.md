@@ -4,8 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** the listen after 3.3 (DadCraft hears `clips/drums`: salsa's percussion, power rock's drummer), then task 3.4a
-(trap's entry).
+**Next:** Bucket 3, task 3.4a (trap's entry, every role it uses).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -217,8 +216,10 @@ For each chosen style, how each member plays it, written from sources.
       no part crosses the clave), `tests/unit/test_drums.py`. Drummers: power rock from rock, trap from hip hop,
       synthwave from dance and pop, plain from rock and pop. Drift (20 minutes, two plays a style): every target met;
       the drums copy one of their last 16 bars only 1-12% of the time, the percussion 59%. 181 tests, exam 106/106.
-- [ ] Listen after 3.3: `clips/drums/salsa_23` and `power_rock_26` (32 bars each: a 16-bar clip is always one
+- [x] Listen after 3.3: `clips/drums/salsa_23` and `power_rock_26` (32 bars each: a 16-bar clip is always one
       section, and the change between sections is what to hear).
+      Heard Oct 24: "good first pass on the drums and percussion. both feel like they should. still a long way to
+      go, but absolutely a good first run." Whether the drummer is steady or restless: asked again at checkpoint 3.
 - [ ] 3.4 One task per style, each entry covering every role it uses: 3.4a trap, 3.4b synthwave, 3.4c salsa,
       3.4d power rock.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
@@ -236,7 +237,8 @@ For each chosen style, how each member plays it, written from sources.
       for" line). The detailed per-bar explanation stays, for debugging.
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
-      pocket (decision 13) can be played to him next to the on-grid version. Ask too whether the chord rounds change
+      pocket (decision 13) can be played to him next to the on-grid version. Ask whether the drummer, almost never repeating a bar,
+      sounds steady or restless (open from the listen after 3.3). Ask too whether the chord rounds change
       too much or too little, on the long clip (open from the listen after 3.2). Also for his ear, from 2.5: the
       semitone key lift, how sections growing heavier comes across, and the layering (3.6).
 

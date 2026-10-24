@@ -214,3 +214,7 @@ isn't reloaded every session; grep for the part a task needs.
   kick and bass are measured (the share of bass notes the kick lands with), not ruled. Seen in the drift sweep, from
   3.2 and not this task: salsa's melody now and then lines up with the other clave over a 32-bar clip (seeds 30, 40);
   for 3.4c.
+- Oct 24: the listen after 3.3 (`clips/drums/salsa_23`, `power_rock_26`, 32 bars). DadCraft: "good first pass on
+  the drums and percussion. both feel like they should. still a long way to go, but absolutely a good first run."
+  The drummer's variety (it almost never repeats a bar: steady or restless?) wasn't answered: asked again at
+  checkpoint 3.
