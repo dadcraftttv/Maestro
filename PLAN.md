@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, task 3.0a (the source sort), once DadCraft's lists are in `inbox/`; then 3.0 (the style book's
-plan), carrying Checkpoint 2's verdict (`docs/verdicts.md`).
+**Next:** Bucket 3, task 3.0 (the style book's plan), with Checkpoint 2's carries (`docs/verdicts.md`) and
+3.0a's sources and proposals (`docs/data.md`, `docs/research.md` round 3).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -151,7 +151,7 @@ A tested PC library: keys, chords, voice leading, rhythm, form. Grown from `dcs_
 
 ### 3. Style book (draft)
 For each chosen style, how each member plays it, written from sources.
-- [ ] 3.0a Source sort (DadCraft, Oct 24): his lists go in `inbox/` (gitignored, nothing public until checked):
+- [x] 3.0a Source sort (DadCraft, Oct 24): his lists go in `inbox/` (gitignored, nothing public until checked):
       `theory-sites.txt` (one URL a line), `named-refs.txt` (sites known only by name; Claude finds the URLs),
       `ai-systems.txt` (checked against `docs/research.md`). Claude writes the rules table (decision 14) as a data
       file Maestro's desk reuses, then sorts every source by license, the styles and members it covers and the gap
@@ -159,6 +159,8 @@ For each chosen style, how each member plays it, written from sources.
       Maestro's reader later (most of them, bucket D), training data (bucket 4), or not usable. Licenses and
       contents from small samples, not whole sites; sweeps to `librarian`, reviewed by Opus. New ideas from the AI
       systems go to `docs/research.md` and come to DadCraft as proposals. Results in `docs/data.md`.
+      Done Oct 24: the rules table `maestro/data/licenses.json` (data.md's tags), the sort in `docs/data.md`
+      ("DadCraft's source lists, sorted"), seven proposals in `docs/research.md` round 3.
 - [ ] 3.0 Plan approved (incl. what a style entry holds: tempo, swing, grid, chord vocabulary, register, default
       sound, all as tendencies and ranges with many variants, never a few fixed patterns: decision 9). Styles with no
       open data for a member (`docs/data.md` "Coverage and gaps") get that member's theory written out in full,

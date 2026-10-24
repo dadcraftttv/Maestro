@@ -1,0 +1,27 @@
+{
+ "about": "Decision 14's rules table: a source's license notice, as found and quoted, mapped to its tag (the tags of docs/data.md). A fixed table, not a model's judgment. Anything not matched here, and any notice that is missing, vague or contradicts itself, is CHECK (not used) until DadCraft looks (or hands it to Claude). Decision 7 sits on top: fan MIDI, tabs or rips of copyrighted songs are OUT whatever license their collection carries (ideas only). Rows are tried in order, narrowest first, and the first match wins: ND before NC before SA before plain BY (\"CC BY\" is inside \"CC BY-NC\"), and plain copyright last (a CC page also says ©). Matches are whole words, case-insensitive (\"MIT\" is not \"permitted\").",
+ "tags": {
+  "SAFE": "commercial-safe: may train the phone model (Ouralia); credit in CREDITS.md",
+  "NC": "PC only (experiments, research, the style judge); models trained with it stay on the PC (CC BY-NC-SA 4.0)",
+  "OUT": "not for training: ideas only, written up in our own words, nothing copied",
+  "CHECK": "license or source not clear: not read, not used, until DadCraft (or Claude) looks"
+ },
+ "licenses": [
+  {"match": ["public domain", "CC0", "CC0-1.0", "Unlicense"], "tag": "SAFE"},
+  {"match": ["CC BY-ND", "CC BY-NC-ND", "NoDerivatives", "NoDerivs"], "tag": "OUT", "why": "no derivatives: may be read, not adapted or trained on"},
+  {"match": ["CC BY-NC", "CC-BY-NC-4.0", "CC BY-NC-SA", "CC-BY-NC-SA-4.0", "NonCommercial"], "tag": "NC", "needs": "attribution; kept apart from commercial-safe data (decision 7)"},
+  {"match": ["CC BY-SA", "CC-BY-SA-4.0", "CC-BY-SA-3.0", "Creative Commons Attribution-ShareAlike"], "tag": "SAFE", "needs": "attribution, share-alike (style data is CC BY-SA 4.0 already)"},
+  {"match": ["CC BY", "CC-BY-4.0", "CC-BY-3.0", "Creative Commons Attribution 4.0", "Creative Commons Attribution 3.0"], "tag": "SAFE", "needs": "attribution"},
+  {"match": ["MIT", "BSD-2-Clause", "BSD-3-Clause", "BSD License", "ISC", "Apache-2.0", "Zlib"], "tag": "SAFE", "needs": "keep the notice"},
+  {"match": ["GPL-2.0-or-later", "GPL-3.0", "GPL-3.0-or-later", "LGPL-2.1", "LGPL-3.0", "AGPL-3.0"], "tag": "SAFE", "needs": "GPL-compatible use only (Maestro is GPL-3.0-or-later)"},
+  {"match": ["ODbL", "ODC-By"], "tag": "SAFE", "needs": "attribution; ODbL: a shared database stays ODbL"},
+  {"match": ["all rights reserved", "©", "Copyright", "terms of use", "research use only", "available on request"], "tag": "OUT", "why": "plain copyright or a closed license: facts and ideas only, in our own words"}
+ ],
+ "doubt": {
+  "no notice found": "CHECK",
+  "notice names no license (a bare 'cc', 'open', 'free')": "CHECK",
+  "site-wide license with 'except where noted' or third-party content": "CHECK until the part used is checked on its own",
+  "a code license (MIT, Apache) on a collection of copyrighted songs": "OUT for the songs (decision 7); the code is checked on its own",
+  "a portal or list linking to other sets": "not a source: each linked set is checked on its own"
+ }
+}

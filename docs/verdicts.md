@@ -179,3 +179,10 @@ isn't reloaded every session; grep for the part a task needs.
   a source sort before the style book plan (3.0a, lists in a gitignored `inbox/`), and Maestro checks licenses
   itself (decision 14): its reader finds and quotes the notice, a fixed rules table decides the tier, anything
   unclear is not usable until he looks; Claude applies the same table until the desk exists.
+- Oct 24: task 3.0a, DadCraft's lists sorted (36 sites, 19 named references, 20 AI systems; portals opened set by
+  set). The rules table uses data.md's tags (SAFE, NC, OUT, CHECK), narrowest license first. Found: few open sources
+  near the four styles (the Rock Corpus, CC BY but copyrighted songs, so statistics for the book only; jazznet,
+  MIT; CoCoPops, NC); TheSession's license forbids any use with LLMs (OUT for Claude and the reader); three named
+  sets don't exist under those names (TIV drumming, choro, Balinese gamelan); most of the list is off-target.
+  Open for DadCraft: the off-target sources (keep for the reader or drop), asking the CCML lab to license MCFlow
+  (rap flow), and the research proposals.

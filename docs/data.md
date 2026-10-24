@@ -108,6 +108,83 @@ specific songs are protected. How it works:
    style) this is their main training data. It is ours, so it is SAFE for the phone model.
 4. **DadCraft checks it by ear:** short clips per style and member in checkpoint 3.
 
+## DadCraft's source lists, sorted (task 3.0a, Oct 24)
+
+His lists of theory sites, named references and AI systems, sorted with the rules table (`maestro/data/licenses.json`,
+decision 14; tags as above). Each notice was read on the source's own page, repo or record on Oct 24; portals were
+opened and their sets checked one by one. **Use:** *book* = a source for the style book now (3.x); *reader* = for
+Maestro's own reader later (bucket D); *data* = training data (bucket 4); *ideas* = read for ideas only; *drop* = not
+used. *Off-target* = none of the planned styles (classical, early, folk or regional traditions); kept as reader
+material only if DadCraft wants those styles later.
+
+### Strongest for the style book now
+| Source | Notice | Tag | Holds | Use |
+|---|---|---|---|---|
+| Rock Corpus (deClercq, Temperley): rockcorpus.midside.com | "can be used under the terms of the CC BY 4.0 License" | SAFE license, songs copyrighted | chord progressions and melodies of 200 rock songs, analysed | book: progression statistics in our own words (the "no flow" carry); not training data (decision 7, like the chord sets above) |
+| music-theory-data: github.com/seancolsen/music-theory-data | CC-BY-SA-4.0 | SAFE | scales, chords, intervals as data | book: checks our scale and chord tables |
+| jazznet: github.com/tosiron/jazznet | MIT | SAFE | generated piano chords, arpeggios, progressions | book, data: progressions; salsa's ii-V and sevenths |
+| Radif Corpus: zenodo 10.5281/zenodo.15742125 | CC BY 4.0 | SAFE | 228 Iranian radif pieces, MIDI, MusicXML | off-target; reader |
+| Drum Groove Corpora (Empirical Musicology Review, 2021) | "CC 4.0" (which one not said) | CHECK | onset timings of pop and rock drumming | for the drummer (3.2) once the license is named |
+| CoCoPops (Billboard, Rolling Stone): github.com/Computational-Cognitive-Musicology-Lab/CoCoPops | CC BY-NC 4.0 | NC | melody and harmony of 949 pop and rock songs | book (ideas, PC side): pop and rock progressions; never the phone model |
+| MIT OCW 21M.383 Computational Music Theory | CC BY-NC-SA (OCW) | NC | course on music21-style analysis | reader |
+
+### Theory sites and papers
+| Source | Notice | Tag | Use |
+|---|---|---|---|
+| musictheory.net lessons | "© 2000-2025 musictheory.net, LLC" | OUT | ideas (basic theory, nothing new to us) |
+| teoria.com | CC BY-NC-ND 4.0 | OUT (ND) | ideas |
+| MusicTheoryBench (HF m-a-p) | "license: cc" (no version) | CHECK | already the model for our exam (2.6), no questions copied |
+| JSD jazz structure dataset (TISMIR 131, listed twice) | article CC BY 4.0; data: audio of copyrighted recordings | CHECK | the annotations' own license to be checked |
+| "A corpus and a modular infrastructure for ... (an)notated music" (Sci Data 2025, PMC12052250) | article CC BY-NC-ND | OUT | ideas; the corpus is checked on its own if wanted |
+| S3 symphony dataset (ISMIR 2024 LBD 37) | none in the paper | CHECK | off-target |
+| Dilemmadata (zenodo 19661224): AugmentedNet + Distant Listening Corpus as pitch arrays | CC BY-NC-SA 4.0 | NC | off-target (classical analysis) |
+| music21 (BSD), mido (MIT; docs CC BY 4.0), maialib (GPL-3.0) | code licenses | SAFE | tools: mido in use; no music21 (decision 2.0); maialib ideas |
+| TransFolk (MIT), folk_ngram_analysis (CC BY 4.0) | code licenses | SAFE | ideas (folk n-grams); off-target |
+| Tegridy MIDI Dataset | Apache-2.0 on the repo; holds Lakh and fan MIDI | OUT | never (decision 7) |
+| MCFlow, Regional Hip-Hop (CCML) | none | CHECK | rap flow and rhyme: the only hip hop sources; ask the lab for a license |
+| SymbTr (makam) | CC BY-NC-SA 4.0 | NC | off-target |
+| Hooktheory API | "Hooktheory © 2026", site terms | OUT | ideas (chord trends per genre), as already in this audit |
+| Cantus Database | CC BY-NC (site) | NC | off-target (chant) |
+| fasola.org (Sacred Harp) | "Copyright © 1995-2025" | OUT | off-target |
+| Josquin Research Project, wandelweiser.de, newmusicnotation.com, itma.ie | none found | CHECK | off-target |
+| The Mod Archive | site ©; each module's license is its author's | CHECK | tracker music (chiptune, early EDM): only modules with their own open license, checked one by one |
+| GitHub topic "computational-musicology", UVA music guide | lists, not sources | - | each linked source on its own |
+
+### Portals, set by set (the ones near our styles)
+| Set | Notice | Tag | Holds |
+|---|---|---|---|
+| OpenMIC-2018 | cc-by-4.0 (Zenodo) | SAFE | instrument labels for audio clips (for a judge, not for parts) |
+| Harmonix Set | MIT file, but "users must agree to the License" before the data | CHECK | beats and structure of 912 pop songs |
+| GiantSteps MTG Key | none | CHECK | keys of 604 EDM excerpts |
+| McGill Billboard, iRb jazz, EWLD, Isophonics, RWC, MedleyDB | none, restricted or research-only | CHECK / OUT | pop, rock, jazz chords and structure |
+| JAAH (jazz harmony) | cc-by-nc-sa-4.0 | NC | 113 jazz tracks, chords aligned to audio |
+| Lakh, BitMidi, MIDI Man, Band-in-a-Box files | fan MIDI of copyrighted songs | OUT | never (decision 7) |
+| CCMUSIC (Chinese pop and instruments) | the repo says CC BY-NC-ND 4.0, Zenodo says CC BY 4.0: contradicts | CHECK | Mandopop set is under a company agreement: OUT |
+| CompMusic (26 sets) | site CC BY-NC-ND 3.0; sets one by one | - | all off-target (Indian art music, makam, jingju) |
+| musoRepo's 27 classical, early and folk sets | not checked | - | off-target |
+
+### Named references (no URL given)
+| Name | Found | Tag |
+|---|---|---|
+| TheSession.org data (github.com/adactio/TheSession-data) | its license allows commercial use but **forbids any use with large language models**, including reading it with LLM tools | OUT: neither Claude nor Maestro's reader may process it |
+| Nottingham Folk Tunes (github.com/jukedeck/nottingham-dataset) | GPL-3.0 | SAFE, off-target (folk) |
+| Persian Radif | the Radif Corpus above | SAFE, off-target |
+| Indian Art Music, Turkish Makam, Beijing Opera | CompMusic's sets above | off-target |
+| VGMusic collection, VGM chiptune (NES-MDB), SNES SPC database | transcriptions and rips of copyrighted game music | OUT (decision 7), whatever the code license |
+| DadaGP | tabs of copyrighted songs | OUT, as already in this audit |
+| MuseScore registries | user scores, mixed rights | PDMX is their open part (SAFE, above) |
+| Essen Folk Song Database, CCARH (KernScores), Lost Voices, neume pipelines | research sites, no clear license | CHECK, off-target |
+| MusicXML repository (W3C) | the format's samples, no license on the repo | a format reference, not data |
+| TIV African Drumming Dataset, Choro Music Symbolic Dataset, Balinese Gamelan Notation Archive | **not found**: no dataset by these names (a choro corpus exists in one 2025 paper, unreleased; El Bongosero is a hand-percussion set to check instead) | - |
+
+### What it adds up to
+- For the four styles, one openly licensed source of real rock progressions (statistics for the book, not training
+  data), one with sevenths and ii-V habits (jazznet, generated, SAFE),
+  and NC pop and rock harmony (CoCoPops) for ideas on the PC side. Trap, synthwave and salsa still have no open
+  harmony data: their entries are written from theory (as planned, "Filling the gaps with theory").
+- Hip hop's only sources (MCFlow, Regional Hip-Hop) have no license; asking the lab would open them.
+- Most of the list is off-target (classical, early, folk, regional traditions): reader material at most.
+
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd
 - PDMX: https://zenodo.org/records/15571083

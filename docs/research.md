@@ -30,6 +30,24 @@ noted). Ideas only: check a license before using any code, weights or data. "→
 | Stable Audio Open Small (2025) | 341M audio model, 11 s in <8 s on a phone; weak on music | Phones carry models; note-level Maestro is far lighter → B6 |
 | RAVE, DDSP | Small real-time models that make one sound behave like another instrument; one model per instrument | Later, a learned sound for the swap idea; parked |
 
+## Round 3: DadCraft's list (Oct 24)
+
+Twenty systems from DadCraft's list. ACE-Step, Stable Audio, MusicGen/AudioCraft, YuE, Magenta and MidiTok were
+already here (rounds 1 and 2). Most of the new ones make audio of whole songs from text; Maestro makes notes per
+member, so they are ideas only (code or weights checked before any use).
+
+| Project | What it does | Idea for Maestro (proposal, needs DadCraft's OK) |
+|---|---|---|
+| Mustango + MusicBench (2023) | text-to-music that follows chords, beats, key and tempo given in the prompt; its data are audio clips changed on purpose (pitch, tempo, loudness) and captioned with the theory MIR tools measure | Label practice MIDI with the controls Maestro takes (style, energy, chords, section), and grow data by changing it on purpose (transpose, tempo, swing) → B4 |
+| HeartMuLa (2026) | open song models (codec, text-audio match, lyrics transcriber, generator); a style per section (intro, verse, chorus) | A style per section, not only per play: blends that shift as the song moves (the band could turn salsa for a breakdown) → B3 layering, 3.5 |
+| LeVo (Tencent, 2025) | song model that can give vocals and backing as separate tracks | Parts kept apart is what Maestro does already; nothing new |
+| Perceiver AR (2022), PerceiverS (2024) | long-context models: a small set of "latents" reads tens of thousands of past tokens; PerceiverS fixes how its masking leaks and segments | How the PC model could remember a 20-minute play (motifs coming back) without a huge model → B5 |
+| Orpheus Music Transformer | large MIDI model, Apache-2.0 weights, trained on the scraped Godzilla MIDI set | Weights trained on fan MIDI: never used (decision 7); its separate drums and "humanizing" models are ideas only |
+| Magenta DrumRNN / MelodyRNN | small RNNs (Apache-2.0) that continue drum and melody lines | A size reference for the phone model (decision 8): what a tiny per-member model can do → B6 |
+| TinyMU (2026) | 229M music-understanding model (audio in, answers out), 35x smaller than its rivals for 82% of the score | A small local judge that could say what it hears ("is this salsa?") next to CLaMP 3 → 3.4, if its license allows |
+| OpenMusic (QA-MDT), SongGen, DiffRhythm, MiniMax-Music, Amphion, Stable Audio 3.0 Small | audio song generators and an audio toolkit | Nothing for note-level parts; Stable Audio Small already noted as the phone size reference |
+| Khala | not found under this name (searched with LeVo) | - |
+
 ## Data and tools found
 
 | Name | License | Use |
