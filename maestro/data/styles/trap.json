@@ -1,7 +1,7 @@
 {
   "style": "trap",
   "license": "CC BY-SA 4.0",
-  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)"],
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)", "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)"],
   "time": {
     "tempo": 140,
     "rhythm": {
@@ -64,8 +64,14 @@
       "sound": 10
     },
     "drums": {
+      "why": "Half-time: hip hop's kick and snare over two bars, the hats in 16ths with rolls into each phrase, no tom fills.",
       "kicks": 3,
-      "hats": "16th"
+      "hats": "16th",
+      "grooves": {"hiphop": 1},
+      "time": {"hat 16th": 60, "hat 8th": 25, "hat quarter": 0, "ride quarter": 0, "ride 8th": 0, "ride 16th": 0, "crash quarter": 0},
+      "busy": 70,
+      "fills": 0,
+      "rolls": 60
     }
   }
 }

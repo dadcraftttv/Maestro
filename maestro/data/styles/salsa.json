@@ -5,7 +5,8 @@
     "Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)",
     "Tempo: DadCraft, Oct 24 (Checkpoint 2)",
     "Progressions: Open Music Theory's loops and schemas (CC BY-SA 4.0) and jazznet's ii-V (MIT), as ideas in our own words (task 3.2)",
-    "Tumbao: Wikipedia, \"Tumbao\" (CC BY-SA 4.0), in our own words (task 3.2)"
+    "Tumbao: Wikipedia, \"Tumbao\" (CC BY-SA 4.0), in our own words (task 3.2)",
+    "Percussion: the parts as salsa players teach them (conga marcha, bongo martillo and bell, cáscara, güiro), written from theory in our own words; the cáscara's two bars set against the clave by where they meet its strokes (task 3.3)"
   ],
   "time": {
     "tempo": 180,
@@ -118,7 +119,7 @@
     ]
   },
   "members": {
-    "why": "Piano, acoustic bass, trumpet. The sketch's drum guide is clave and cowbell, so no kicks or hats.",
+    "why": "Piano, acoustic bass, trumpet, and the percussion member: congas, bongos, timbales, güiro, clave. No kit: a salsa band's drums are its percussion (DadCraft, Oct 24).",
     "pad": {
       "sound": 0
     },
@@ -197,6 +198,520 @@
     },
     "melody": {
       "sound": 56
+    },
+    "percussion": {
+      "why": "The percussion section, its own member (decision 11). Each part keeps to the son 2-3 clave; the loud sections move the bongos and timbales onto their bells.",
+      "parts": {
+        "clave": {
+          "why": "The clave itself, the timeline everyone lines up with.",
+          "patterns": {
+            "son clave 2-3": {
+              "bars": 2,
+              "hits": [
+                [
+                  4,
+                  "claves",
+                  100
+                ],
+                [
+                  8,
+                  "claves",
+                  100
+                ],
+                [
+                  16,
+                  "claves",
+                  105
+                ],
+                [
+                  22,
+                  "claves",
+                  100
+                ],
+                [
+                  28,
+                  "claves",
+                  100
+                ]
+              ],
+              "why": "2 and 3, then 1, 2 and, 4"
+            }
+          },
+          "variants": {
+            "drop": 0
+          }
+        },
+        "congas": {
+          "why": "The tumbao (marcha): muted heel and toe strokes keep the pulse, a slap on 2, open tones on 4 and its and.",
+          "patterns": {
+            "tumbao": {
+              "weight": 4,
+              "hits": [
+                [
+                  0,
+                  "conga muted",
+                  60
+                ],
+                [
+                  2,
+                  "conga muted",
+                  45
+                ],
+                [
+                  4,
+                  "conga slap",
+                  100
+                ],
+                [
+                  6,
+                  "conga muted",
+                  45
+                ],
+                [
+                  8,
+                  "conga muted",
+                  60
+                ],
+                [
+                  10,
+                  "conga muted",
+                  45
+                ],
+                [
+                  12,
+                  "conga open",
+                  100
+                ],
+                [
+                  14,
+                  "conga open",
+                  95
+                ]
+              ],
+              "why": "the slap on 2, open tones on 4 and its and"
+            },
+            "tumbao with the tumba": {
+              "weight": 3,
+              "hits": [
+                [
+                  0,
+                  "conga muted",
+                  60
+                ],
+                [
+                  2,
+                  "conga muted",
+                  45
+                ],
+                [
+                  4,
+                  "conga slap",
+                  100
+                ],
+                [
+                  6,
+                  "conga muted",
+                  45
+                ],
+                [
+                  8,
+                  "conga muted",
+                  60
+                ],
+                [
+                  10,
+                  "conga muted",
+                  45
+                ],
+                [
+                  12,
+                  "conga open",
+                  100
+                ],
+                [
+                  14,
+                  "tumba",
+                  100
+                ]
+              ],
+              "why": "the and of 4 on the low drum"
+            },
+            "tumbao, open on 2 and": {
+              "weight": 2,
+              "when": "high",
+              "hits": [
+                [
+                  0,
+                  "conga muted",
+                  60
+                ],
+                [
+                  2,
+                  "conga muted",
+                  45
+                ],
+                [
+                  4,
+                  "conga slap",
+                  105
+                ],
+                [
+                  6,
+                  "conga open",
+                  90
+                ],
+                [
+                  8,
+                  "conga muted",
+                  60
+                ],
+                [
+                  10,
+                  "conga muted",
+                  45
+                ],
+                [
+                  12,
+                  "conga open",
+                  105
+                ],
+                [
+                  14,
+                  "tumba",
+                  105
+                ]
+              ],
+              "why": "an open tone after the slap as well: fuller, for the loud sections"
+            }
+          }
+        },
+        "bongos": {
+          "why": "The martillo (hammer) in the quieter sections; in the montuno the bongocero takes up the bell.",
+          "patterns": {
+            "martillo": {
+              "weight": 4,
+              "when": "low",
+              "hits": [
+                [
+                  0,
+                  "bongo high",
+                  85
+                ],
+                [
+                  2,
+                  "bongo high",
+                  55
+                ],
+                [
+                  4,
+                  "bongo high",
+                  90
+                ],
+                [
+                  6,
+                  "bongo high",
+                  55
+                ],
+                [
+                  8,
+                  "bongo high",
+                  85
+                ],
+                [
+                  10,
+                  "bongo high",
+                  55
+                ],
+                [
+                  12,
+                  "bongo high",
+                  90
+                ],
+                [
+                  14,
+                  "bongo low",
+                  100
+                ]
+              ],
+              "why": "eighths on the small drum, the open low drum closing the bar"
+            },
+            "martillo, open on 4": {
+              "weight": 1,
+              "when": "low",
+              "hits": [
+                [
+                  0,
+                  "bongo high",
+                  85
+                ],
+                [
+                  2,
+                  "bongo high",
+                  55
+                ],
+                [
+                  4,
+                  "bongo high",
+                  90
+                ],
+                [
+                  6,
+                  "bongo high",
+                  55
+                ],
+                [
+                  8,
+                  "bongo high",
+                  85
+                ],
+                [
+                  10,
+                  "bongo high",
+                  55
+                ],
+                [
+                  12,
+                  "bongo low",
+                  100
+                ],
+                [
+                  14,
+                  "bongo high",
+                  60
+                ]
+              ],
+              "why": "the open low drum a stroke earlier"
+            },
+            "bongo bell": {
+              "weight": 3,
+              "when": "high",
+              "hits": [
+                [
+                  0,
+                  "bongo bell",
+                  110
+                ],
+                [
+                  4,
+                  "bongo bell",
+                  80
+                ],
+                [
+                  6,
+                  "bongo bell",
+                  70
+                ],
+                [
+                  8,
+                  "bongo bell",
+                  110
+                ],
+                [
+                  12,
+                  "bongo bell",
+                  80
+                ],
+                [
+                  14,
+                  "bongo bell",
+                  70
+                ]
+              ],
+              "why": "the big strokes on 1 and 3, the and of 2 and of 4 leading into them"
+            },
+            "bongo bell in quarters": {
+              "weight": 2,
+              "when": "high",
+              "hits": [
+                [
+                  0,
+                  "bongo bell",
+                  110
+                ],
+                [
+                  4,
+                  "bongo bell",
+                  80
+                ],
+                [
+                  8,
+                  "bongo bell",
+                  110
+                ],
+                [
+                  12,
+                  "bongo bell",
+                  80
+                ]
+              ],
+              "why": "plainer: the four beats, 1 and 3 big"
+            }
+          }
+        },
+        "timbales": {
+          "why": "The cáscara on the shells in the quieter sections, the same rhythm on the bell in the loud ones (the mambo bell proper waits for a source); an abanico into a new section.",
+          "abanico": 60,
+          "patterns": {
+            "cáscara 2-3": {
+              "bars": 2,
+              "weight": 3,
+              "when": "low",
+              "hits": [
+                [
+                  0,
+                  "shell",
+                  90
+                ],
+                [
+                  4,
+                  "shell",
+                  65
+                ],
+                [
+                  8,
+                  "shell",
+                  90
+                ],
+                [
+                  10,
+                  "shell",
+                  70
+                ],
+                [
+                  14,
+                  "shell",
+                  80
+                ],
+                [
+                  16,
+                  "shell",
+                  90
+                ],
+                [
+                  20,
+                  "shell",
+                  65
+                ],
+                [
+                  22,
+                  "shell",
+                  85
+                ],
+                [
+                  26,
+                  "shell",
+                  70
+                ],
+                [
+                  30,
+                  "shell",
+                  80
+                ]
+              ],
+              "why": "1, 2, 3, 3 and, 4 and on the clave's 2-side; 1, 2, 2 and, 3 and, 4 and on its 3-side"
+            },
+            "cáscara on the bell": {
+              "bars": 2,
+              "weight": 3,
+              "when": "high",
+              "hits": [
+                [
+                  0,
+                  "timbale bell",
+                  105
+                ],
+                [
+                  4,
+                  "timbale bell",
+                  75
+                ],
+                [
+                  8,
+                  "timbale bell",
+                  105
+                ],
+                [
+                  10,
+                  "timbale bell",
+                  80
+                ],
+                [
+                  14,
+                  "timbale bell",
+                  90
+                ],
+                [
+                  16,
+                  "timbale bell",
+                  105
+                ],
+                [
+                  20,
+                  "timbale bell",
+                  75
+                ],
+                [
+                  22,
+                  "timbale bell",
+                  95
+                ],
+                [
+                  26,
+                  "timbale bell",
+                  80
+                ],
+                [
+                  30,
+                  "timbale bell",
+                  90
+                ]
+              ],
+              "why": "the cáscara's strokes moved onto the bell"
+            }
+          }
+        },
+        "güiro": {
+          "why": "Long scrape on the strong beats, two short ones after.",
+          "patterns": {
+            "long, short short": {
+              "weight": 3,
+              "hits": [
+                [
+                  0,
+                  "guiro long",
+                  85
+                ],
+                [
+                  4,
+                  "guiro short",
+                  60
+                ],
+                [
+                  6,
+                  "guiro short",
+                  65
+                ],
+                [
+                  8,
+                  "guiro long",
+                  85
+                ],
+                [
+                  12,
+                  "guiro short",
+                  60
+                ],
+                [
+                  14,
+                  "guiro short",
+                  65
+                ]
+              ],
+              "why": "a long scrape on 1 and 3, short ones on 2, its and, 4 and its and"
+            }
+          }
+        }
+      }
     }
   }
 }

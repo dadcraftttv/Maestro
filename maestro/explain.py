@@ -9,13 +9,15 @@ Task 3.2's flow (`theory/flow.py`) is the default: progressions as families, the
 shaped over the phrase. `--no-flow` gives Checkpoint 2's bar-by-bar draws, to compare.
 
     python -m maestro.explain salsa --seed 7 --bars 16 [--no-flow]"""
-import argparse
+import argparse, re
 
 from .rng import ComposerRng, fresh_seed
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
 from .theory.flow import BASS, FLOW, bass_part, chart, check_bass, check_phrase, chord_at, held, phrase_melody, \
     progression
+from .theory.drums import DRUMMER, check_drums, drum_part
 from .theory.form import FORM, WORDS, Play, Theme, explain_section
+from .theory.percussion import PERCUSSION, check_percussion, percussion_part
 from .theory.pitch import Key
 from .theory.rhythm import CLAVES, METERS, RHYTHM, check_clave, check_onsets, choose_onsets, explain_feel, explain_onsets, \
     feel_for
@@ -213,6 +215,25 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
             p["lines"] += lines + ([f"    ruled out: {bad}"] if bad else [])
             p["phrases"].append(lines)
             melody += notes
+    # the drums and the percussion over the whole play (task 3.3), their words with each section
+    every = [{"bar": b, "section": play.section_at(b), "energy": play.section_at(b).energy_at(b)}
+             for b in range(play.bar)]
+    whole, half = play.bar * met.bar, feel_for(style, "drums").pulse == "half"
+    drums, percussion, kit_why = [], [], []
+    for p in plan:
+        p["drums"], p["percussion"] = [], []
+    if DRUMMER[style]:
+        drums, said = drum_part(rng, DRUMMER[style], every, met, form.phrase, whole, half)
+        for s, line in said:
+            next(p for p in plan if p["section"] is s)["drums"].append(line)
+        kit_why.append(("drums", check_drums(drums, met, whole, half)))
+    if PERCUSSION[style]:
+        percussion, said = percussion_part(rng, PERCUSSION[style], every, met, whole, clave)
+        for s, line in said:
+            next(p for p in plan if p["section"] is s)["percussion"].append(line)
+        kit_why.append(("percussion", check_percussion(percussion, met, whole, clave)))
+    for p in plan:
+        p["lines"] += p["drums"] + p["percussion"]
     # cut at the clip's end, in words and notes
     out = [f"{style}, seed {seed}, home {home}, {bpm} bpm (flow)"]
     for i, p in enumerate(plan):
@@ -222,6 +243,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         out += ["", explain_section(s, plan[i - 1]["section"] if i else None)] + p["lines"]
     if why:
         out.append(f"  bass check: {why}")
+    out += [f"  {role} check: {why}" for role, why in kit_why if why]
     out.append(f"  pad: each chord voiced under the melody, moving the shortest way"
                + (f"; drawn again {again} times (muddy with the bass)" if again else "")
                + (f"; rests under {rests} chords" if rests else ""))
@@ -234,8 +256,19 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         recs.append({"bar": b, "section": s, "key": s.key, "energy": s.energy_at(b),
                      "chord": chord_at(spans, b * met.bar).chord})
     take = {"pad": cut(pad), "bass": cut(bass), "melody": cut(melody), "bars": recs,
+            "drums": [h for h in drums if h[0] < end], "percussion": [h for h in percussion if h[0] < end],
             "plan": [p for p in plan if p["section"].start < bars], "spans": [s for s in spans if s.at < end]}
     return out, take
+
+
+def _bar_of(line):
+    """The bar a line of words is about ("  drums, bar 8: ...")."""
+    m = re.search(r"bar (\d+):", line)
+    return int(m[1]) if m else 0
+
+
+def _bars_said(lines, last):
+    return [f"bar {_bar_of(ln)}, {ln.split(': ', 1)[1]}" for ln in lines if _bar_of(ln) <= last]
 
 
 def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
@@ -259,14 +292,32 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
                  if varied else "Every round as written.")
         out.append(line)
         out.append(f"Bass, bars {a}-{b}: {p['pattern'].name}" + (f": {p['pattern'].why}." if p['pattern'].why else "."))
+        if p.get("drums"):
+            said = _bars_said(p["drums"][1:], b)
+            out.append(f"Drums, bars {a}-{b}: {p['drums'][0].split('drums: ', 1)[1]}"
+                       + (f"; then {'; '.join(said)}" if said else "") + ".")
+        if p.get("percussion"):
+            parts = re.sub(r" \([^)]*\)", "", p["percussion"][0].split("percussion: ", 1)[1])
+            closes = [ln for ln in p["percussion"][1:] if _bar_of(ln) <= b]
+            out.append(f"Percussion, bars {a}-{b}: {parts}" + ("; an abanico into the next section" if closes else "")
+                       + ".")
     out.append("Pad: holds each chord, its voices moving the shortest way, under the melody.")
     phrases = [ph for p in plan for ph in p["phrases"]][:max(1, bars // FORM[style].phrase)]
     n = FORM[style].phrase
     out.append(f"Melody: {len(phrases)} phrase{'s' * (len(phrases) > 1)} of {n} bars. Each states the motif, "
                f"climbs to a peak about two-thirds in, ends its first half open and lands home on the cadence: "
                + "; ".join(ln.strip() for ph in phrases for ln in ph[1:] if "then" in ln) + ".")
+    if take.get("drums"):
+        kicks = {h[0] for h in take["drums"] if h[4] == "kick"}
+        locked = sum(1 for n in take["bass"] if n[0] in kicks)
+        out.append(f"Kick and bass: the kick lands with {round(100 * locked / max(1, len(take['bass'])))}% of the bass "
+                   f"notes.")
     out.append("Listen for: does it flow, chords going round and coming home rather than wandering; does the bass "
-               "feel like the style; does each phrase sound like a question and its answer.")
+               "feel like the style; does each phrase sound like a question and its answer"
+               + ("; does the drummer feel like the style, its fills leading into the next phrase"
+                  if take.get("drums") else "")
+               + ("; does the percussion sit with the clave and lift in the loud sections"
+                  if take.get("percussion") else "") + ".")
     return out
 
 def main(argv=None):

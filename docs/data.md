@@ -17,7 +17,7 @@ styles either, so the style book fills them the same way.
 
 | Set | License | Tag | Size | Format | Styles | Members | Status |
 |---|---|---|---|---|---|---|---|
-| Groove MIDI (GMD) | CC BY 4.0 | SAFE | 1,150 files, 13.6 h; MIDI-only 3 MB (with audio 4.8 GB) | MIDI + synthesized WAV, CSV | 18 drum styles: afrobeat, afrocuban, funk, hip hop, jazz, latin, rock, reggae, pop, soul... | drums (human, with feel) | **chosen** (3.2) |
+| Groove MIDI (GMD) | CC BY 4.0 | SAFE | 1,150 files, 13.6 h; MIDI-only 3 MB (with audio 4.8 GB) | MIDI + synthesized WAV, CSV | 18 drum styles: afrobeat, afrocuban, funk, hip hop, jazz, latin, rock, reggae, pop, soul... | drums (human, with feel) | **chosen**; **in use** (3.3, Oct 24: license re-checked, MIDI-only zip in `private/gmd`, counts in `maestro/data/grooves.json`) |
 | Expanded GMD (E-GMD) | CC BY 4.0 | SAFE | 45,537 sequences (1,059 unique), 444 h, 43 kits; MIDI-only 103 MB (with audio 90 GB) | MIDI + WAV, CSV | as GMD | drums | **chosen**, MIDI only |
 | PDMX | CC BY 4.0 (scores public domain) | SAFE | 250K+ scores, 14.4 GB | MusicXML (MXL), MIDI, MusicRender JSON, PDF; CSV with genres and ratings | mostly classical, folk, hymns, film/game arrangements; genre column | melody, bass, pad (harmony, voice leading); few drums | **chosen**: only the `no_license_conflict` subset (222,856); 12% have license conflicts, dropped |
 | imslp-midi-cc0-1.0 (TiMauzi, HF) | CC0 1.0 | SAFE | 1,113 files, 50 MB download | parquet holding MIDI, with era, style, key | classical, romantic, some "modern" | melody, bass, pad | **chosen** (theory, bucket 2) |

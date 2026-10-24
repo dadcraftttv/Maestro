@@ -3,8 +3,9 @@
 holds each chord of the progression, the bass plays its pattern, the melody is shaped over the phrase, above the
 pad; the clip's `.txt` opens with a short summary. `--no-flow` plays Checkpoint 2's bar-by-bar draws (the pad holds
 its voicing for the bar, the bass plays its note on the drawn rhythm, the melody states the motif every two bars).
-A bare drum guide keeps time; it comes from the style's rhythm draft with its own seed and isn't explained (the
-drummer is task 3.3). Salsa has no kit: the clave and a cowbell on the beats. Sounds are GM stand-ins.
+The drummer and the percussion member (task 3.3) play under them, as `explain` says: salsa has no kit, its
+percussion keeps time. `--no-flow` keeps Checkpoint 2's bare drum guide (from the style's rhythm draft with its own
+seed, unexplained; salsa's is the clave and a cowbell). Sounds are GM stand-ins.
 
     python -m maestro.sketch [style ...] [--out clips/flow] [--bars 16] [--seeds 2] [--seed N] [--no-flow]
 
@@ -90,7 +91,7 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
     bpm = TEMPO[style]
     lines, take = flow_choices(style, seed, bars, home, bpm, room)
     met = METERS["4/4"]
-    song = Song(tempo=bpm, source={"set": "maestro sketch (flow, task 3.2)", "license": "GPL-3.0-or-later",
+    song = Song(tempo=bpm, source={"set": "maestro sketch (flow, tasks 3.2-3.3)", "license": "GPL-3.0-or-later",
                                    "commercial_safe": True, "seed": seed, "style": style})
     v_pad, v_bass, v_mel = LEVELS.get(style, (70, 100, 84))
     for role, program, level in zip(_PLAYED, SOUNDS[style], (v_pad, v_bass, v_mel)):
@@ -101,15 +102,23 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
         song.timeline.append({"bar": r["bar"], "tempo": bpm, "meter": met.name, "key": str(r["key"]),
                               "chord": name(r["chord"], r["key"]), "section": {"kind": r["section"].kind},
                               "energy": round(r["energy"], 3)})
-    drum_on = _drums(song, style, take["bars"], met, seed)
     clave = CLAVES[RHYTHM[style].clave] if RHYTHM[style].clave else None
     parts = {"bass": ([n[0] for n in take["bass"]], feel_for(style, "bass")),
-             "melody": ([n[0] for n in take["melody"]], feel_for(style, "melody")),
-             "drums": (drum_on, feel_for(style, "drums"))}
+             "melody": ([n[0] for n in take["melody"]], feel_for(style, "melody"))}
+    for role in ("drums", "percussion"):     # the drummer and the percussion (task 3.3), each on the kit channel
+        if take[role]:
+            kit = song.member(role, role, kit=True)
+            for st, length, note, vel, _ in take[role]:
+                kit.add(st, length, note, vel)
+    if take["drums"]:
+        parts["drums"] = ([h[0] for h in take["drums"]], feel_for(style, "drums"))
+    for name_ in sorted({h[4] for h in take["percussion"]}):
+        parts[f"percussion's {name_}"] = ([h[0] for h in take["percussion"] if h[4] == name_],
+                                          feel_for(style, "percussion"))
     for why in check_band_rhythm(parts, met, clave if clave and clave.two_sided else None):
         lines.append(f"  band check: {why}")
     short = summary(style, seed, bars, bpm, take)
-    song.listen = " ".join(short[1:]) + " The drums are a bare guide; sounds are GM stand-ins."
+    song.listen = " ".join(short[1:]) + " Sounds are GM stand-ins."
     return song, short + ["", "In detail:"] + lines
 
 

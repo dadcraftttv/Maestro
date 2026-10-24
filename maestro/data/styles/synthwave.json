@@ -1,7 +1,7 @@
 {
   "style": "synthwave",
   "license": "CC BY-SA 4.0",
-  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)"],
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)", "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)"],
   "time": {
     "tempo": 100,
     "rhythm": {
@@ -59,8 +59,13 @@
       "level": 58
     },
     "drums": {
+      "why": "A drum machine's steadiness: dance and pop grooves, closed hats, few ghost notes, short fills.",
       "kicks": 4,
-      "hats": "8th"
+      "hats": "8th",
+      "grooves": {"dance": 2, "pop": 1},
+      "time": {"hat 8th": 50, "hat 16th": 35, "hat quarter": 5, "ride quarter": 0, "ride 8th": 0, "crash quarter": 0},
+      "busy": 40,
+      "fills": 40
     }
   }
 }

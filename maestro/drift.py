@@ -45,7 +45,7 @@ SAYS = {
     "phrases_shared": "4-bar phrases shared by two plays",
     "longest_shared_run": "longest run shared by two plays (bars)",
 }
-GROOVE = ("drums", "bass", "pad")   # shown beside the targets, never capped (DadCraft, Oct 24: they groove)
+GROOVE = ("drums", "percussion", "bass", "pad")   # shown beside the targets, never capped (DadCraft, Oct 24: they groove)
 
 
 class Play:

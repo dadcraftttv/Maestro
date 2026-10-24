@@ -85,9 +85,10 @@ def test_a_flow_sketch_plays_what_it_says_and_the_melody_is_on_top():
     for style in STYLES:
         song, lines = flow_sketch(style, seed=4, bars=16)
         assert lines[0].startswith(style.replace("_", " ")) and "In detail:" in lines
-        assert not any("band check" in ln or "bass check" in ln or ln.startswith("    ruled out") for ln in lines), style
+        assert not any(" check: " in ln or ln.startswith("    ruled out") for ln in lines), style
         parts = {m.name: m.notes for m in song.members}
-        assert all(parts[n] for n in ("pad", "bass", "melody", "drums")), style
+        assert all(parts[n] for n in ("pad", "bass", "melody")), style
+        assert parts.get("drums") or parts.get("percussion"), style   # salsa: percussion, no kit
         for m in parts["melody"]:
             under = [p for p in parts["pad"] if p.step <= m.step < p.step + p.steps]
             assert all(m.pitch > p.pitch for p in under), style

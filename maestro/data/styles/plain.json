@@ -1,7 +1,7 @@
 {
   "style": "plain",
   "license": "CC BY-SA 4.0",
-  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)"],
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)"],
   "why": "No style: the theory core's defaults, the baseline the others lean away from.",
   "time": {
     "tempo": 100,
@@ -27,8 +27,11 @@
       "sound": 11
     },
     "drums": {
+      "why": "A plain drummer: GMD's rock and pop grooves as they come.",
       "kicks": 2,
-      "hats": "8th"
+      "hats": "8th",
+      "grooves": {"rock": 1, "pop": 1},
+      "fills": 50
     }
   }
 }

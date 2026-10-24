@@ -263,6 +263,8 @@ part may carry a `"why"` in plain words.
 | `harmony.progressions` | `families` (each a loop in roman numerals with its bar lines, `"i iv \| V7 iv"`, and a weight), `variants` (weights: again, swap, colour, approach, turnaround), `stay` | `flow.Flow` (3.2) |
 | `members.<role>` | `sound` (GM program), `level` (velocity), for drums `kicks` and `hats` | the sketch |
 | `members.bass.patterns` | pattern families: notes as `[at, length, tone, which]` in 16ths (length `null`: held to the next note; tone root, third, fifth or octave; which `now` or `ahead`, the chord at the next half bar), `bars`, `weight`; `variants` (again, drop, approach, octave) | `flow.Pattern` (3.2) |
+| `members.drums` | `grooves` (the GMD styles it draws on, with weights), `time` (weights for its timekeeping, `"hat 8th"`, `"ride quarter"`, `"crash 8th"`, leaning GMD's own), `busy` (% of GMD's small-hit odds played), `fills` (% of phrases ending in a fill), `rolls` (% ending in a hat roll instead); no `grooves`: no kit | `drums.Drummer` (3.3) |
+| `members.percussion.parts` | each part's pattern families: hits as `[16th, voice, velocity]` over `bars` 1 or 2 (two-bar ones in the clave's cycle), `weight`, `when` (low, high or any energy); `variants` (again, drop); `abanico` (% of section ends) | `percussion.Part` (3.3) |
 
 Roles are the band's members (decision 11). The loader says where a file goes wrong (`trap: form.moves: unknown key
 move 'leap'`): unknown parts and fields, the wrong kind of value, a missing source or the wrong license, and any name
@@ -271,6 +273,14 @@ become whole numbers, as the theory expects. Bucket 3's later tasks add parts (f
 check. A style that names no progressions or bass patterns plays `theory/flow.py`'s defaults (common loops and
 schemas; roots, root and fifth, root eighths); the families that don't fit a key or the style's vocabulary are
 ruled out, with the reason.
+
+**The drummer's numbers** (task 3.3) are in `maestro/data/grooves.json`, made by `tools/groove_stats.py` from the
+Groove MIDI Dataset (CC BY 4.0, downloaded into `private/gmd`): our own counts, never the performances. For each GMD
+style (rock, hip hop, pop, dance; straight takes only, each lined up on its backbeat, rounded to 16ths, up to 32 bars
+a take): its common backbones (kick and accented snare on the 8ths) with their shares, how often a bar keeps the one
+before, the odds of every other hit on each 16th, its timekeeping, the mean velocity on each 16th, and its fills
+(length, pace, drums, how often the toms go down). Run the tool again after changing it; the style files only point
+at it.
 
 ## The port and the C (task 2.1, Oct 23)
 `maestro/port.py` is today's `dcs_composer` in Python, choice for choice: the same seed and messages give the same

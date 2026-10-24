@@ -205,3 +205,12 @@ isn't reloaded every session; grep for the part a task needs.
   through a question and answer or call and response." On too much or too little change from round to round: "i
   can't tell" (asked again at checkpoint 3, on a long clip). "this was big step in the right direction for salsa,
   but there's still a long way to go."
+- Oct 24: 3.3's plan approved, with DadCraft's choices: salsa gets the percussion member and no kit (as a salsa band
+  plays); percussion for salsa now, the other styles' in 3.4; GMD feeds the drummer as groove families plus per-step
+  odds, varied each bar; a listen to salsa and power rock at the end.
+- Oct 24: 3.3 done. Notes: GMD's punk takes left out (5 straight takes, the lining-up misreads its skank beat), so
+  power rock draws on rock only; 63 swung rock takes left out (our four styles are straight); a long jam capped at
+  32 bars a take. The cáscara's bars set against the clave by where they meet its strokes (sources disagreed). The
+  kick and bass are measured (the share of bass notes the kick lands with), not ruled. Seen in the drift sweep, from
+  3.2 and not this task: salsa's melody now and then lines up with the other clave over a 32-bar clip (seeds 30, 40);
+  for 3.4c.

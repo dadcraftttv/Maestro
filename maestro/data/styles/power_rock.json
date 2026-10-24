@@ -1,7 +1,7 @@
 {
   "style": "power_rock",
   "license": "CC BY-SA 4.0",
-  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)"],
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)", "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)"],
   "time": {
     "tempo": 130,
     "rhythm": {
@@ -60,8 +60,13 @@
       "sound": 29
     },
     "drums": {
+      "why": "GMD's rock drummers: hat or ride in 8ths (the crash ridden now and then), a fill into most phrases.",
       "kicks": 3,
-      "hats": "8th"
+      "hats": "8th",
+      "grooves": {"rock": 1},
+      "time": {"hat quarter": 3, "ride quarter": 2, "crash quarter": 3, "crash 8th": 3},
+      "busy": 100,
+      "fills": 70
     }
   }
 }

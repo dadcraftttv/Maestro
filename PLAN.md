@@ -4,7 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, task 3.3 (the drummer from the Groove MIDI Dataset, and the percussion member).
+**Next:** the listen after 3.3 (DadCraft hears `clips/drums`: salsa's percussion, power rock's drummer), then task 3.4a
+(trap's entry).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -204,8 +205,20 @@ For each chosen style, how each member plays it, written from sources.
       Heard Oct 24 (`clips/flow/salsa_23`): more like salsa, the clave and bass a nice feel, the lead goes round and
       comes home, question and answer heard; "a big step in the right direction ... still a long way to go". How
       much the rounds change he couldn't tell: asked again at checkpoint 3 (`docs/verdicts.md`).
-- [ ] 3.3 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0), and the **percussion** member (congas,
+- [x] 3.3 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0), and the **percussion** member (congas,
       timbales, cowbell, clave), written from theory (El Bongosero's data license is still unclear).
+      Done Oct 24 (plan approved; DadCraft chose: salsa has percussion and no kit, percussion for salsa now and the
+      rest in 3.4, GMD as groove families plus odds, a listen to salsa and power rock): `tools/groove_stats.py`
+      counts GMD (straight takes, lined up on the backbeat, rounded to 16ths) into `maestro/data/grooves.json`;
+      `maestro/theory/drums.py` (a groove a section, kept or changed bar by bar at GMD's rate, the small hits by its
+      odds and the energy, fills at phrase ends with toms mostly going down, a crash on each section, trap's half
+      time and hat rolls; the check: grid, two hands, the backbeat); `maestro/theory/percussion.py` (salsa's clave,
+      conga tumbao, bongo martillo or bell, cáscara on shell or bell, güiro, an abanico into a section; the check:
+      no part crosses the clave), `tests/unit/test_drums.py`. Drummers: power rock from rock, trap from hip hop,
+      synthwave from dance and pop, plain from rock and pop. Drift (20 minutes, two plays a style): every target met;
+      the drums copy one of their last 16 bars only 1-12% of the time, the percussion 59%. 181 tests, exam 106/106.
+- [ ] Listen after 3.3: `clips/drums/salsa_23` and `power_rock_26` (32 bars each: a 16-bar clip is always one
+      section, and the change between sections is what to hear).
 - [ ] 3.4 One task per style, each entry covering every role it uses: 3.4a trap, 3.4b synthwave, 3.4c salsa,
       3.4d power rock.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
