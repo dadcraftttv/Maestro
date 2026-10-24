@@ -180,7 +180,7 @@ material only if DadCraft wants those styles later.
 ### For the four styles now (searched Oct 24, DadCraft: "how much can you find for those things we need now?")
 | Need | Found | Tag | Use |
 |---|---|---|---|
-| Progressions, loops, pop schemas (all four styles) | Open Music Theory (viva.pressbooks.pub/openmusictheory): popular music part with loops and four-chord schemas | CHECK: reported CC BY-SA; its site refuses automated fetches, so the notice needs a look in a browser | book, once the notice is seen |
+| Progressions, loops, pop schemas (all four styles) | Open Music Theory (viva.pressbooks.pub/openmusictheory): popular music part with loops and four-chord schemas | SAFE: "licensed under a Creative Commons Attribution-ShareAlike 4.0 International License, except where otherwise noted" (DadCraft read it on the site, Oct 24; Gotham, Gullings, Hamm, Hughes, Jarvis, Lavengood, Peterson, 2023). Each chapter used is checked for its own note first (the rules table's "except where noted") | book: progressions, loops, schemas, form; credited in CREDITS.md when used |
 | Progressions in folk and pop | Chord Progression Handbook (Matney, Niemuth, KU ScholarWorks 2019) | NC (CC BY-NC 4.0) | reader; ideas for the book |
 | Tumbao, guajeo (montuno), clave, salsa's sections | Wikipedia's articles on them | SAFE (CC BY-SA 4.0, text) | book: theory in our own words, credited |
 | Rock progressions | the Rock Corpus (above) | statistics only | book |
