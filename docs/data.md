@@ -124,7 +124,7 @@ material only if DadCraft wants those styles later.
 | music-theory-data: github.com/seancolsen/music-theory-data | CC-BY-SA-4.0 | SAFE | scales, chords, intervals as data | book: checks our scale and chord tables |
 | jazznet: github.com/tosiron/jazznet | MIT | SAFE | generated piano chords, arpeggios, progressions | book, data: progressions; salsa's ii-V and sevenths |
 | Radif Corpus: zenodo 10.5281/zenodo.15742125 | CC BY 4.0 | SAFE | 228 Iranian radif pieces, MIDI, MusicXML | off-target; reader |
-| Drum Groove Corpora (Empirical Musicology Review, 2021) | "CC 4.0" (which one not said) | CHECK | onset timings of pop and rock drumming | for the drummer (3.2) once the license is named |
+| Drum Groove Corpora (Empirical Musicology Review, 2021) | "CC 4.0" (which one not said) | CHECK | onset timings of pop and rock drumming | for the drummer (3.3) once the license is named |
 | CoCoPops (Billboard, Rolling Stone): github.com/Computational-Cognitive-Musicology-Lab/CoCoPops | CC BY-NC 4.0 | NC | melody and harmony of 949 pop and rock songs | book (ideas, PC side): pop and rock progressions; never the phone model |
 | MIT OCW 21M.383 Computational Music Theory | CC BY-NC-SA (OCW) | NC | course on music21-style analysis | reader |
 
@@ -185,7 +185,7 @@ material only if DadCraft wants those styles later.
 | Tumbao, guajeo (montuno), clave, salsa's sections | Wikipedia's articles on them | SAFE (CC BY-SA 4.0, text) | book: theory in our own words, credited |
 | Rock progressions | the Rock Corpus (above) | statistics only | book |
 | Sevenths, ii-V, progressions | jazznet (above) | SAFE | book, data |
-| Drums: rock, hip hop, latin, afrocuban, funk | Groove MIDI and E-GMD (chosen, above) | SAFE | data (3.2) |
+| Drums: rock, hip hop, latin, afrocuban, funk | Groove MIDI and E-GMD (chosen, above) | SAFE | data (3.3) |
 | Afro-Cuban drums | ClaveNet (2024): GMD grooves with Afro-Cuban seed patterns swapped in; no data release found | - | ideas: the same trick on our own grooves |
 | Hand percussion (congas, bongos) | El Bongosero (ISMIR 2024): paper CC BY 4.0, data license not stated | CHECK | percussion, once its license is found |
 | Pop and rock drum timing | Drum Groove Corpora: the article says "CC 4.0", its footer CC BY-NC 4.0 | CHECK (likely NC) | - |

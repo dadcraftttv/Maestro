@@ -2,7 +2,7 @@
 """The theory core's choices as rough clips, for checkpoint 2: what `explain.py` says, played. The pad holds its
 voicing for the bar, the bass plays its note on the drawn rhythm, the melody states the motif every two bars, in
 one register above the pad's highest note. A bare drum guide keeps time; it comes from the style's rhythm draft with its own seed and isn't explained
-(the drummer is task 3.2). Salsa has no kit: the clave and a cowbell on the beats. Sounds are GM stand-ins.
+(the drummer is task 3.3). Salsa has no kit: the clave and a cowbell on the beats. Sounds are GM stand-ins.
 
     python -m maestro.sketch [style ...] [--out clips/checkpoint2] [--bars 8] [--seeds 2] [--seed N]
 

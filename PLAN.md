@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, task 3.0 (the style book's plan), with Checkpoint 2's carries (`docs/verdicts.md`) and
-3.0a's sources and proposals (`docs/data.md`, `docs/research.md` round 3).
+**Next:** Bucket 3, task 3.1 (the style book format: the theory tables move into one JSON file a style, same
+behaviour).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -161,30 +161,55 @@ For each chosen style, how each member plays it, written from sources.
       systems go to `docs/research.md` and come to DadCraft as proposals. Results in `docs/data.md`.
       Done Oct 24: the rules table `maestro/data/licenses.json` (data.md's tags), the sort in `docs/data.md`
       ("DadCraft's source lists, sorted"), seven proposals in `docs/research.md` round 3.
-- [ ] 3.0 Plan approved (incl. what a style entry holds: tempo, swing, grid, chord vocabulary, register, default
-      sound, all as tendencies and ranges with many variants, never a few fixed patterns: decision 9). Styles with no
-      open data for a member (`docs/data.md` "Coverage and gaps") get that member's theory written out in full,
-      since practice MIDI made from it is their main training data (DadCraft, Oct 23; the method and
-      examples: `docs/data.md` "Filling the gaps with theory"). Each style's entry covers every role it uses,
-      the new ones too (decision 11). DadCraft's taste notes (`docs/taste.md`, from his production logs) are a
-      source for synthwave and the blends, and for checks before he listens. Check open textbooks as
-      sources (e.g. Open Music Theory, license to check).
-- [ ] 3.1 The style book as data files (one per style, in a plain format the desk can write too); the theory
-      modules load them instead of the Python tables in `chords.py`, `voicing.py`, `rhythm.py` and `form.py`. Same
-      behaviour: the tests and the exam pass unchanged. (The clip player moved to 2.7.)
-- [ ] 3.2 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0).
-- [ ] 3.3 One task per style: 3.3a trap, 3.3b synthwave, 3.3c salsa, 3.3d power rock.
-- [ ] 3.4 The style judge (CLaMP 3, license checked) scores the clips first.
-- [ ] 3.5 Layering (arrangement): which members play when. Members join one after another along a build and drop
+- [x] 3.0 Plan approved Oct 24. **A style entry** (one JSON file a style, CC BY-SA 4.0, its sources cited; JSON
+      like `composer.json` and `licenses.json`: read and written with no extra library, so the desk can write it
+      too) holds tendencies and ranges with weights, never fixed patterns (decision 9):
+      - **time:** tempo range around the felt tempo (trap ~140, synthwave ~100, salsa ~180, power rock ~130),
+        half-time, meter, the grid subdivisions it uses, swing as a grid point (decision 13);
+      - **harmony:** mode weights, the chord vocabulary (today's `VOCAB`), **progression families** (loops and
+        schemas with their variants), **harmonic rhythm** (chords a bar), cadence habits;
+      - **each member it uses** (drums, percussion, bass, keys, rhythm guitar, horns, pad, arp, melody: decision 11):
+        register and density ranges, rhythm leanings on the grid, **pattern families** (tumbao, 808 slides, root
+        eighths, montuno, power-chord chugs), voice-leading habits, a default sound (a GM program for the PC clips, a
+        named sound for Ouralia);
+      - **fit and form:** the energies and moods it suits, the one trait it lends when it seasons a blend, who comes
+        in first and who sits out (`docs/taste.md`);
+      - **checks before DadCraft listens:** `docs/taste.md`'s failure list.
+      Every member but drums is an open-data gap in all four styles, so each one's theory is written out in full
+      (`docs/data.md` "Filling the gaps with theory"); sources from 3.0a's sort (`docs/data.md`, "For the four
+      styles now"). Carries from Checkpoint 2 (`docs/verdicts.md`): flow (3.2), the melody heard on long clips
+      (checkpoint 3), a short summary per clip (3.7).
+- [ ] 3.1 The style book format: the tables in `chords.py`, `voicing.py`, `rhythm.py`, `form.py` and `sketch.py`
+      move into one JSON file a style, with a loader that checks each file. Same behaviour: the tests and the exam
+      pass unchanged.
+- [ ] 3.2 Flow (Checkpoint 2's "no flow"): progressions drawn as families with variants over 4 or 8 bars, not one
+      chord a bar; the bass built on its style's pattern family; the melody shaped over a phrase (a statement and
+      an answer landing on the cadence). Check and choose like the other theory modules. Sources: Open Music Theory
+      (loops, schemas; each chapter's own note checked), the Rock Corpus (statistics in our words), jazznet (ii-V).
+      The drift measures run first (loops repeat, bars must still stay under the staleness targets).
+- [ ] Listen after 3.2 (DadCraft, Oct 24): one style, a 16-bar clip with its progression, bass pattern and a phrased
+      melody, with its summary (3.7's shape), before the four entries are written.
+- [ ] 3.3 The drummer, starting from the Groove MIDI Dataset (CC BY 4.0), and the **percussion** member (congas,
+      timbales, cowbell, clave), written from theory (El Bongosero's data license is still unclear).
+- [ ] 3.4 One task per style, each entry covering every role it uses: 3.4a trap, 3.4b synthwave, 3.4c salsa,
+      3.4d power rock.
+- [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
+      that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
+- [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
       out as it eases (after Ouralia's Calm builds: pad, room notes, chimes, then harmony and reverb, each joining
       further along the rise; `docs/format.md`), and sections thin or fill the band. Each style's entry says who
       comes in first and who sits out (trap might drop its drums for a breakdown), as tendencies, never a fixed
       order (decision 9). Driven by `form.py`'s energy, with the check and choose like the other theory modules.
+      Also a style per section (after HeartMuLa, research round 3, DadCraft, Oct 24): the blend can shift as the
+      song moves (the band turns salsa for a breakdown), as tendencies too.
       In bucket 6 it becomes the way Calm builds and Maestro's arc stop stacking (DadCraft, Oct 23).
+- [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
+      bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
+      for" line). The detailed per-bar explanation stays, for debugging.
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
       pocket (decision 13) can be played to him next to the on-grid version. Also for his ear, from 2.5: the
-      semitone key lift, how sections growing heavier comes across, and the layering (3.5).
+      semitone key lift, how sections growing heavier comes across, and the layering (3.6).
 
 ### D. Maestro's own desk (draft; between buckets 3 and 4, decision 14)
 A local web page on this PC where DadCraft teaches Maestro without Claude Code.

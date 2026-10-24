@@ -188,3 +188,11 @@ isn't reloaded every session; grep for the part a task needs.
   (rap flow), and the research proposals.
 - Oct 24: DadCraft: keep the off-target sources for Maestro's reader ("i want as much training data for it
   later"). Then, before 3.0: find the theory and open data the four styles need now.
+- Oct 24: task 3.0, bucket 3's plan approved as presented (PLAN.md 3.0): a style entry is one JSON file a style
+  (time, harmony with progression families and harmonic rhythm, each member's ranges and pattern families, fit and
+  form, checks); a new task 3.2 Flow for Checkpoint 2's "no flow", then the drummer and percussion (3.3), the four
+  styles (3.4), the judge (3.5), layering (3.6), clip summaries (3.7). DadCraft also chose: a listen after 3.2
+  (one style, 16 bars) before the four entries are written; the clip summary shape as shown (style, bars, key,
+  tempo; the chord loop and how it varies; bass; pad; the melody's phrase; a "listen for" line); and two round-3
+  proposals into bucket 3: a style per section (HeartMuLa, in 3.6) and TinyMU as a second judge (3.5, license
+  first). The other round-3 proposals come up in buckets 4-6's plans.
