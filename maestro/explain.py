@@ -13,6 +13,7 @@ import argparse, re
 from itertools import groupby
 
 from .rng import ComposerRng, fresh_seed
+from .stylebook import part
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
 from .theory.flow import BASS, FLOW, bass_808, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
     check_loop, held, loop_melody, LOOPS, phrase_melody, progression
@@ -219,7 +220,9 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         key, ch = key_at(sp.at), sp.chord
         under = [m for st, length, m in bass if st <= sp.at < st + length] or [bass[0][2]]
         try:
-            n = 3 if voicings(ch, key, 3, member_range("pad"), leading, ceiling=UNDER) else 4   # four for a 9th
+            want = part(style, "members", "pad").get("voices", 3)                             # trap: 2
+            n = want if voicings(ch, key, want, member_range("pad"), leading, ceiling=UNDER) else \
+                3 if voicings(ch, key, 3, member_range("pad"), leading, ceiling=UNDER) else 4   # four for a 9th
             for tries in range(TRIES + 1):
                 v = choose_voicing(rng, ch, key, n, member_range("pad"), prev, leading, ceiling=UNDER)
                 if not check_band({"pad": v, "bass": under}, key):

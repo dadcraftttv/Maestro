@@ -8,7 +8,8 @@ count as copies. The whole band's bar is all its members' bars together.
 Within a play (~20 minutes):
 - **phrases copied:** the share of the band's 4-bar phrases (on the 4-bar line) that copy an earlier stretch;
 - **longest copy:** the longest run of band bars that repeats bars heard before;
-- **melody bars copied:** the share of the melody's bars that copy one of its last 16 (drums and bass groove: no cap);
+- **melody bars copied:** the share of the melody's bars that copy one of its last 16 (drums and bass groove: no cap;
+  nor a melody that loops, trap's riff, DadCraft, Oct 24: "let the riff repeat freely");
 - **fresh, worst window:** in each 2-minute window, the share of band bars new to the play; the lowest window.
 Between two plays (same settings, fresh seeds):
 - **same bar, same place:** bar i of one play is bar i of the other;
@@ -175,8 +176,10 @@ def table(rows):
             cells.append(f"{(f'{v:.0%}' if isinstance(t, float) else str(v)) + (' ok' if ok else ' NO'):>12}")
         tgt = ("<= " if side == "max" else ">= ") + (f"{t:.0%}" if isinstance(t, float) else str(t))
         lines.append("  ".join([f"{SAYS[k]:44}{tgt:>8}"] + cells))
-    for role in GROOVE:
+    for role in GROOVE + ("riff",):
         k = f"{role}_bars_copied"
+        if role == "riff" and not any(k in m for _, m in rows):
+            continue
         cells = [f"{f'{m[k]:.0%}' if k in m else '-':>12}" for _, m in rows]
         lines.append("  ".join([f"{role + ' bars copying one of the last 16':44}{'free':>8}"] + cells))
     return lines
@@ -199,12 +202,15 @@ def main(argv=None):
     seed = a.seed if a.seed is not None else random.SystemRandom().randrange(1, 1 << 24)
     if a.flow:
         from .sketch import TEMPO, flow_sketch
+        from .theory.flow import LOOPS
         rows = []
         for i, style in enumerate(a.flow):
             bars = round(a.minutes * TEMPO[style] / 4)
             p, q = (from_song(flow_sketch(style, s, bars)[0]) for s in (seed + 2 * i, seed + 2 * i + 1))
             m = staleness(p)
             m.update(sameness(p, q))
+            if LOOPS[style]:                 # a riff repeats: shown beside the grooves, never capped
+                m["riff_bars_copied"] = m.pop("melody_bars_copied", 0.0)
             rows.append((style, m))
         print(f"flow sketch, {a.minutes:g} minutes a play, seeds from {seed} (two plays per style)")
         print("\n".join(table(rows)))

@@ -185,4 +185,15 @@ def test_the_fills_roll_fall_and_swell():
             if h[4] == "riser":
                 assert h[1] == 2 * MET.bar
         seen |= {h[4] for h in hits}
-    assert {"cascade", "roll", "swell", "crash", "riser"} <= seen
+    assert {"roll", "swell", "crash", "riser"} <= seen
+    assert ("cascade" in seen) == (DRUMMER["trap"].cascade > 0)    # off until DadCraft's reference (Oct 24)
+
+
+def test_the_riff_rests_between_rounds():
+    lf = LOOPS["trap"]
+    assert lf.every == 2
+    for take in _takes(4):
+        for p in take["plan"]:
+            s = p["section"]
+            sounding = {n[0] // MET.bar for n in take["melody"] if s.start * MET.bar <= n[0] < s.end * MET.bar}
+            assert len(sounding) <= (s.end - s.start) // 2 + 1    # about half the bars rest

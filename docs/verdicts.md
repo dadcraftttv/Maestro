@@ -245,3 +245,9 @@ isn't reloaded every session; grep for the part a task needs.
   between 11 and 12, "11 feels the most right" (16ths over the last two beats, each hit 80 ms, 1.6 semitones a
   step). He can't describe it further, and the tracks that have it are copyrighted, so 11 stands for now; its
   settings are kept in `synth.py` to nudge later.
+- Oct 24: the listen to `clips/trap3/trap_1025`. DadCraft: "let the riff repeat freely, go with your drift idea. the
+  bells and strings could stand to still be even less busier. i just don't know how to feel about the cascade.
+  it's not hitting right. i'll listen to some trap at some point and come back with a sample of what i'm thinking
+  of. just bear in mind it will probably be copyright material. in general, i'm not crazy about what i'm hearing
+  for trap so far beyond the bass." Decision 9 now lets a looping melody repeat freely (`drift.py`: the riff's
+  row "free"). The riff every other round, the strings two voices, the cascade off. Trap waits for his reference.

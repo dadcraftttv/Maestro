@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, the listen to `clips/trap3/trap_1025` (the fills, the bell quieter and sparser), then 3.4b.
+**Next:** Bucket 3, 3.4b (synthwave's entry); trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -44,7 +44,9 @@ band member play, the way its style plays it?
    alike:** turn Ouralia off and on with the same settings and the evolution is a new one. The same key and scale
    share notes, but the music is never identical run to run (a fresh random seed each play; no replaying a stored
    path). Measured before DadCraft listens: staleness within a play (how often bars and phrases repeat over ~20
-   minutes) and sameness between plays (two runs, same settings).
+   minutes) and sameness between plays (two runs, same settings). Grooving members (drums, percussion, bass, pad)
+   and a melody that loops (trap's riff) repeat freely; the band's own targets still hold (DadCraft, Oct 24: "let
+   the riff repeat freely").
 11. **The band grows past today's four members** (drums, bass, pad, melody, plus the arp). The first styles need
     more roles, planned from the style book on: **rhythm guitar** (power rock), **keys** (salsa's montuno piano),
     **horns** (salsa) and **percussion** (congas, timbales, cowbell, clave; its own member, apart from the kit).
@@ -271,8 +273,15 @@ For each chosen style, how each member plays it, written from sources.
       sections with a crash on the one, a riser over the last two bars of 35%; drop-outs 40%. The bell quieter
       (72) and sparser (rests and quarters favoured), the strings quieter (28). 190 tests, exam 106/106; drift's
       band targets met, the riff's own still 77% (asked).
-- [ ] Listen to `clips/trap3/trap_1025` (32 bars: the hats alone, a cascade at bar 8, a riser and a swell into bar
-      17, a roll into bar 25, a cascade at the end); DadCraft's call on the melody drift target for a riff.
+- [x] Listen to `clips/trap3/trap_1025`. Heard Oct 24: the bells and strings "could stand to still be even less
+      busier"; the cascade "not hitting right"; "in general, i'm not crazy about what i'm hearing for trap so far
+      beyond the bass". The riff repeats freely (decision 9). Done: the riff plays every other round (78 notes
+      where there were 168), the strings two voices (66 notes where there were 99), the cascade off (its code
+      kept). Clip: `clips/trap4/trap_1025`, the same music.
+- [ ] Trap, when DadCraft brings a reference (Oct 24: "i'll listen to some trap at some point and come back with a
+      sample", likely copyrighted): heard and described on this PC only, ideas in our own words, the file kept in
+      `inbox/` (gitignored), never committed, never sent to a free API, never training data (decision 7). Then the
+      cascade, and whatever else he finds missing.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

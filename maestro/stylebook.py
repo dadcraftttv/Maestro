@@ -23,7 +23,8 @@ PARTS = {"time": ("tempo", "rhythm", "feel"), "harmony": ("vocabulary", "leading
 MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "patterns": dict, "variants": dict,
           "grooves": dict, "time": dict, "busy": (0, 200), "fills": (0, 100), "rolls": (0, 100), "parts": dict,
           "with": str, "tones": dict, "slides": (0, 100), "develop": dict, "backbeat": str, "turns": (0, 100),
-          "turn rates": dict, "shape": str, "loop": dict}
+          "turn rates": dict, "shape": str, "loop": dict,
+          "voices": (2, 4)}
 TEMPO = (20, 400)
 
 

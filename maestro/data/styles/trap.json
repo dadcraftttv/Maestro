@@ -117,8 +117,9 @@
     "why": "Dark strings, an 808, a bell lead (DadCraft, Oct 24: the bell and the strings).",
     "pad": {
       "sound": 49,
-      "why": "slow strings (GM's String Ensemble 2), holding each chord",
-      "level": 28
+      "why": "slow strings (GM's String Ensemble 2), two voices, holding each chord (DadCraft, Oct 24: less busy)",
+      "level": 28,
+      "voices": 2
     },
     "bass": {
       "sound": "808",
@@ -138,7 +139,7 @@
       "level": 72,
       "shape": "loop",
       "loop": {
-        "why": "Trap's lead is a short riff on repeat, with room around it (DadCraft, Oct 24: the bells too busy); it changes between sections, not inside them.",
+        "why": "Trap's lead is a short riff on repeat, with room around it (DadCraft, Oct 24: the bells too busy); it changes between sections, not inside them. It plays every other round, resting between (DadCraft, Oct 24: still too busy).",
         "bars": {
           "1": 1,
           "2": 3
@@ -154,7 +155,8 @@
           "8 16 16": 0
         },
         "stay": 1,
-        "vary": 15
+        "vary": 15,
+        "every": 2
       }
     },
     "drums": {
@@ -163,7 +165,7 @@
       "kicks": 3,
       "hats": "16th",
       "patterns": {
-        "why": "Kicks as each bar's 16ths (the clap is on 8); hats an 8th at a time: - none, x an 8th, xx two 16ths, o an open hat, 3 16th triplets, 4 32nds, 6 32nd triplets (a run of 3, 4 and 6 is a roll, louder as it goes). Fills (DadCraft's picks from the auditions, Oct 24): a snare roll into a new section, the falling cascade (16ths over the last two beats, each hit short, stepping down) at the end of an 8-bar run, a reversed cymbal and a crash into each section, a riser before some; the clap on 3 layered over a snare.",
+        "why": "Kicks as each bar's 16ths (the clap is on 8); hats an 8th at a time: - none, x an 8th, xx two 16ths, o an open hat, 3 16th triplets, 4 32nds, 6 32nd triplets (a run of 3, 4 and 6 is a roll, louder as it goes). Fills (DadCraft's picks from the auditions, Oct 24): a snare roll into a new section, the falling cascade (16ths over the last two beats, each hit short, stepping down) at the end of an 8-bar run, a reversed cymbal and a crash into each section, a riser before some; the clap on 3 layered over a snare. The cascade off for now (DadCraft, Oct 24: \"it's not hitting right\"), until he brings a reference.",
         "kicks": {
           "home": {
             "bars": [
@@ -318,7 +320,7 @@
         "drop": 40,
         "intro": 4,
         "roll": 40,
-        "cascade": 50,
+        "cascade": 0,
         "cymbals": 60,
         "riser": 35
       }
