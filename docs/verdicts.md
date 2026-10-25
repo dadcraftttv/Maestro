@@ -255,3 +255,6 @@ isn't reloaded every session; grep for the part a task needs.
   harmony families, a programmed drummer, a phrased lead, tempo by mood); light pumping; the RTRO-DRM loops later.
   Asked which synthwave to aim for, he asked for a recommendation: outrun as the core, the dreamy side (The
   Midnight's) for calm sections, darksynth kept for blends. "yes, go with outrun core and dreamy calm sections".
+- Oct 24: the listen to `clips/synthwave/synthwave_14`. DadCraft: "yes to all of those" (outrun when up, dreamy when
+  low, the lead on top and singing, the pump light, the tom fills leading in); "pads and leads still sound too
+  loud, but don't worry about doing another render right now". The pad and lead turned down about 3 dB each.

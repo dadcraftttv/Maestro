@@ -284,6 +284,27 @@ slides over an 8th, 214 ms at 140, and a bend linear in semitones is the exponen
 "stutter" rolls (our grid of 24 a beat stops at 32nd triplets), and a check for rolled hats (the spread of the gaps
 between hat hits). Its advice to penalise major keys hard goes against decision 9, so it isn't taken.
 
+### DadCraft's synthwave finds (Oct 24, from a Google search; `inbox/synthwave.md`)
+
+Licenses from each repo's own page (GitHub's license field, the Hugging Face card).
+
+| Source | License | Tag | What | Use |
+|---|---|---|---|---|
+| Tegridy MIDI Dataset | Apache-2.0 on the repo; holds Lakh and fan MIDI | OUT | already audited above | none (decision 7) |
+| Synthwave MIDI Reimaginer (zeittresor) | none stated | ideas only | a GUI that restyles MIDI by 171 hand-set presets | its synthwave preset read (below), nothing kept |
+| SynTheory (brown-palm; HF meganwei/syntheory) | MIT (code and data) | SAFE | made-up clips of notes, intervals, scales, chords, progressions, tempos, meters, to probe whether a music model knows theory | for 3.5 and bucket 4: checking that the style judge and our model hear theory; not a synthwave source |
+| synth1-dataset (OdysseasKr) | none stated | OUT | sounds rendered from Synth1 presets | none |
+| WaivOps Lo-Fi Chords | CC BY 4.0 (Zenodo; the GitHub repo states none) | SAFE | already audited above | off-target for synthwave (piano, soul) |
+| Open Music Theory | already in use (3.2) | - | - | - |
+| YC Music Theory (CUNY Academic Commons) | not read: the page asks for a captcha | not usable until checked | a course site | DadCraft to look at its footer, or skip |
+| music21 | BSD-3-Clause | SAFE | already audited above (a tool, not used) | - |
+| mingus | GPL-3.0 | SAFE | a Python theory library (chords, scales, progressions) | not needed: our theory core covers it |
+
+The Reimaginer's synthwave preset agrees with the entry: 96-128 BPM (ours 112), four on the floor, a gated snare,
+tom fills, a Juno-style pad, a synth bass and an arp; reverb and delay fairly high. Its lead sits much lower than
+ours (centred on G#4, the bass on A2), where our lead's phrases run from about E5 to A6: a reason, beside the level,
+the lead may sound too loud (a saw that high cuts through). Noted for the next synthwave round, not yet changed.
+
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd
 - PDMX: https://zenodo.org/records/15571083

@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft listens to `clips/synthwave/synthwave_14` (3.4b); then 3.4c (salsa). Trap waits for his
-reference for the cascade.
+**Next:** Bucket 3, 3.4c (salsa's entry). Synthwave's quieter pad and lead get a render when DadCraft wants one;
+trap waits for his reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -300,7 +300,11 @@ For each chosen style, how each member plays it, written from sources.
       from the first beat. The tempo stays one a play: the calm sections slow by the drums going half time, not by
       a tempo change. 198 tests (`tests/unit/test_synthwave.py`), exam and parity pass; drift: every target met
       (melody copies 3%; trap's unchanged). Trap's clips are byte-identical.
-- [ ] Listen after 3.4b: `clips/synthwave/synthwave_14` (32 bars: 16 outrun bars, a tom fill, 16 dreamy bars).
+- [x] Listen after 3.4b: `clips/synthwave/synthwave_14` (32 bars: 16 outrun bars, a tom fill, 16 dreamy bars).
+      Heard Oct 24: "yes" to all the listen-for questions (outrun, then dreamy; the lead on top; the light pump; the
+      tom fill); the pads and leads still too loud. Done: the pad and lead each about 3 dB down (levels 56 and 80);
+      no new render yet (DadCraft: not now). His synthwave finds checked (`docs/data.md`): nothing new to train on;
+      SynTheory (MIT) kept for the style judge; one preset suggests the lead sits too high (an idea for later).
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

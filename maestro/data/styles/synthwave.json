@@ -63,7 +63,7 @@
     "why": "Maestro's own sounds (synth.py): a supersaw pad, a saw bass, a plucked arp, a saw lead, a LinnDrum-style kit. The pad and bass duck lightly under the kick (DadCraft, Oct 24: light pumping).",
     "pad": {
       "sound": "supersaw",
-      "level": 70,
+      "level": 56,
       "pump": 35
     },
     "bass": {
@@ -97,7 +97,7 @@
     "melody": {
       "why": "A singable lead on top, shaped over the phrase (DadCraft's notes: the melody must stay on top).",
       "sound": "saw lead",
-      "level": 100
+      "level": 80
     },
     "drums": {
       "why": "A drum machine (LinnDrum-style): the snare big on 2 and 4 with its gated reverb, four on the floor or a motorik kick, 8th or 16th hats, open hats on the and; at low energy the kick and snare go half time (the dreamy sections). Tom fills, high to floor, into a new section; a reversed cymbal into some.",
