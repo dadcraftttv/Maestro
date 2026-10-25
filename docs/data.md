@@ -296,7 +296,7 @@ Licenses from each repo's own page (GitHub's license field, the Hugging Face car
 | synth1-dataset (OdysseasKr) | none stated | OUT | sounds rendered from Synth1 presets | none |
 | WaivOps Lo-Fi Chords | CC BY 4.0 (Zenodo; the GitHub repo states none) | SAFE | already audited above | off-target for synthwave (piano, soul) |
 | Open Music Theory | already in use (3.2) | - | - | - |
-| YC Music Theory (CUNY Academic Commons) | not read: the page asks for a captcha | not usable until checked | a course site | DadCraft to look at its footer, or skip |
+| YC Music Theory (CUNY Academic Commons; source github.com/georgelam155/cunyopenmusic, from DadCraft) | CC BY-SA 4.0 (the site's footer and its "about" page: use, change, even sell, with credit and the same license) | SAFE | a 2019 remix of Open Music Theory 1.0 for a York College course; its pop/rock harmony pages | ideas, in our own words (below) |
 | music21 | BSD-3-Clause | SAFE | already audited above (a tool, not used) | - |
 | mingus | GPL-3.0 | SAFE | a Python theory library (chords, scales, progressions) | not needed: our theory core covers it |
 
@@ -304,6 +304,14 @@ The Reimaginer's synthwave preset agrees with the entry: 96-128 BPM (ours 112), 
 tom fills, a Juno-style pad, a synth bass and an arp; reverb and delay fairly high. Its lead sits much lower than
 ours (centred on G#4, the bass on A2), where our lead's phrases run from about E5 to A6: a reason, beside the level,
 the lead may sound too loud (a saw that high cuts through). Noted for the next synthwave round, not yet changed.
+
+YC Music Theory's pop/rock harmony pages (read from the repo DadCraft found, Oct 24; the site itself asks for a
+captcha) back the synthwave entry: in minor, pop's usual way home is bVI-bVII-i rather than iv-V-i (the bass
+stepping up, closer to the relative major), and the "singer/songwriter" loop (VI-IV-I-V in major, i-VI-III-VII in
+minor) is the entry's sunset and aeolian loop. So a synthwave phrase landing home on E7-Am (the flow's cadence
+borrowing V7) is less its own than F-G-Am: a change proposed to DadCraft for the next synthwave round. Its "Everett
+systems" page on rock's major triads over the pentatonic (I, bIII, IV, V, bVII; rotated loops of power chords) is
+for power rock (3.4d).
 
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd
