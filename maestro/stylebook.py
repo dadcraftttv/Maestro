@@ -24,7 +24,7 @@ MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "
           "grooves": dict, "time": dict, "busy": (0, 200), "fills": (0, 100), "rolls": (0, 100), "parts": dict,
           "with": str, "tones": dict, "slides": (0, 100), "develop": dict, "backbeat": str, "turns": (0, 100),
           "turn rates": dict, "shape": str, "loop": dict,
-          "voices": (2, 4)}
+          "voices": (2, 4), "shapes": dict, "rate": dict, "calm": str, "pump": (0, 100), "echo": (0, 100)}
 TEMPO = (20, 400)
 
 

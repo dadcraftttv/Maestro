@@ -4,7 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, 3.4b (synthwave's entry); trap waits for DadCraft's reference for the cascade.
+**Next:** DadCraft listens to `clips/synthwave/synthwave_14` (3.4b); then 3.4c (salsa). Trap waits for his
+reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -282,6 +283,24 @@ For each chosen style, how each member plays it, written from sources.
       sample", likely copyrighted): heard and described on this PC only, ideas in our own words, the file kept in
       `inbox/` (gitignored), never committed, never sent to a free API, never training data (decision 7). Then the
       cascade, and whatever else he finds missing.
+- [x] 3.4b Synthwave. Plan (Oct 24), approved; DadCraft chose: outrun as the core and dreamy calm sections
+      ("what would you recommend?": outrun, the sound most mean by synthwave and what his own notes describe), light
+      pumping, RTRO-DRM later (writing its patterns from theory now), all seven proposals.
+      Done Oct 24: Maestro's own synthwave sounds in `synth.py`, stereo: a supersaw pad (seven saws, ±28 cents,
+      spread), a saw bass (its filter snapping shut, a sine sub), a plucked arp with a ping-pong echo on the dotted
+      8th, a saw lead with vibrato on held notes, a LinnDrum-style kit (gated-reverb snare and toms); a reverb a
+      member, the pad (35%) and bass (20%) ducking under the kick (`pump`, a member's field in the song's JSON).
+      The bass by mood (`when` on a pattern): octave or root 8ths and 16ths when the energy is up, a held sub when
+      it's low. A new **arp** member (`flow.arp_part`): a shape a section (up, up and down, broken, climb, pedal)
+      round each chord's tones from C4, 16ths, or 8ths when the energy is low; checked (one note at a time, chord
+      tones, its range); it stays under the lead. The programmed drummer generalised: the snare's beats a style (2
+      and 4) or a kick pattern (half time on 3 for calm sections), tom fills high to floor into a section; the check
+      takes each bar's allowed snare beats. Harmony: six four-bar families (the aeolian loop i-bVI-bIII-bVII first;
+      two major ones for a lifted key), rounds mostly as written, half the phrases landing home. Tempo 112, full
+      from the first beat. The tempo stays one a play: the calm sections slow by the drums going half time, not by
+      a tempo change. 198 tests (`tests/unit/test_synthwave.py`), exam and parity pass; drift: every target met
+      (melody copies 3%; trap's unchanged). Trap's clips are byte-identical.
+- [ ] Listen after 3.4b: `clips/synthwave/synthwave_14` (32 bars: 16 outrun bars, a tom fill, 16 dreamy bars).
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

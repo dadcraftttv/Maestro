@@ -96,11 +96,17 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
     v_pad, v_bass, v_mel = LEVELS.get(style, (70, 100, 84))
     for role, program, level in zip(_PLAYED, SOUNDS[style], (v_pad, v_bass, v_mel)):
         member, feel = song.member(role, role, program), feel_for(style, role)
+        member.pump = part(style, "members", role).get("pump", 0)
         for st, length, m in take[role]:
             member.add(st, length, m, level if role == "pad" else velocity(st % met.bar, met, feel, level))
         if role == "bass":                   # trap's 808 slides, as pitch bends
             for sl in take["slides"]:
                 member.slide(*sl)
+    if take["arp"]:                          # synthwave's arp (task 3.4b)
+        a = part(style, "members", "arp")
+        member, feel = song.member("arp", "arp", a.get("sound", 81)), feel_for(style, "arp")
+        for st, length, m in take["arp"]:
+            member.add(st, length, m, velocity(st % met.bar, met, feel, a.get("level", 64)))
     for r in take["bars"]:
         song.timeline.append({"bar": r["bar"], "tempo": bpm, "meter": met.name, "key": str(r["key"]),
                               "chord": name(r["chord"], r["key"]), "section": {"kind": r["section"].kind},
@@ -121,7 +127,10 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
     for why in check_band_rhythm(parts, met, clave if clave and clave.two_sided else None):
         lines.append(f"  band check: {why}")
     short = summary(style, seed, bars, bpm, take)
-    song.listen = " ".join(short[1:]) + " Sounds are GM stand-ins."
+    gm = [m.name for m in song.members if not isinstance(m.program, str)]
+    song.listen = " ".join(short[1:]) + (f" Sounds: Maestro's own, {', '.join(gm)} GM stand-ins." if gm and len(gm) <
+                                         len(song.members) else " Sounds are GM stand-ins." if gm else
+                                         " Sounds are Maestro's own (synth.py).")
     return song, short + ["", "In detail:"] + lines
 
 

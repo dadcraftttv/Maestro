@@ -35,7 +35,7 @@ def test_a_wave_builds_then_releases():
 def test_a_full_opening_starts_at_the_top():
     p = Play(rng(), A_MIN, FORM["power_rock"])
     assert p.arc(0) >= 0.6
-    assert Play(rng(), A_MIN, FORM["synthwave"]).arc(0) == 0
+    assert Play(rng(), A_MIN, FORM["plain"]).arc(0) == 0
 
 
 def test_a_long_play_rises_and_falls_more_than_once():

@@ -25,7 +25,7 @@ from dataclasses import dataclass, field
 from ..stylebook import STYLES, StyleError, part
 from .chords import Chord, _resolves_to, function, name, outside, parse_roman, pool, two_five
 from .form import WORDS, _draw
-from .rhythm import check_clave
+from .rhythm import VALUES, check_clave
 from .voicing import member_range
 
 SIXTEENTH = 6        # grid steps in a 16th
@@ -350,10 +350,13 @@ class Pattern:
     bars: int = 1
     weight: int = 1
     why: str = ""
+    when: str = "any"    # the energy it plays at: "low" (under 0.5), "high" or "any" (synthwave's moods)
 
     def __post_init__(self):
         if self.bars not in (1, 2) or self.weight < 1:
             raise ValueError(f"{self.name}: 1 or 2 bars, weight at least 1")
+        if self.when not in ("low", "high", "any"):
+            raise ValueError(f"{self.name}: when low, high or any")
         ats = [n[0] for n in self.notes]
         if not ats or ats != sorted(set(ats)) or ats[0] < 0 or ats[-1] >= 16 * self.bars:
             raise ValueError(f"{self.name}: notes go in order, one a 16th, inside its {self.bars} bar(s) of 4/4")
@@ -402,11 +405,11 @@ def _bass_flow(style):
         if n == "why":
             continue
         try:
-            extra = set(p) - {"notes", "bars", "weight", "why"}
+            extra = set(p) - {"notes", "bars", "weight", "why", "when"}
             if extra:
-                raise ValueError(f"unknown part {sorted(extra)[0]!r} (known: notes, bars, weight, why)")
+                raise ValueError(f"unknown part {sorted(extra)[0]!r} (known: notes, bars, weight, why, when)")
             pats.append(Pattern(n, tuple(tuple(x) for x in p["notes"]), p.get("bars", 1), p.get("weight", 1),
-                                p.get("why", "")))
+                                p.get("why", ""), p.get("when", "any")))
         except (ValueError, TypeError, KeyError) as e:
             raise StyleError(f"{where}.patterns.{n}: {e}") from None
     variants = {**BASS_VARIANTS, **_weights(d.get("variants", {}), BASS_VARIANTS, f"{where}.variants")}
@@ -463,6 +466,7 @@ def bass_part(rng, bf, spans, key_at, start, bars, met, energy, prev=None, clave
     last bass note, so the line carries on from it. `key_at(step)`: the key there (a note ahead may fall in the
     next section, after a key change)."""
     fits = [p for p in bf.patterns if bars % p.bars == 0]
+    fits = [p for p in fits if p.when == "any" or (p.when == "low") == (energy < 0.5)] or fits   # by the mood
     pat = fits[_draw(rng, {i: p.weight * (bf.stay if p == prev else 1) for i, p in enumerate(fits)})]
     weights = dict(bf.variants)
     for k in ("approach", "octave"):
@@ -864,4 +868,81 @@ def check_loop(notes, spans, key, floor):
     good = sum((n[2] - key.tonic) % 12 in {t % 12 for t in chord_at(spans, n[0]).chord.tones} for n in on)
     if on and good / len(on) < CHORD_TONES:
         return f"only {good} of {len(on)} notes on the beat are chord tones"
+    return None
+
+
+# ---- the arp (synthwave, task 3.4b) ----
+
+# a shape: which of the chord's tones (counted up from the arp's floor) it plays, in order, round and round
+ARP_SHAPES = {"up": (0, 1, 2, 3), "down": (3, 2, 1, 0), "up and down": (0, 1, 2, 3, 2, 1), "broken": (0, 2, 1, 3)}
+ARP_FLOOR = 60                   # C4: the arp's tones climb from the first chord tone at or over it
+ARP_RATES = ("8th", "16th")
+
+
+@dataclass(frozen=True)
+class ArpFlow:
+    shapes: tuple = tuple((n, s, 1) for n, s in ARP_SHAPES.items())   # (name, tones, weight)
+    rates: tuple = (("16th", 1),)  # (note value, weight) when the energy is up
+    calm: str = "8th"              # its rate under energy 0.5: slower, colder (the dreamy sections)
+    stay: int = 3                  # times likelier a section keeps the shape before
+    floor: int = ARP_FLOOR
+
+
+def _arp_flow(style):
+    d, where = part(style, "members", "arp"), f"{style}: members.arp"
+    if not d:
+        return None
+    shapes = []
+    for n, x in d.get("shapes", {k: {"tones": list(v)} for k, v in ARP_SHAPES.items()}).items():
+        if n == "why":
+            continue
+        t = x.get("tones") if isinstance(x, dict) else None
+        if not isinstance(t, list) or not 2 <= len(t) <= 8 or any(not isinstance(i, int) or not 0 <= i <= 6 for i in t):
+            raise StyleError(f"{where}.shapes.{n}: \"tones\", 2 to 8 of the chord's tones counted up from the floor, 0-6")
+        shapes.append((n, tuple(t), x.get("weight", 1)))
+    rates = tuple((k, w) for k, w in d.get("rate", {"16th": 1}).items() if k != "why")
+    if any(k not in ARP_RATES for k, _ in rates) or d.get("calm", "8th") not in ARP_RATES:
+        raise StyleError(f"{where}: rate and calm among {', '.join(ARP_RATES)}")
+    return ArpFlow(tuple(shapes), rates, d.get("calm", "8th"))
+
+
+ARPS = {s: _arp_flow(s) for s in STYLES}   # None: the band has no arp
+
+
+def _ladder(chord, key, floor, top):
+    """The chord's tones from the floor up to `top`, as MIDI notes."""
+    pcs = {(key.tonic + t) % 12 for t in chord.tones}
+    return [m for m in range(floor, top + 1) if m % 12 in pcs]
+
+
+def arp_part(rng, af, spans, key_at, start, bars, met, energy, prev=None):
+    """One section's arp: (notes as (step, length, MIDI note), its shape, lines). A shape and a rate a section (the
+    slower rate when the energy is low), round and round over each chord's tones, starting again on each chord."""
+    shape = af.shapes[_draw(rng, {i: s[2] * (af.stay if s == prev else 1) for i, s in enumerate(af.shapes)})]
+    rate = af.calm if energy < 0.5 else _draw(rng, dict(af.rates))
+    step, r = VALUES[rate], member_range("arp")
+    lo, hi = start * met.bar, (start + bars) * met.bar
+    out = []
+    for sp in spans:
+        if not lo <= sp.at < hi:
+            continue
+        ladder = _ladder(sp.chord, key_at(sp.at), max(af.floor, r.low), r.high)
+        for k, at in enumerate(range(sp.at, sp.at + sp.length, step)):
+            out.append((at, step, ladder[min(shape[1][k % len(shape[1])], len(ladder) - 1)]))
+    lines = [f"  arp: {shape[0]} in {rate}s over each chord's tones" + (" (kept)" if shape == prev else "")
+             + (", slower for the low energy" if energy < 0.5 else "")]
+    return out, shape, lines
+
+
+def check_arp(notes, spans, key_at):
+    """None when the arp fits, else the reason: one note at a time, each a tone of its chord, inside its range."""
+    r = member_range("arp")
+    for i, (st, length, m) in enumerate(notes):
+        if i + 1 < len(notes) and st + length > notes[i + 1][0]:
+            return f"two arp notes at once at step {st}"
+        if not r.low <= m <= r.high:
+            return f"an arp note {m} outside its range"
+        ch, key = chord_at(spans, st).chord, key_at(st)
+        if (m - key.tonic) % 12 not in {t % 12 for t in ch.tones}:
+            return f"an arp note at step {st} off its chord"
     return None

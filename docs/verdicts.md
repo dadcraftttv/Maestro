@@ -251,3 +251,7 @@ isn't reloaded every session; grep for the part a task needs.
   of. just bear in mind it will probably be copyright material. in general, i'm not crazy about what i'm hearing
   for trap so far beyond the bass." Decision 9 now lets a looping melody repeat freely (`drift.py`: the riff's
   row "free"). The riff every other round, the strings two voices, the cascade off. Trap waits for his reference.
+- Oct 24: 3.4b's plan (synthwave). DadCraft approved all seven proposals (own sounds, the bass by mood, an arp,
+  harmony families, a programmed drummer, a phrased lead, tempo by mood); light pumping; the RTRO-DRM loops later.
+  Asked which synthwave to aim for, he asked for a recommendation: outrun as the core, the dreamy side (The
+  Midnight's) for calm sections, darksynth kept for blends. "yes, go with outrun core and dreamy calm sections".

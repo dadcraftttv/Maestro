@@ -153,11 +153,11 @@ def test_the_808_and_its_kit_are_rendered(tmp_path):
     song, _ = flow_sketch("trap", 300, 8)
     stem = str(tmp_path / "t")
     song.write(stem)
-    assert play._own(stem + ".mid") == {"bass": "808", "drums": "808 kit"}
+    assert play._own(stem + ".mid") == {"bass": ("808", 0), "drums": ("808 kit", 0)}
     midi = mido.MidiFile(stem + ".mid")
     n = int(midi.length * synth.RATE)
-    bass = play._synth_tracks(midi, {"bass": "808"}, n)
-    kit = play._synth_tracks(midi, {"drums": "808 kit"}, n)
+    bass = play._synth_tracks(midi, {"bass": ("808", 0)}, n)[:, 0]   # mono, on both sides
+    kit = play._synth_tracks(midi, {"drums": ("808 kit", 0)}, n)
     assert np.max(np.abs(bass)) > 0.05 and np.max(np.abs(kit)) > 0.05
     assert np.all(np.isfinite(bass)) and np.all(np.isfinite(kit))
     spec = np.abs(np.fft.rfft(bass))                     # the 808 lives low: most of its energy under 150 Hz

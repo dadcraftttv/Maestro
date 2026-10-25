@@ -21,7 +21,8 @@ entry's own written patterns instead (members.drums.patterns): kick patterns ove
 hat patterns an 8th at a time with the rolls written in, louder as they run, the clap fixed on 3; machine-steady
 velocities. A section draws a kick and a hat pattern by its energy and mostly keeps them; the kick may vary a note
 from round to round. The kick and clap drop out for the end of a section before the next one, and the play may open
-on the hats alone (the 808 rests with them). The check rules out a hit off the grid or outside the clip, two of one drum on one
+on the hats alone (the 808 rests with them). Synthwave's (task 3.4b) puts its snare on 2 and 4, half time (on 3) where
+a calm kick pattern says so, and fills into a section with the toms, high to floor. The check rules out a hit off the grid or outside the clip, two of one drum on one
 step, more than two hands at once and a groove without its backbeat (with a fixed backbeat: a snare anywhere
 else). Tendencies, never a fixed part (decision 9)."""
 import json, os
@@ -154,12 +155,13 @@ def _drummer(style):
 
 @dataclass(frozen=True)
 class KickPattern:
-    """Two bars of kicks, as the 16ths of each bar."""
+    """Two bars of kicks, as the 16ths of each bar; `snare`: the beats its snare plays on (none: the drummer's)."""
     name: str
     bars: tuple
     weight: int = 1
     when: str = "any"
     why: str = ""
+    snare: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -180,19 +182,22 @@ STEADY = {"kick": 118, "snare": 112, "beat": 96, "eighth": 86, "sixteenth": 70, 
 
 @dataclass(frozen=True)
 class Programmed:
-    """A drummer playing the style's own written patterns (trap)."""
+    """A drummer playing the style's own written patterns (trap, synthwave)."""
     kicks: tuple
     hats: tuple
     stay: int = 4        # times more likely a section keeps the patterns of the one before
     vary: int = 25       # % of rounds the kick moves, adds or drops a note
     drop: int = 50       # % of section ends where the kick and clap (and the 808) drop out for the last bar
     intro: int = 4       # bars of hats alone at the play's start (0: none)
-    fixed: bool = True   # the clap only on 3 (the check)
+    fixed: tuple = ((3,),)   # the sets of beats a bar's snares may fall on (the check)
     turns: int = 0
     roll: int = 60       # % of section ends with a snare roll over the last two beats (16ths, then 32nds)
     cascade: int = 50    # % of 8-bar runs (a section's end, when it has no roll) ending in the falling cascade
     cymbals: int = 100   # % of new sections entered with a reversed cymbal swelling in and a crash
     riser: int = 50      # % of section ends with a riser over their last two bars
+    snare: tuple = (3,)  # the beats the snare (or clap) plays on, unless a kick pattern says its own
+    voice: str = "clap"  # what the backbeat is called in words
+    toms: int = 0        # % of section ends with a tom fill (synthwave), when there's no roll
 
 
 def _programmed(style, d, where):
@@ -217,15 +222,39 @@ def _programmed(style, d, where):
                 bars = tuple(tuple(c) for c in cells)
             if x.get("when", "any") not in ("low", "high", "any") or not isinstance(x.get("weight", 1), int):
                 raise StyleError(f"{w}: when low, high or any; a whole-number weight")
-            out.append(cls(n, bars, x.get("weight", 1), x.get("when", "any"), x.get("why", "")))
+            extra = set(x) - {"bars", "weight", "when", "why"} - ({"snare"} if kind == "kicks" else set())
+            if extra:
+                raise StyleError(f"{w}: unknown part {sorted(extra)[0]!r}")
+            more = {"snare": _beats(x["snare"], f"{w}.snare")} if "snare" in x else {}
+            out.append(cls(n, bars, x.get("weight", 1), x.get("when", "any"), x.get("why", ""), **more))
     if not kicks or not hats:
         raise StyleError(f"{where}.patterns: both kicks and hats")
-    for k in ("stay", "vary", "drop", "intro", "roll", "cascade", "cymbals", "riser"):
+    for k in ("stay", "vary", "drop", "intro", "roll", "cascade", "cymbals", "riser", "toms"):
         if k in p and (not isinstance(p[k], int) or isinstance(p[k], bool) or p[k] < 0):
             raise StyleError(f"{where}.patterns.{k}: a whole number, 0 or more")
+    default = _beats(p.get("snare", [3]), f"{where}.patterns.snare")
+    if p.get("voice", "clap") not in ("clap", "snare"):
+        raise StyleError(f"{where}.patterns.voice: \"clap\" or \"snare\"")
     return Programmed(tuple(kicks), tuple(hats), p.get("stay", 4), p.get("vary", 25), p.get("drop", 50),
                       p.get("intro", 4), roll=p.get("roll", 60), cascade=p.get("cascade", 50),
-                      cymbals=p.get("cymbals", 100), riser=p.get("riser", 50))
+                      cymbals=p.get("cymbals", 100), riser=p.get("riser", 50),
+                      snare=default, voice=p.get("voice", "clap"),
+                      toms=p.get("toms", 0), fixed=tuple(sorted({k.snare or default for k in kicks})))
+
+
+def _beats(b, where):
+    if not isinstance(b, list) or not b or b != sorted(set(b)) or any(x not in (1, 2, 3, 4) for x in b):
+        raise StyleError(f"{where}: the beats, 1 to 4, in order")
+    return tuple(b)
+
+
+def _on(beats):
+    """Beats in words: "3", "2 and 4"."""
+    return " and ".join(str(b) for b in beats)
+
+
+def snares_of(dr, kick):
+    return kick.snare or dr.snare
 
 
 def _fit(rng, pats, energy, prev, stay):
@@ -260,7 +289,8 @@ def _vary_kick(rng, bars):
 
 def programmed_part(rng, dr, recs, met, phrase, end):
     """The programmed drummer over `recs` (a record a bar), up to step `end`: ([(step, length, MIDI note,
-    velocity, voice)], [(section, line)]). Two bars a round; the clap on 3 of each bar."""
+    velocity, voice)], [(section, line)]). Two bars a round; the clap (or snare) on its beats each bar: trap's on 3,
+    synthwave's on 2 and 4, or on 3 under a half-time kick pattern."""
     hits, lines = [], []
     sec, kick, hat, drops, swelling, crash_here = None, None, None, 0, False, False
     first = recs[0]["section"] if recs else None
@@ -271,19 +301,26 @@ def programmed_part(rng, dr, recs, met, phrase, end):
         if s is not sec:
             sec = s
             kick, hat = _fit(rng, dr.kicks, e, kick, dr.stay), _fit(rng, dr.hats, e, hat, dr.stay)
-            lines.append((s, f"  drums: programmed; kick {kick.name}, hats {hat.name}, the clap on 3"))
+            lines.append((s, f"  drums: programmed; kick {kick.name}, hats {hat.name}, the {dr.voice} on "
+                             f"{_on(snares_of(dr, kick))}"))
             dropping = s.end - s.start >= 4 and _chance(rng, dr.drop)
             if dropping:
                 drops += 1
-                lines.append((s, f"  drums, bar {s.end}: the kick and clap (and the 808) drop out for the last bar"))
+                lines.append((s, f"  drums, bar {s.end}: the kick and {dr.voice}{' (and the 808)' if dr.voice == 'clap' else ''} "
+                                 f"drop out for the last bar"))
             more = s.end * met.bar < end                  # another section follows inside the clip
             rolling = more and _chance(rng, dr.roll)
             falling = more and not rolling and _chance(rng, dr.cascade)       # or the cascade ends the section
+            tumbling = more and not rolling and not falling and dr.toms > 0 and _chance(rng, dr.toms)   # or a tom fill
+            tom_beats = 2 if e >= 0.6 else 1
             rising = more and s.end - s.start >= 8 and _chance(rng, dr.riser)
             if rolling:
                 lines.append((s, f"  drums, bar {s.end}: a snare roll into the next section"))
             if falling:
                 lines.append((s, f"  drums, bar {s.end}: the falling cascade into the next section"))
+            if tumbling:
+                lines.append((s, f"  drums, bar {s.end}: a tom fill over the last {'two beats' if tom_beats == 2 else 'beat'}"
+                                 f", high to floor, into the next section"))
             if rising:
                 lines.append((s, f"  drums, bar {s.end - 1}: a riser over the last two bars"))
             crash_here, swelling = swelling, more and _chance(rng, dr.cymbals)   # this section's crash, the next's swell
@@ -308,20 +345,27 @@ def programmed_part(rng, dr, recs, met, phrase, end):
             b0 = at + i * met.bar
             quiet = bar < intro or (dropping and bar == s.end - 1)
             last = bar == s.end - 1
-            fill = ("roll" if rolling else "cascade" if falling else None) if last else \
+            fill = ("roll" if rolling else "cascade" if falling else "toms" if tumbling else None) if last else \
                 "cascade" if (bar + 1 - s.start) % phrase == 0 and _chance(rng, dr.cascade) else None
-            cut = b0 + met.beats[2] if fill else b0 + met.bar   # from 3 on, the fill alone (and the clap)
+            cut = b0 + met.beats[4 - tom_beats] if fill == "toms" else b0 + met.beats[2] if fill else b0 + met.bar
+            #     from 3 on (the toms: 3 or 4), the fill alone (and the clap on its beat)
             if fill == "cascade" and not last:
                 lines.append((s, f"  drums, bar {bar + 1}: the falling cascade, the end of an 8-bar run"))
             if not quiet:
                 for p in bars[i]:
                     if b0 + p * SIXTEENTH < cut:
                         add(b0 + p * SIXTEENTH, "kick", STEADY["kick"])
-                add(b0 + met.beats[2], "snare", STEADY["snare"])
+                for beat in snares_of(dr, kick):
+                    if b0 + met.beats[beat - 1] <= cut:
+                        add(b0 + met.beats[beat - 1], "snare", STEADY["snare"])
             if fill == "roll":                            # 16ths on 3, 32nds on 4, louder as it goes
                 steps = [cut + k * SIXTEENTH for k in range(4)] + [cut + 24 + k * 3 for k in range(8)]
                 for k, st in enumerate(steps):
                     add(st, "roll", 40 + 70 * k / (len(steps) - 1))
+            elif fill == "toms":                          # 16ths stepping down the toms, two a drum
+                steps = [cut + k * SIXTEENTH for k in range(4 * tom_beats)]
+                for k, st in enumerate(steps):
+                    add(st, TOMS[min(2, 3 * k // len(steps))], 96 + 20 * k / max(1, len(steps) - 1))
             elif fill == "cascade":                       # 16ths stepping down, each hit short and separate
                 for k in range(8):
                     add(cut + k * SIXTEENTH, "cascade", 104, note=CASCADE[k])
@@ -536,17 +580,20 @@ def check_drums(hits, met, end, half=False, fixed=False):
             continue
         if "snare" not in cells:
             return f"bar {u // met.bar + 1}: no backbeat"
-    if fixed:
-        scale = unit // 16
-        on = {u + p * scale for u in range(0, end - unit + 1, unit) for p in BACKBEAT}
-        for step, cell in sorted(at.items()):
-            if "snare" in cell and step not in on:
-                return f"a snare off the backbeat on {met.count(step)} (bar {step // met.bar + 1})"
+    if fixed:   # each bar's snares on one of the allowed sets of beats, and on every one of that set
+        sets = fixed if isinstance(fixed, tuple) else ((3,),) if half else ((2, 4),)
         half_bar = met.bar // 2
         loud = {s // half_bar for s, c in at.items() if {"kick", "snare"} & set(c)}
-        for step in sorted(on):
-            if step // half_bar not in loud:                   # a drop-out
+        for b0 in range(0, end - met.bar + 1, met.bar):
+            on = {s for s, c in at.items() if b0 <= s < b0 + met.bar and "snare" in c}
+            if not on:
                 continue
-            if "snare" not in at.get(step, []) and not any(v in TOMS for v in at.get(step, [])):
-                return f"no snare on {met.count(step)} (bar {step // met.bar + 1})"
+            fit = next((bs for bs in sets if on <= {b0 + met.beats[x - 1] for x in bs}), None)
+            if fit is None:
+                step = min(on - {b0 + met.beats[x - 1] for x in sets[0]} or on)
+                return f"a snare off the backbeat on {met.count(step)} (bar {step // met.bar + 1})"
+            for x in fit:
+                step = b0 + met.beats[x - 1]
+                if step // half_bar in loud and not {"snare", "roll", "cascade", *TOMS} & set(at.get(step, [])):
+                    return f"no snare on {met.count(step)} (bar {step // met.bar + 1})"
     return None

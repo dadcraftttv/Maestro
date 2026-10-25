@@ -15,7 +15,7 @@ from itertools import groupby
 from .rng import ComposerRng, fresh_seed
 from .stylebook import part
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
-from .theory.flow import BASS, FLOW, bass_808, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
+from .theory.flow import ARPS, BASS, FLOW, arp_part, bass_808, check_arp, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
     check_loop, held, loop_melody, LOOPS, phrase_melody, progression
 from .theory.drums import DRUMMER, check_drums, drum_part, quiet_spans
 from .theory.form import DEVELOPS, FORM, WORDS, Play, Theme, explain_section
@@ -258,6 +258,16 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     # the drums and the percussion over the whole play (task 3.3), their words with each section
     if not bf.kick:
         drums = draw_drums()
+    # the arp (synthwave): a shape a section, round and round over each chord's tones
+    arp, shape = [], None
+    if ARPS[style]:
+        for p in plan:
+            s = p["section"]
+            notes, shape, lines = arp_part(rng, ARPS[style], spans, key_at, s.start, s.bars, met, s.energy, shape)
+            p["lines"] += lines
+            p["arp"] = lines[0].split(": ", 1)[1]
+            arp += notes
+        kit_why.append(("arp", check_arp(arp, spans, key_at)))
     percussion = []
     if PERCUSSION[style]:
         percussion, said = percussion_part(rng, PERCUSSION[style], every, met, whole, clave)
@@ -287,7 +297,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         s = play.section_at(b)
         recs.append({"bar": b, "section": s, "key": s.key, "energy": s.energy_at(b),
                      "chord": chord_at(spans, b * met.bar).chord})
-    take = {"pad": cut(pad), "bass": cut(bass), "melody": cut(melody), "bars": recs,
+    take = {"pad": cut(pad), "bass": cut(bass), "melody": cut(melody), "arp": cut(arp), "bars": recs,
             "slides": [sl for sl in slides if sl[0] + sl[1] < end],
             "drums": [h for h in drums if h[0] < end], "percussion": [h for h in percussion if h[0] < end],
             "plan": [p for p in plan if p["section"].start < bars], "spans": [s for s in spans if s.at < end]}
@@ -343,6 +353,9 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
             out.append(f"Percussion, bars {a}-{b}: {parts}" + ("; an abanico into the next section" if closes else "")
                        + ".")
     out.append("Pad: holds each chord, its voices moving the shortest way, under the melody.")
+    if take.get("arp"):
+        out.append("Arp: " + "; ".join(f"bars {p['section'].start + 1}-{min(p['section'].end, bars)}, {p['arp']}"
+                                      for p in plan) + ".")
     phrases = [ph for p in plan for ph in p["phrases"]][:max(1, bars // FORM[style].phrase)]
     n = FORM[style].phrase
     if LOOPS[style]:
@@ -363,6 +376,12 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
                    "do the hats roll rather than tick, the clap staying put on 3; does the bell's riff go round like "
                    "trap's, its triplets over the grid; do the hats-alone opening and the drop before a section "
                    "keep it from feeling stuck.")
+        return out
+    if ARPS[style]:                             # synthwave's own questions (task 3.4b)
+        out.append("Listen for: does it feel like outrun when the energy is up (the bass driving in 8ths, the snare "
+                   "big on 2 and 4, the arp sparkling in 16ths) and turn dreamy when it's low (a held bass, the drums "
+                   "at half time, the arp in 8ths); does the lead stay on top and sing; do the pad and bass breathe "
+                   "with the kick without pumping like EDM; do the tom fills lead into the next section.")
         return out
     out.append("Listen for: does it flow, chords going round and coming home rather than wandering; does the bass "
                "feel like the style; does each phrase sound like a question and its answer"

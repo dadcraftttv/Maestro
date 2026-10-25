@@ -54,21 +54,26 @@ def _lib():
 
 
 def _own(mid):
-    """{track name: Maestro's own sound} from the clip's JSON."""
+    """{track name: (Maestro's own sound, how deep it ducks under the kick, 0-1)} from the clip's JSON."""
     info = mid[:-4] + ".json"
     if not os.path.exists(info):
         return {}
     members = json.load(open(info)).get("members", {})
-    return {n: m["sound"] for n, m in members.items() if m.get("sound") in synth.SYNTHS}
+    return {n: (m["sound"], m.get("pump", 0) / 100) for n, m in members.items() if m.get("sound") in synth.SYNTHS}
+
+
+OWN = {"supersaw": synth.supersaw, "saw bass": synth.saw_bass, "pluck": synth.pluck, "saw lead": synth.saw_lead}
 
 
 def _synth_tracks(midi, own, length):
-    """Maestro's own sounds for the tracks named in `own`, mixed, mono, `length` samples."""
+    """Maestro's own sounds for the tracks named in `own`, mixed, stereo, `length` samples: each with its echo and
+    reverb (`synth.MIX`), ducking under the kit's kicks as deep as its `pump`."""
     sec = 60 / mido.tempo2bpm(next((m.tempo for m in midi.tracks[0] if m.type == "set_tempo"), 500000))
-    out = np.zeros(length)
+    out, kicks, parts = np.zeros((length, 2)), [], []
     for tr in midi.tracks:
         if tr.name not in own:
             continue
+        sound, depth = own[tr.name]
         now, held, notes, hits, bends = 0, {}, [], [], []
         for m in tr:
             now += m.time
@@ -83,10 +88,24 @@ def _synth_tracks(midi, own, length):
                 last[1] = last[1] or t
             elif m.type == "pitchwheel":
                 bends.append((t, m.pitch / 8192 * 12))
-        if own[tr.name] == "808":
-            out += synth.bass_808(notes, bends, length)
+        if sound == "808":
+            x = synth.bass_808(notes, bends, length)[:, None].repeat(2, 1)
+        elif sound == "808 kit":
+            x = synth.kit_808([(a, b or a + 0.1, n, v) for a, b, n, v in hits], length)[:, None].repeat(2, 1)
+        elif sound == "linn kit":
+            x = synth.linn_kit([(a, b or a + 0.1, n, v) for a, b, n, v in hits], length)
         else:
-            out += synth.kit_808([(a, b or a + 0.1, n, v) for a, b, n, v in hits], length)
+            x = OWN[sound](notes, length)
+        if sound.endswith("kit"):
+            kicks += [h[0] for h in hits if h[2] == 36]
+        wet_echo, feedback, wet_room, room = synth.MIX.get(sound, (0, 0, 0, 0))
+        if wet_echo:
+            x = synth.echo(x, sec, wet_echo, feedback)
+        if wet_room:
+            x = synth.reverb(x, room, wet_room)
+        parts.append((x, depth))
+    for x, depth in parts:
+        out += x * synth.pump(length, kicks, depth)[:, None] if depth and kicks else x
     return out
 
 
@@ -105,8 +124,8 @@ def render(mid, wav, sf2=None):
         with wave.open(os.path.join(tmp, "gm.wav")) as w:
             ch, frames = w.getnchannels(), w.readframes(w.getnframes())
     gm = np.frombuffer(frames, dtype="<i2").reshape(-1, ch).astype(float) / 32768
-    mono = _synth_tracks(midi, own, len(gm))
-    mix = gm + mono[:, None]
+    own_mix = _synth_tracks(midi, own, len(gm))
+    mix = gm + (own_mix if gm.shape[1] == 2 else own_mix.mean(1, keepdims=True))
     peak = np.max(np.abs(mix))
     if peak > 0:                         # its peak at about -1 dB
         mix *= 0.89 / peak

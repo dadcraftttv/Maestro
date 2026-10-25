@@ -1,15 +1,15 @@
 {
   "style": "synthwave",
   "license": "CC BY-SA 4.0",
-  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)", "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)"],
+  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2); outrun's drive at 112 (task 3.4b)", "DadCraft's production notes (docs/taste.md, Oct 23): the bass carrying the groove three ways, high sparkle arps and cold 8th arps, supersaw pads, minor for urgency, fast tracks full from the first beat", "Task 3.4b (Oct 24): DadCraft chose outrun as the core with dreamy calm sections, and light pumping; the patterns and sounds are what's widely known of the style (80s polysynths, the LinnDrum and its gated reverb, outrun's octave bass), in our own words"],
   "time": {
-    "tempo": 100,
+    "tempo": 112,
     "rhythm": {
       "why": "Straight 8ths and 16ths, on the beat.",
       "lift": 3
     },
     "feel": {
-      "why": "Straight, even.",
+      "why": "Straight, even: a machine's steadiness.",
       "*": {
         "accent": 10
       }
@@ -28,13 +28,28 @@
       "fifths": 0,
       "octaves": 0,
       "spread": 12
+    },
+    "progressions": {
+      "why": "Four-bar loops of a chord a bar, mostly natural minor's own bVI, bIII and bVII (no leading tone: it circles rather than resolves); a bright major loop when a section lifts to a major key. Loops come round as they were, now and then coloured; half the phrases land home.",
+      "families": {
+        "aeolian loop": {"chords": "i | bVI | bIII | bVII", "weight": 4, "why": "the classic: home, the chord a semitone over its fifth, the relative major, the step under home"},
+        "climb home": {"chords": "i | i | bVI | bVII", "weight": 2, "why": "home held, then the two chords that climb back to it"},
+        "minor four": {"chords": "i | iv | bVI | bVII", "weight": 2, "why": "the subdominant first, then the climb"},
+        "turning": {"chords": "i | bVII | bVI | bVII", "weight": 2, "why": "rocking between the steps under home"},
+        "glow": {"chords": "I | V | vi | IV", "weight": 2, "why": "for a major key: the bright four-chord loop"},
+        "sunset": {"chords": "vi | IV | I | V", "weight": 1, "why": "for a major key: the same loop from its relative minor, wistful"}
+      },
+      "variants": {"again": 8, "swap": 1, "colour": 2, "approach": 0, "turnaround": 0},
+      "stay": 4,
+      "cadence": 50
     }
   },
   "form": {
-    "why": "Long swells, a key lift.",
+    "why": "Outrun starts at full energy (DadCraft's notes: fast tracks from the first beat); long waves, a key lift a step up.",
     "phrase": 8,
     "wave": [4, 7],
     "depth": 0.6,
+    "opening": "full",
     "change": 25,
     "moves": {
       "step_up": 2,
@@ -45,27 +60,78 @@
     "modes": ["minor", "major", "dorian"]
   },
   "members": {
-    "why": "Polysynth, synth bass 2, saw lead; the saw lead and polysynth are loud, so their levels are lower.",
+    "why": "Maestro's own sounds (synth.py): a supersaw pad, a saw bass, a plucked arp, a saw lead, a LinnDrum-style kit. The pad and bass duck lightly under the kick (DadCraft, Oct 24: light pumping).",
     "pad": {
-      "sound": 90,
-      "level": 48
+      "sound": "supersaw",
+      "level": 70,
+      "pump": 35
     },
     "bass": {
-      "sound": 39,
-      "level": 76
+      "why": "The bass carries the groove (DadCraft's notes): octave or root 8ths locked to the kick when the energy is up (outrun), a held sub when it's low (dreamy).",
+      "sound": "saw bass",
+      "level": 104,
+      "pump": 20,
+      "patterns": {
+        "octave eighths": {"notes": [[0, 2, "root", "now"], [2, 2, "octave", "now"], [4, 2, "root", "now"], [6, 2, "octave", "now"], [8, 2, "root", "now"], [10, 2, "octave", "now"], [12, 2, "root", "now"], [14, 2, "octave", "now"]], "weight": 4, "when": "high", "why": "outrun's own: the root and its octave in 8ths"},
+        "root eighths": {"notes": [[0, 2, "root", "now"], [2, 2, "root", "now"], [4, 2, "root", "now"], [6, 2, "root", "now"], [8, 2, "root", "now"], [10, 2, "root", "now"], [12, 2, "root", "now"], [14, 2, "root", "now"]], "weight": 3, "when": "high", "why": "driving 8ths on the root"},
+        "rolling sixteenths": {"notes": [[0, 1, "root", "now"], [1, 1, "root", "now"], [2, 1, "root", "now"], [3, 1, "root", "now"], [4, 1, "root", "now"], [5, 1, "root", "now"], [6, 1, "root", "now"], [7, 1, "root", "now"], [8, 1, "root", "now"], [9, 1, "root", "now"], [10, 1, "root", "now"], [11, 1, "root", "now"], [12, 1, "root", "now"], [13, 1, "root", "now"], [14, 1, "octave", "now"], [15, 1, "root", "now"]], "weight": 1, "when": "high", "why": "16ths on the root, the octave before the bar line"},
+        "held sub": {"notes": [[0, null, "root", "now"]], "weight": 3, "when": "low", "why": "a clean sub under the melody, held through the bar"},
+        "sub and nudge": {"notes": [[0, null, "root", "now"], [10, null, "root", "now"]], "weight": 2, "when": "low", "why": "the held root, struck again on the and of 3"}
+      },
+      "variants": {"again": 8, "drop": 0, "approach": 1, "octave": 1}
+    },
+    "arp": {
+      "why": "A high sparkle arp in 16ths when the energy is up; colder, slower 8ths when it's low (DadCraft's notes). A shape a section, round each chord's tones, an echo on the dotted 8th.",
+      "sound": "pluck",
+      "level": 76,
+      "shapes": {
+        "up": {"tones": [0, 1, 2, 3], "weight": 3},
+        "up and down": {"tones": [0, 1, 2, 3, 2, 1], "weight": 2},
+        "broken": {"tones": [0, 2, 1, 3], "weight": 2},
+        "climb": {"tones": [0, 1, 2, 3, 4, 5], "weight": 1},
+        "pedal": {"tones": [0, 2, 0, 3, 0, 4], "weight": 1}
+      },
+      "rate": {"16th": 3, "8th": 1},
+      "calm": "8th"
     },
     "melody": {
-      "sound": 81,
-      "level": 58
+      "why": "A singable lead on top, shaped over the phrase (DadCraft's notes: the melody must stay on top).",
+      "sound": "saw lead",
+      "level": 100
     },
     "drums": {
-      "why": "A drum machine's steadiness: dance and pop grooves, closed hats, few ghost notes, short fills.",
+      "why": "A drum machine (LinnDrum-style): the snare big on 2 and 4 with its gated reverb, four on the floor or a motorik kick, 8th or 16th hats, open hats on the and; at low energy the kick and snare go half time (the dreamy sections). Tom fills, high to floor, into a new section; a reversed cymbal into some.",
+      "sound": "linn kit",
       "kicks": 4,
       "hats": "8th",
-      "grooves": {"dance": 2, "pop": 1},
-      "time": {"hat 8th": 50, "hat 16th": 35, "hat quarter": 5, "ride quarter": 0, "ride 8th": 0, "crash quarter": 0},
-      "busy": 40,
-      "fills": 40
+      "patterns": {
+        "why": "Kicks as each bar's 16ths; hats an 8th at a time: - none, x an 8th, xx two 16ths, o an open hat. A kick pattern may set its own snare (half time: on 3).",
+        "snare": [2, 4],
+        "voice": "snare",
+        "kicks": {
+          "four on the floor": {"bars": [[0, 4, 8, 12], [0, 4, 8, 12]], "weight": 4, "when": "high", "why": "a kick every beat: outrun's drive"},
+          "push": {"bars": [[0, 4, 8, 12], [0, 4, 8, 12, 14]], "weight": 2, "when": "high", "why": "four on the floor, a pickup into the next round"},
+          "motorik": {"bars": [[0, 8, 10], [0, 8, 10, 14]], "weight": 2, "when": "high", "why": "1 and 3 with the and of 3: forward motion"},
+          "half time": {"bars": [[0, 10], [0, 6]], "weight": 3, "when": "low", "snare": [3], "why": "the dreamy sections: the kick on 1, the snare on 3"},
+          "half time sparse": {"bars": [[0], [0, 10]], "weight": 2, "when": "low", "snare": [3], "why": "room for the pad to float"}
+        },
+        "hats": {
+          "eighths": {"bars": ["x x x x x x x x", "x x x x x x x x"], "weight": 3, "why": "plain 8ths"},
+          "sixteenths": {"bars": ["xx xx xx xx xx xx xx xx", "xx xx xx xx xx xx xx xx"], "weight": 2, "when": "high", "why": "16ths, for drive"},
+          "open on the and": {"bars": ["x o x o x o x o", "x o x o x o x o"], "weight": 2, "when": "high", "why": "the open hat on every and"},
+          "quarters": {"bars": ["x - x - x - x -", "x - x - x - x -"], "weight": 2, "when": "low", "why": "a hat a beat, for air"},
+          "dreamy eighths": {"bars": ["x x x x x x x x", "x x x x x x x o"], "weight": 2, "when": "low", "why": "8ths, opening at the end of the round"}
+        },
+        "stay": 4,
+        "vary": 10,
+        "drop": 15,
+        "intro": 0,
+        "roll": 15,
+        "cascade": 0,
+        "toms": 60,
+        "cymbals": 70,
+        "riser": 25
+      }
     }
   }
 }
