@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, 3.4c (salsa's entry). Synthwave's quieter pad and lead get a render when DadCraft wants one;
-trap waits for his reference for the cascade.
+**Next:** Bucket 3, 3.4c (salsa's entry). Synthwave's open points (below, after 3.4b's listen) wait for its next
+round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -305,6 +305,10 @@ For each chosen style, how each member plays it, written from sources.
       tom fill); the pads and leads still too loud. Done: the pad and lead each about 3 dB down (levels 56 and 80);
       no new render yet (DadCraft: not now). His synthwave finds checked (`docs/data.md`): nothing new to train on;
       SynTheory (MIT) kept for the style judge; one preset suggests the lead sits too high (an idea for later).
+- [ ] Synthwave, next round (logged Oct 24, DadCraft: "log that to pick up next time"): ask him first whether a
+      phrase should land home through bVI-bVII-i (F-G-Am) instead of the flow's borrowed V7 (E7-Am), as YC Music
+      Theory's minor-key pop page suggests (`docs/data.md`); the lead's register (ours E5-A6, the Reimaginer's
+      preset centred on G#4); then a render with the quieter pad and lead.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
