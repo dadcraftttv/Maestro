@@ -3,7 +3,7 @@ from maestro.explain import flow_choices, passage
 from maestro.sketch import TEMPO, flow_sketch
 from maestro.stylebook import STYLES
 from maestro.theory.chords import VOCAB, Chord
-from maestro.theory.flow import BASS, FLOW, Family, cadence, check_bass, check_family, check_phrase, chord_at, \
+from maestro.theory.flow import BASS, FLOW, LOOPS, Family, cadence, check_bass, check_family, check_phrase, chord_at, \
     progression, _home, _pulls_home
 from maestro.theory.form import FORM
 from maestro.theory.pitch import Key
@@ -68,7 +68,7 @@ def test_the_tumbao_skips_the_one_and_sits_with_the_clave():
 
 
 def test_every_phrase_is_shaped():
-    for style in STYLES:
+    for style in [s for s in STYLES if LOOPS[s] is None]:   # a looping melody (trap): test_trap.py
         phrase = FORM[style].phrase
         for seed in (1, 2, 3):
             _, take = flow_choices(style, seed, 32, A_MINOR, TEMPO[style])

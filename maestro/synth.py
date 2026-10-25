@@ -7,10 +7,11 @@ FluidSynth's General MIDI sounds; a member whose sound is named here (`SYNTHS`) 
   decay (held notes fade over about two seconds), a light rounding (soft saturation) so the low notes are heard
   on small speakers, kept clean (DadCraft prefers trap without the fuzz). Pitch bends glide (the slides), the
   phase carried from note to note so a slide is one sound.
-- **808 kit** (a kit member): the kick a short punchy sine sweep (the 808 bass carries the boom); the snare a clap
-  (three quick noise bursts and a tail) over a short body tone; the hats six square waves and a little noise, the
-  closed one short, the open one longer, all through a band pass; a crash of high noise. GM drum notes, as on
-  the kit channel.
+- **808 kit** (a kit member): the kick a short punchy sine sweep (the 808 bass carries the boom); on 3 a clap
+  (three quick noise bursts and a tail) layered over a crisp snare; the roll on the clap; the falling cascade a
+  snare stepping down, each hit cut short; the hats six square waves and a little noise, the closed one short, the
+  open one longer, all through a band pass; a crash of high noise, a reversed cymbal swelling into a section and a
+  riser sweeping up (DadCraft's picks from the auditions, Oct 24). GM drum notes, as on the kit channel.
 
 Rendering is plain numpy, mono, 44.1 kHz. Ouralia's own 808 (bucket 6) starts from these settings."""
 import numpy as np
@@ -87,8 +88,14 @@ def _kit_sounds():
         burst += (t >= d) * np.exp(-np.maximum(0, t - d) / 0.006) * (0.8 if k < 2 else 1.0)
     burst += 0.5 * (t >= 0.022) * np.exp(-np.maximum(0, t - 0.022) / 0.12)
     clap = _bandpass(_noise(len(t), rng), 900, 5000) * burst
-    body = np.sin(2 * np.pi * 185 * t) * np.exp(-t / 0.03)
-    s["snare"] = 0.9 * clap / np.max(np.abs(clap)) + 0.25 * body
+    s["clap"] = clap / np.max(np.abs(clap)) + 0.25 * np.sin(2 * np.pi * 185 * t) * np.exp(-t / 0.03)
+    t = np.arange(int(0.25 * RATE)) / RATE                            # the snare: two tones and a crisp noise
+    snare = (0.5 * np.sin(2 * np.pi * 185 * t) + 0.3 * np.sin(2 * np.pi * 330 * t)) * np.exp(-t / 0.05) \
+        + 0.8 * _bandpass(_noise(len(t), rng), 2000, 12000) * np.exp(-t / 0.07)
+    s["snare only"] = snare / np.max(np.abs(snare))
+    n = len(s["clap"])                                                # on 3: the snare under the clap
+    both = s["clap"] + np.pad(s["snare only"], (0, n - len(s["snare only"])))
+    s["snare"] = both / np.max(np.abs(both))
     for name, dur, tau in (("hat", 0.12, 0.03), ("open", 0.6, 0.22)):
         t = np.arange(int(dur * RATE)) / RATE
         sq = sum(np.sign(np.sin(2 * np.pi * hz * t + k)) for k, hz in enumerate(HAT_HZ))
@@ -100,25 +107,73 @@ def _kit_sounds():
     return s
 
 
-KIT_NOTES = {36: "kick", 38: "snare", 39: "snare", 42: "hat", 44: "hat", 46: "open", 49: "crash", 57: "crash"}
+def _pitched(x, semis):
+    """x played faster (higher, shorter) or slower."""
+    return np.interp(np.arange(0, len(x) - 1, 2 ** (semis / 12)), np.arange(len(x)), x)
+
+
+def _gated(x, seconds):
+    """Cut short, with a 5 ms fade: dry and separate (DadCraft: "staccato and deliberate")."""
+    y = x[:int(seconds * RATE)].copy()
+    f = min(len(y), int(0.005 * RATE))
+    y[len(y) - f:] *= np.linspace(1, 0, f)
+    return y
+
+
+def _swell(seconds):
+    """A reversed cymbal over `seconds`, swelling into the next section."""
+    rng = np.random.default_rng(52)
+    n = int(seconds * RATE)
+    c = _bandpass(_noise(n, rng), 3500, 16000) * np.exp(-np.arange(n) / RATE / 0.6)
+    return (c / np.max(np.abs(c)))[::-1]
+
+
+def _riser(seconds):
+    """A band of noise sweeping up two octaves over `seconds`, louder as it goes."""
+    rng = np.random.default_rng(58)
+    n = int(seconds * RATE)
+    noise, out = _noise(n, rng), np.zeros(n)
+    for k in range(16):
+        a, b = k * n // 16, (k + 1) * n // 16
+        out[a:b] = _bandpass(noise[a:b], 500 * 2 ** (k / 4), 1500 * 2 ** (k / 4))
+    out *= np.linspace(0, 1, n) ** 2
+    return out / np.max(np.abs(out))
+
+
+# GM drum notes: the clap on 3 layered over a snare (38), the roll on the clap (40), the falling cascade's eight
+# steps on 67 down to 60 (GM's bongos, congas and timbales: a falling run on another player too; DadCraft chose
+# audition 11), the swell (52) and the riser (58) as long as their notes
+CASCADE_NOTES = tuple(range(67, 59, -1))
+KIT_NOTES = {36: "kick", 38: "snare", 39: "clap", 40: "roll", 42: "hat", 44: "hat", 46: "open", 49: "crash",
+             57: "crash", 52: "swell", 58: "riser", **{n: "cascade" for n in CASCADE_NOTES}}
+CASCADE_TOP, CASCADE_STEP, CASCADE_GATE = 3.0, 1.6, 0.08   # semitones: its first hit, each step down; seconds a hit
 # the hats raised Oct 24, after DadCraft's listen: they were lost under the bell and the strings
-LEVEL = {"kick": 0.45, "snare": 0.32, "hat": 0.38, "open": 0.33, "crash": 0.1}
+LEVEL = {"kick": 0.45, "snare": 0.32, "clap": 0.32, "roll": 0.45, "hat": 0.38, "open": 0.33, "crash": 0.2,
+         "cascade": 0.42, "swell": 0.26, "riser": 0.17}
 _SOUNDS = None
 
 
 def kit_808(hits, length):
-    """The kit: hits as (start s, MIDI note, velocity) into `length` samples. An open hat is cut by the next
-    closed one, as on the machine."""
+    """The kit: hits as (start s, end s, MIDI note, velocity) into `length` samples. An open hat is cut by the next
+    closed one, as on the machine; the swell and the riser last as long as their notes."""
     global _SOUNDS
     if _SOUNDS is None:
         _SOUNDS = _kit_sounds()
     out = np.zeros(length)
-    closed = sorted(int(t * RATE) for t, n, _ in hits if KIT_NOTES.get(n) == "hat")
-    for t, note, vel in hits:
+    closed = sorted(int(t * RATE) for t, _, n, _ in hits if KIT_NOTES.get(n) == "hat")
+    for t, end, note, vel in hits:
         name = KIT_NOTES.get(note)
         if name is None:
             continue
-        x = _SOUNDS[name] * LEVEL[name] * _amp(vel)
+        if name == "cascade":
+            x = _gated(_pitched(_SOUNDS["snare only"], CASCADE_TOP - CASCADE_STEP * (CASCADE_NOTES[0] - note)), CASCADE_GATE)
+        elif name == "swell":
+            x = _swell(end - t)
+        elif name == "riser":
+            x = _riser(end - t)
+        else:
+            x = _SOUNDS["clap" if name == "roll" else name]
+        x = x * LEVEL[name] * _amp(vel)
         a = int(t * RATE)
         if name == "open":
             cut = next((c for c in closed if c > a), None)

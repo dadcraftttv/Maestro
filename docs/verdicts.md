@@ -236,3 +236,12 @@ isn't reloaded every session; grep for the part a task needs.
   Measured: the hats at -40 dB, the bell -27, the strings -35. Remixed, the same music (seed 74): the hats -30, the
   bell -36 (level 110 to 80), the strings -40 (48 to 36); the 808 and kick as they were. The melody drift target
   not yet answered.
+- Oct 24: the remix. DadCraft: "better. the bells and pads still feel loud and they're too busy. i also feel like
+  there's parts of a drum or trap kit that i'm not hearing but i can hear in my head." He asked for auditions
+  (`clips/audition/`, 8 bars of trap_74's drums and 808 with one part added each) and chose: the snare rolls, the
+  snare layered on the clap, the cymbal swells and riser (not the rimshots and percs). Also "a sort of snare hit
+  waterfall type of sound ... usually at the end of an 8 or 16 measure run": of four candidates the falling snare
+  cascade was closest, but "more staccato and deliberate" (the first "smearing together"); of the staccato ones,
+  between 11 and 12, "11 feels the most right" (16ths over the last two beats, each hit 80 ms, 1.6 semitones a
+  step). He can't describe it further, and the tracks that have it are copyrighted, so 11 stands for now; its
+  settings are kept in `synth.py` to nudge later.

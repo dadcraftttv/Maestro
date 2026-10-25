@@ -836,6 +836,8 @@ def loop_melody(rng, lf, spans, key, start, bars, met, floor, prev=None, phrase=
             m = base + key.degree(d)
             while m <= floor and m + 12 <= member_range("melody").high:   # never down in the pad
                 m += 12
+            while m > member_range("melody").high and m - 12 > floor:     # nor over the top
+                m -= 12
             notes.append([st, length, m])
         if last and k != rounds - 1:
             lines.append(f"  melody, bar {start + k * n + n}: the round lands home")

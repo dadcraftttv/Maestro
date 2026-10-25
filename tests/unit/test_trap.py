@@ -163,3 +163,26 @@ def test_the_808_and_its_kit_are_rendered(tmp_path):
     spec = np.abs(np.fft.rfft(bass))                     # the 808 lives low: most of its energy under 150 Hz
     hz = np.fft.rfftfreq(len(bass), 1 / synth.RATE)
     assert spec[hz < 150].sum() > spec[hz >= 150].sum()
+
+
+def test_the_fills_roll_fall_and_swell():
+    seen = set()
+    for take in _takes(12):
+        hits = take["drums"]
+        assert check_drums(hits, MET, 32 * MET.bar, True, True) is None
+        cascade = [h for h in hits if h[4] == "cascade"]
+        for k in range(0, len(cascade), 8):                         # eight 16ths, each a step lower
+            run = cascade[k:k + 8]
+            assert [h[2] for h in run] == list(range(67, 59, -1))
+            assert all(b[0] - a[0] == 6 for a, b in zip(run, run[1:]))
+            assert not any(h[4] in ("hat", "kick") and run[0][0] <= h[0] < run[-1][0] + 6 for h in hits)
+        roll = sorted((h[0], h[3]) for h in hits if h[4] == "roll")
+        if roll:
+            assert roll[-1][1] > roll[0][1]                         # louder as it goes
+        for h in hits:
+            if h[4] == "swell":
+                assert h[1] == MET.bar and any(c[4] == "crash" and c[0] == h[0] + MET.bar for c in hits)
+            if h[4] == "riser":
+                assert h[1] == 2 * MET.bar
+        seen |= {h[4] for h in hits}
+    assert {"cascade", "roll", "swell", "crash", "riser"} <= seen

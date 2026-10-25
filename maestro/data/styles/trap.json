@@ -118,7 +118,7 @@
     "pad": {
       "sound": 49,
       "why": "slow strings (GM's String Ensemble 2), holding each chord",
-      "level": 36
+      "level": 28
     },
     "bass": {
       "sound": "808",
@@ -135,23 +135,23 @@
     "melody": {
       "sound": 9,
       "why": "a bell (GM's glockenspiel): a one- or two-bar riff going round the section, its beat notes fitted to each chord, a beat of it often in triplets over the straight grid (triplet flow); not shaped over the phrase (DadCraft, Oct 24: it felt stuck, not trap)",
-      "level": 80,
+      "level": 72,
       "shape": "loop",
       "loop": {
-        "why": "Trap's lead is a short riff on repeat; it changes between sections, not inside them.",
+        "why": "Trap's lead is a short riff on repeat, with room around it (DadCraft, Oct 24: the bells too busy); it changes between sections, not inside them.",
         "bars": {
           "1": 1,
           "2": 3
         },
         "cells": {
-          "8 8": 4,
-          "t t t": 3,
-          "8 r": 2,
-          "r 8": 2,
-          "16 16 8": 2,
-          "8 16 16": 1,
-          "q": 2,
-          "r": 1
+          "8 r": 3,
+          "r 8": 3,
+          "q": 3,
+          "r": 2,
+          "8 8": 2,
+          "t t t": 2,
+          "16 16 8": 1,
+          "8 16 16": 0
         },
         "stay": 1,
         "vary": 15
@@ -163,7 +163,7 @@
       "kicks": 3,
       "hats": "16th",
       "patterns": {
-        "why": "Kicks as each bar's 16ths (the clap is on 8); hats an 8th at a time: - none, x an 8th, xx two 16ths, o an open hat, 3 16th triplets, 4 32nds, 6 32nd triplets (a run of 3, 4 and 6 is a roll, louder as it goes).",
+        "why": "Kicks as each bar's 16ths (the clap is on 8); hats an 8th at a time: - none, x an 8th, xx two 16ths, o an open hat, 3 16th triplets, 4 32nds, 6 32nd triplets (a run of 3, 4 and 6 is a roll, louder as it goes). Fills (DadCraft's picks from the auditions, Oct 24): a snare roll into a new section, the falling cascade (16ths over the last two beats, each hit short, stepping down) at the end of an 8-bar run, a reversed cymbal and a crash into each section, a riser before some; the clap on 3 layered over a snare.",
         "kicks": {
           "home": {
             "bars": [
@@ -315,8 +315,12 @@
         },
         "stay": 4,
         "vary": 25,
-        "drop": 50,
-        "intro": 4
+        "drop": 40,
+        "intro": 4,
+        "roll": 40,
+        "cascade": 50,
+        "cymbals": 60,
+        "riser": 35
       }
     }
   }

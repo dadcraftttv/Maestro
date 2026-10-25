@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, the listen to `clips/trap2/trap_74` remixed (the hats up, the bell and strings down), then 3.4b.
+**Next:** Bucket 3, the listen to `clips/trap3/trap_1025` (the fills, the bell quieter and sparser), then 3.4b.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -262,7 +262,17 @@ For each chosen style, how each member plays it, written from sources.
       kinds of section). Heard Oct 24: the bass "definately feels more like trap", the pads and bells still too
       loud to hear the hats; "a good step in the right direction". Remixed (the hats up 10 dB, the bell and the
       strings down 5-9 dB, the same music).
-- [ ] Listen to the remix of `clips/trap2/trap_74`; DadCraft's call on the melody drift target for a riff.
+- [x] Listen to the remix of `clips/trap2/trap_74`. Heard Oct 24: "better"; the bells and pads still loud and too
+      busy; kit parts he hears in his head missing. Auditions (`clips/audition/`) chosen: the snare rolls, a snare
+      under the clap, the cymbal swells and riser, and a falling snare cascade, staccato (audition 11).
+      Built Oct 24: the clap on 3 layered over a snare; at a section's end a snare roll (16ths, then 32nds, louder,
+      40%) or the cascade (50% of the rest, and of 8-bar runs inside a section): 16ths over the last two beats,
+      each hit cut short, stepping down, the kick and hats stopping for it; a reversed cymbal into 60% of
+      sections with a crash on the one, a riser over the last two bars of 35%; drop-outs 40%. The bell quieter
+      (72) and sparser (rests and quarters favoured), the strings quieter (28). 190 tests, exam 106/106; drift's
+      band targets met, the riff's own still 77% (asked).
+- [ ] Listen to `clips/trap3/trap_1025` (32 bars: the hats alone, a cascade at bar 8, a riser and a swell into bar
+      17, a roll into bar 25, a cascade at the end); DadCraft's call on the melody drift target for a riff.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

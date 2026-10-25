@@ -40,7 +40,9 @@ SIXTEENTH = 6
 KIT = {"kick": 36, "snare": 38, "ghost": 38, "hat": 42, "pedal": 44, "open": 46, "crash": 49, "ride": 51,
        "high tom": 50, "mid tom": 47, "floor tom": 43}
 TOMS = ("high tom", "mid tom", "floor tom")
-HANDS = {"snare", "ghost", "hat", "open", "crash", "ride"} | set(TOMS)
+HANDS = {"snare", "ghost", "hat", "open", "crash", "ride", "roll", "cascade"} | set(TOMS)
+FX = {"swell": 52, "riser": 58, "roll": 40}       # the programmed drummer's own voices beyond the kit
+CASCADE = tuple(range(67, 59, -1))               # the falling cascade's eight steps (synth.CASCADE_NOTES)
 LOUD = {"kick": 100, "snare": 105, "ghost": 40, "hat": 75, "open": 85, "crash": 100, "ride": 80,
         "high tom": 95, "mid tom": 95, "floor tom": 100}
 TIMES = tuple(f"{v} {r}" for v in ("hat", "ride", "crash") for r in ("quarter", "8th", "16th"))
@@ -187,6 +189,10 @@ class Programmed:
     intro: int = 4       # bars of hats alone at the play's start (0: none)
     fixed: bool = True   # the clap only on 3 (the check)
     turns: int = 0
+    roll: int = 60       # % of section ends with a snare roll over the last two beats (16ths, then 32nds)
+    cascade: int = 50    # % of 8-bar runs (a section's end, when it has no roll) ending in the falling cascade
+    cymbals: int = 100   # % of new sections entered with a reversed cymbal swelling in and a crash
+    riser: int = 50      # % of section ends with a riser over their last two bars
 
 
 def _programmed(style, d, where):
@@ -214,8 +220,12 @@ def _programmed(style, d, where):
             out.append(cls(n, bars, x.get("weight", 1), x.get("when", "any"), x.get("why", "")))
     if not kicks or not hats:
         raise StyleError(f"{where}.patterns: both kicks and hats")
+    for k in ("stay", "vary", "drop", "intro", "roll", "cascade", "cymbals", "riser"):
+        if k in p and (not isinstance(p[k], int) or isinstance(p[k], bool) or p[k] < 0):
+            raise StyleError(f"{where}.patterns.{k}: a whole number, 0 or more")
     return Programmed(tuple(kicks), tuple(hats), p.get("stay", 4), p.get("vary", 25), p.get("drop", 50),
-                      p.get("intro", 4))
+                      p.get("intro", 4), roll=p.get("roll", 60), cascade=p.get("cascade", 50),
+                      cymbals=p.get("cymbals", 100), riser=p.get("riser", 50))
 
 
 def _fit(rng, pats, energy, prev, stay):
@@ -252,7 +262,7 @@ def programmed_part(rng, dr, recs, met, phrase, end):
     """The programmed drummer over `recs` (a record a bar), up to step `end`: ([(step, length, MIDI note,
     velocity, voice)], [(section, line)]). Two bars a round; the clap on 3 of each bar."""
     hits, lines = [], []
-    sec, kick, hat, drops = None, None, None, 0
+    sec, kick, hat, drops, swelling, crash_here = None, None, None, 0, False, False
     first = recs[0]["section"] if recs else None
     intro = dr.intro if first and first.end - first.start >= 2 * max(1, dr.intro) else 0
     for r in recs[::2]:
@@ -266,28 +276,65 @@ def programmed_part(rng, dr, recs, met, phrase, end):
             if dropping:
                 drops += 1
                 lines.append((s, f"  drums, bar {s.end}: the kick and clap (and the 808) drop out for the last bar"))
+            more = s.end * met.bar < end                  # another section follows inside the clip
+            rolling = more and _chance(rng, dr.roll)
+            falling = more and not rolling and _chance(rng, dr.cascade)       # or the cascade ends the section
+            rising = more and s.end - s.start >= 8 and _chance(rng, dr.riser)
+            if rolling:
+                lines.append((s, f"  drums, bar {s.end}: a snare roll into the next section"))
+            if falling:
+                lines.append((s, f"  drums, bar {s.end}: the falling cascade into the next section"))
+            if rising:
+                lines.append((s, f"  drums, bar {s.end - 1}: a riser over the last two bars"))
+            crash_here, swelling = swelling, more and _chance(rng, dr.cymbals)   # this section's crash, the next's swell
+            if swelling:
+                lines.append((s, f"  drums, bar {s.end}: a reversed cymbal swells into the next section, a crash "
+                                 f"on its one"))
         bars = kick.bars
         if b > s.start and _chance(rng, dr.vary):
             bars, how = _vary_kick(rng, kick.bars)
-        cells = {}
+        cells, long, notes = {}, {}, {}
 
-        def add(step, voice, vel):
+        def add(step, voice, vel, length=SIXTEENTH, note=None):
             if step < end:
                 cells.setdefault(step, {})[voice] = max(1, min(127, round(vel * (0.9 + 0.2 * e))))
+                long[step, voice] = length
+                if note is not None:
+                    notes[step, voice] = note
         for i in range(2):
             bar = b + i
             if bar >= s.end:
                 break
             b0 = at + i * met.bar
             quiet = bar < intro or (dropping and bar == s.end - 1)
+            last = bar == s.end - 1
+            fill = ("roll" if rolling else "cascade" if falling else None) if last else \
+                "cascade" if (bar + 1 - s.start) % phrase == 0 and _chance(rng, dr.cascade) else None
+            cut = b0 + met.beats[2] if fill else b0 + met.bar   # from 3 on, the fill alone (and the clap)
+            if fill == "cascade" and not last:
+                lines.append((s, f"  drums, bar {bar + 1}: the falling cascade, the end of an 8-bar run"))
             if not quiet:
                 for p in bars[i]:
-                    add(b0 + p * SIXTEENTH, "kick", STEADY["kick"])
+                    if b0 + p * SIXTEENTH < cut:
+                        add(b0 + p * SIXTEENTH, "kick", STEADY["kick"])
                 add(b0 + met.beats[2], "snare", STEADY["snare"])
+            if fill == "roll":                            # 16ths on 3, 32nds on 4, louder as it goes
+                steps = [cut + k * SIXTEENTH for k in range(4)] + [cut + 24 + k * 3 for k in range(8)]
+                for k, st in enumerate(steps):
+                    add(st, "roll", 40 + 70 * k / (len(steps) - 1))
+            elif fill == "cascade":                       # 16ths stepping down, each hit short and separate
+                for k in range(8):
+                    add(cut + k * SIXTEENTH, "cascade", 104, note=CASCADE[k])
+            if last and rising:
+                add(b0 - met.bar, "riser", 96, 2 * met.bar)
+            if last and swelling:
+                add(b0, "swell", 100, met.bar)
             row = list(hat.bars[i])
             run = []
             for c, tok in enumerate(row):
                 s8 = b0 + c * 2 * SIXTEENTH
+                if s8 >= cut:
+                    break
                 if tok in ROLLS:
                     run.append((s8, tok))
                     continue
@@ -300,8 +347,13 @@ def programmed_part(rng, dr, recs, met, phrase, end):
                         STEADY["beat"] if c % 2 == 0 and k == 0 else STEADY["eighth"] if k == 0 else STEADY["sixteenth"])
             if run:
                 _roll(add, run)
+        if crash_here and b == s.start:                   # the crash takes the hat's place on the one
+            cells.get(at, {}).pop("hat", None)
+            cells.get(at, {}).pop("open", None)
+            add(at, "crash", 100)
         for step in sorted(cells):
-            hits += [(step, SIXTEENTH, KIT[v], vel, v) for v, vel in cells[step].items()]
+            hits += [(step, long[step, v], notes.get((step, v)) or KIT.get(v) or FX[v], vel, v)
+                     for v, vel in cells[step].items()]
     if intro:
         lines.insert(1 if lines else 0, (recs[0]["section"], f"  drums, bar 1: the hats alone for {intro} bars, the "
                                                             f"kick, clap and 808 come in on bar {intro + 1}"))

@@ -75,13 +75,18 @@ def _synth_tracks(midi, own, length):
             t = now / midi.ticks_per_beat * sec
             if m.type == "note_on" and m.velocity:
                 held[m.note] = (t, m.velocity)
-                hits.append((t, m.note, m.velocity))
+                hits.append([t, None, m.note, m.velocity])   # every hit, even one a quick roll overlaps
             elif m.type in ("note_on", "note_off") and m.note in held:
                 on, v = held.pop(m.note)
                 notes.append((on, t, m.note, v))
+                last = next(h for h in reversed(hits) if h[2] == m.note)
+                last[1] = last[1] or t
             elif m.type == "pitchwheel":
                 bends.append((t, m.pitch / 8192 * 12))
-        out += synth.bass_808(notes, bends, length) if own[tr.name] == "808" else synth.kit_808(hits, length)
+        if own[tr.name] == "808":
+            out += synth.bass_808(notes, bends, length)
+        else:
+            out += synth.kit_808([(a, b or a + 0.1, n, v) for a, b, n, v in hits], length)
     return out
 
 
