@@ -101,7 +101,8 @@ def _kit_sounds():
 
 
 KIT_NOTES = {36: "kick", 38: "snare", 39: "snare", 42: "hat", 44: "hat", 46: "open", 49: "crash", 57: "crash"}
-LEVEL = {"kick": 0.45, "snare": 0.32, "hat": 0.12, "open": 0.11, "crash": 0.1}
+# the hats raised Oct 24, after DadCraft's listen: they were lost under the bell and the strings
+LEVEL = {"kick": 0.45, "snare": 0.32, "hat": 0.38, "open": 0.33, "crash": 0.1}
 _SOUNDS = None
 
 

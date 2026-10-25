@@ -232,3 +232,7 @@ isn't reloaded every session; grep for the part a task needs.
   personally prefer a cleaner trap sound and not the fuzzy distortion) and the Atlanta and other styles"; on the
   sounds: "what would get us closest to the sound i'm thinking of?" (answered: our own synthesized 808 and kit, the
   TR-808's way, clean); on the order: "try everything".
+- Oct 24: the listen after 3.4a's second round (`clips/trap2/trap_74`). DadCraft: "the bass definately feels more like trap. the pads and bells are still way too loud. to hear the hihats very well. still, a good step in the right direction."
+  Measured: the hats at -40 dB, the bell -27, the strings -35. Remixed, the same music (seed 74): the hats -30, the
+  bell -36 (level 110 to 80), the strings -40 (48 to 36); the 808 and kick as they were. The melody drift target
+  not yet answered.

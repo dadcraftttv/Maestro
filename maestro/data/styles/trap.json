@@ -118,7 +118,7 @@
     "pad": {
       "sound": 49,
       "why": "slow strings (GM's String Ensemble 2), holding each chord",
-      "level": 48
+      "level": 36
     },
     "bass": {
       "sound": "808",
@@ -135,7 +135,7 @@
     "melody": {
       "sound": 9,
       "why": "a bell (GM's glockenspiel): a one- or two-bar riff going round the section, its beat notes fitted to each chord, a beat of it often in triplets over the straight grid (triplet flow); not shaped over the phrase (DadCraft, Oct 24: it felt stuck, not trap)",
-      "level": 110,
+      "level": 80,
       "shape": "loop",
       "loop": {
         "why": "Trap's lead is a short riff on repeat; it changes between sections, not inside them.",

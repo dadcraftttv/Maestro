@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, the listen after 3.4a's second round (`clips/trap2/trap_74`), then 3.4b (synthwave's entry).
+**Next:** Bucket 3, the listen to `clips/trap2/trap_74` remixed (the hats up, the bell and strings down), then 3.4b.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -258,8 +258,11 @@ For each chosen style, how each member plays it, written from sources.
       its beat notes fitted to each chord, a phrase's last round landing home. No chord swaps. 189 tests, exam
       106/106. Drift: every band target met; the melody's own (copies of its last 16 bars <= 30%) not: 77%, as a
       riff repeats; asked of DadCraft, the target unchanged until he says.
-- [ ] Listen after 3.4a's second round: `clips/trap2/trap_74` (32 bars; hats alone, the drop at bar 16, three
-      kinds of section).
+- [x] Listen after 3.4a's second round: `clips/trap2/trap_74` (32 bars; hats alone, the drop at bar 16, three
+      kinds of section). Heard Oct 24: the bass "definately feels more like trap", the pads and bells still too
+      loud to hear the hats; "a good step in the right direction". Remixed (the hats up 10 dB, the bell and the
+      strings down 5-9 dB, the same music).
+- [ ] Listen to the remix of `clips/trap2/trap_74`; DadCraft's call on the melody drift target for a riff.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
