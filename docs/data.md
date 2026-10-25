@@ -262,6 +262,28 @@ the fetch, to check in 3.4a; it refused again in 3.4a, HTTP 403, so it is left o
 5. For 3.6 (layering): the 808 and kick dropping out before a hook, hat-only openings, a beat switch.
 6. Subgenres (drill, rage, trapsoul) later, as their own entries or as seasoning.
 
+### DadCraft's trap finds (Oct 24, from a Google search; `inbox/trap.md`, `inbox/trap_training_specs.md`)
+
+| Source | License | Tag | What | Use |
+|---|---|---|---|---|
+| GigaMIDI | scraped | OUT | already audited above | none (decision 7) |
+| XMIDI (xmusic-project) | none stated; source of its 108k MIDI not stated | OUT | MIDI with emotion and genre labels | none unless a license and the files' origin turn up |
+| RapBank (zqning) | CC BY-NC-SA 4.0, and only YouTube IDs | OUT | links to 94k rap videos; the audio is copyrighted | none |
+| RapVerse | none stated for the data (the paper is CC BY 4.0) | OUT | rap vocals, lyrics, motion | none (no instrumental, no license) |
+| GCX trap dataset | a vendor's licensed product | OUT | audio with key and tempo labels | none (not open) |
+| genres_v2.csv (Spotify audio features, a GitHub project) | none stated; Spotify's API terms | ideas only | 42k tracks' features (tempo, energy, valence, mode), 15 playlist genres | numbers checked, nothing kept |
+
+What genres_v2 says (medians, our own counts): its "trap" label sits with techno, trance and dnb (150 BPM, energy
+0.94): EDM trap, not the Atlanta rap trap DadCraft means. Its "Dark Trap" (4,578 tracks) is: 142 BPM (our 140 fits),
+low valence 0.22 (dark), energy 0.65, and only 46% detected as minor (Spotify's mode is rough, but minor is no lock,
+as decision 9 says). No change to the entry.
+
+The specs file is an AI-written overview (Google's), ideas only and to be checked: it agrees with the entry (140
+counted in half time, the snare on 3 of each bar, 32nd hat rolls, triplets, an 808 gliding over 50-250 ms: ours
+slides over an 8th, 214 ms at 140, and a bend linear in semitones is the exponential glide it gives). New: 64th
+"stutter" rolls (our grid of 24 a beat stops at 32nd triplets), and a check for rolled hats (the spread of the gaps
+between hat hits). Its advice to penalise major keys hard goes against decision 9, so it isn't taken.
+
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd
 - PDMX: https://zenodo.org/records/15571083
