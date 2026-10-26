@@ -4,7 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** the A/B listen after 3.4d (`clips/ab/power_rock`). Synthwave's open points (below, after 3.4b's listen)
+**Next:** power rock's next round: first ask DadCraft what 80s arena rock is missing (below, after 3.4d's listen),
+then 3.5. Synthwave's open points (below, after 3.4b's listen)
 wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -361,10 +362,17 @@ For each chosen style, how each member plays it, written from sources.
       style): a phrase's half landing on a borrowed chord with no other tone in the key stepped up instead of landing
       home. 223 tests (`tests/unit/test_power_rock.py`), exam, fuzz 2000 seeds a style clean, drift every target met
       (melody copies 4%); the other styles' clips byte-identical (80 seeds).
-- [ ] Listen after 3.4d, as A/B: `clips/ab/power_rock` (seed 65, 32 bars; A: 3.3's round, ee7fe99; B: today's: an
+- [x] Listen after 3.4d, as A/B: `clips/ab/power_rock` (seed 65, 32 bars; A: 3.3's round, ee7fe99; B: today's: an
       8-bar verse, an 8-bar pre-chorus ending in a stop with the snare build, 8 bars of chorus on the double plagal,
       8 driven). Listen for: 80s arena rock; the two guitars wide, tight palm mutes in the verse, big in the chorus;
       the build and the stop; the bass driving with the kick; the lead's bends in tune; the flat seventh.
+      Oct 26: B ("B wins again, but i wouldn't say it sounds like 80's arena rock at all. the guitars sound fine.
+      Everything else sounds fine.").
+- [ ] Power rock, next round (DadCraft, Oct 26: B fine, but not 80s arena rock): ask him what's missing, or for a
+      reference (handled like trap's: heard on this PC only, in `inbox/`, never committed or sent out). Candidates:
+      the sound (GM stand-ins: a big gated-reverb kit and room, like synthwave's own LinnDrum kit; layered guitars
+      with chorus and a big reverb), 80s keys (a synth pad or brass stabs under the chorus), the lead as a sung
+      anthem hook rather than a guitar line, the tempo.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

@@ -284,3 +284,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 26: 3.4d's plan approved, with DadCraft's choices: "all seven, 80s arena rock, keep 130, solo later" (the
   doubled rhythm guitar, Rock Corpus harmony, the rock bass, the pentatonic lead with bends, the parts with builds
   and stops, two guitars left and right, the checks and an A/B); the guitar solo waits for 3.6.
+- Oct 26: the A/B listen after 3.4d (power rock). "B wins again, but i wouldn't say it sounds like 80's arena rock
+  at all. the guitars sound fine. Everything else sounds fine." Logged as power rock's next round (PLAN.md).
