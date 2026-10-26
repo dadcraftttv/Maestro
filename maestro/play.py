@@ -150,10 +150,11 @@ def render(mid, wav, sf2=None):
         return _fluid(mid, wav, sf2)
     midi = mido.MidiFile(mid)
     rest = [t for t in midi.tracks[1:] if t.name not in own]
-    if any(t.name in gains for t in rest):      # a GM member at its own gain: FluidSynth renders each alone
-        parts = gm_parts(midi, {t.name for t in rest}, sf2)
-        gm = sum((x * gains.get(n, 1) for n, x in parts.items()),
-                 np.zeros((int(((midi.length + TAIL_S) * RATE) // PERIOD * PERIOD), 2)))
+    silence = np.zeros((int((midi.length + TAIL_S) * RATE / PERIOD) * PERIOD, 2))
+    if not rest:                                # every member one of Maestro's own: no FluidSynth
+        gm = silence
+    elif any(t.name in gains for t in rest):    # a GM member at its own gain: FluidSynth renders each alone
+        gm = sum((x * gains.get(n, 1) for n, x in gm_parts(midi, {t.name for t in rest}, sf2).items()), silence)
     else:
         with tempfile.TemporaryDirectory() as tmp:
             whole = mido.MidiFile(type=1, ticks_per_beat=midi.ticks_per_beat)
