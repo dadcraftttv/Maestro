@@ -295,3 +295,4 @@ isn't reloaded every session; grep for the part a task needs.
   harmony: "yes and yes". Logged as power rock's third round (PLAN.md).
 - Oct 26: power rock's third round: "yes, fix the kick" first (an estimate asked first: about 15-20 minutes); the
   sound and thrash still to choose.
+- Oct 26: the A/B listen for power rock's louder kick: "B wins."
