@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** the listen after 3.4c, as A/B (`clips/ab/salsa`). Then 3.4d (power rock). Synthwave's open points (below,
+**Next:** 3.4d (power rock). Synthwave's open points (below,
 after 3.4b's listen) wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -334,8 +334,13 @@ For each chosen style, how each member plays it, written from sources.
       horns -7, bass -3, keys -6), every member in its target. 212 tests (`tests/unit/test_salsa.py`), exam
       106/106, fuzz 2000 seeds a style clean, drift every target met (melody copies 2%); the other styles' clips
       byte-identical (80 seeds).
-- [ ] Listen after 3.4c, as A/B: `clips/ab/salsa` (seed 75, 32 bars; A: 3.3's round, cac0f0a; B: today's: 16 bars
-      of cuerpo, a break, 8 of montuno, 8 of mambo), with B's summary and "listen for" line.
+- [x] Listen after 3.4c, as A/B: `clips/ab/salsa` (seed 75, 32 bars; A: 3.3's round, cac0f0a; B: today's: 16 bars
+      of cuerpo, a break, 8 of montuno, 8 of mambo). Oct 26: B ("the piano timing sounds right", the trombones
+      sound right, "the break hits together, and the progression feels right. It still feels like salsa").
+- [ ] Salsa, next round (DadCraft, Oct 26, "maybe down the line"): a fuller horn section for styles that have one,
+      more horns playing together, a little quieter, "so that we get that full horn section sound". Today's two
+      trombones already play in harmony but on one GM track; look at each voice on its own (its own channel and
+      pan) and adding the trumpets (and sax where a style has them), set in the mix check.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

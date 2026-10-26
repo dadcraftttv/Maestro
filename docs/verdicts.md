@@ -276,3 +276,8 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 26: 3.4c's plan approved, with DadCraft's choices: all six proposals (the montuno piano, the horn section,
   coro and pregón, salsa's parts pulled forward from 3.6, the bass's walk-ups and more tumbaos, GM sounds with the
   mix set before the render), classic Fania era (so two trombones, a trumpet lead), the tempo kept at 180.
+- Oct 26: the A/B listen after 3.4c (salsa). B: "the piano timing sounds right. Yes, the trombones sound right,
+  maybe down the line we could bring in multiple for a genre like this that has more than one, and they can play
+  together, albeit a little bit quieter, so that we get that full horn section sound. The break hits together, and
+  the progression feels right. It still feels like salsa." The fuller horn section is logged in PLAN.md (salsa,
+  next round).
