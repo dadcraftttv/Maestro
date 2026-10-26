@@ -268,3 +268,8 @@ isn't reloaded every session; grep for the part a task needs.
   picks: one default mix target for every style, a style overriding it when his ear says so (the melody 0-3 dB over
   the loudest other member, drums, percussion and bass 0-4 dB under it, pad and arp 5-10 dB under); the pad gives
   way when a phrase runs over C7; a part a check rules out is drawn again, then the plain one plays.
+- Oct 26: the A/B listen after 3.8. B in both pairs: "the B group sounds better. not sure how exactly. cleaner,
+  maybe? less hiss or fuzziness?" Every clip is peaked at -1 dB with nothing clipped, so the hiss was not in the
+  files: in A the louder pad and lead (synthwave) and the louder 808 against the riff (trap, its fuzzy distortion)
+  crowded the mix, and the peak level left the rest quieter. The default mix target holds for both; synthwave gets
+  no targets of its own.

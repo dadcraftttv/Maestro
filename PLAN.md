@@ -4,8 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** the A/B listen after 3.8 (`clips/ab/synthwave`, `clips/ab/trap`), then bucket 3, 3.4c (salsa's entry; its
-mix set from the mix check before its render). Synthwave's open points (below, after 3.4b's listen) wait for its
+**Next:** bucket 3, 3.4c (salsa's entry; its mix set from the mix check before its render). Synthwave's open points (below, after 3.4b's listen) wait for its
 next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -314,7 +313,7 @@ For each chosen style, how each member plays it, written from sources.
 - [ ] Synthwave, next round (logged Oct 24, DadCraft: "log that to pick up next time"): ask him first whether a
       phrase should land home through bVI-bVII-i (F-G-Am) instead of the flow's borrowed V7 (E7-Am), as YC Music
       Theory's minor-key pop page suggests (`docs/data.md`); the lead's register (ours E5-A6, the Reimaginer's
-      preset centred on G#4); then a render with the quieter pad and lead.
+      preset centred on G#4). The quieter pad and lead were heard in the A/B after 3.8 (B, his pick).
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
@@ -344,9 +343,9 @@ For each chosen style, how each member plays it, written from sources.
       check: `maestro/mix.py` (BS.1770 loudness of each member alone, against the melody); the targets in the
       style book's "mix" (one default, a style may override); each member's "gain" (dB) in the player's mix. Set:
       synthwave's drums and bass -2, pad and arp -1; trap's 808 -22, kit -17, strings -3. A/B: `tools/ab.py`.
-- [ ] Listen after 3.8, as A/B. `clips/ab/synthwave` (A: what DadCraft heard, 1bad590; B: the pad and lead 3 dB
-      down and today's gains), `clips/ab/trap` (the same notes; B: the riff about 22 dB up against the 808). Which
-      is better, and why? If synthwave's A still sounds right in the lead's level, synthwave gets its own targets.
+- [x] Listen after 3.8, as A/B. `clips/ab/synthwave` (A: what DadCraft heard, 1bad590; B: the pad and lead 3 dB
+      down and today's gains), `clips/ab/trap` (the same notes; B: the riff about 22 dB up against the 808). Oct 26:
+      B in both ("cleaner, maybe? less hiss or fuzziness?"). The default mix target holds; no style overrides it.
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
       pocket (decision 13) can be played to him next to the on-grid version. Ask too whether the chord rounds change
