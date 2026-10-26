@@ -27,6 +27,7 @@ Before every listen (task 3.8; the tests also run on GitHub on every push):
 
     .venv/bin/python tools/fuzz.py                       # 2000 seeds a style: nothing breaks, nothing out of place
     .venv/bin/python -m maestro.mix clip.mid             # each member's loudness against the style's targets
+    .venv/bin/python -m maestro.judge clip.mid           # the style judge: the traits off its style's card, the cross check
     .venv/bin/python tools/ab.py synthwave 1bad590 --seed 14 --bars 32   # an earlier round next to today's
 
 The parity test needs Ouralia beside this repo (or `MAESTRO_OURALIA`), with its test build: `tools/build_libpd.sh`

@@ -137,7 +137,8 @@ class Song:
 
 
 def read_notes(path):
-    """A MIDI file's notes per track name: {name: [Note]}. Refuses a note off the grid (decision 13)."""
+    """A MIDI file's notes per track name: {name: [Note]}. Refuses a note off the grid (decision 13). Notes of one
+    pitch may overlap (trap's 32nd hat rolls): a note off ends the oldest."""
     mid = mido.MidiFile(path)
     scale = TICKS / mid.ticks_per_beat
     out = {}
@@ -152,9 +153,9 @@ def read_notes(path):
                 raise ValueError(f"{path}: {name} has a note off the grid at tick {now}")
             key = (msg.channel, msg.note)
             if msg.type == "note_on" and msg.velocity:
-                held[key] = (int(t) // TICK, msg.velocity)
-            elif key in held:
-                s, v = held.pop(key)
+                held.setdefault(key, []).append((int(t) // TICK, msg.velocity))
+            elif held.get(key):
+                s, v = held[key].pop(0)   # the oldest first: a roll's hits overlap on one pitch
                 notes.append(Note(s, int(t) // TICK - s, msg.note, v))
         if notes:
             out[name] = sorted(notes, key=lambda n: (n.step, n.pitch))

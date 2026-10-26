@@ -4,8 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.5b, `maestro/judge.py` measuring a clip against its style's card. Synthwave's open points (below,
-after 3.4b's listen) wait for its next round; trap waits for DadCraft's reference for the cascade.
+**Next:** 3.5c, checking the judge, starting with DadCraft's calls on what 3.5b's first run flagged (in 3.5b
+below). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -423,9 +424,24 @@ For each chosen style, how each member plays it, written from sources.
         on the beat, against the chord there or the one a note is held into, so the tumbao's anticipations count);
         the loader checks every card. Expected in 3.5c: synthwave's lead register (the Reimaginer's C4-C6) will flag
         today's lead (E5-A6), the open point already waiting for synthwave's next round.
-  - [ ] 3.5b `maestro/judge.py`: measures a clip's MIDI (its `.json` gives the roles), scores each member against
+  - [x] 3.5b `maestro/judge.py`: measures a clip's MIDI (its `.json` gives the roles), scores each member against
         its style's card and names the trait that's off ("trap hats: too few rolls"); a cross check scores each
         clip against every style's card, and a clip should fit its own style best.
+        Done Oct 26: `python -m maestro.judge clip.mid` (or a Song in memory). A trait inside its range scores 1,
+        falling to 0 a range's width outside. The fit is the mean over members (the band's tempo and chords count
+        as one), so a busy drum card doesn't outweigh the melody, and a member a style has no card for scores 0
+        (otherwise synthwave, with no guitar card, out-fit power rock on its own clips). "Repeats" compares where
+        the onsets fall, not their pitches, so a montuno or arp following the chords still goes round. A blend
+        can give each member its own style. `song.read_notes` now keeps overlapping notes of one pitch (trap's
+        32nd hat rolls lost 8 of 306 hits), and a roll ringing past the end adds no bar. 246 tests.
+        First run (seeds 7-9, 16 bars): every clip fits its own style best (trap 99% against synthwave's 87%,
+        the closest; the others by 25 points or more). Flagged, for 3.5c: synthwave's lead A5-E6 against C4-C6
+        (expected) and its bass down to C1 on two seeds; salsa seed 7 drew "tumbao on the one" for the whole clip
+        (beat 1 every bar against the card's 0-40%, 50% chord tones since its beat-4 anticipation stops at the
+        bar line instead of being held into the next chord, down to D1 under E1), and the keys' syncopation at 23%
+        against 25%; power rock's timeline says "A" for all 16 bars while the riff moves A5-D5-E5 (guitars 77%
+        chord tones, bass 62-66%), guitar R doubles an octave up (A3-A4 against E2-E4), and seed 8's bass plays 12
+        notes a bar against 2-8. One-offs: trap's melody at 9 notes a bar (seed 7) and no triplets (seed 9).
   - [ ] 3.5c Check the judge: today's clips pass their own cards; wrong clips (a member from another style, the
         velocities flattened, the notes shuffled off the style's steps) score low; SynTheory (MIT) tests the chord
         and tempo measures where it fits. Tests and fuzz clean. Then every listen gets the judge's table first.
