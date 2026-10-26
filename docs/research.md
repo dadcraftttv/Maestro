@@ -76,6 +76,16 @@ transpose and tempo augmentation (4.4), velocity variation on the grid (an idea,
 Some claims were off: one review couldn't read the files and took "bucket 2" from the stale README; the trap rounds
 weren't mostly level tweaks (one round was).
 
+## Round 5: DadCraft's ideas list (Oct 26)
+
+From `inbox/ideas.md`. The **Fase Groove** family (wsx79: piano, guitar, drums, lead, arranger; AGPL-3.0, so ideas
+only, no code) writes MIDI by rules, one engine per instrument on a shared key, tempo and swing, in song sections.
+All 13 of its genres are house. DadCraft took two ideas (Oct 26): the **DNA nudges** (PLAN.md 3.9) and the guitar's
+**scratch lane** (3.10). Noted for later: a fill library per instrument, per-lane timing feels, a voicing compare
+(range, voice movement, top line) as a check for the judge, and stored takes with locks. The other links (LocalAI,
+indra, soundbox, SoundForge Studio) don't serve Maestro; SoundForge's physical-model sound effects might interest
+Ouralia's sounds.
+
 ## Data and tools found
 
 | Name | License | Use |
@@ -109,3 +119,4 @@ weren't mostly level tweaks (one round was).
 - Groove MIDI: https://magenta.tensorflow.org/datasets/groove · PDMX: https://zenodo.org/records/15571083
 - Aria-MIDI: https://arxiv.org/pdf/2504.15071 · MidiTok: https://github.com/Natooz/MidiTok
 - Basic Pitch: https://github.com/spotify/basic-pitch · Beat This!: https://huggingface.co/cstr/beat-this-GGUF
+- Fase Groove: https://github.com/wsx79/fasegroovearranger · https://github.com/wsx79/fasegroovepiano · https://github.com/wsx79/fasegrooveguitar

@@ -431,6 +431,19 @@ For each chosen style, how each member plays it, written from sources.
 - [x] Listen after 3.8, as A/B. `clips/ab/synthwave` (A: what DadCraft heard, 1bad590; B: the pad and lead 3 dB
       down and today's gains), `clips/ab/trap` (the same notes; B: the riff about 22 dB up against the 808). Oct 26:
       B in both ("cleaner, maybe? less hiss or fuzziness?"). The default mix target holds; no style overrides it.
+- [ ] 3.9 DNA nudges (DadCraft, Oct 26, from Fase Groove Piano's "Musical DNA": `docs/research.md` round 5). A few
+      named directions (more energetic, more minimal, funkier, more soulful, more sophisticated), each one step a
+      click. A step shifts the style's tendencies, not its notes: density, syncopation, accents and velocity, chord
+      colour, register. It always stays inside the style's ranges (decision 9), so the rules never have to fight it
+      (decision 6). It works on one member or the whole band and stacks with a blend (decision 4). Check before a
+      listen: each step moves its own measures the way it says, the drift measures still pass, fuzz clean. Plan to
+      DadCraft before starting; in bucket 6 it may become a control in Ouralia.
+- [ ] 3.10 The scratch lane (DadCraft, Oct 26, from Fase Groove Guitar: `docs/research.md` round 5). The rhythm
+      guitar gets a lane of muted, unpitched scratch strokes that fills the empty 16ths between its chord hits by
+      itself: palm-mute chugs in power rock, funk scratch where a style asks for it (afrobeat, later). It's a
+      tendency in the style entry (how often, on which 16ths, how loud), never on top of a chord hit, and it eases
+      off in stops and builds. Check: never under another hit, in its mix target, fuzz clean; then an A/B against
+      the guitar without it. Plan to DadCraft before starting; it may join power rock's next round.
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
       pocket (decision 13) can be played to him next to the on-grid version. Ask too whether the chord rounds change
