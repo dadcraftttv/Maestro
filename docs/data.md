@@ -313,6 +313,26 @@ borrowing V7) is less its own than F-G-Am: a change proposed to DadCraft for the
 systems" page on rock's major triads over the pentatonic (I, bIII, IV, V, bVII; rotated loops of power chords) is
 for power rock (3.4d).
 
+## The outside lists (Oct 26)
+
+Six AI systems' lists of open music-AI resources (`inbox/`, private; `docs/research.md` round 4). Nothing in them is
+trap, synthwave, salsa or power rock, so the gaps above stand. Licenses below are what the lists claim, **not checked
+yet**: each is CHECK until its own page is read (decision 14).
+
+| Candidate | What it is | Use, if its license holds |
+|---|---|---|
+| Niko Chord Progression Dataset | 5k+ chord progressions labelled by style | book or data: may cover our styles' loops |
+| ComMU | 11k short MIDI pieces by pro composers, with metadata | data |
+| EMOPIA, Popular Hooks | pop piano clips with emotion labels; pop songs as audio, MIDI and lyrics | data, nearest to pop |
+| JSB Chorales, GiantMIDI-Piano, MusicNet | Bach chorales; transcribed classical piano; labelled classical recordings | off-target; voice leading and the exam |
+| Fundamentals of Music Processing (Müller), with its free notebooks | MIR textbook | reader (bucket D) |
+| Galaxy MIDI, Discover MIDI | millions of MIDI files (Galaxy claims CC BY-NC-SA) | likely scraped: check how they were built (decision 7) |
+
+The lists got several licenses wrong, against what we checked at the source: Lakh MIDI and Slakh2100 called CC BY
+(fan MIDI of copyrighted songs: OUT); MAESTRO and MTG-Jamendo counted as plain CC (both NC); Hooktheory, teoria.com and
+musictheory.net called usable for training (all OUT); Essen called public domain (no clear license: CHECK). The
+refuse-when-in-doubt rule (decision 14) is there for exactly this.
+
 ## Sources (checked Oct 23)
 - GMD: https://magenta.tensorflow.org/datasets/groove · E-GMD: https://magenta.tensorflow.org/datasets/e-gmd
 - PDMX: https://zenodo.org/records/15571083

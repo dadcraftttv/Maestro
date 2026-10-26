@@ -258,3 +258,7 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 24: the listen to `clips/synthwave/synthwave_14`. DadCraft: "yes to all of those" (outrun when up, dreamy when
   low, the lead on top and singing, the pump light, the tom fills leading in); "pads and leads still sound too
   loud, but don't worry about doing another render right now". The pad and lead turned down about 3 dB each.
+- Oct 26: six outside reviews of the repo and six resource lists (`inbox/`, private). Nine proposals put to DadCraft;
+  "i'm fine with 1 through 9": decision 15 (the beat never waits), task 3.8 (seed fuzzing, a mix check, A/B listens,
+  tests on every push), bucket S (a first model spike after Checkpoint 3), 5.0's success measures, 6.0's live inputs,
+  the README and decision order fixed (`docs/research.md` round 4). The lists' new candidates in `docs/data.md`.

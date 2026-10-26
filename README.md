@@ -2,7 +2,7 @@
 
 The composer of the Orchestra: the music brain that will drive Ouralia's generative music.
 
-Status: bucket 2 of 6 (the theory core) under way: today's Ouralia composer ported to Python, checked against the C.
+Status: bucket 3 of 6 (the style book) under way: the theory core is done, and the trap and synthwave entries are written.
 
 ## The idea
 

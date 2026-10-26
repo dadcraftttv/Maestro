@@ -48,6 +48,34 @@ member, so they are ideas only (code or weights checked before any use).
 | OpenMusic (QA-MDT), SongGen, DiffRhythm, MiniMax-Music, Amphion, Stable Audio 3.0 Small | audio song generators and an audio toolkit | Nothing for note-level parts; Stable Audio Small already noted as the phone size reference |
 | Khala | not found under this name (searched with LeVo) | - |
 
+## Round 4: outside reviews (Oct 26)
+
+DadCraft asked six AI systems (ChatGPT, DeepSeek, Grok, Kimi, Meta, Mistral) to review the public repo and to list
+open music-AI resources. The reviews stay private in `inbox/`; what they suggest is summed up here in our words. Their
+resource lists went into `docs/data.md` ("The outside lists"). DadCraft took all nine proposals (Oct 26: "i'm fine
+with 1 through 9"):
+
+| # | Proposal (who raised it) | Where it went |
+|---|---|---|
+| 1 | Make the next bar ahead of time, with the rules as a fallback, so a slow model never drops a beat (5 of 6) | Decision 15; 6.1 |
+| 2 | Check the mix before a listen: each member's loudness per style, the melody on top (Kimi, Mistral) | 3.8 |
+| 3 | Seed fuzzing: thousands of seeds, nothing empty, out of range or off the grid (DeepSeek, Meta, Mistral) | 3.8 |
+| 4 | A/B listens against the earlier round (ChatGPT, DeepSeek, Kimi, Meta) | 3.8 |
+| 5 | The README's status was stale; decision 10 sat above 8 | Fixed Oct 26 |
+| 6 | A small learned-model test before the desk and the training data: the real risk is bucket 5 (ChatGPT, Kimi, Mistral) | Bucket S |
+| 7 | Say what the model must add over the rules' choose, as measures (Mistral) | 5.0 |
+| 8 | Live inputs: smoothed, on phrase boundaries, who wins when the user and the room disagree (ChatGPT, Grok, Meta) | 6.0 |
+| 9 | Tests on every push (DeepSeek, Meta) | 3.8 |
+
+Not taken, each against a decision: testing the timing pocket now (13: only DadCraft brings it back); fewer styles
+(1.4 picked four); an early in-app slice or streaming prototype (5, 12); one reader model instead of a team (14);
+rules that suggest and a model that scores (6, 9); an MIT license for the player (10); a separate status file (PLAN.md
+is the only one). Smaller points left for their bucket's plan step: per-file provenance with hashes (bucket 4), a
+versioned Maestro-Ouralia interface (6.0), novelty past exact notes (contour, rhythm, chord-change variety: 5.5),
+transpose and tempo augmentation (4.4), velocity variation on the grid (an idea, decision 13 covers timing only).
+Some claims were off: one review couldn't read the files and took "bucket 2" from the stale README; the trap rounds
+weren't mostly level tweaks (one round was).
+
 ## Data and tools found
 
 | Name | License | Use |

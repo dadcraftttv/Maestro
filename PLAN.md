@@ -5,7 +5,8 @@ same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: 
 as much as possible to keep token cost low").
 
 **Next:** Bucket 3, 3.4c (salsa's entry). Synthwave's open points (below, after 3.4b's listen) wait for its next
-round; trap waits for DadCraft's reference for the cascade.
+round; trap waits for DadCraft's reference for the cascade. 3.8 (checks before every listen, adopted Oct 26) can
+go before 3.4c's listen.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -35,7 +36,6 @@ band member play, the way its style plays it?
    PC-side work only: experiments, research, the style judge; models trained with it stay on the PC, under
    CC BY-NC-SA 4.0. Never train on Lakh-style fan MIDI of copyrighted songs, or use weights trained on it (ideas only).
    Music made by other AI models is ideas only too (DadCraft, Oct 23: "lets stay legally safe").
-10. **Licenses:** code GPL-3.0-or-later (like Ouralia); docs and the style book CC BY-SA 4.0 (README "License").
 8. **The phone version is small** (target: tens of MB, around MIDI-GPT's ~20M parameters), shrunk from the PC model.
 9. **Free to drift, always making sense.** Maestro is never locked to fixed patterns: styles are written as
    tendencies and ranges, the model makes fresh choices each bar, and the rules only rule out what doesn't fit,
@@ -48,6 +48,7 @@ band member play, the way its style plays it?
    minutes) and sameness between plays (two runs, same settings). Grooving members (drums, percussion, bass, pad)
    and a melody that loops (trap's riff) repeat freely; the band's own targets still hold (DadCraft, Oct 24: "let
    the riff repeat freely").
+10. **Licenses:** code GPL-3.0-or-later (like Ouralia); docs and the style book CC BY-SA 4.0 (README "License").
 11. **The band grows past today's four members** (drums, bass, pad, melody, plus the arp). The first styles need
     more roles, planned from the style book on: **rhythm guitar** (power rock), **keys** (salsa's montuno piano),
     **horns** (salsa) and **percussion** (congas, timbales, cowbell, clave; its own member, apart from the kit).
@@ -83,6 +84,11 @@ band member play, the way its style plays it?
     content) leaves the source not usable until DadCraft looks, or hands it to Claude (the notice and the source
     page, not the whole text). Each verdict shows on the desk page with the notice and the reason, and DadCraft can
     overrule it. Until the desk exists, Claude applies the same table (3.0a).
+15. **The beat never waits** (DadCraft, Oct 26, from the outside reviews: `docs/research.md` round 4). Maestro
+    makes each member's next bar ahead of time and keeps it queued; the model never runs note by note. If a bar
+    isn't ready in time (the phone busy, the model slow), the rule-made bar plays instead, so a slow model never
+    drops a beat or stalls the sound. The time to make a bar is measured on the PC from the model spike (S.1) on,
+    and on the phone in 6.1.
 
 ## How each bucket runs
 
@@ -322,13 +328,32 @@ For each chosen style, how each member plays it, written from sources.
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.
+- [ ] 3.8 Checks before every listen (outside reviews, DadCraft, Oct 26: `docs/research.md` round 4):
+      - **seed fuzzing:** thousands of seeds a style through the theory modules and the sketch: nothing empty,
+        every note on the grid and in its member's range, no choose left with nothing to pick;
+      - **a mix check:** each member's loudness in the rendered clip against a target per style, the melody on
+        top; levels are set from it before a render, not after a listen;
+      - **A/B listens:** when a style has an earlier round, both clips go to DadCraft side by side (same seed and
+        bars where they can be), and he says which is better and why;
+      - **tests on every push:** a GitHub Actions run of pytest (the parity test skips there: no Ouralia build).
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
       pocket (decision 13) can be played to him next to the on-grid version. Ask too whether the chord rounds change
       too much or too little, on the long clip (open from the listen after 3.2). Also for his ear, from 2.5: the
       semitone key lift, how sections growing heavier comes across, and the layering (3.6).
 
-### D. Maestro's own desk (draft; between buckets 3 and 4, decision 14)
+### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
+Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a
+learned model finds out what buckets 4 and 5 need before the desk and the training data are built (outside reviews,
+`docs/research.md` round 4).
+- [ ] S.0 Plan approved: one member (the drums from Groove MIDI, CC BY 4.0, or a member from the style book's practice
+      MIDI), the smallest MIDI-GPT-style model that can learn it, a few days' work at most.
+- [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
+      to make a bar (decision 15).
+- [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
+      into the plans of buckets 4 and 5.
+
+### D. Maestro's own desk (draft; after S, before bucket 4, decision 14)
 A local web page on this PC where DadCraft teaches Maestro without Claude Code.
 - [ ] D.0 Plan approved: the reader models, picked on a test of our own (the same chapters run through each
       candidate, scored on what it got right and what it missed), from what's best when we get there: the license,
@@ -358,7 +383,10 @@ A local web page on this PC where DadCraft teaches Maestro without Claude Code.
 
 ### 5. The model (draft)
 Trained on this PC (RTX 2070, 8 GB).
-- [ ] 5.0 Plan approved.
+- [ ] 5.0 Plan approved, with the success measures set first (outside reviews, Oct 26), so the model earns its
+      place over the rules' seeded choose: how often the checks reject its suggestions (too often and it's a
+      bottleneck), how often it picks what choose rarely would (too rarely and it's a thin coat over the rules),
+      DadCraft's blind A/B, and the time to make a bar (decision 15). The spike (S) tries them first.
 - [ ] 5.1 A small per-member model with controls (MIDI-GPT style); each member written seeing the others.
 - [ ] 5.2 Compare a GETMusic-style model; keep the better one.
 - [ ] 5.3 Style dropout for the "how much style" knob; style blends.
@@ -371,7 +399,11 @@ Trained on this PC (RTX 2070, 8 GB).
 - [ ] 6.0 Plan approved (follows Ouralia's CLAUDE.md). The separate dev path (decision 12): e.g. a long-lived
       Ouralia branch kept up to date with main, and a beta build that installs beside the release; to settle here.
       The C side gets its tables from a header generated from `composer.json` (one source).
-- [ ] 6.1 Shrink the model for the phone; measure CPU and battery.
+      The plan also settles the live inputs (outside reviews, Oct 26): how Ouralia's room, movement and the user's
+      own changes steer Maestro; smoothed, landing on phrase or section boundaries, holding a while before going
+      back, and which one wins when the user and the room disagree.
+- [ ] 6.1 Shrink the model for the phone; measure CPU, battery and the time to make a bar, with the rules'
+      fallback (decision 15): a bar ready well before it's due at the fastest tempo (salsa's 180), nearly always.
 - [ ] 6.2 `dcs_composer` gains a style and a sound per member, swappable; rules as guardrails; the new roles
       (decision 11) get members and kits in Ouralia.
 - [ ] 6.3 The drift measures on the phone (fresh seed each play; the patch's Pd `[random]`s and `expr random` are
