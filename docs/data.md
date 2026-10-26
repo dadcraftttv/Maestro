@@ -316,17 +316,23 @@ for power rock (3.4d).
 ## The outside lists (Oct 26)
 
 Six AI systems' lists of open music-AI resources (`inbox/`, private; `docs/research.md` round 4). Nothing in them is
-trap, synthwave, salsa or power rock, so the gaps above stand. Licenses below are what the lists claim, **not checked
-yet**: each is CHECK until its own page is read (decision 14).
+trap, synthwave, salsa or power rock, so the gaps above stand. Each notice was read on the source's own page on
+Oct 26 and mapped with the rules table (`maestro/data/licenses.json`, decision 14).
 
-| Candidate | What it is | Use, if its license holds |
-|---|---|---|
-| Niko Chord Progression Dataset | 5k+ chord progressions labelled by style | book or data: may cover our styles' loops |
-| ComMU | 11k short MIDI pieces by pro composers, with metadata | data |
-| EMOPIA, Popular Hooks | pop piano clips with emotion labels; pop songs as audio, MIDI and lyrics | data, nearest to pop |
-| JSB Chorales, GiantMIDI-Piano, MusicNet | Bach chorales; transcribed classical piano; labelled classical recordings | off-target; voice leading and the exam |
-| Fundamentals of Music Processing (Müller), with its free notebooks | MIR textbook | reader (bucket D) |
-| Galaxy MIDI, Discover MIDI | millions of MIDI files (Galaxy claims CC BY-NC-SA) | likely scraped: check how they were built (decision 7) |
+| Candidate | What it is | Notice found (where) | Tag | Use |
+|---|---|---|---|---|
+| MusicNet | 330 classical recordings, 1M+ note labels | "Creative Commons Attribution 4.0 International" (Zenodo record 5120004, Rights); recordings from CC and public-domain sources, each file's source in its metadata | SAFE | off-target; voice leading and the exam, if wanted |
+| Fundamentals of Music Processing (Müller) | MIR textbook as notebooks | text and figures "CC BY-NC-SA 4.0", `libfmp` code "MIT license", audio "the respective original licenses apply" (FMP C0 page, About) | NC (text), SAFE (code) | reader, PC side; ideas in our own words |
+| ComMU | 11,144 short MIDI pieces "written and created by professional composers" | "CC BY-NC-SA 4.0 ... prohibited to be used for commercial purposes" (POZAlabs/ComMU-code README, License) | NC | PC only: experiments, the style judge |
+| GiantMIDI-Piano | 10,855 classical piano pieces transcribed from YouTube recordings | "CC BY 4.0" (bytedance/GiantMIDI-Piano README, License), not saying if it covers the MIDI or the code; the download disclaimer adds no terms and says nothing on the recordings | CHECK | third-party content (the recordings); off-target, low priority |
+| JSB Chorales | Bach's chorales (the Boulanger-Lewandowski split) | none (czhuang/JSB-Chorales-dataset: no LICENSE, no notice; its source page is gone). music21's copy (Greentree's MusicXML) is distributed "with the permission of the encoders", and the corpus "may not be used for commercial uses" in parts | CHECK | Bach is public domain, the encodings aren't clearly licensed; off-target |
+| EMOPIA | 1,087 pop piano clips from 387 songs, emotion labels; MIDI transcribed from YouTube covers | "Creative Commons Attribution 4.0 International" (Zenodo record 5090631, Rights) | OUT | a CC license on transcriptions of copyrighted pop songs (the doubt rule; decision 7); the four emotion quadrants as an idea only |
+| Popular Hooks | 38,694 hooks of pop songs: MIDI, lyrics, YouTube links | none (NEXTLab-ZJU/popular-hook card: no license field); each song links its TheoryTab entry, lyrics from music APIs | OUT | copyrighted songs, no notice; TheoryTab is Hooktheory's (OUT above) |
+| Niko Chord Progression Dataset | 5k+ progressions labelled by style | AccoMontage2 repo "MIT license" (the code); the data "re-organized from the original Niko Dataset", which is "Nikos Ultimate MIDI Pack" (pianoforproducers.com, a paid MIDI pack) | OUT | a code license on a commercial pack (the doubt rule) |
+| Discover MIDI | 6.74M de-duplicated MIDI files | "cc-by-nc-sa-4.0" (projectlosangeles/Discover-MIDI-Dataset card); sources not given, files matched to artist and title | OUT | Lakh-style fan MIDI of copyrighted songs (decision 7) |
+| Galaxy MIDI | "19.9M MIDI" (one list only) | not found on Hugging Face, GitHub or in papers | drop | likely a list's mistake |
+
+So nothing new for the phone model: MusicNet is safe but classical; ComMU and the FMP text are PC only.
 
 The lists got several licenses wrong, against what we checked at the source: Lakh MIDI and Slakh2100 called CC BY
 (fan MIDI of copyrighted songs: OUT); MAESTRO and MTG-Jamendo counted as plain CC (both NC); Hooktheory, teoria.com and
