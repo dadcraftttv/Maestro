@@ -573,6 +573,7 @@ class Double:
     parts: tuple
     bursts: int = 0
     stay: int = 3
+    level: int = 0       # every double-bass kick at this velocity, both feet even (0: GMD's, the off foot softer)
 
 
 def _double(style):
@@ -587,9 +588,10 @@ def _double(style):
         if not ks or ks != sorted(set(ks)) or ks[0] != 0 or ks[-1] >= 16 or not isinstance(w, int) or w < 1:
             raise StyleError(f"{where}.runs.{n}: kicks as a bar's 16ths in order from 0, a whole-number weight")
         runs.append((n, tuple(ks), w, r.get("why", "")))
-    if not runs or not isinstance(d.get("parts"), list) or not 0 <= d.get("bursts", 0) <= 100:
-        raise StyleError(f"{where}: runs, the parts that play them, bursts a share in %")
-    return Double(tuple(runs), tuple(d["parts"]), d.get("bursts", 0))
+    if not runs or not isinstance(d.get("parts"), list) or not 0 <= d.get("bursts", 0) <= 100 or not \
+            0 <= d.get("level", 0) <= 127:
+        raise StyleError(f"{where}: runs, the parts that play them, bursts a share in %, level a velocity")
+    return Double(tuple(runs), tuple(d["parts"]), d.get("bursts", 0), level=d.get("level", 0))
 
 
 DOUBLE = {s: _double(s) for s in STYLES}   # None: one foot
@@ -603,7 +605,8 @@ def double_kick(rng, dbl, dr, hits, phrases, met, skip=()):
     out, lines, prev = list(hits), [], None
 
     def kick(st, e, strong):
-        return (st, SIXTEENTH, KIT["kick"], max(1, round(_vel(dr, "kick", 0, e) * (1 if strong else 0.85))), "kick")
+        vel = dbl.level or max(1, round(_vel(dr, "kick", 0, e) * (1 if strong else 0.85)))
+        return (st, SIXTEENTH, KIT["kick"], vel, "kick")
     for lo, hi, name, e in phrases:
         bars = [b for b in range(lo // met.bar, hi // met.bar) if b not in skip]
         if name in dbl.parts:

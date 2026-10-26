@@ -893,7 +893,8 @@
   },
   "drums": {
    "why": "GMD's rock drummers with double bass (written from theory: GMD has none): the hat in a verse, the ride or the crash in a chorus; in the loud parts both feet run 16ths or the gallop, and a burst of 16ths drives into some phrases; a snare build at a pre-chorus's end.",
-   "gain": -1,
+   "sound": 16,
+   "gain": -9,
    "kicks": 3,
    "hats": "8th",
    "grooves": {
@@ -917,7 +918,7 @@
     "hat 8th": 2
    },
    "double": {
-    "why": "Both feet: kicks as a bar's 16ths, the loud parts that play them, bursts (% of the other phrases' last beats).",
+    "why": "Both feet: kicks as a bar's 16ths, the loud parts that play them, bursts (% of the other phrases' last beats). Every run's kick at velocity 120, both feet even, on GM's Power kit (sound 16, a punchier kick), the bass an octave up out of their way (DadCraft, Oct 26: \"i almost didn't hear the double bass pedal kicks\").",
     "runs": {
      "sixteenths": {
       "kicks": [
@@ -983,7 +984,8 @@
      "drive",
      "duel"
     ],
-    "bursts": 30
+    "bursts": 30,
+    "level": 120
    }
   }
  },

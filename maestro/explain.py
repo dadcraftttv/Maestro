@@ -35,6 +35,7 @@ REDRAWS = 4  # draws of a phrase the check rules out before the plain one plays
 LEAN = 12   # how much more often a section opens on its tonic, and a tension chord goes where it leans
 SAY = 2     # bars between statements of the motif (a statement and its answer)
 UNDER = 77  # the pad stays under F5, leaving the melody its own register on top
+UP_FROM = 43  # G2: under it, power rock's bass goes an octave up over the double bass
 
 
 def _notes(key, v):
@@ -367,6 +368,9 @@ def rock_band(rng, style, plan, play, spans, key_at, bass, melody, drums, kit_wh
                                   met, set(breaks) | set(builds))
         for lo, ln in said:
             next(p for p in plan if p["section"].start <= lo // met.bar < p["section"].end)["drums"].append(ln)
+        up = [(at * met.bar, (at + phrase) * met.bar) for at, _, x in parts if x.name in DOUBLE[style].parts]
+        bass = [(st, n, m + 12 if any(lo <= st < hi for lo, hi in up) and m + 12 <= r.high and m < UP_FROM else m)
+                for st, n, m in bass]                # the bass an octave up, out of the double bass's low end
     drums.sort(key=lambda h: (h[0], h[2]))
     for k in guitar:
         guitar[k].sort(key=lambda n: (n[0], n[2]))

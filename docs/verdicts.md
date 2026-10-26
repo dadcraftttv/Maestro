@@ -293,3 +293,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 26: the A/B listen after power rock's second round. B: "it doesn't sound like 80's hair metal or thrash, but
   it's better than it was. i almost didn't hear the double bass pedal kicks." The duel trading and the twin
   harmony: "yes and yes". Logged as power rock's third round (PLAN.md).
+- Oct 26: power rock's third round: "yes, fix the kick" first (an estimate asked first: about 15-20 minutes); the
+  sound and thrash still to choose.

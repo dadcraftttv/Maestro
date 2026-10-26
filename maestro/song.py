@@ -97,7 +97,7 @@ class Song:
             ch = DRUMS_CHANNEL if m.kit else next(chan)
             tr = mido.MidiTrack()
             tr.append(mido.MetaMessage("track_name", name=m.name, time=0))
-            if not m.kit and isinstance(m.program, int):
+            if isinstance(m.program, int) and (not m.kit or m.program):   # a kit's program picks GM's kit (16: Power)
                 tr.append(mido.Message("program_change", channel=ch, program=m.program, time=0))
             if m.pan:
                 tr.append(mido.Message("control_change", channel=ch, control=10, value=64 + m.pan, time=0))

@@ -4,7 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** power rock's third round, once DadCraft picks from its list (below), then 3.5. Synthwave's open points (below, after 3.4b's listen)
+**Next:** the A/B listen for power rock's louder kick (`clips/ab/power_rock`); then the sound (Maestro's own metal
+sounds, power rock's third round, below), or 3.5. Synthwave's open points (below, after 3.4b's listen)
 wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -391,6 +392,13 @@ For each chosen style, how each member plays it, written from sources.
       bass's 8ths: louder, clickier kicks in the runs, the bass out of their way); still not hair metal or thrash,
       most likely the sound (GM stand-ins: Maestro's own high-gain guitar, a tight metal kit, a scooped mix), maybe
       thrash's faster tempo and riffs. Ask DadCraft which first.
+      The kick first (DadCraft, Oct 26: "yes, fix the kick"). Done Oct 26: every double-bass kick at velocity 120,
+      both feet even; GM's Power kit (sound 16; the song file now writes a kit's program when it isn't 0); the bass an
+      octave up (under G2) in the double-bass phrases, out of the kick's low end; drums gain -9 (the Power kit is
+      louder throughout). The kick alone measured 7 dB up against the band; the drums in their target on 4 of 5
+      clips (a verse-heavy one 1.2 dB under). 226 tests, fuzz 2000 clean, the other styles byte-identical. A/B:
+      `clips/ab/power_rock` (seed 63, 48 bars; A: the second round, df745ed; B: the new kick). Still open in this
+      round: Maestro's own metal sounds; thrash (part of power rock, or its own style later).
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
