@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** ask DadCraft: Maestro's own metal sounds (power rock's third round, below) and thrash, or on to 3.5. Synthwave's open points (below, after 3.4b's listen)
+**Next:** 3.5, the style judge: plan to DadCraft first. Synthwave's open points (below, after 3.4b's listen)
 wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -387,7 +387,7 @@ For each chosen style, how each member plays it, written from sources.
       the duel trading left and right, the turns shorter and hotter, landing home together; the twin harmony.
       Oct 26: B. "it doesn't sound like 80's hair metal or thrash, but it's better than it was. i almost didn't hear
       the double bass pedal kicks." The duel and the twin harmony: "yes and yes".
-- [ ] Power rock, third round (logged Oct 26): the double bass barely heard (the GM kick soft and masked by the
+- [x] Power rock, third round (logged Oct 26): the double bass barely heard (the GM kick soft and masked by the
       bass's 8ths: louder, clickier kicks in the runs, the bass out of their way); still not hair metal or thrash,
       most likely the sound (GM stand-ins: Maestro's own high-gain guitar, a tight metal kit, a scooped mix), maybe
       thrash's faster tempo and riffs. Ask DadCraft which first.
@@ -397,8 +397,10 @@ For each chosen style, how each member plays it, written from sources.
       louder throughout). The kick alone measured 7 dB up against the band; the drums in their target on 4 of 5
       clips (a verse-heavy one 1.2 dB under). 226 tests, fuzz 2000 clean, the other styles byte-identical. A/B:
       `clips/ab/power_rock` (seed 63, 48 bars; A: the second round, df745ed; B: the new kick). Heard Oct 26: "B wins."
-      Still open in this
-      round: Maestro's own metal sounds; thrash (part of power rock, or its own style later).
+      Closed Oct 26 (DadCraft: "lets save the metal sounds for later. no thrash."): no thrash, in power rock or as
+      a style.
+- [ ] Later (DadCraft, Oct 26): Maestro's own metal sounds for power rock (a high-gain guitar, a tight metal kit, a
+      scooped mix) in place of the GM stand-ins. Ask DadCraft when to pick it up.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
