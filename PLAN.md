@@ -88,6 +88,11 @@ band member play, the way its style plays it?
     isn't ready in time (the phone busy, the model slow), the rule-made bar plays instead, so a slow model never
     drops a beat or stalls the sound. The time to make a bar is measured on the PC from the model spike (S.1) on,
     and on the phone in 6.1.
+16. **Checkpoint 3 asks for a sound baseline, not a finished style** (DadCraft, Oct 26). A listening round is worth
+    running while it still changes the style book's format or the checks; once a style's rounds only fine-tune its
+    sound (salsa's fuller horn section, synthwave's lead register and the like), that tuning waits for the desk (D),
+    where DadCraft does it himself, offline, and it tests the desk too. Each style passes Checkpoint 3 when it is good
+    enough to be a sound baseline: for the practice MIDI, the guardrails and the fallback bar (decision 15).
 
 ## How each bucket runs
 
@@ -446,7 +451,8 @@ For each chosen style, how each member plays it, written from sources.
       tendency in the style entry (how often, on which 16ths, how loud), never on top of a chord hit, and it eases
       off in stops and builds. Check: never under another hit, in its mix target, fuzz clean; then an A/B against
       the guitar without it. Plan to DadCraft before starting; it may join power rock's next round.
-- [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
+- [ ] Checkpoint 3 (decision 16: a sound baseline per style, not a finished one; fine-tuning waits for the desk):
+      each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
       pocket (decision 13) can be played to him next to the on-grid version. Ask too whether the chord rounds change
       too much or too little, on the long clip (open from the listen after 3.2). Also for his ear, from 2.5: the
@@ -480,7 +486,8 @@ A local web page on this PC where DadCraft teaches Maestro without Claude Code.
 - [ ] D.3 The page: drop files in, see what was taken away, accept, edit or reject; accepted changes go into the
       style book, with the source credited.
 - [ ] Checkpoint D: DadCraft feeds an open textbook chapter through the page, away from Claude Code, and judges
-      what it took away.
+      what it took away. Then the style fine-tuning that decision 16 left for the desk (salsa's fuller horn section,
+      synthwave's lead register, Maestro's own metal sounds, ...) is his to do there.
 
 ### 4. Training data (draft)
 - [ ] 4.0 Plan approved.
