@@ -66,10 +66,15 @@ OWN = {"supersaw": synth.supersaw, "saw bass": synth.saw_bass, "pluck": synth.pl
 
 
 def _synth_tracks(midi, own, length):
-    """Maestro's own sounds for the tracks named in `own`, mixed, stereo, `length` samples: each with its echo and
-    reverb (`synth.MIX`), ducking under the kit's kicks as deep as its `pump`."""
+    """Maestro's own sounds for the tracks named in `own`, mixed, stereo, `length` samples."""
+    return sum(synth_parts(midi, own, length).values(), np.zeros((length, 2)))
+
+
+def synth_parts(midi, own, length):
+    """{track name: its own sound, stereo, `length` samples}: each with its echo and reverb (`synth.MIX`), ducking
+    under the kit's kicks as deep as its `pump`."""
     sec = 60 / mido.tempo2bpm(next((m.tempo for m in midi.tracks[0] if m.type == "set_tempo"), 500000))
-    out, kicks, parts = np.zeros((length, 2)), [], []
+    kicks, parts = [], {}
     for tr in midi.tracks:
         if tr.name not in own:
             continue
@@ -103,10 +108,9 @@ def _synth_tracks(midi, own, length):
             x = synth.echo(x, sec, wet_echo, feedback)
         if wet_room:
             x = synth.reverb(x, room, wet_room)
-        parts.append((x, depth))
-    for x, depth in parts:
-        out += x * synth.pump(length, kicks, depth)[:, None] if depth and kicks else x
-    return out
+        parts[tr.name] = (x, depth)
+    return {n: x * synth.pump(length, kicks, depth)[:, None] if depth and kicks else x
+            for n, (x, depth) in parts.items()}
 
 
 def render(mid, wav, sf2=None):
