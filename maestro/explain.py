@@ -16,7 +16,7 @@ from .rng import ComposerRng, fresh_seed
 from .stylebook import part
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
 from .theory.flow import ARPS, BASS, FLOW, arp_part, bass_808, check_arp, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
-    check_loop, held, loop_melody, LOOPS, phrase_melody, progression
+    check_loop, held, loop_melody, LOOPS, phrase_melody, plain_phrase, progression
 from .theory.drums import DRUMMER, check_drums, drum_part, quiet_spans
 from .theory.form import DEVELOPS, FORM, WORDS, Play, Theme, explain_section
 from .theory.percussion import PERCUSSION, check_percussion, percussion_part
@@ -26,6 +26,7 @@ from .theory.rhythm import CLAVES, METERS, RHYTHM, check_clave, check_onsets, ch
 from .theory.voicing import LEADING, check_band, choose_voicing, explain, member_range, note_name, voicings
 
 TRIES = 10   # draws of a bass rhythm before giving up on sitting with the clave
+REDRAWS = 4  # draws of a phrase the check rules out before the plain one plays
 LEAN = 12   # how much more often a section opens on its tonic, and a tension chord goes where it leans
 SAY = 2     # bars between statements of the motif (a statement and its answer)
 UNDER = 77  # the pad stays under F5, leaving the melody its own register on top
@@ -151,6 +152,42 @@ def choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, room=0
 
 
 
+def give_way(rng, notes, pad, bass, spans, key_at, lo, hi, leading):
+    """When a phrase runs over the melody's top, the pad gives way: the phrase an octave down, the pad's chords
+    under it voiced below it, still not muddy with the bass. (the notes, the new pad or None, lines)."""
+    top = member_range("melody").high
+    if max(m for _, _, m in notes) <= top:
+        return notes, None, []
+    down = [(st, length, m - 12) for st, length, m in notes]
+    ceiling = min(m for _, _, m in down)
+    if max(m for _, _, m in down) > top or ceiling <= member_range("pad").low:
+        return notes, None, []
+    out, prev = [n for n in pad if not lo <= n[0] < hi], None
+    for sp in spans:
+        if not lo <= sp.at < hi:
+            continue
+        was = sorted(m for st, _, m in pad if st == sp.at)
+        if not was:
+            continue
+        if prev is None:                    # the voicing before the phrase, to move from smoothly
+            prev = sorted(m for st, length, m in pad if st < sp.at <= st + length) or None
+        under = [m for st, length, m in bass if st <= sp.at < st + length] or [bass[0][2]]
+        try:
+            for _ in range(TRIES + 1):
+                v = choose_voicing(rng, sp.chord, key_at(sp.at), len(was), member_range("pad"), prev, leading,
+                                   ceiling=ceiling)
+                if not check_band({"pad": v, "bass": under}, key_at(sp.at)):
+                    break
+            else:
+                return notes, None, []
+        except ValueError:
+            return notes, None, []
+        out += [(sp.at, sp.length, m) for m in v]
+        prev = v
+    return down, sorted(out), [f"    the pad gives way: voiced under {note_name(key_at(lo), ceiling)}, the melody an "
+                               "octave down to stay under C7"]
+
+
 def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, room=0.5):
     """Task 3.2's choices for `bars` bars: (lines of plain words, the take). The take holds the notes ("pad",
     "bass", "melody": (step, length, MIDI note)), a record a bar like `choices`' (bar, section, key, energy, its
@@ -249,10 +286,18 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         for at in range(s.start, s.end, form.phrase):
             lo, hi = at * met.bar, (at + form.phrase) * met.bar
             floor = max((m for st, length, m in pad if st < hi and st + length > lo), default=UNDER)
-            notes, lines = phrase_melody(rng, theme, spans, s.key, at, form.phrase, met, floor, clave,
-                                         [n[0] for n in melody])
-            bad = check_phrase(notes, spans, s.key, met, form.phrase, at)
-            p["lines"] += lines + ([f"    ruled out: {bad}"] if bad else [])
+            sung, two = [n[0] for n in melody], clave if clave and clave.two_sided else None
+            for tries in range(REDRAWS + 2):         # drawn again when the check rules it out, then the plain one
+                notes, lines = plain_phrase(spans, s.key, at, form.phrase, met, floor, two) if tries > REDRAWS else \
+                    phrase_melody(rng, theme, spans, s.key, at, form.phrase, met, floor, clave, sung)
+                notes, under, said = give_way(rng, notes, pad, bass, spans, key_at, lo, hi, leading)
+                bad = check_phrase(notes, spans, s.key, met, form.phrase, at, two, sung)
+                if not bad:
+                    break
+                p["lines"].append(f"    drawn again: {bad}")
+            if under is not None:
+                pad[:] = under
+            p["lines"] += lines + said + ([f"    ruled out: {bad}"] if bad else [])
             p["phrases"].append(lines)
             melody += notes
     # the drums and the percussion over the whole play (task 3.3), their words with each section

@@ -117,12 +117,14 @@
     "why": "Dark strings, an 808, a bell lead (DadCraft, Oct 24: the bell and the strings).",
     "pad": {
       "sound": 49,
+      "gain": -3,
       "why": "slow strings (GM's String Ensemble 2), two voices, holding each chord (DadCraft, Oct 24: less busy)",
       "level": 28,
       "voices": 2
     },
     "bass": {
       "sound": "808",
+      "gain": -22,
       "why": "The 808: no pattern of its own, a note on every kick held to the next, mostly roots, some fifths and octave jumps; now and then a slide into the next note (DadCraft, Oct 24: about 1 in 6). A synth bass stands in for the 808.",
       "with": "kick",
       "tones": {
@@ -162,6 +164,7 @@
     "drums": {
       "why": "Programmed, as trap is (DadCraft, Oct 24: GMD's human hip hop wasn't trap): written kick patterns the 808 follows, written hat patterns with their rolls, the clap fixed on 3, machine-steady; the kick and clap drop out before a new section, and the play opens on the hats.",
       "sound": "808 kit",
+      "gain": -17,
       "kicks": 3,
       "hats": "16th",
       "patterns": {

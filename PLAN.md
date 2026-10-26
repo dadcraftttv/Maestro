@@ -4,9 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Bucket 3, 3.4c (salsa's entry). Synthwave's open points (below, after 3.4b's listen) wait for its next
-round; trap waits for DadCraft's reference for the cascade. 3.8 (checks before every listen, adopted Oct 26) can
-go before 3.4c's listen.
+**Next:** the A/B listen after 3.8 (`clips/ab/synthwave`, `clips/ab/trap`), then bucket 3, 3.4c (salsa's entry; its
+mix set from the mix check before its render). Synthwave's open points (below, after 3.4b's listen) wait for its
+next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -328,7 +328,7 @@ For each chosen style, how each member plays it, written from sources.
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.
-- [ ] 3.8 Checks before every listen (outside reviews, DadCraft, Oct 26: `docs/research.md` round 4):
+- [x] 3.8 Checks before every listen (outside reviews, DadCraft, Oct 26: `docs/research.md` round 4):
       - **seed fuzzing:** thousands of seeds a style through the theory modules and the sketch: nothing empty,
         every note on the grid and in its member's range, no choose left with nothing to pick;
       - **a mix check:** each member's loudness in the rendered clip against a target per style, the melody on
@@ -336,6 +336,17 @@ For each chosen style, how each member plays it, written from sources.
       - **A/B listens:** when a style has an earlier round, both clips go to DadCraft side by side (same seed and
         bars where they can be), and he says which is better and why;
       - **tests on every push:** a GitHub Actions run of pytest (the parity test skips there: no Ouralia build).
+      Done Oct 26. CI: `.github/workflows/tests.yml`. Fuzzing: `tools/fuzz.py` (2000 seeds a style, every style
+      clean; 40 a style in the tests). It found the phrase melody over C7, salsa's melody crossing the clave, a
+      phrase's first half ending home, and the checks only saying what they ruled out. Fixed, as DadCraft picked:
+      the pad gives way under a phrase that runs over C7; a phrase the check rules out (range, ending, clave) is
+      drawn again, up to 4 times, then the plain phrase plays (a chord tone a bar, on the clave's hits). The mix
+      check: `maestro/mix.py` (BS.1770 loudness of each member alone, against the melody); the targets in the
+      style book's "mix" (one default, a style may override); each member's "gain" (dB) in the player's mix. Set:
+      synthwave's drums and bass -2, pad and arp -1; trap's 808 -22, kit -17, strings -3. A/B: `tools/ab.py`.
+- [ ] Listen after 3.8, as A/B. `clips/ab/synthwave` (A: what DadCraft heard, 1bad590; B: the pad and lead 3 dB
+      down and today's gains), `clips/ab/trap` (the same notes; B: the riff about 22 dB up against the 808). Which
+      is better, and why? If synthwave's A still sounds right in the lead's level, synthwave gets its own targets.
 - [ ] Checkpoint 3: each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
       pocket (decision 13) can be played to him next to the on-grid version. Ask too whether the chord rounds change

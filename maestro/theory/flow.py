@@ -707,23 +707,53 @@ def phrase_melody(rng, theme, spans, key, start, bars, met, floor, clave=None, s
             prev = line[-1][2]
         notes += line
         onsets += [n[0] for n in line]
-    # the register: the lowest octave that keeps the phrase over the floor
-    lo, hi = min(key.degree(n[2]) for n in notes), max(key.degree(n[2]) for n in notes)
-    top = member_range("melody").high
-    base = next((b for b in range(key.tonic, 128, 12) if b + lo > floor and b + hi <= top),
-                next(b for b in range(key.tonic, 128, 12) if b + lo > floor))
-    out = [(s, length, base + key.degree(d)) for s, length, d in notes]
+    out = _register(key, notes, floor)
     peak = max(range(len(out)), key=lambda j: out[j][2])
     lines = [f"  melody, bars {start + 1}-{start + bars}: a phrase of {bars}, its peak in bar "
              f"{out[peak][0] // met.bar + 1}"] + ["    " + w for w in words]
     return out, lines
 
 
-def check_phrase(notes, spans, key, met, bars, start):
-    """None when the phrase is shaped, else the reason: it ends home, its half ends open, and most notes on the
-    beat are chord tones."""
+def _register(key, notes, floor):
+    """Degrees ([step, length, degree]) as notes in the lowest octave that keeps the phrase over the floor and under
+    the melody's top (over its top when nothing fits: the pad then gives way, or the check rules the phrase out)."""
+    lo, hi = min(key.degree(n[2]) for n in notes), max(key.degree(n[2]) for n in notes)
+    top = member_range("melody").high
+    base = next((b for b in range(key.tonic, 128, 12) if b + lo > floor and b + hi <= top),
+                next(b for b in range(key.tonic, 128, 12) if b + lo > floor))
+    return [(s, length, base + key.degree(d)) for s, length, d in notes]
+
+
+def plain_phrase(spans, key, start, bars, met, floor, clave=None):
+    """The rules' plainest phrase, for when no drawn one passes the check: (notes, lines). A chord tone held each
+    bar, moving the shortest way from the third; the bar at the half lands open, the last lands home. With a
+    two-sided clave each bar starts on the clave's first hit in it, so the phrase can't cross it."""
+    notes, d = [], 2
+    for i in range(bars):
+        b0 = (start + i) * met.bar
+        at = min((c - b0 % clave.length for c in clave.onsets if 0 <= c - b0 % clave.length < met.bar), default=0) \
+            if clave is not None else 0
+        st = b0 + at
+        pcs = {t % 12 for t in chord_at(spans, st).chord.tones}
+        if i == bars - 1:
+            d = 0 if abs(d) < abs(d - 7) else 7
+        else:
+            d = _degree_near(key, pcs - ({0} if i == bars // 2 - 1 else set()), d)
+        notes.append([st, met.bar - at, d])
+    return _register(key, notes, floor), [f"  melody, bars {start + 1}-{start + bars}: the plain phrase (no drawn "
+                                          "one passed the check), a chord tone a bar"]
+
+
+def check_phrase(notes, spans, key, met, bars, start, clave=None, sung=()):
+    """None when the phrase is shaped, else the reason: in the melody's range, it ends home, its half ends open,
+    most notes on the beat are chord tones, and with what was sung before it the melody sits with a two-sided
+    clave."""
     if not notes:
         return "no melody"
+    r = member_range("melody")
+    for st, length, m in notes:
+        if not r.low <= m <= r.high:
+            return f"{m} is outside the melody's range"
     if (notes[-1][2] - key.tonic) % 12:
         return "the phrase doesn't end home"
     half = (start + bars // 2) * met.bar
@@ -734,6 +764,10 @@ def check_phrase(notes, spans, key, met, bars, start):
     good = sum((n[2] - key.tonic) % 12 in {t % 12 for t in chord_at(spans, n[0]).chord.tones} for n in on)
     if on and good / len(on) < CHORD_TONES:
         return f"only {good} of {len(on)} notes on the beat are chord tones"
+    if clave is not None:
+        why = check_clave(list(sung) + [n[0] for n in notes], clave)
+        if why:
+            return f"the melody is {why}"
     return None
 
 

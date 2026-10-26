@@ -262,3 +262,9 @@ isn't reloaded every session; grep for the part a task needs.
   "i'm fine with 1 through 9": decision 15 (the beat never waits), task 3.8 (seed fuzzing, a mix check, A/B listens,
   tests on every push), bucket S (a first model spike after Checkpoint 3), 5.0's success measures, 6.0's live inputs,
   the README and decision order fixed (`docs/research.md` round 4). The lists' new candidates in `docs/data.md`.
+- Oct 26: task 3.8. Plan approved ("yes, as planned": CI, fuzzing, the mix check, A/B); the mix targets measured
+  first, then set with him. The first fuzz found the phrase melody over C7 (8-21% of seeds), salsa's melody crossing
+  the clave (8%), a phrase's first half ending home (~1%), and the checks only reporting what they ruled out. His
+  picks: one default mix target for every style, a style overriding it when his ear says so (the melody 0-3 dB over
+  the loudest other member, drums, percussion and bass 0-4 dB under it, pad and arp 5-10 dB under); the pad gives
+  way when a phrase runs over C7; a part a check rules out is drawn again, then the plain one plays.

@@ -63,12 +63,14 @@
     "why": "Maestro's own sounds (synth.py): a supersaw pad, a saw bass, a plucked arp, a saw lead, a LinnDrum-style kit. The pad and bass duck lightly under the kick (DadCraft, Oct 24: light pumping).",
     "pad": {
       "sound": "supersaw",
+      "gain": -1,
       "level": 56,
       "pump": 35
     },
     "bass": {
       "why": "The bass carries the groove (DadCraft's notes): octave or root 8ths locked to the kick when the energy is up (outrun), a held sub when it's low (dreamy).",
       "sound": "saw bass",
+      "gain": -2,
       "level": 104,
       "pump": 20,
       "patterns": {
@@ -83,6 +85,7 @@
     "arp": {
       "why": "A high sparkle arp in 16ths when the energy is up; colder, slower 8ths when it's low (DadCraft's notes). A shape a section, round each chord's tones, an echo on the dotted 8th.",
       "sound": "pluck",
+      "gain": -1,
       "level": 76,
       "shapes": {
         "up": {"tones": [0, 1, 2, 3], "weight": 3},
@@ -102,6 +105,7 @@
     "drums": {
       "why": "A drum machine (LinnDrum-style): the snare big on 2 and 4 with its gated reverb, four on the floor or a motorik kick, 8th or 16th hats, open hats on the and; at low energy the kick and snare go half time (the dreamy sections). Tom fills, high to floor, into a new section; a reversed cymbal into some.",
       "sound": "linn kit",
+      "gain": -2,
       "kicks": 4,
       "hats": "8th",
       "patterns": {

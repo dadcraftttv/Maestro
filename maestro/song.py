@@ -40,6 +40,7 @@ class Member:
     #                           (decision 3: the sound is kept apart from the style)
     kit: bool = False         # a drum kit (plays on the kit channel)
     pump: int = 0             # % it ducks under the kick in the clip player's mix (synthwave's pad and bass)
+    gain: int = 0             # dB in the clip player's mix (the mix check's, task 3.8)
     notes: list = field(default_factory=list)
     slides: list = field(default_factory=list)   # (step, steps, semitones): a bend from step, reached at its end
 
@@ -110,7 +111,8 @@ class Song:
         info = {"tempo": self.tempo, "meter": f"{self.meter[0]}/{self.meter[1]}", "source": self.source,
                 "listen": self.listen,
                 "members": {m.name: {"role": m.role, "sound": m.program if isinstance(m.program, str) else
-                                     "kit" if m.kit else m.program, **({"pump": m.pump} if m.pump else {})}
+                                     "kit" if m.kit else m.program, **({"pump": m.pump} if m.pump else {}),
+                                     **({"gain": m.gain} if m.gain else {})}
                             for m in self.members},
                 "timeline": self.timeline}
         with open(f"{stem}.json", "w") as f:

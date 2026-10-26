@@ -23,6 +23,12 @@ the computer, and a small version distilled from it runs on the phone.
     .venv/bin/python tests/exam/exam.py    # the theory exam's score card (--all: every question and why)
     .venv/bin/python -m maestro.explain salsa --seed 7   # a few bars of choices, in plain words
 
+Before every listen (task 3.8; the tests also run on GitHub on every push):
+
+    .venv/bin/python tools/fuzz.py                       # 2000 seeds a style: nothing breaks, nothing out of place
+    .venv/bin/python -m maestro.mix clip.mid             # each member's loudness against the style's targets
+    .venv/bin/python tools/ab.py synthwave 1bad590 --seed 14 --bars 32   # an earlier round next to today's
+
 The parity test needs Ouralia beside this repo (or `MAESTRO_OURALIA`), with its test build: `tools/build_libpd.sh`
 and `make -C dcs` there. It only reads Ouralia, never changes it.
 

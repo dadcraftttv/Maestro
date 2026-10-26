@@ -113,28 +113,60 @@ def synth_parts(midi, own, length):
             for n, (x, depth) in parts.items()}
 
 
+def _gains(mid):
+    """{track name: its gain in the mix, as a factor} from the clip's JSON (in dB there: the mix check's)."""
+    info = mid[:-4] + ".json"
+    if not os.path.exists(info):
+        return {}
+    return {n: 10 ** (m["gain"] / 20) for n, m in json.load(open(info)).get("members", {}).items() if m.get("gain")}
+
+
+def _read(wav):
+    with wave.open(wav) as w:
+        ch, frames = w.getnchannels(), w.readframes(w.getnframes())
+    x = np.frombuffer(frames, dtype="<i2").reshape(-1, ch).astype(float) / 32768
+    return x if ch == 2 else x.repeat(2, 1)
+
+
+def gm_parts(midi, names, sf2=None):
+    """{track name: FluidSynth's render of that track alone, stereo}, each the clip's length."""
+    out = {}
+    with tempfile.TemporaryDirectory() as tmp:
+        for tr in midi.tracks[1:]:
+            if tr.name in names:
+                solo = mido.MidiFile(type=1, ticks_per_beat=midi.ticks_per_beat)
+                solo.tracks = [midi.tracks[0], tr]
+                part, wav = os.path.join(tmp, "solo.mid"), os.path.join(tmp, "solo.wav")
+                solo.save(part)
+                out[tr.name] = _read(_fluid(part, wav, sf2, midi.length))
+    return out
+
+
 def render(mid, wav, sf2=None):
-    """Renders a MIDI file to a 16-bit WAV, faster than real time; Maestro's own sounds mixed in."""
-    own = _own(mid)
-    if not own:
+    """Renders a MIDI file to a 16-bit WAV, faster than real time; Maestro's own sounds mixed in, each member at its
+    gain."""
+    own, gains = _own(mid), _gains(mid)
+    if not own and not gains:
         return _fluid(mid, wav, sf2)
     midi = mido.MidiFile(mid)
-    with tempfile.TemporaryDirectory() as tmp:
-        rest = mido.MidiFile(type=1, ticks_per_beat=midi.ticks_per_beat)
-        rest.tracks = [t for t in midi.tracks if t.name not in own]
-        part = os.path.join(tmp, "gm.mid")
-        rest.save(part)
-        _fluid(part, os.path.join(tmp, "gm.wav"), sf2, midi.length)
-        with wave.open(os.path.join(tmp, "gm.wav")) as w:
-            ch, frames = w.getnchannels(), w.readframes(w.getnframes())
-    gm = np.frombuffer(frames, dtype="<i2").reshape(-1, ch).astype(float) / 32768
-    own_mix = _synth_tracks(midi, own, len(gm))
-    mix = gm + (own_mix if gm.shape[1] == 2 else own_mix.mean(1, keepdims=True))
+    rest = [t for t in midi.tracks[1:] if t.name not in own]
+    if any(t.name in gains for t in rest):      # a GM member at its own gain: FluidSynth renders each alone
+        parts = gm_parts(midi, {t.name for t in rest}, sf2)
+        gm = sum((x * gains.get(n, 1) for n, x in parts.items()),
+                 np.zeros((int(((midi.length + TAIL_S) * RATE) // PERIOD * PERIOD), 2)))
+    else:
+        with tempfile.TemporaryDirectory() as tmp:
+            whole = mido.MidiFile(type=1, ticks_per_beat=midi.ticks_per_beat)
+            whole.tracks = [midi.tracks[0]] + rest
+            part = os.path.join(tmp, "gm.mid")
+            whole.save(part)
+            gm = _read(_fluid(part, os.path.join(tmp, "gm.wav"), sf2, midi.length))
+    mix = gm + sum((x * gains.get(n, 1) for n, x in synth_parts(midi, own, len(gm)).items()), np.zeros_like(gm))
     peak = np.max(np.abs(mix))
     if peak > 0:                         # its peak at about -1 dB
         mix *= 0.89 / peak
     with wave.open(wav, "wb") as w:
-        w.setnchannels(ch)
+        w.setnchannels(2)
         w.setsampwidth(2)
         w.setframerate(RATE)
         w.writeframes((mix * 32767).astype("<i2").tobytes())

@@ -1,16 +1,19 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """The mix check (task 3.8): each member's loudness in a rendered clip, before DadCraft listens. Every member is
-rendered alone, on the clip player's own scale (before the mix's peak is set), and measured the way ITU-R BS.1770
-does: K-weighted (here by its response over the spectrum), in 400 ms blocks, gated at -70 and then 10 dB under the
-member's own level, so its rests don't count. The levels are said against the melody's.
+rendered alone, on the clip player's own scale (before the mix's peak is set) and at its gain, and measured the way
+ITU-R BS.1770 does: K-weighted (here by its response over the spectrum), in 400 ms blocks, gated at -70 and then
+10 dB under the member's own level, so its rests don't count. The levels are said against the melody's and checked
+against the style's targets (the style book's "mix"); the gains that would meet them are said too, for the members'
+"gain".
 
     python -m maestro.mix clips/synthwave/synthwave_14.mid [...]"""
-import argparse, os, tempfile, wave
+import argparse, json
 
 import mido
 import numpy as np
 
 from . import play
+from .stylebook import STYLES, mix_targets
 
 BLOCK, HOP = 0.4, 0.1    # BS.1770's blocks: 400 ms, overlapping by 75%
 
@@ -55,37 +58,35 @@ def loudness(x, rate=play.RATE):
 
 
 def members(mid, sf2=None):
-    """{member: its loudness (LUFS), or None when silent} for a clip, each rendered alone."""
-    midi, own = mido.MidiFile(mid), play._own(mid)
-    with tempfile.TemporaryDirectory() as tmp:
-        gm = {}
-        for tr in midi.tracks[1:]:
-            if tr.name in own:
-                continue
-            solo = mido.MidiFile(type=1, ticks_per_beat=midi.ticks_per_beat)
-            solo.tracks = [midi.tracks[0], tr]
-            part, out = os.path.join(tmp, "solo.mid"), os.path.join(tmp, "solo.wav")
-            solo.save(part)
-            play._fluid(part, out, sf2, midi.length)
-            with wave.open(out) as w:
-                ch, frames = w.getnchannels(), w.readframes(w.getnframes())
-            x = np.frombuffer(frames, dtype="<i2").reshape(-1, ch).astype(float) / 32768
-            gm[tr.name] = x if ch == 2 else x.repeat(2, 1)
-    length = max((len(x) for x in gm.values()), default=int((midi.length + play.TAIL_S) * play.RATE))
-    parts = {**gm, **play.synth_parts(midi, own, length)} if own else gm
-    return {t.name: loudness(parts[t.name]) for t in midi.tracks[1:] if t.name in parts}
+    """{member: its loudness (LUFS) as the player mixes it, or None when silent}, each rendered alone."""
+    midi, own, gains = mido.MidiFile(mid), play._own(mid), play._gains(mid)
+    parts = play.gm_parts(midi, {t.name for t in midi.tracks[1:] if t.name not in own}, sf2)
+    length = max((len(x) for x in parts.values()), default=int((midi.length + play.TAIL_S) * play.RATE))
+    if own:
+        parts.update(play.synth_parts(midi, own, length))
+    return {n: loudness(x * gains.get(n, 1)) for n, x in parts.items()}
 
 
-def report(levels):
-    """Lines: each member's loudness and how far under the melody it sits."""
-    top = levels.get("melody")
-    out = []
-    for name, v in sorted(levels.items(), key=lambda kv: -(kv[1] if kv[1] is not None else -999)):
-        if v is None:
-            out.append(f"  {name:12s} silent")
-        else:
-            out.append(f"  {name:12s} {v:6.1f} LUFS" + (f"  {v - top:+5.1f} dB against the melody" if top else ""))
-    return out
+def check(levels, roles, targets):
+    """(lines: each member's loudness against the melody's and its target; {member: the dB change to the middle of
+    its target})."""
+    top = next((v for n, v in levels.items() if roles.get(n) == "melody"), None)
+    if top is None:
+        return ["  no melody to measure against"], {}
+    out, fit = [], {}
+    others = {n: v - top for n, v in levels.items() if v is not None and roles.get(n) != "melody"}
+    for n, rel in sorted(others.items(), key=lambda kv: -kv[1]):
+        lo, hi = targets.get(roles.get(n), (None, None))
+        off = lo is not None and not lo <= rel <= hi
+        out.append(f"  {n:12s} {rel:+5.1f} dB against the melody"
+                   + ("" if lo is None else f"  (target {lo:+g} to {hi:+g})") + ("  OFF" if off else ""))
+        if lo is not None:
+            fit[n] = (lo + hi) / 2 - rel
+    if others and "top" in targets:
+        over, (lo, hi) = -max(others.values()), targets["top"]
+        out.append(f"  the melody {over:+.1f} dB over the loudest other member  (target {lo:+g} to {hi:+g})"
+                   + ("" if lo <= over <= hi else "  OFF"))
+    return out, fit
 
 
 def main(argv=None):
@@ -93,8 +94,17 @@ def main(argv=None):
     ap.add_argument("clips", nargs="+", help="MIDI clips (their JSON beside them)")
     a = ap.parse_args(argv)
     for mid in a.clips:
-        print(mid)
-        print("\n".join(report(members(mid))))
+        info = json.load(open(mid[:-4] + ".json"))
+        style = info["source"].get("style")
+        gains = {n: m.get("gain", 0) for n, m in info["members"].items()}
+        lines, fit = check(members(mid), {n: m["role"] for n, m in info["members"].items()},
+                           mix_targets(style) if style in STYLES else {})
+        print(f"{mid} ({style})")
+        print("\n".join(lines))
+        moves = {n: round(gains[n] + d) for n, d in fit.items() if round(gains[n] + d) != gains[n]}
+        if moves:
+            print("  to meet the targets, the members' gain (dB): "
+                  + ", ".join(f"{n} {g:+d}" for n, g in moves.items()))
 
 
 if __name__ == "__main__":

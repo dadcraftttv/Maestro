@@ -97,6 +97,7 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
     for role, program, level in zip(_PLAYED, SOUNDS[style], (v_pad, v_bass, v_mel)):
         member, feel = song.member(role, role, program), feel_for(style, role)
         member.pump = part(style, "members", role).get("pump", 0)
+        member.gain = part(style, "members", role).get("gain", 0)
         for st, length, m in take[role]:
             member.add(st, length, m, level if role == "pad" else velocity(st % met.bar, met, feel, level))
         if role == "bass":                   # trap's 808 slides, as pitch bends
@@ -105,6 +106,7 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
     if take["arp"]:                          # synthwave's arp (task 3.4b)
         a = part(style, "members", "arp")
         member, feel = song.member("arp", "arp", a.get("sound", 81)), feel_for(style, "arp")
+        member.gain = a.get("gain", 0)
         for st, length, m in take["arp"]:
             member.add(st, length, m, velocity(st % met.bar, met, feel, a.get("level", 64)))
     for r in take["bars"]:
@@ -117,6 +119,7 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
     for role in ("drums", "percussion"):     # the drummer and the percussion (task 3.3), each on the kit channel
         if take[role]:
             kit = song.member(role, role, part(style, "members", role).get("sound", 0), kit=True)
+            kit.gain = part(style, "members", role).get("gain", 0)
             for st, length, note, vel, _ in take[role]:
                 kit.add(st, length, note, vel)
     if take["drums"]:

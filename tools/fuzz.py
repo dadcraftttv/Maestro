@@ -2,8 +2,8 @@
 """Seed fuzzing (task 3.8): many seeds a style through the flow sketch, before any listen. A seed fails when a choose
 has nothing left to pick (it raises), a member is empty in a clip of 8 bars or more (an opening may keep one out:
 trap's 808 follows the kick, and its intro has none), a note (not a drum hit) runs past the clip's end or out of
-its member's range, a theory check rules a part out (the part is still played), or the band check finds members out
-of sync. Notes off the grid can't be made (`song.Note` refuses them).
+its member's range, the melody sinks into the pad, a theory check still rules a part out after its redraws, or the
+band check finds members out of sync. Notes off the grid can't be made (`song.Note` refuses them).
 
     .venv/bin/python tools/fuzz.py                     # 2000 seeds a style
     .venv/bin/python tools/fuzz.py synthwave --seeds 200 --first 1
@@ -19,7 +19,8 @@ from maestro.theory.form import FORM
 from maestro.theory.rhythm import METERS
 from maestro.theory.voicing import RANGES
 
-BARS = (16, 8, 32, 4, 12)   # a seed's bars, in turn: the clip lengths Maestro makes, some cutting a section
+BARS = (16, 8, 32, 24, 40)  # a seed's bars, in turn: whole phrases (8 bars), some cutting a section. Not half a
+#                             phrase: Ouralia never cuts one, and half a phrase can cross the clave
 
 
 def faults(style, seed, bars):
@@ -43,6 +44,11 @@ def faults(style, seed, bars):
             if span and not span.low <= n.pitch <= span.high:
                 out.append(f"{m.name}: {n.pitch} out of its range {span.low}-{span.high}")
                 break
+    pads = [n for m in song.members if m.role == "pad" for n in m.notes]
+    for n in (n for m in song.members if m.role == "melody" for n in m.notes):
+        if any(p.step <= n.step < p.step + p.steps and p.pitch >= n.pitch for p in pads):
+            out.append(f"melody: {n.pitch} at step {n.step} sinks into the pad")
+            break
     return out
 
 
