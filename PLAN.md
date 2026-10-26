@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** bucket 3, 3.4c (salsa's entry; its mix set from the mix check before its render). Synthwave's open points (below, after 3.4b's listen) wait for its
-next round; trap waits for DadCraft's reference for the cascade.
+**Next:** the listen after 3.4c, as A/B (`clips/ab/salsa`). Then 3.4d (power rock). Synthwave's open points (below,
+after 3.4b's listen) wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -314,6 +314,28 @@ For each chosen style, how each member plays it, written from sources.
       phrase should land home through bVI-bVII-i (F-G-Am) instead of the flow's borrowed V7 (E7-Am), as YC Music
       Theory's minor-key pop page suggests (`docs/data.md`); the lead's register (ours E5-A6, the Reimaginer's
       preset centred on G#4). The quieter pad and lead were heard in the A/B after 3.8 (B, his pick).
+- [x] 3.4c Salsa. Plan (Oct 26), approved; DadCraft chose: all six proposals, classic Fania era, the tempo kept at
+      180. Done Oct 26: the **keys** member (`theory/keys.py`): the piano montuno, a two-bar guajeo in 8ths a
+      section (four patterns, two only when loud, one only when low), its top line in octaves, a chord tone filling
+      in on the clave's strokes and the anticipations, each change pushed in an 8th early; every pattern checked
+      against the clave when the book loads. The **horns** member (`theory/horns.py`): two trombones (GM 57) in
+      harmony (the chord tone a third to a sixth under the top line, a third down the scale on a passing note):
+      punches on the clave's strokes closing the lead's phrases, the coro (a two-bar refrain, kept all section,
+      answering the lead in bars 3-4 and 7-8), the mambo's riff; a loop that crosses the clave with what the horns
+      played before is drawn again, then they punch. **The parts** (`theory/arrange.py`, the style book's new
+      `arrange`, a first piece of 3.6): a part a phrase, the play's first section the cuerpo (the lead sings, the
+      horns punch), loud phrases the montuno (the lead calls, the coro answers) or, after a montuno, a mambo (the
+      horns' riff, the lead out); 60% of section ends break (bass, piano and horns on the clave's 3-side strokes, the
+      percussion down to the clave, the strokes and an abanico, the lead silent). The bass: two more tumbaos (the
+      third, the octave) and a walk up into 50% of the other section ends (on 1, the and of 2 and of 3, landing on
+      the tumbao's 4). The pad sits out (`plays: false`), still voiced so the lead keeps its room. Where leaving
+      the lead out would cross the clave (the whole play or cut at the clip's end), it sings on. Mix: new defaults
+      keys -8 to -3 dB and horns -6 to 0 dB under the melody; salsa's gains from the mix check (percussion -7,
+      horns -7, bass -3, keys -6), every member in its target. 212 tests (`tests/unit/test_salsa.py`), exam
+      106/106, fuzz 2000 seeds a style clean, drift every target met (melody copies 2%); the other styles' clips
+      byte-identical (80 seeds).
+- [ ] Listen after 3.4c, as A/B: `clips/ab/salsa` (seed 75, 32 bars; A: 3.3's round, cac0f0a; B: today's: 16 bars
+      of cuerpo, a break, 8 of montuno, 8 of mambo), with B's summary and "listen for" line.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

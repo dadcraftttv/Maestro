@@ -25,7 +25,9 @@ MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "
           "with": str, "tones": dict, "slides": (0, 100), "develop": dict, "backbeat": str, "turns": (0, 100),
           "turn rates": dict, "shape": str, "loop": dict,
           "voices": (2, 4), "shapes": dict, "rate": dict, "calm": str, "pump": (0, 100), "echo": (0, 100),
-          "gain": (-40, 20)}   # gain: dB in the clip player's mix, set from the mix check (task 3.8)
+          "gain": (-40, 20),   # gain: dB in the clip player's mix, set from the mix check (task 3.8)
+          "plays": bool, "walk": (0, 100), "coro": dict, "riff": dict}   # task 3.4c: a member sitting out, the
+#                                                                          bass's walk-ups, the horns' loops
 TEMPO = (20, 400)
 
 
@@ -50,7 +52,7 @@ def _keys(d, known, where):
 
 def check(entry, name):
     """Raise a StyleError saying where, when a style file isn't one the book can read."""
-    _keys(entry, ("style", "license", "sources", "time", "harmony", "form", "members", "mix"), name)
+    _keys(entry, ("style", "license", "sources", "time", "harmony", "form", "members", "mix", "arrange"), name)
     if "mix" in entry:
         check_mix(entry["mix"], f"{name}: mix")
     if entry.get("style") != name:
@@ -81,9 +83,9 @@ def check(entry, name):
                     raise StyleError(f"{name}: members.{role}.sound: no sound {v!r} (Maestro's own: "
                                      f"{', '.join(SYNTHS)}; else a GM program)")
                 continue
-            if rule in (str, dict) and not isinstance(v, rule) or isinstance(rule, tuple) and not (
+            if rule in (str, dict, bool) and not isinstance(v, rule) or isinstance(rule, tuple) and not (
                     isinstance(v, int) and not isinstance(v, bool) and rule[0] <= v <= rule[1]):
-                want = {str: "words", dict: "an object"}.get(rule) or f"a whole number from {rule[0]} to {rule[1]}"
+                want = {str: "words", dict: "an object", bool: "true or false"}.get(rule) or f"a whole number from {rule[0]} to {rule[1]}"
                 raise StyleError(f"{name}: members.{role}.{k} must be {want}, got {v!r}")
 
 

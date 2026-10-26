@@ -6,7 +6,8 @@
     "Tempo: DadCraft, Oct 24 (Checkpoint 2)",
     "Progressions: Open Music Theory's loops and schemas (CC BY-SA 4.0) and jazznet's ii-V (MIT), as ideas in our own words (task 3.2)",
     "Tumbao: Wikipedia, \"Tumbao\" (CC BY-SA 4.0), in our own words (task 3.2)",
-    "Percussion: the parts as salsa players teach them (conga marcha, bongo martillo and bell, cáscara, güiro), written from theory in our own words; the cáscara's two bars set against the clave by where they meet its strokes (task 3.3)"
+    "Percussion: the parts as salsa players teach them (conga marcha, bongo martillo and bell, cáscara, güiro), written from theory in our own words; the cáscara's two bars set against the clave by where they meet its strokes (task 3.3)",
+    "Montuno, horns and the song's parts (cuerpo, montuno with coro and pregón, mambo, the break): Wikipedia's \"Guajeo\", \"Montuno\", \"Son montuno\", \"Salsa music\" and \"Mambo (music)\" (CC BY-SA 4.0), in our own words; the two-trombone section after the classic Fania records (DadCraft, Oct 26) (task 3.4c)"
   ],
   "time": {
     "tempo": 180,
@@ -119,9 +120,242 @@
     ]
   },
   "members": {
-    "why": "Piano, acoustic bass, trumpet, and the percussion member: congas, bongos, timbales, güiro, clave. No kit: a salsa band's drums are its percussion (DadCraft, Oct 24).",
+    "why": "The montuno piano, acoustic bass, a trumpet lead, two trombones, and the percussion member: congas, bongos, timbales, güiro, clave. No kit: a salsa band's drums are its percussion (DadCraft, Oct 24). Classic Fania era (DadCraft, Oct 26).",
     "pad": {
-      "sound": 0
+      "sound": 0,
+      "plays": false,
+      "why": "Sits out: the montuno piano plays the chords (task 3.4c). Still voiced, so the lead keeps its room on top."
+    },
+    "keys": {
+      "sound": 0,
+      "level": 76,
+      "why": "The piano montuno (guajeo): a two-bar figure in 8ths, its top line doubled an octave below, a chord tone filling in on the clave's strokes and the anticipations; it pushes the next chord in on an and.",
+      "patterns": {
+        "why": "Each sits with the son 2-3 clave (checked when the book loads): its strokes on the 2 side's 2 and 3, the 3 side's and of 2 and 4, none on the 3-2 side's.",
+        "guajeo, broken": {
+          "hits": [
+            [
+              1,
+              2,
+              "now"
+            ],
+            [
+              2,
+              1,
+              "now"
+            ],
+            [
+              4,
+              2,
+              "now"
+            ],
+            [
+              5,
+              1,
+              "now"
+            ],
+            [
+              7,
+              0,
+              "ahead"
+            ],
+            [
+              9,
+              2,
+              "now"
+            ],
+            [
+              11,
+              1,
+              "ahead"
+            ],
+            [
+              13,
+              2,
+              "now"
+            ],
+            [
+              14,
+              1,
+              "now"
+            ],
+            [
+              15,
+              0,
+              "ahead"
+            ]
+          ],
+          "weight": 3,
+          "why": "the top line rocking between two chord tones, dropping to the lowest to push each change in"
+        },
+        "guajeo, climbing": {
+          "hits": [
+            [
+              1,
+              0,
+              "now"
+            ],
+            [
+              2,
+              1,
+              "now"
+            ],
+            [
+              4,
+              2,
+              "now"
+            ],
+            [
+              5,
+              3,
+              "now"
+            ],
+            [
+              7,
+              1,
+              "ahead"
+            ],
+            [
+              9,
+              0,
+              "now"
+            ],
+            [
+              11,
+              1,
+              "ahead"
+            ],
+            [
+              13,
+              2,
+              "now"
+            ],
+            [
+              14,
+              3,
+              "now"
+            ],
+            [
+              15,
+              1,
+              "ahead"
+            ]
+          ],
+          "weight": 2,
+          "when": "high",
+          "why": "climbing the chord a bar at a time"
+        },
+        "guajeo, busy": {
+          "hits": [
+            [
+              1,
+              1,
+              "now"
+            ],
+            [
+              2,
+              2,
+              "now"
+            ],
+            [
+              3,
+              1,
+              "ahead"
+            ],
+            [
+              4,
+              3,
+              "now"
+            ],
+            [
+              5,
+              2,
+              "now"
+            ],
+            [
+              6,
+              1,
+              "now"
+            ],
+            [
+              7,
+              0,
+              "ahead"
+            ],
+            [
+              9,
+              1,
+              "now"
+            ],
+            [
+              10,
+              2,
+              "now"
+            ],
+            [
+              11,
+              1,
+              "ahead"
+            ],
+            [
+              13,
+              2,
+              "now"
+            ],
+            [
+              14,
+              3,
+              "now"
+            ],
+            [
+              15,
+              2,
+              "ahead"
+            ]
+          ],
+          "weight": 2,
+          "when": "high",
+          "why": "nearly every 8th, for the loud montunos and mambos"
+        },
+        "montuno on the strokes": {
+          "hits": [
+            [
+              2,
+              1,
+              "now"
+            ],
+            [
+              4,
+              2,
+              "now"
+            ],
+            [
+              7,
+              0,
+              "ahead"
+            ],
+            [
+              11,
+              1,
+              "ahead"
+            ],
+            [
+              14,
+              2,
+              "now"
+            ],
+            [
+              15,
+              0,
+              "ahead"
+            ]
+          ],
+          "weight": 3,
+          "when": "low",
+          "why": "sparse: the clave's strokes and the anticipations only"
+        }
+      },
+      "gain": -6
     },
     "bass": {
       "sound": 32,
@@ -186,6 +420,42 @@
           ],
           "weight": 1,
           "why": "the one as well: heavier and plainer"
+        },
+        "tumbao with the third": {
+          "notes": [
+            [
+              6,
+              null,
+              "third",
+              "ahead"
+            ],
+            [
+              12,
+              null,
+              "root",
+              "ahead"
+            ]
+          ],
+          "weight": 2,
+          "why": "the and of 2 on the coming chord's third, 4 on its root"
+        },
+        "tumbao with the octave": {
+          "notes": [
+            [
+              6,
+              null,
+              "root",
+              "ahead"
+            ],
+            [
+              12,
+              null,
+              "octave",
+              "ahead"
+            ]
+          ],
+          "weight": 1,
+          "why": "4 jumps up to the octave"
         }
       },
       "variants": {
@@ -194,7 +464,48 @@
         "drop": 0,
         "approach": 3,
         "octave": 1
-      }
+      },
+      "walk": 50,
+      "gain": -3
+    },
+    "horns": {
+      "sound": 57,
+      "level": 88,
+      "voices": 2,
+      "why": "Two trombones, the classic Fania sound (Willie Colón's band): punches in the body of the song, the coro in the montuno, the mambo's riff (arrange).",
+      "coro": {
+        "why": "A singable two-bar refrain answering the lead, every other two bars; the same one all section, often all song.",
+        "bars": {
+          "2": 1
+        },
+        "cells": {
+          "q": 3,
+          "8 r": 3,
+          "8 8": 2,
+          "r 8": 2,
+          "r": 1
+        },
+        "stay": 6,
+        "vary": 10,
+        "every": 2
+      },
+      "riff": {
+        "why": "The mambo: a busier riff in 8ths and 16ths, every round.",
+        "bars": {
+          "2": 1
+        },
+        "cells": {
+          "8 8": 3,
+          "8 r": 3,
+          "r 8": 3,
+          "16 16 8": 1,
+          "q": 1
+        },
+        "stay": 3,
+        "vary": 20,
+        "every": 1
+      },
+      "gain": -7
     },
     "melody": {
       "sound": 56
@@ -711,7 +1022,37 @@
             }
           }
         }
-      }
+      },
+      "gain": -7
     }
+  },
+  "arrange": {
+    "why": "Son into montuno (Wikipedia's \"Salsa music\" and \"Son montuno\", in our own words): the body of the song first, then the montuno, the coro answering the lead, and now and then a mambo, the horns' turn. The first section is the body; a section may close on a break.",
+    "opens": "cuerpo",
+    "parts": {
+      "cuerpo": {
+        "when": "low",
+        "weight": 1,
+        "lead": "phrase",
+        "horns": "punches",
+        "why": "the body: the lead sings the verse, the horns punch its ends"
+      },
+      "montuno": {
+        "when": "high",
+        "weight": 4,
+        "lead": "call",
+        "horns": "coro",
+        "why": "the lead calls, the coro answers"
+      },
+      "mambo": {
+        "when": "high",
+        "weight": 2,
+        "after": "montuno",
+        "lead": "out",
+        "horns": "riff",
+        "why": "the horns' riff, the lead out"
+      }
+    },
+    "breaks": 60
   }
 }

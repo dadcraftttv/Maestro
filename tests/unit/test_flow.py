@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 from maestro.explain import flow_choices, passage
 from maestro.sketch import TEMPO, flow_sketch
-from maestro.stylebook import STYLES
+from maestro.stylebook import STYLES, part
 from maestro.theory.chords import VOCAB, Chord
 from maestro.theory.flow import BASS, FLOW, LOOPS, Family, cadence, check_bass, check_family, check_phrase, chord_at, \
     progression, _home, _pulls_home
@@ -63,7 +63,8 @@ def test_the_tumbao_skips_the_one_and_sits_with_the_clave():
         plan = take["plan"][0]
         if plan["pattern"].name != "tumbao on the one":
             first = plan["section"]
-            ones = [s for s, _, _ in bass if s % MET.bar == 0 and first.start * MET.bar <= s < first.end * MET.bar]
+            # the section's last bar may walk up or break on the clave's strokes (task 3.4c), the one among them
+            ones = [s for s, _, _ in bass if s % MET.bar == 0 and first.start * MET.bar <= s < (first.end - 1) * MET.bar]
             assert not ones, seed
 
 
@@ -77,7 +78,9 @@ def test_every_phrase_is_shaped():
                 for at in range(s.start, min(s.end, 32), phrase):
                     lo, hi = at * MET.bar, (at + phrase) * MET.bar
                     notes = [n for n in take["melody"] if lo <= n[0] < hi]
-                    if hi <= 32 * MET.bar:
+                    lead = next((x.lead for b, _, x in take["parts"] if b == at), "phrase")   # salsa's parts (3.4c)
+                    whole = lead == "phrase" and not any(at <= b < at + phrase for b in take["breaks"])
+                    if hi <= 32 * MET.bar and whole:
                         assert check_phrase(notes, take["spans"], s.key, MET, phrase, at) is None, (style, seed, at)
 
 
@@ -87,9 +90,10 @@ def test_a_flow_sketch_plays_what_it_says_and_the_melody_is_on_top():
         assert lines[0].startswith(style.replace("_", " ")) and "In detail:" in lines
         assert not any(" check: " in ln or ln.startswith("    ruled out") for ln in lines), style
         parts = {m.name: m.notes for m in song.members}
-        assert all(parts[n] for n in ("pad", "bass", "melody")), style
+        played = [n for n in ("pad", "bass", "melody") if part(style, "members", n).get("plays", True)]
+        assert all(parts[n] for n in played), style                  # salsa's pad sits out (task 3.4c)
         assert parts.get("drums") or parts.get("percussion"), style   # salsa: percussion, no kit
-        for m in parts["melody"]:
+        for m in parts["melody"] if "pad" in parts else ():
             under = [p for p in parts["pad"] if p.step <= m.step < p.step + p.steps]
             assert all(m.pitch > p.pitch for p in under), style
 

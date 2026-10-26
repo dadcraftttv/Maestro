@@ -95,6 +95,8 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
                                    "commercial_safe": True, "seed": seed, "style": style})
     v_pad, v_bass, v_mel = LEVELS.get(style, (70, 100, 84))
     for role, program, level in zip(_PLAYED, SOUNDS[style], (v_pad, v_bass, v_mel)):
+        if not part(style, "members", role).get("plays", True):      # salsa's pad sits out (task 3.4c)
+            continue
         member, feel = song.member(role, role, program), feel_for(style, role)
         member.pump = part(style, "members", role).get("pump", 0)
         member.gain = part(style, "members", role).get("gain", 0)
@@ -103,6 +105,13 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
         if role == "bass":                   # trap's 808 slides, as pitch bends
             for sl in take["slides"]:
                 member.slide(*sl)
+    for role in ("keys", "horns"):            # salsa's montuno and horns (task 3.4c)
+        if take[role]:
+            a = part(style, "members", role)
+            member, feel = song.member(role, role, a.get("sound", 0)), feel_for(style, role)
+            member.gain = a.get("gain", 0)
+            for st, length, m in take[role]:
+                member.add(st, length, m, velocity(st % met.bar, met, feel, a.get("level", 80)))
     if take["arp"]:                          # synthwave's arp (task 3.4b)
         a = part(style, "members", "arp")
         member, feel = song.member("arp", "arp", a.get("sound", 81)), feel_for(style, "arp")

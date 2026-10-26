@@ -15,6 +15,7 @@ import argparse, os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from maestro.sketch import flow_sketch
+from maestro.stylebook import part
 from maestro.theory.form import FORM
 from maestro.theory.rhythm import METERS
 from maestro.theory.voicing import RANGES
@@ -32,7 +33,7 @@ def faults(style, seed, bars):
     end = bars * METERS["4/4"].bar
     out = [ln.strip() for ln in lines if " check: " in ln or ln.startswith("    ruled out")]   # as test_flow
     have = {m.role for m in song.members}
-    out += [f"no {r}" for r in ("pad", "bass", "melody") if r not in have]
+    out += [f"no {r}" for r in ("pad", "bass", "melody") if r not in have and part(style, "members", r).get("plays", True)]
     for m in song.members:
         if not m.notes and bars >= 8:
             out.append(f"{m.name} is empty")

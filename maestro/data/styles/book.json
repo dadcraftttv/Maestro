@@ -1,3 +1,4 @@
 {"why": "The style book: one file a style, in this order (plain first, the baseline).", "styles": ["plain", "trap", "synthwave", "salsa", "power_rock"],
- "mix": {"why": "Each member's loudness against the melody's, in dB, the mix check's targets (task 3.8; DadCraft, Oct 26: one default, a style overriding it when his ear says so): the melody on top, 0-3 dB over the loudest other member; the drums, the percussion and the bass 0-4 dB under it; the pad and the arp 5-10 dB under.",
-         "top": [0, 3], "drums": [-4, 0], "percussion": [-4, 0], "bass": [-4, 0], "pad": [-10, -5], "arp": [-10, -5]}}
+ "mix": {"why": "Each member's loudness against the melody's, in dB, the mix check's targets (task 3.8; DadCraft, Oct 26: one default, a style overriding it when his ear says so): the melody on top, 0-3 dB over the loudest other member; the drums, the percussion and the bass 0-4 dB under it; the pad and the arp 5-10 dB under; the keys 3-8 dB under and the horns 0-6 dB under (task 3.4c: new members, new defaults).",
+         "top": [0, 3], "drums": [-4, 0], "percussion": [-4, 0], "bass": [-4, 0], "pad": [-10, -5], "arp": [-10, -5],
+         "keys": [-8, -3], "horns": [-6, 0]}}

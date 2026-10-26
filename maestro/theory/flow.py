@@ -797,16 +797,20 @@ def _loop_flow(style):
         raise StyleError(f"{where}.shape: \"phrase\" (shaped over the phrase) or \"loop\" (a riff going round)")
     if shape == "phrase":
         return None
-    lp = d.get("loop", {})
+    return loop_flow(d.get("loop", {}), f"{where}.loop")
+
+
+def loop_flow(lp, where):
+    """A LoopFlow from its part of a style's file (the melody's loop, the horns' coro and riff)."""
     extra = set(lp) - {"why", "bars", "cells", "stay", "vary", "every"}
     if extra:
-        raise StyleError(f"{where}.loop: unknown part {sorted(extra)[0]!r} (known: bars, cells, stay, vary, every)")
+        raise StyleError(f"{where}: unknown part {sorted(extra)[0]!r} (known: bars, cells, stay, vary, every)")
     if not isinstance(lp.get("every", 1), int) or lp.get("every", 1) < 1:
-        raise StyleError(f"{where}.loop.every: a whole number from 1")
+        raise StyleError(f"{where}.every: a whole number from 1")
     bars = tuple((int(k), w) for k, w in lp.get("bars", {"2": 1}).items() if k != "why")
     cells = tuple((k, w) for k, w in lp.get("cells", {c: 1 for c in CELLS}).items() if k != "why")
     if any(b not in (1, 2) for b, _ in bars) or any(c not in CELLS for c, _ in cells):
-        raise StyleError(f"{where}.loop: bars 1 or 2; cells among {', '.join(CELLS)}")
+        raise StyleError(f"{where}: bars 1 or 2; cells among {', '.join(CELLS)}")
     return LoopFlow(bars, cells, lp.get("stay", 2), lp.get("vary", 20), lp.get("every", 1))
 
 
@@ -841,11 +845,12 @@ def _loop_words(n, loop, met):
                       for i in range(0, len(cells), len(met.beats)))
 
 
-def loop_melody(rng, lf, spans, key, start, bars, met, floor, prev=None, phrase=8):
+def loop_melody(rng, lf, spans, key, start, bars, met, floor, prev=None, phrase=8, r=None):
     """One section's melody as a loop going round: (notes as [step, length, MIDI note], the loop, lines). Each
     round the notes on the beat move to the nearest tone of the chord under them; now and then a round moves one
     note a step; the last round of each phrase lands home on its last note. With `every`, the riff plays only one
-    round in that many (the last of each group), resting between."""
+    round in that many (the last of each group), resting between. `r`: the range it keeps to (the melody's)."""
+    r = r or member_range("melody")
     if prev is not None and rng.rnd(lf.stay + 1):
         n, loop = prev
         kept = True
@@ -858,7 +863,7 @@ def loop_melody(rng, lf, spans, key, start, bars, met, floor, prev=None, phrase=
     hi_deg = max(d for _, _, d in loop) + 1
     base = next((12 * o + key.tonic for o in range(3, 8)
                  if 12 * o + key.tonic + key.degree(lo_deg) > floor
-                 and 12 * o + key.tonic + key.degree(hi_deg) <= member_range("melody").high),
+                 and 12 * o + key.tonic + key.degree(hi_deg) <= r.high),
                 12 * 5 + key.tonic)
     notes, rounds = [], bars // n
     for k in range(rounds):
@@ -879,9 +884,9 @@ def loop_melody(rng, lf, spans, key, start, bars, met, floor, prev=None, phrase=
             if last and j == len(loop) - 1:
                 d = 0 if abs(d) < abs(d - 7) else 7
             m = base + key.degree(d)
-            while m <= floor and m + 12 <= member_range("melody").high:   # never down in the pad
+            while m <= floor and m + 12 <= r.high:   # never down in the pad
                 m += 12
-            while m > member_range("melody").high and m - 12 > floor:     # nor over the top
+            while m > r.high and m - 12 > floor:     # nor over the top
                 m -= 12
             notes.append([st, length, m])
         if last and k != rounds - 1:

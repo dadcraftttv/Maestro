@@ -273,3 +273,6 @@ isn't reloaded every session; grep for the part a task needs.
   files: in A the louder pad and lead (synthwave) and the louder 808 against the riff (trap, its fuzzy distortion)
   crowded the mix, and the peak level left the rest quieter. The default mix target holds for both; synthwave gets
   no targets of its own.
+- Oct 26: 3.4c's plan approved, with DadCraft's choices: all six proposals (the montuno piano, the horn section,
+  coro and pregón, salsa's parts pulled forward from 3.6, the bass's walk-ups and more tumbaos, GM sounds with the
+  mix set before the render), classic Fania era (so two trombones, a trumpet lead), the tempo kept at 180.

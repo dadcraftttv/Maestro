@@ -16,8 +16,11 @@ from .rng import ComposerRng, fresh_seed
 from .stylebook import part
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
 from .theory.flow import ARPS, BASS, FLOW, arp_part, bass_808, check_arp, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
-    check_loop, held, loop_melody, LOOPS, phrase_melody, plain_phrase, progression
+    check_loop, held, loop_melody, LOOPS, phrase_melody, plain_phrase, progression, _nearest, _tone
 from .theory.drums import DRUMMER, check_drums, drum_part, quiet_spans
+from .theory.arrange import ARRANGE, check_parts, cut as silence, phrase_parts
+from .theory.horns import HORNS, check_horns, harmonize, hits, horn_part, strokes
+from .theory.keys import KEYS, ahead, check_keys, montuno_part, voice
 from .theory.form import DEVELOPS, FORM, WORDS, Play, Theme, explain_section
 from .theory.percussion import PERCUSSION, check_percussion, percussion_part
 from .theory.pitch import Key
@@ -188,6 +191,102 @@ def give_way(rng, notes, pad, bass, spans, key_at, lo, hi, leading):
                                "octave down to stay under C7"]
 
 
+def band(rng, style, plan, play, spans, key_at, bass, melody, percussion, clave, kit_why, end):
+    """Salsa's band over the whole play (task 3.4c): a part each phrase (`arrange.py`), the lead calling or
+    leaving room for it, the montuno a section, the horns a phrase, the bass walking up into some sections and the
+    band breaking on the clave's strokes at others. (keys, horns, parts, breaks, bass, melody, percussion). `end`:
+    the clip's last step, where the lead is cut too."""
+
+    def crosses(notes):                  # the lead with bars left out, over the whole play and up to the clip's end
+        return clave and clave.two_sided and any(check_clave(sorted({n[0] % clave.length for n in ns}), clave)
+                                                 for ns in (notes, [n for n in notes if n[0] < end]))
+    met, ar, phrase = METERS["4/4"], ARRANGE[style], FORM[style].phrase
+    parts, breaks, said = phrase_parts(rng, ar, play.sections, phrase, play.bar)
+    for ln in said:
+        bar = _bar_of(ln) - 1
+        next(p for p in plan if p["section"].start <= bar < p["section"].end)["lines"].append(ln)
+    for p in plan:
+        p["parts"] = [(at, x.name) for at, s, x in parts if s is p["section"]]
+    kit_why.append(("arrangement", check_parts(parts, ar)))
+    # the montuno, a pattern a section
+    keys, pat = [], None
+    if KEYS[style]:
+        for p in plan:
+            s = p["section"]
+            notes, pat, lines = montuno_part(rng, KEYS[style], spans, key_at, s.start, s.bars, met, s.energy, pat,
+                                             clave)
+            p["lines"] += lines
+            p["keys"] = pat
+            keys += notes
+    # the horns a phrase, and the lead around them
+    horns, loops, hf = [], {}, HORNS[style]
+    for at, s, x in parts:
+        lo, hi = at * met.bar, (at + phrase) * met.bar
+        played = "out"
+        if hf:
+            notes, played, lines = horn_part(rng, hf, x.horns, spans, key_at, at, phrase, met, s.energy_at(at), loops,
+                                             clave, phrase, [n[0] for n in horns])
+            horns += notes
+            p = next(p for p in plan if p["section"] is s)
+            p["lines"] += [f"  bar {at + 1}, {ln.strip()}" for ln in lines]
+            p.setdefault("horns", []).append((at, played))
+        was = melody
+        if x.lead == "out":
+            melody = silence(melody, lo, hi)
+        elif x.lead == "call" and played == "coro":
+            for k in range(phrase // 2):
+                if (k + 1) % hf.coro.every == 0:
+                    melody = silence(melody, lo + 2 * k * met.bar, lo + (2 * k + 2) * met.bar)
+        if melody is not was and crosses(melody):
+            melody = was                     # what's left of the lead would cross the clave: it sings on
+            next(p for p in plan if p["section"] is s)["lines"].append(
+                f"  melody, bar {at + 1}: sings on through the horns' bars, to stay with the clave")
+    # the bass's walk-ups, and the breaks
+    walk, r = part(style, "members", "bass").get("walk", 0), member_range("bass")
+    for s in play.sections[:-1]:
+        b = s.end - 1
+        lo, side = b * met.bar, strokes(clave, b, met)
+        if len(side) != 3:              # only on the clave's 3 side
+            continue
+        if b in breaks:
+            hit = [lo + t for t in side]
+            nxt = [ahead(st, met) if st == hit[-1] else st for st in hit]
+            was, melody = melody, silence(melody, lo, lo + met.bar)
+            if crosses(melody):
+                melody = was                 # what's left of the lead would cross the clave: it sings on
+            near = next((m for st, _, m in reversed(bass) if st < lo), round(r.mid))
+            bass = [n for n in bass if not lo <= n[0] < lo + met.bar]
+            for st, at in zip(hit, nxt):
+                near = _nearest(key_at(at).tonic + _tone(chord_at(spans, at).chord, "root"), near, r)
+                bass.append((st, 9 if st != hit[-1] else None, near))
+            bass = held(sorted(bass, key=lambda n: n[0]), play.bar * met.bar)
+            keys = silence(keys, lo, lo + met.bar) + [(st, 9, m) for st, at in zip(hit, nxt)
+                                                      for m in voice(chord_at(spans, at).chord, key_at(at), 1, True)]
+            if hf:
+                horns = silence(horns, lo, lo + met.bar) + harmonize(
+                    hits(spans, key_at, hit, lambda st: nxt[hit.index(st)]), spans, key_at, hf.voices)
+            percussion = [h for h in percussion if not lo <= h[0] < lo + met.bar or h[4] == "clave"
+                          or h[0] - lo in side or h[4] == "timbales" and h[1] == 3]
+        elif walk and rng.rnd(100) < walk:
+            t = next((m for st, _, m in bass if st == lo + 72), None)
+            key = key_at((b + 1) * met.bar)
+            under = [m for m in range(t - 12, t) if (m - key.tonic) % 12 in {key.degree(d) % 12 for d in range(7)}][-3:] \
+                if t else []
+            if len(under) == 3 and under[0] >= r.low:
+                bass = [n for n in bass if not lo <= n[0] < lo + 72] + list(zip((lo, lo + 36, lo + 60), (36, 24, 12),
+                                                                                under))
+                bass = held(sorted(bass, key=lambda n: n[0]), play.bar * met.bar)
+                next(p for p in plan if p["section"] is s)["lines"].append(
+                    f"  bass, bar {b + 1}: walks up into the next section")
+    keys.sort(key=lambda n: n[0])
+    horns.sort(key=lambda n: n[0])
+    if KEYS[style]:
+        kit_why.append(("keys", check_keys(keys, spans, key_at, met, clave)))
+    if hf:
+        kit_why.append(("horns", check_horns(horns, hf.voices, clave)))
+    return keys, horns, parts, breaks, bass, melody, percussion
+
+
 def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, room=0.5):
     """Task 3.2's choices for `bars` bars: (lines of plain words, the take). The take holds the notes ("pad",
     "bass", "melody": (step, length, MIDI note)), a record a bar like `choices`' (bar, section, key, energy, its
@@ -319,6 +418,12 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         for s, line in said:
             next(p for p in plan if p["section"] is s)["percussion"].append(line)
         kit_why.append(("percussion", check_percussion(percussion, met, whole, clave)))
+    # salsa's band (task 3.4c): the part each phrase plays, the breaks, the bass's walk-ups, the montuno, the horns
+    keys, horns, parts, breaks = [], [], [], []
+    if ARRANGE[style]:
+        keys, horns, parts, breaks, bass, melody, percussion = band(rng, style, plan, play, spans, key_at, bass, melody,
+                                                                    percussion, clave, kit_why, end)
+        why = check_bass(bass, met, clave)
     for p in plan:
         p["lines"] += p["drums"] + p["percussion"]
     # cut at the clip's end, in words and notes
@@ -343,6 +448,8 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         recs.append({"bar": b, "section": s, "key": s.key, "energy": s.energy_at(b),
                      "chord": chord_at(spans, b * met.bar).chord})
     take = {"pad": cut(pad), "bass": cut(bass), "melody": cut(melody), "arp": cut(arp), "bars": recs,
+            "keys": cut(keys), "horns": cut(horns), "parts": [x for x in parts if x[0] < bars],
+            "breaks": [b for b in breaks if b < bars],
             "slides": [sl for sl in slides if sl[0] + sl[1] < end],
             "drums": [h for h in drums if h[0] < end], "percussion": [h for h in percussion if h[0] < end],
             "plan": [p for p in plan if p["section"].start < bars], "spans": [s for s in spans if s.at < end]}
@@ -388,6 +495,9 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         else:
             out.append(f"Bass, bars {a}-{b}: {p['pattern'].name}"
                        + (f": {p['pattern'].why}." if p['pattern'].why else "."))
+        if p.get("keys"):
+            out.append(f"Keys, bars {a}-{b}: the montuno, {p['keys'].name}" + (f": {p['keys'].why}." if p['keys'].why
+                                                                               else "."))
         if p.get("drums"):
             said = _bars_said(p["drums"][1:], b)
             out.append(f"Drums, bars {a}-{b}: {p['drums'][0].split('drums: ', 1)[1]}"
@@ -397,7 +507,28 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
             closes = [ln for ln in p["percussion"][1:] if _bar_of(ln) <= b]
             out.append(f"Percussion, bars {a}-{b}: {parts}" + ("; an abanico into the next section" if closes else "")
                        + ".")
-    out.append("Pad: holds each chord, its voices moving the shortest way, under the melody.")
+    if take.get("parts"):                       # salsa's parts (task 3.4c)
+        runs = [(k, [at for at, _ in g]) for k, g in groupby(((at, x.name) for at, _, x in take["parts"]),
+                                                             key=lambda y: y[1])]
+        words = {"cuerpo": "the cuerpo (the lead sings the verse, the horns punch its ends)",
+                 "montuno": "the montuno (the lead calls, the horns answer with the coro)",
+                 "mambo": "a mambo (the horns' riff, the lead out)"}
+        out.append("Parts: " + "; ".join(f"bars {ats[0] + 1}-{min(ats[-1] + FORM[style].phrase, bars)}, "
+                                         f"{words.get(k, 'the ' + k)}" for k, ats in runs)
+                   + "".join(f"; a break in bar {b + 1}, the band hitting the clave's strokes together"
+                             for b in take["breaks"]) + ".")
+    if take.get("horns"):                       # what the horns play, part by part (task 3.4c)
+        said = []
+        for p in plan:
+            for ln in p["lines"]:
+                m = re.match(r"\s*bar (\d+), horns: (.*)", ln)
+                if m and int(m[1]) <= bars and "(kept)" not in m[2] and not (said and said[-1][1] == m[2]):
+                    said.append((int(m[1]), m[2]))
+        out.append("Horns, two trombones in harmony: " + "; ".join(f"from bar {b}, {w}" for b, w in said) + ".")
+    if part(style, "members", "pad").get("plays", True):
+        out.append("Pad: holds each chord, its voices moving the shortest way, under the melody.")
+    else:
+        out.append("Pad: sits out; the montuno piano plays the chords.")
     if take.get("arp"):
         out.append("Arp: " + "; ".join(f"bars {p['section'].start + 1}-{min(p['section'].end, bars)}, {p['arp']}"
                                       for p in plan) + ".")
@@ -427,6 +558,19 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
                    "big on 2 and 4, the arp sparkling in 16ths) and turn dreamy when it's low (a held bass, the drums "
                    "at half time, the arp in 8ths); does the lead stay on top and sing; do the pad and bass breathe "
                    "with the kick without pumping like EDM; do the tom fills lead into the next section.")
+        return out
+    if take.get("parts"):                       # salsa's own questions (task 3.4c)
+        names = {x.name for _, _, x in take["parts"]}
+        walks = [_bar_of(ln) for p in plan for ln in p["lines"] if "walks up" in ln and _bar_of(ln) < bars]
+        out.append("Listen for: does the piano's montuno lock with the clave and push each chord in early; do the "
+                   "trombones sound like a Fania horn section ("
+                   + ", ".join(w for k, w in (("cuerpo", "punching the ends of the lead's phrases"),
+                                              ("montuno", "the coro answering the lead"),
+                                              ("mambo", "the mambo's riff")) if k in names) + ")"
+                   + ("; does the song move from its body into the montuno" if {"cuerpo", "montuno"} <= names else "")
+                   + ("; does the break hit together" if take["breaks"] else "")
+                   + ("; does the bass walk up into the next section" if walks else "")
+                   + "; does it all still feel like salsa.")
         return out
     out.append("Listen for: does it flow, chords going round and coming home rather than wandering; does the bass "
                "feel like the style; does each phrase sound like a question and its answer"
