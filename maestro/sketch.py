@@ -102,6 +102,7 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
         member, feel = song.member(role, role, program), feel_for(style, role)
         member.pump = part(style, "members", role).get("pump", 0)
         member.gain = part(style, "members", role).get("gain", 0)
+        member.pan = part(style, "members", role).get("pan", 0)          # power rock's first lead, to one side
         bent = {st: (steps, semis) for st, steps, semis in take["bends"]} if role == "melody" else {}
         for st, length, m in take[role]:
             vel = level if role == "pad" else velocity(st % met.bar, met, feel, level)
@@ -117,6 +118,21 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
         if role == "melody":
             for sh in take["vibrato"]:
                 member.shake(*sh)
+    if take["lead2"]:                        # power rock's second lead, on the other side (its second round)
+        member, feel = song.member("lead 2", "melody", SOUNDS[style][2]), feel_for(style, "melody")
+        member.pan, member.gain = -part(style, "members", "melody").get("pan", 0), \
+            part(style, "members", "melody").get("gain", 0)
+        bent = {st: (steps, semis) for st, steps, semis in take["bends2"]}
+        for st, length, m in take["lead2"]:
+            vel = velocity(st % met.bar, met, feel, v_mel)
+            if st in bent:
+                steps, semis = bent[st]
+                member.add(st, length, m - semis, vel)
+                member.slide(st, steps, semis, length - steps)
+            else:
+                member.add(st, length, m, vel)
+        for sh in take["vibrato2"]:
+            member.shake(*sh)
     if take["guitar"]:                       # power rock's doubled rhythm guitar (task 3.4d), palm mutes softer
         g, feel, muted = part(style, "members", "guitar"), feel_for(style, "guitar"), set(take["muted"])
         for t in GUITAR[style].tracks:

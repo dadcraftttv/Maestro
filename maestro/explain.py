@@ -17,9 +17,9 @@ from .stylebook import part
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
 from .theory.flow import ARPS, BASS, FLOW, arp_part, bass_808, check_arp, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
     check_loop, held, loop_melody, LOOPS, phrase_melody, plain_phrase, progression, _nearest, _tone
-from .theory.drums import DRUMMER, KIT, _fill, _vel, check_drums, drum_part, quiet_spans
-from .theory.guitar import GUITAR, VOICINGS, _root as guitar_root, bends as lead_bends, check_guitar, guitar_part, \
-    lock_bass, pentatonic, power, vibrato
+from .theory.drums import DOUBLE, DRUMMER, KIT, _fill, _vel, check_drums, double_kick, drum_part, quiet_spans
+from .theory.guitar import GUITAR, VOICINGS, _root as guitar_root, bends as lead_bends, check_guitar, check_leads, \
+    duel, guitar_part, lock_bass, pentatonic, power, twin, vibrato
 from .theory.arrange import ARRANGE, check_parts, cut as silence, phrase_parts
 from .theory.horns import HORNS, check_horns, harmonize, hits, horn_part, strokes
 from .theory.keys import KEYS, ahead, check_keys, montuno_part, voice
@@ -292,9 +292,10 @@ def band(rng, style, plan, play, spans, key_at, bass, melody, percussion, clave,
 def rock_band(rng, style, plan, play, spans, key_at, bass, melody, drums, kit_why, ruled):
     """Power rock's band over the whole play (task 3.4d): a part each phrase (`arrange.py`: verse, pre-chorus,
     chorus), the rhythm guitar a phrase in its part's group, the bass locking to the guitar where its pattern says,
-    the snare building at a pre-chorus's end, the band stopping on the one at some section ends; then the lead's
-    bends and vibrato. `ruled`: the parts, drawn before the drums (`phrase_parts`). (guitar {track: notes}, muted
-    steps, parts, breaks, builds, bass, drums, bends, vibrato)."""
+    the snare building at a pre-chorus's end, the band stopping on the one at some section ends, double bass in the
+    loud parts; then the second lead (twin harmony in a chorus, trading licks in a duel) and the leads' bends and
+    vibrato. `ruled`: the parts, drawn before the drums (`phrase_parts`). (guitar {track: notes}, muted steps,
+    parts, breaks, builds, bass, drums, bends, vibrato, the first lead, the second, its bends, its vibrato)."""
     met, ar, phrase, gf = METERS["4/4"], ARRANGE[style], FORM[style].phrase, GUITAR[style]
     whole = play.bar * met.bar
     parts, breaks, said = ruled
@@ -360,16 +361,44 @@ def rock_band(rng, style, plan, play, spans, key_at, bass, melody, drums, kit_wh
             p = next(p for p in plan if p["section"].start <= b < p["section"].end)
             p["drums"] = [ln for ln in p["drums"] if not ln.startswith(f"  drums, bar {b + 1}:")] + [
                 f"  drums, bar {b + 1}: the stop, kick and crash on the one, then {words}"]
+    if DOUBLE[style]:                    # both feet: double bass in the loud parts, bursts into some phrases
+        drums, said = double_kick(rng, DOUBLE[style], dr, drums,
+                                  [(at * met.bar, (at + phrase) * met.bar, x.name, s.energy_at(at)) for at, s, x in parts],
+                                  met, set(breaks) | set(builds))
+        for lo, ln in said:
+            next(p for p in plan if p["section"].start <= lo // met.bar < p["section"].end)["drums"].append(ln)
     drums.sort(key=lambda h: (h[0], h[2]))
     for k in guitar:
         guitar[k].sort(key=lambda n: (n[0], n[2]))
     kit_why.append(("guitar", check_guitar(guitar, gf, spans, key_at, met)))
     kit_why.append(("drums after the stops and builds", check_drums(drums, met, whole)))
-    # the lead's bends and vibrato
-    lead = part(style, "members", "melody")
+    # the two leads: in twin harmony in a chorus, trading licks in a duel
+    lead, second, licks, near = part(style, "members", "melody"), [], [], None
+    floor = member_range("melody").low - 1
+    for at, s, x in parts:
+        lo, hi = at * met.bar, (at + phrase) * met.bar
+        if x.lead == "twin":
+            second += twin([n for n in melody if lo <= n[0] < hi], key_at, floor)
+        elif x.lead == "duel":
+            near = next((m for st, _, m in reversed(melody) if st < lo), 76)
+            one, two, lines = duel(rng, lead.get("licks", {"run": 1}), lead.get("fast", 0), spans, key_at, at,
+                                   phrase, met, near)
+            melody = sorted(silence(melody, lo, hi) + one, key=lambda n: n[0])
+            second += two
+            licks.append((lo, hi))
+            next(p for p in plan if p["section"] is s)["lines"] += lines
+    second.sort(key=lambda n: n[0])
+    if second:
+        kit_why.append(("leads", check_leads(melody, second, key_at, spans, licks)))
+    # the leads' bends and vibrato: the twin bends with the first lead
     bent = lead_bends(rng, melody, key_at, lead["bends"]) if lead.get("bends") else []
+    at = {st: (steps, semis) for st, steps, semis in bent}
+    bent2 = [(st, at[st][0], k) for st, length, m in second if st in at
+             for k in [2 if (m - 2 - key_at(st).tonic) % 12 in {key_at(st).degree(d) % 12 for d in range(7)} else 1]
+             if m - k > floor]
     shakes = vibrato(melody) if lead.get("vibrato") else []
-    return guitar, sorted(muted), parts, breaks, builds, bass, drums, bent, shakes
+    return guitar, sorted(muted), parts, breaks, builds, bass, drums, bent, shakes, melody, second, bent2, \
+        vibrato(second) if lead.get("vibrato") else []
 
 
 def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, room=0.5):
@@ -522,11 +551,10 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
                                                                     percussion, clave, kit_why, end)
         why = check_bass(bass, met, clave)
     # power rock's band (task 3.4d): the parts, the doubled rhythm guitar, the builds and stops, the lead's bends
-    guitar, muted, builds, bent, shakes = {}, [], [], [], []
+    guitar, muted, builds, bent, shakes, second, bent2, shakes2 = {}, [], [], [], [], [], [], []
     if GUITAR[style]:
-        guitar, muted, parts, breaks, builds, bass, drums, bent, shakes = rock_band(rng, style, plan, play, spans,
-                                                                                    key_at, bass, melody, drums,
-                                                                                    kit_why, ruled)
+        guitar, muted, parts, breaks, builds, bass, drums, bent, shakes, melody, second, bent2, shakes2 = rock_band(
+            rng, style, plan, play, spans, key_at, bass, melody, drums, kit_why, ruled)
         why = check_bass(bass, met, clave)
     for p in plan:
         p["lines"] += p["drums"] + p["percussion"]
@@ -556,6 +584,8 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
             "breaks": [b for b in breaks if b < bars], "builds": [b for b in builds if b < bars],
             "guitar": {k: cut(ns) for k, ns in guitar.items()}, "muted": [m for m in muted if m < end],
             "bends": [x for x in bent if x[0] < end], "vibrato": [(st, min(n, end - st)) for st, n in shakes if st < end],
+            "lead2": cut(second), "bends2": [x for x in bent2 if x[0] < end],
+            "vibrato2": [(st, min(n, end - st)) for st, n in shakes2 if st < end],
             "slides": [sl for sl in slides if sl[0] + sl[1] < end],
             "drums": [h for h in drums if h[0] < end], "percussion": [h for h in percussion if h[0] < end],
             "plan": [p for p in plan if p["section"].start < bars], "spans": [s for s in spans if s.at < end]}
@@ -563,13 +593,18 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
 
 
 def _bar_of(line):
-    """The bar a line of words is about ("  drums, bar 8: ...")."""
-    m = re.search(r"bar (\d+):", line)
+    """The bar a line of words is about ("  drums, bar 8: ...", or the first of "  drums, bars 17-24: ...")."""
+    m = re.search(r"bars? (\d+)(?:-\d+)?:", line)
     return int(m[1]) if m else 0
 
 
 def _bars_said(lines, last):
-    return [f"bar {_bar_of(ln)}, {ln.split(': ', 1)[1]}" for ln in lines if _bar_of(ln) <= last]
+    out = []
+    for ln in lines:
+        m = re.search(r"(bars? \d+(?:-\d+)?):", ln)
+        if _bar_of(ln) <= last:
+            out.append(f"{m[1] if m else 'bar 0'}, {ln.split(': ', 1)[1]}")
+    return out
 
 
 def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
@@ -661,6 +696,15 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
     if take.get("bends") or take.get("vibrato"):
         out.append(f"Lead: on the pentatonic; {len(take['bends'])} held note{'s' * (len(take['bends']) != 1)} bend up "
                    f"into place, {len(take['vibrato'])} long one{'s' * (len(take['vibrato']) != 1)} with vibrato.")
+    if take.get("lead2"):                       # power rock's second lead (its second round)
+        names = [(at, x.name, x.lead) for at, _, x in take.get("parts", [])]
+        twins = [at for at, _, ld in names if ld == "twin"]
+        duels = [at for at, _, ld in names if ld == "duel"]
+        n = FORM[style].phrase
+        out.append("Second lead, on the other side: " + "; ".join(
+            [f"bars {at + 1}-{min(at + n, bars)}, twin harmony a third under the first" for at in twins]
+            + [f"bars {at + 1}-{min(at + n, bars)}, the duel: the two trade licks (two bars each, then one, then half "
+               "a bar) and land home together" for at in duels]) + ".")
     if take.get("drums"):
         kicks = {h[0] for h in take["drums"] if h[4] == "kick"}
         locked = sum(1 for n in take["bass"] if n[0] in kicks)
@@ -680,13 +724,17 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         return out
     if GUITAR[style]:                           # power rock's own questions (task 3.4d)
         names = {x.name for _, _, x in take["parts"]}
-        out.append("Listen for: does it sound like 80s arena rock; do the two guitars sound wide, left and right, "
-                   "palm-muted and tight in the verse"
-                   + (", opening up big in the chorus" if "chorus" in names else "")
+        double = any("double bass" in ln for p in plan for ln in p.get("drums", []))
+        leads = {x.lead for _, _, x in take["parts"]}
+        out.append("Listen for: does it sound like 80s hair metal and shred"
+                   + ("; does the double bass drive the loud parts" if double else "")
+                   + ("; do the two leads duel, trading licks left and right, the turns getting shorter and hotter, "
+                      "and land home together" if "duel" in leads else "")
+                   + ("; do they sing the chorus's hook in twin harmony" if "twin" in leads else "")
+                   + "; are the rhythm guitars still wide and tight, palm-muted in the verse"
                    + ("; does the pre-chorus build into it, the snare doubling up" if take.get("builds") else "")
                    + ("; does the stop hit together and ring" if take["breaks"] else "")
-                   + "; does the bass drive with the kick; does the lead sound like a guitar on the pentatonic, its "
-                   "bends landing in tune; do the chords feel like rock (the flat seventh, the anthem loop).")
+                   + "; do the bends land in tune.")
         return out
     if take.get("parts"):                       # salsa's own questions (task 3.4c)
         names = {x.name for _, _, x in take["parts"]}

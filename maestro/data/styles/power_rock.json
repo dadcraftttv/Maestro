@@ -7,10 +7,11 @@
   "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)",
   "Harmony: our counts from the Rock Corpus (de Clercq and Temperley, CC BY 4.0), maestro/data/rock.json (task 3.4d)",
   "The guitar, the lead and the parts: Wikipedia's \"Power chord\", \"Palm mute\", \"Pentatonic scale\", \"String bending\", \"Verse-chorus form\" and \"Arena rock\" (CC BY-SA 4.0), the ideas in our own words (task 3.4d)",
-  "80s arena rock, the tempo kept at 130: DadCraft, Oct 26"
+  "80s arena rock, the tempo kept at 130: DadCraft, Oct 26",
+  "The second round (DadCraft, Oct 26): \"double bass pedals and dueling guitars, akin to Bill and Ted\": 80s hair metal and shred, the tempo 150; Wikipedia's \"Double bass drum\", \"Twin lead guitar\", \"Shred guitar\" and \"Guitar solo\" (CC BY-SA 4.0), the ideas in our own words"
  ],
  "time": {
-  "tempo": 130,
+  "tempo": 150,
   "rhythm": {
    "why": "Driving 8ths, the odd triplet fill.",
    "triplet": 1,
@@ -131,7 +132,7 @@
   }
  },
  "members": {
-  "why": "Two distortion guitars on power chords, left and right (the pad sits out), a picked bass driving 8ths, an overdriven lead on the pentatonic, GMD's rock drummers.",
+  "why": "80s hair metal and shred (DadCraft, Oct 26): two distortion guitars on power chords, left and right (the pad sits out), a picked bass, two overdriven leads, one each side, singing alone in a verse, in twin harmony in a chorus, trading licks in a duel; double bass drums in the loud parts.",
   "pad": {
    "sound": 30,
    "plays": false
@@ -140,7 +141,7 @@
    "why": "Power chords doubled left and right, each in its own octave: palm-muted chugs in a verse, open 8ths to build, big ringing chords and the dotted push in a chorus.",
    "sound": 30,
    "level": 92,
-   "gain": -9,
+   "gain": -11,
    "tracks": {
     "guitar L": {
      "pan": -48,
@@ -455,6 +456,86 @@
       ]
      ],
      "why": "open 8ths, the and of 4 pushing in, the bass locked to it"
+    },
+    "drive gallop": {
+     "group": "drive",
+     "weight": 2,
+     "bass": true,
+     "hits": [
+      [
+       0,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       2,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       3,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       4,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       6,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       7,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       8,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       10,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       11,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       12,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       14,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       15,
+       1,
+       "dyad",
+       "now"
+      ]
+     ],
+     "why": "the gallop opened up, an 8th and two 16ths a beat over the double bass, the bass locked to it"
     },
     "anthem": {
      "group": "open",
@@ -797,14 +878,22 @@
    }
   },
   "melody": {
-   "why": "An overdriven lead on the pentatonic, a hook in the chorus; some held notes bend up into place, long ones shake.",
+   "why": "Two overdriven leads, one each side, on the pentatonic: the first sings a verse alone; in a chorus the second joins a third under it (twin harmony); in a duel they trade shred licks (runs, pedal licks, sweeps), the turns getting shorter, and land home together. Held notes bend up into place, long ones shake.",
    "sound": 29,
    "scale": "pentatonic",
    "bends": 16,
-   "vibrato": true
+   "vibrato": true,
+   "pan": -32,
+   "licks": {
+    "run": 3,
+    "pedal": 2,
+    "sweep": 2
+   },
+   "fast": 40
   },
   "drums": {
-   "why": "GMD's rock drummers: the hat in 8ths in a verse, the ride or the crash in a chorus, a fill into most phrases; a snare build at a pre-chorus's end.",
+   "why": "GMD's rock drummers with double bass (written from theory: GMD has none): the hat in a verse, the ride or the crash in a chorus; in the loud parts both feet run 16ths or the gallop, and a burst of 16ths drives into some phrases; a snare build at a pre-chorus's end.",
+   "gain": -1,
    "kicks": 3,
    "hats": "8th",
    "grooves": {
@@ -814,8 +903,10 @@
     "hat quarter": 2,
     "ride quarter": 0,
     "ride 8th": 0,
+    "ride 16th": 0,
     "crash quarter": 0,
-    "crash 8th": 0
+    "crash 8th": 0,
+    "crash 16th": 0
    },
    "busy": 100,
    "fills": 70,
@@ -824,11 +915,80 @@
     "crash quarter": 1,
     "crash 8th": 1,
     "hat 8th": 2
+   },
+   "double": {
+    "why": "Both feet: kicks as a bar's 16ths, the loud parts that play them, bursts (% of the other phrases' last beats).",
+    "runs": {
+     "sixteenths": {
+      "kicks": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "weight": 3,
+      "why": "16ths straight through, both feet"
+     },
+     "gallop": {
+      "kicks": [
+       0,
+       2,
+       3,
+       4,
+       6,
+       7,
+       8,
+       10,
+       11,
+       12,
+       14,
+       15
+      ],
+      "weight": 2,
+      "why": "an 8th and two 16ths a beat, with the guitars' gallop"
+     },
+     "eighths into sixteenths": {
+      "kicks": [
+       0,
+       2,
+       4,
+       6,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "weight": 1,
+      "why": "8ths, then 16ths through the second half"
+     }
+    },
+    "parts": [
+     "chorus",
+     "drive",
+     "duel"
+    ],
+    "bursts": 30
    }
   }
  },
  "arrange": {
-  "why": "Verse to chorus (Wikipedia's \"Verse-chorus form\" and \"Arena rock\", in our own words): the play opens on a verse, palm-muted; loud phrases are the chorus, big and open, or driven in 8ths; a quiet section leading into a loud one most often builds through a pre-chorus; some section ends stop, the band hitting the one together and letting it ring while the drums fill in.",
+  "why": "Verse to chorus to the duel (Wikipedia's \"Verse-chorus form\", \"Arena rock\" and \"Guitar solo\", in our own words): the play opens on a verse, palm-muted, one lead singing; loud phrases are the chorus (big open chords, the two leads in twin harmony), driven in 8ths, or after a chorus the duel (the solo pulled forward from task 3.6: the two leads trading licks); a quiet section leading into a loud one most often builds through a pre-chorus; some section ends stop.",
   "opens": "verse",
   "parts": {
    "verse": {
@@ -841,7 +1001,8 @@
     "when": "high",
     "weight": 3,
     "guitar": "open",
-    "why": "big open chords, the lead's hook up high"
+    "why": "big open chords, the two leads in twin harmony on the hook",
+    "lead": "twin"
    },
    "drive": {
     "when": "high",
@@ -854,6 +1015,14 @@
     "weight": 0,
     "guitar": "drive",
     "why": "open 8ths building, the snare doubling up into the chorus"
+   },
+   "duel": {
+    "when": "high",
+    "weight": 2,
+    "after": "chorus",
+    "guitar": "drive",
+    "lead": "duel",
+    "why": "the two leads trading licks over the gallop and the double bass"
    }
   },
   "breaks": 40,

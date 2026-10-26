@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from ..stylebook import STYLES, StyleError, part
 from .form import _draw
 
-LEADS = ("phrase", "call", "out")
+LEADS = ("phrase", "call", "out", "twin", "duel")   # twin, duel: power rock's two leads
 HORN_PARTS = ("punches", "coro", "riff", "out")
 HIGH = 0.5
 

@@ -563,6 +563,67 @@ def drum_part(rng, dr, recs, met, phrase, end, half=False):
     return hits, lines
 
 
+# ---- double bass (power rock's second round, DadCraft, Oct 26: "double bass pedals and dueling guitars") ----
+
+@dataclass(frozen=True)
+class Double:
+    """Two feet on two kicks: `runs` the kick patterns a loud phrase draws ({name: (16ths of a bar, weight)}), the
+    parts that play them, and `bursts`: % of the other phrases whose last beat runs 16ths into the next."""
+    runs: tuple
+    parts: tuple
+    bursts: int = 0
+    stay: int = 3
+
+
+def _double(style):
+    d, where = part(style, "members", "drums").get("double"), f"{style}: members.drums.double"
+    if not d:
+        return None
+    runs = []
+    for n, r in d.get("runs", {}).items():
+        if n == "why":
+            continue
+        ks, w = r.get("kicks", []), r.get("weight", 1)
+        if not ks or ks != sorted(set(ks)) or ks[0] != 0 or ks[-1] >= 16 or not isinstance(w, int) or w < 1:
+            raise StyleError(f"{where}.runs.{n}: kicks as a bar's 16ths in order from 0, a whole-number weight")
+        runs.append((n, tuple(ks), w, r.get("why", "")))
+    if not runs or not isinstance(d.get("parts"), list) or not 0 <= d.get("bursts", 0) <= 100:
+        raise StyleError(f"{where}: runs, the parts that play them, bursts a share in %")
+    return Double(tuple(runs), tuple(d["parts"]), d.get("bursts", 0))
+
+
+DOUBLE = {s: _double(s) for s in STYLES}   # None: one foot
+
+
+def double_kick(rng, dbl, dr, hits, phrases, met, skip=()):
+    """The drums with both feet: in each phrase whose part plays double bass, its kicks swapped for a run (a run a
+    phrase, the one before likelier kept); in the others, a burst of 16ths on some phrases' last beat. `phrases`:
+    [(first step, last step, part's name, energy)]; `skip`: bars left alone (the stops and builds). (hits,
+    [(first step, line)])."""
+    out, lines, prev = list(hits), [], None
+
+    def kick(st, e, strong):
+        return (st, SIXTEENTH, KIT["kick"], max(1, round(_vel(dr, "kick", 0, e) * (1 if strong else 0.85))), "kick")
+    for lo, hi, name, e in phrases:
+        bars = [b for b in range(lo // met.bar, hi // met.bar) if b not in skip]
+        if name in dbl.parts:
+            k = _draw(rng, {i: w * (dbl.stay if n == prev else 1) for i, (n, _, w, _) in enumerate(dbl.runs)})
+            n, ks, _, why = dbl.runs[k]
+            prev = n
+            for b in bars:
+                b0 = b * met.bar
+                out = [h for h in out if not (b0 <= h[0] < b0 + met.bar and h[4] == "kick")]
+                out += [kick(b0 + x * SIXTEENTH, e, x % 4 == 0) for x in ks]
+            lines.append((lo, f"  drums, bars {lo // met.bar + 1}-{hi // met.bar}: double bass, {n}"
+                              + (f": {why}" if why else "")))
+        elif bars and bars[-1] == hi // met.bar - 1 and _chance(rng, dbl.bursts):
+            b0 = bars[-1] * met.bar + met.beats[-1]
+            out = [h for h in out if not (b0 <= h[0] < b0 + 24 and h[4] == "kick")]
+            out += [kick(b0 + x, e, x == 0) for x in range(0, 24, SIXTEENTH)]
+            lines.append((lo, f"  drums, bar {bars[-1] + 1}: a burst of double-bass 16ths into the next phrase"))
+    return sorted(out, key=lambda h: (h[0], h[2])), lines
+
+
 def check_drums(hits, met, end, half=False, fixed=False):
     """None when the drums fit, else the reason: on the grid and inside the clip, one of each drum a step, two hands
     at most, and every groove keeping its backbeat (a bar with a fill aside); `fixed`: the snare on the backbeat

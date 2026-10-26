@@ -233,3 +233,132 @@ def bends(rng, notes, key_at, pct):
 def vibrato(notes):
     """[(step, steps)]: each long note shaking after its first 8th."""
     return [(st + BEND, length - BEND) for st, length, _ in notes if length >= SHAKE]
+
+
+# ---- two leads (power rock's second round, DadCraft, Oct 26: "dueling guitars, akin to Bill and Ted") ----
+#
+# A second lead guitar on the other side. In a chorus the two play the hook in twin harmony, the second a third under
+# the first in the key (over it where it would sink under the lead's floor). In a duel (the solo pulled forward from
+# task 3.6) they trade shred licks, the turns getting shorter and hotter: two bars each, then one, then half a bar,
+# and both land home together in harmony. A lick is a fast run on the pentatonic (16ths, or 16th triplets), a pedal
+# lick (a high chord tone struck between the notes of a line falling under it) or a sweep (the chord's tones up and
+# down in 16th triplets), each ending on a held chord tone. Sources: Wikipedia's "Twin lead guitar", "Shred guitar"
+# and "Guitar solo" (CC BY-SA 4.0), the ideas in our own words.
+
+LICKS = ("run", "pedal", "sweep")
+FAST = {"16th": 6, "16th_triplet": 4}
+TURNS = ((0, 2, 0), (2, 2, 1), (4, 1, 0), (5, 1, 1), (6, 0.5, 0), (6.5, 0.5, 1))   # (bar, bars, which lead) of 8
+LICK_LOW, LICK_HIGH = 64, 93   # E4 to A6: where the licks run, under the melody's top
+
+
+def _in_key(key):
+    return {key.degree(d) % 12 for d in range(7)}
+
+
+def third_under(m, key, floor):
+    """The note a third under `m` in the key (a third over when that sinks to `floor` or under)."""
+    scale = _in_key(key)
+    under = next((m - k for k in (3, 4) if (m - k - key.tonic) % 12 in scale), m - 3)
+    if under > floor:
+        return under
+    return next((m + k for k in (3, 4) if (m + k - key.tonic) % 12 in scale), m + 3)
+
+
+def twin(notes, key_at, floor):
+    """The second lead in twin harmony with the first: each note a third under it in the key."""
+    return [(st, length, third_under(m, key_at(st), floor)) for st, length, m in notes]
+
+
+def _tones_near(spans, key, st, near):
+    """The chord tone sounding at `st` nearest `near`, in the licks' span."""
+    pcs = {(key.tonic + t) % 12 for t in chord_at(spans, st).chord.tones}
+    cands = [m for m in range(LICK_LOW, LICK_HIGH + 1) if m % 12 in pcs]
+    return min(cands, key=lambda m: (abs(m - near), m))
+
+
+def lick(rng, kind, rate, spans, key, st, steps, near):
+    """One lick from `st` for `steps`: fast notes, then a held chord tone on the last beat (on the last span when a
+    turn is half a bar). (notes, the last note)."""
+    hold = 24 if steps >= 48 else steps // 2
+    end, out = st + steps - hold, []
+    pool = [m for m in range(LICK_LOW, LICK_HIGH + 1) if (m - key.tonic) % 12 in scale_of(key)]
+    i = min(range(len(pool)), key=lambda k: abs(pool[k] - near))
+    if kind == "run":                         # up or down the pentatonic, turning at the edges
+        step = 1 if rng.rnd(2) else -1
+        for t in range(st, end, rate):
+            out.append((t, rate, pool[i]))
+            if not 0 <= i + step < len(pool):
+                step = -step
+            i += step
+    elif kind == "pedal":                     # a high chord tone struck between a line falling under it
+        top = _tones_near(spans, key, st, near + 5)
+        line = [m for m in pool if m < top][::-1] or [top - 12]
+        k = 0
+        for n, t in enumerate(range(st, end, rate)):
+            out.append((t, rate, top if n % 2 == 0 else line[min(k, len(line) - 1)]))
+            k += n % 2
+    else:                                     # a sweep: the chord's tones up and down, a beat at a time
+        rate = FAST["16th_triplet"]
+        for b in range(st, end, 24):
+            ch = chord_at(spans, b).chord
+            tones = sorted(m for m in range(LICK_LOW, LICK_HIGH + 1)
+                           if (m - key.tonic) % 12 in {t % 12 for t in ch.tones} and abs(m - near) <= 12)[:4]
+            shape = tones + tones[-2:0:-1] or [near]
+            for n, t in enumerate(range(b, min(b + 24, end), rate)):
+                out.append((t, rate, shape[n % len(shape)]))
+    last = _tones_near(spans, key, end, out[-1][2] if out else near)
+    out.append((end, hold, last))
+    return out, last
+
+
+def duel(rng, weights, fast, spans, key_at, start, bars, met, near):
+    """A duel over a phrase: (the first lead's notes, the second's, lines). The turns follow TURNS (scaled to the
+    phrase), then both land home together in harmony on the phrase's last chord."""
+    one, two, lines = [], [], []
+    scale = bars / 8
+    for at, length, who in TURNS:
+        st = (start * met.bar) + round(at * scale * met.bar)
+        steps = round(length * scale * met.bar)
+        kind = LICKS[_draw(rng, {i: weights.get(k, 0) for i, k in enumerate(LICKS)}) or 0]
+        rate = FAST["16th_triplet"] if rng.rnd(100) < fast else FAST["16th"]
+        notes, near = lick(rng, kind, rate, spans, key_at(st), st, steps, near)
+        (two if who else one).extend(notes)
+        lines.append(f"    bar {st // met.bar + 1}{' (half)' if length < 1 else ''}: the {'second' if who else 'first'} "
+                     f"lead, a {kind}" + (" in 16th triplets" if rate == 4 and kind != "sweep" else ""))
+    b0 = (start + bars - 1) * met.bar
+    last = [s for s in spans if b0 <= s.at < b0 + met.bar] or [chord_at(spans, b0)]
+    land = max(last[-1].at, b0 + met.bar // 2)
+    key = key_at(land)
+    run, near = lick(rng, "run", FAST["16th"], spans, key, b0, land - b0 + 24, near)
+    one += run[:-1]
+    home = min((m for m in range(LICK_LOW, LICK_HIGH + 1) if (m - key.tonic) % 12 == 0), key=lambda m: abs(m - near))
+    one.append((land, b0 + met.bar - land, home))
+    pcs = {(key.tonic + t) % 12 for t in chord_at(spans, land).chord.tones}
+    two.append((land, b0 + met.bar - land, next((home - k for k in (8, 9) if (home - k) % 12 in pcs),
+                                                 third_under(home, key, LICK_LOW - 1))))   # a sixth under: its third
+    lines.append(f"    bar {start + bars}: a run, then both land home in harmony")
+    return one, two, [f"  duel, bars {start + 1}-{start + bars}: the two leads trade licks, the turns getting "
+                      "shorter"] + lines
+
+
+def check_leads(one, two, key_at, spans, licks=()):
+    """None when the two leads fit, else the reason: inside the melody's range, the two never sounding at once
+    unless in twin harmony (a third apart in the key, or a sixth where the second sits over), and a held note in
+    a duel's licks (`licks`: its [(first step, last step)]) on a tone of its chord."""
+    r = member_range("melody")
+    for st, length, m in one + two:
+        if not r.low <= m <= r.high:
+            return f"{m} at step {st} outside the leads' range"
+    at = {st: m for st, _, m in one}
+    for st, length, m in two:
+        if st in at:
+            if (at[st] - m) % 12 not in (3, 4, 8, 9):
+                return f"step {st}: the leads {at[st]} and {m}, not a third apart"
+        elif any(s <= st < s + n for s, n, _ in one):
+            return f"step {st}: the second lead over the first's held note"
+    for st, length, m in one + two:
+        if length >= 12 and any(lo <= st < hi for lo, hi in licks):
+            pcs = {(key_at(st).tonic + t) % 12 for t in chord_at(spans, st).chord.tones}
+            if m % 12 not in pcs:
+                return f"a held {m} at step {st} off its chord"
+    return None

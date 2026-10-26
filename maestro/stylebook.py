@@ -28,7 +28,9 @@ MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "
           "gain": (-40, 20),   # gain: dB in the clip player's mix, set from the mix check (task 3.8)
           "plays": bool, "walk": (0, 100), "coro": dict, "riff": dict,   # task 3.4c: a member sitting out, the
 #                                                                          bass's walk-ups, the horns' loops
-          "tracks": dict, "scale": str, "bends": (0, 100), "vibrato": bool}   # task 3.4d: the doubled guitars, the
+          "tracks": dict, "scale": str, "bends": (0, 100), "vibrato": bool,
+          "double": dict, "licks": dict, "fast": (0, 100), "pan": (-64, 63)}   # the second round: double bass,
+#                                                                          the duel's licks, a lead to one side   # task 3.4d: the doubled guitars, the
 #                                                                          lead's pentatonic, bends and vibrato
 TEMPO = (20, 400)
 

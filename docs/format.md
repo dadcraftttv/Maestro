@@ -286,6 +286,8 @@ part may carry a `"why"` in plain words.
 | `members.drums."loud time"` | the timekeeping weights when the section's part is loud (power rock's chorus: ride or crash), `time` otherwise | 3.4d |
 | `form.home` | weights for the home key's mode a play draws (power rock: major 3, minor 1) | 3.4d |
 | `arrange` (power rock) | each part's `guitar` (the group it plays); `build` and `builds` (the part a quiet section's last phrase may turn into before a loud one, and how often: the pre-chorus); `stop`: true makes the breaks stops (the band on the one, ringing, the drums filling in) | 3.4d |
+| `members.drums.double` | double bass: `runs` (each `kicks` as a bar's 16ths, `weight`), `parts` (the parts that play it), `bursts` (% of the other phrases ending on a beat of 16ths) | power rock's 2nd round |
+| `members.melody` (two leads) | `pan` (the first lead's side; the second sits opposite), `licks` (weights: run, pedal, sweep), `fast` (% of runs in 16th triplets); an `arrange` part's `lead` may be `"twin"` (the second lead a third under) or `"duel"` (the two trade licks) | power rock's 2nd round |
 
 Roles are the band's members (decision 11). The loader says where a file goes wrong (`trap: form.moves: unknown key
 move 'leap'`): unknown parts and fields, the wrong kind of value, a missing source or the wrong license, and any name

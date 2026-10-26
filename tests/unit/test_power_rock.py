@@ -156,3 +156,53 @@ def test_the_book_refuses_a_guitar_pattern_with_an_unknown_shape(monkeypatch):
     monkeypatch.setattr("maestro.theory.guitar.part", lambda *a: bad)
     with pytest.raises(StyleError, match="odd"):
         _guitar_flow("power_rock")
+
+
+# ---- the second round (DadCraft, Oct 26): double bass, two leads, the duel, 150 BPM ----
+
+def test_double_bass_runs_through_the_loud_parts():
+    found = 0
+    for _, take in _takes(10, 48):
+        stops = set(take["breaks"]) | set(take["builds"])
+        for at, _, x in take["parts"]:
+            if x.name not in ("chorus", "drive", "duel"):
+                continue
+            for b in range(at, at + 8):
+                if b in stops or b >= 48:
+                    continue
+                kicks = [h for h in take["drums"] if b * MET.bar <= h[0] < (b + 1) * MET.bar and h[4] == "kick"]
+                assert len(kicks) >= 10, (at, b, len(kicks))           # both feet, 16ths or the gallop
+                found += 1
+    assert found and TEMPO["power_rock"] == 150
+
+
+def test_the_chorus_twins_a_third_under_and_the_duel_trades():
+    duels = 0
+    for _, take in _takes(20, 48):
+        one = {st: m for st, _, m in take["melody"]}
+        for at, _, x in take["parts"]:
+            lo, hi = at * MET.bar, (at + 8) * MET.bar
+            two = [n for n in take["lead2"] if lo <= n[0] < hi]
+            if x.lead == "twin":
+                assert two and all((one[st] - m) % 12 in (3, 4, 8, 9) for st, _, m in two)
+            elif x.lead == "duel" and hi <= 48 * MET.bar:
+                duels += 1
+                firsts = [n for n in take["melody"] if lo <= n[0] < hi]
+                assert firsts and two
+                last = hi - MET.bar
+                for st, length, m in two:                              # the second plays while the first rests
+                    if st < last:
+                        assert not any(s <= st < s + n for s, n, _ in firsts), st
+                ends = [n for n in take["melody"] if last <= n[0] < hi][-1]
+                assert (ends[2] - next(r["key"] for r in take["bars"] if r["bar"] == at).tonic) % 12 == 0
+    assert duels
+
+
+def test_the_leads_check_refuses_clashing_leads():
+    from maestro.theory.guitar import check_leads
+    key = Key(9, "major")
+    from maestro.theory.flow import Span
+    spans = [Span(0, MET.bar, parse_roman("I", key))]
+    assert check_leads([(0, 24, 81)], [(0, 24, 78)], lambda st: key, spans) is None   # A over F#, a third
+    assert "not a third" in check_leads([(0, 24, 81)], [(0, 24, 79)], lambda st: key, spans)
+    assert "held note" in check_leads([(0, 48, 81)], [(24, 12, 76)], lambda st: key, spans)

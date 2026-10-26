@@ -4,8 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** power rock's next round: first ask DadCraft what 80s arena rock is missing (below, after 3.4d's listen),
-then 3.5. Synthwave's open points (below, after 3.4b's listen)
+**Next:** the A/B listen after power rock's second round (`clips/ab/power_rock`), then 3.5. Synthwave's open points (below, after 3.4b's listen)
 wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -368,11 +367,24 @@ For each chosen style, how each member plays it, written from sources.
       the build and the stop; the bass driving with the kick; the lead's bends in tune; the flat seventh.
       Oct 26: B ("B wins again, but i wouldn't say it sounds like 80's arena rock at all. the guitars sound fine.
       Everything else sounds fine.").
-- [ ] Power rock, next round (DadCraft, Oct 26: B fine, but not 80s arena rock): ask him what's missing, or for a
-      reference (handled like trap's: heard on this PC only, in `inbox/`, never committed or sent out). Candidates:
-      the sound (GM stand-ins: a big gated-reverb kit and room, like synthwave's own LinnDrum kit; layered guitars
-      with chorus and a big reverb), 80s keys (a synth pad or brass stabs under the chorus), the lead as a sung
-      anthem hook rather than a guitar line, the tempo.
+- [x] Power rock, second round (DadCraft, Oct 26: B fine, but not 80s arena rock). Asked what's missing: "when i
+      think power rock, i think double bass pedals and dueling guitars, akin to Bill and Ted, among others." Plan
+      approved: "all of it, 150, both, pull the solo forward"; the target is now 80s hair metal and shred. Done Oct 26:
+      **double bass** (`drums.double_kick`, written from theory: GMD has none): in the chorus, drive and duel both
+      feet run 16ths, the gallop or 8ths into 16ths (a run a phrase, mostly kept), 30% of the other phrases end on a
+      beat of 16ths; never in a stop or a build. **Two leads**, one each side (pan ∓32): the first alone in a verse;
+      in a chorus (`lead: "twin"`) the second a third under it in the key; **the duel** (`lead: "duel"`, a part after
+      a chorus, the solo pulled forward from 3.6): the two trade shred licks over the phrase, two bars each, then one,
+      then half a bar, and land home together a sixth apart; a lick is a pentatonic run (16ths, 40% in 16th
+      triplets), a pedal lick or a sweep, ending on a held chord tone (`guitar.duel`, `check_leads`: in range, never
+      both at once unless a third or sixth apart, a lick's held notes on their chord). The twin bends with the first.
+      A gallop in the drive group too, locking the bass. Tempo 150. Mix: rhythm guitars gain -11 (6-7 dB under the
+      lead), drums -1; every member in its target on 8 clips. A verse's timekeeping now never on the ride or crash.
+      226 tests, fuzz 2000 seeds a style clean, drift every target met, the other styles' clips byte-identical.
+- [ ] Listen after power rock's second round, as A/B: `clips/ab/power_rock` (seed 63, 48 bars; A: the first round,
+      6543892; B: today's: verse, pre-chorus with the snare build, a chorus in twin harmony, a duel, a chorus, a
+      duel; double plagal then the anthem loop). Listen for: hair metal and shred; the double bass in the loud parts;
+      the duel trading left and right, the turns shorter and hotter, landing home together; the twin harmony.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

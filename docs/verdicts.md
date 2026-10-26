@@ -286,3 +286,7 @@ isn't reloaded every session; grep for the part a task needs.
   and stops, two guitars left and right, the checks and an A/B); the guitar solo waits for 3.6.
 - Oct 26: the A/B listen after 3.4d (power rock). "B wins again, but i wouldn't say it sounds like 80's arena rock
   at all. the guitars sound fine. Everything else sounds fine." Logged as power rock's next round (PLAN.md).
+- Oct 26: what power rock is missing (DadCraft): "when i think power rock, i think double bass pedals and dueling
+  guitars, akin to Bill and Ted, among others." The next round's plan approved: "all of it, 150, both, pull the solo
+  forward" (double bass drums, two leads trading and in twin harmony, shred licks, a duel section pulled forward
+  from 3.6, the rhythm guitars a little lower; the tempo 150; the target named 80s hair metal and shred).
