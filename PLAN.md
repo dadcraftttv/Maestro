@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.5a, the style cards for our own style judge (plan approved Oct 26). Synthwave's open points (below,
+**Next:** 3.5b, `maestro/judge.py` measuring a clip against its style's card. Synthwave's open points (below,
 after 3.4b's listen) wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -413,10 +413,16 @@ For each chosen style, how each member plays it, written from sources.
       songs can't be ruled out (decision 7: no weights trained on it). TinyMU (arXiv 2604.15849) has no code, weights
       or license we could find; look again if it gets a release. A small classifier trained only on our practice MIDI
       and openly licensed sets can join the judge in buckets 4-5, and 5.4 improves against this judge.
-  - [ ] 3.5a Style cards: a "judge" part in each style file, a few measurable traits a member (notes a bar, which
+  - [x] 3.5a Style cards: a "judge" part in each style file, a few measurable traits a member (notes a bar, which
         steps it hits, syncopation, register, chord tones, velocity spread, repetition) as ranges, each with its
         source. Written from the sources (`docs/research.md`, `docs/taste.md`, the style's references), not copied
         from the generator's own numbers, so the judge doesn't just grade the rules against themselves.
+        Done Oct 26: cards in trap, synthwave, salsa and power rock (plain is the core's defaults, no card), 2-5
+        traits a member, the drums by lane and salsa's percussion by part; the trait list and its definitions in
+        `stylebook.TRAITS` (syncopation: an onset off the beat with no onset on the next beat; chord tones counted
+        on the beat, against the chord there or the one a note is held into, so the tumbao's anticipations count);
+        the loader checks every card. Expected in 3.5c: synthwave's lead register (the Reimaginer's C4-C6) will flag
+        today's lead (E5-A6), the open point already waiting for synthwave's next round.
   - [ ] 3.5b `maestro/judge.py`: measures a clip's MIDI (its `.json` gives the roles), scores each member against
         its style's card and names the trait that's off ("trap hats: too few rolls"); a cross check scores each
         clip against every style's card, and a clip should fit its own style best.

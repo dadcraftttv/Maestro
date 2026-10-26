@@ -1054,5 +1054,50 @@
       }
     },
     "breaks": 60
+  },
+  "judge": {
+    "why": "Written from salsa's sources (Wikipedia's \"Tumbao\", \"Guajeo\", \"Montuno\", \"Clave (rhythm)\", \"Mambo (music)\"; the percussion parts as players teach them), against the son 2-3 clave.",
+    "band": {"chords": [0.5, 2, "Wikipedia, \"Montuno\": a vamp of two to four chords over two bars"]},
+    "bass": {
+      "notes": [1.5, 4, "Wikipedia, \"Tumbao\": two notes a bar, the one left out"],
+      "steps": [
+        [[6, 12], 70, 100, "Wikipedia, \"Tumbao\": the and of 2 and beat 4"],
+        [[0], 0, 40, "Wikipedia, \"Tumbao\": the bass skips the one, held over from 4"]
+      ],
+      "syncopation": [30, 80, "Wikipedia, \"Tumbao\": the and of 2 anticipates, played ahead of the chord"],
+      "chord tones": [85, 100, "Wikipedia, \"Tumbao\": the coming chord's root, fifth or third"],
+      "register": ["E1", "G3", "Wikipedia, \"Double bass\": its lowest string E1"]
+    },
+    "keys": {
+      "notes": [2.5, 8, "Wikipedia, \"Guajeo\": an ostinato in 8ths, from the strokes only to nearly every 8th"],
+      "syncopation": [25, 80, "Wikipedia, \"Guajeo\": offbeat, anticipating the chords"],
+      "repeats": [60, 100, "Wikipedia, \"Guajeo\": a two-bar figure repeated over the vamp"],
+      "voices": [2, 4, "Wikipedia, \"Montuno\": the piano in octaves, a chord tone between"]
+    },
+    "horns": {
+      "syncopation": [15, 90, "Wikipedia, \"Mambo (music)\": syncopated horn riffs"],
+      "repeats": [40, 100, "Wikipedia, \"Son montuno\": the coro's refrain over and over"]
+    },
+    "melody": {
+      "chord tones": [50, 100, "Open Music Theory, \"Embellishing tones\" (CC BY-SA 4.0): the strong beats take the chord's tones"],
+      "top": [60, 100, "docs/taste.md, \"Failures to check for\": the melody must stay on top"]
+    },
+    "percussion": {
+      "clave": {
+        "notes": [2, 3, "Wikipedia, \"Clave (rhythm)\": five strokes over two bars"],
+        "steps": [
+          [
+            [0, 4, 6, 8, 12],
+            35,
+            65,
+            "Wikipedia, \"Clave (rhythm)\": son 2-3, beats 2 and 3, then 1, the and of 2 and 4: each in one bar of two"
+          ]
+        ]
+      },
+      "congas": {
+        "notes": [5, 10, "the tumbao (marcha) as congueros teach it: heel and toe strokes in 8ths"],
+        "steps": [[[12, 14], 70, 100, "the tumbao: open tones on 4 and its and"]]
+      }
+    }
   }
 }

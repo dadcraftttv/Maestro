@@ -1031,5 +1031,44 @@
   "stop": true,
   "build": "pre-chorus",
   "builds": 70
- }
+ },
+  "judge": {
+    "why": "Written from GMD's rock drummers (maestro/data/grooves.json, CC BY 4.0) and Wikipedia's \"Power chord\", \"Palm mute\", \"String bending\", \"Double bass drum\" and \"Twin lead guitar\", not from the entry's patterns.",
+    "drums": {
+      "snare": {"steps": [[[4, 12], 80, 100, "GMD rock: every common groove's snare on 2 and 4"]]},
+      "kick": {
+        "notes": [1, 16, "GMD rock: 2-4 a bar; Wikipedia, \"Double bass drum\": 16th runs in the loud parts"],
+        "steps": [[[0], 80, 100, "GMD rock: every common groove's kick on the one"]]
+      },
+      "hats": {
+        "velocity": [8, 35, "GMD rock: hats near 95 on the beat, 70-80 on the and, near 50 on the 16ths"],
+        "triplets": [0, 10, "GMD rock: straight takes, the odd triplet fill"]
+      }
+    },
+    "guitar": {
+      "voices": [1, 2, "Wikipedia, \"Power chord\": the root and fifth, no third"],
+      "chord tones": [90, 100, "Wikipedia, \"Power chord\": the chord's root and fifth"],
+      "syncopation": [0, 30, "Wikipedia, \"Palm mute\": driving 8ths on the beat; the odd push"],
+      "register": ["E2", "E4", "Wikipedia, \"Power chord\": low on the guitar's bottom strings, from E2"]
+    },
+    "bass": {
+      "notes": [2, 8, "GMD rock and Wikipedia, \"Arena rock\": a bass in 8ths locked to the kick"],
+      "chord tones": [85, 100, "the bass on the root under power chords"],
+      "syncopation": [0, 25, "driving on the beat"],
+      "register": ["E1", "G3", "Wikipedia, \"Bass guitar\": its lowest string E1"]
+    },
+    "melody": {
+      "slides": [5, 60, "Wikipedia, \"String bending\": held notes bent up into place"],
+      "chord tones": [
+        40,
+        100,
+        "Open Music Theory, \"Embellishing tones\" (CC BY-SA 4.0): the strong beats take the chord's tones; the pentatonic's passing notes"
+      ],
+      "top": [
+        60,
+        100,
+        "docs/taste.md, \"Failures to check for\": the melody must stay on top; the twin lead a third under it (Wikipedia, \"Twin lead guitar\")"
+      ]
+    }
+  }
 }

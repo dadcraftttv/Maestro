@@ -33,6 +33,27 @@ MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "
 #                                                                          the duel's licks, a lead to one side   # task 3.4d: the doubled guitars, the
 #                                                                          lead's pentatonic, bends and vibrato
 TEMPO = (20, 400)
+# The style judge's cards (task 3.5a): what each member's playing should measure, written from the style's sources,
+# never from the generator's own numbers. Each trait is [low, high, its source]; `maestro/judge.py` measures a clip
+# against them (3.5b). Shares are % of the member's notes (rolls: of its bars), counted on the bars it plays.
+TRAITS = {
+    "notes": (0, 64),          # onsets a bar (a chord's notes struck together count once)
+    "syncopation": (0, 100),   # % of onsets off the beat with no onset of the member's on the next beat
+    "triplets": (0, 100),      # % of onsets off the 16th grid (triplets, 32nds)
+    "rolls": (0, 100),         # % of bars holding a run of three or more onsets closer than a 16th
+    "register": "names",       # [lowest, highest] note names: its 10th and 90th percentile pitches lie inside
+    "chord tones": (0, 100),   # % of onsets on a beat that are tones of the chord there or the one they're held into
+    "velocity": (0, 127),      # the spread (standard deviation) of its velocities
+    "repeats": (0, 100),       # % of bars whose onsets repeat one of the two bars it played before
+    "length": (0, 64),         # its median note length, in beats
+    "voices": (1, 12),         # the median count of pitch classes struck together
+    "slides": (0, 100),        # % of notes sliding (a pitch bend) into place
+    "top": (0, 100),           # % of its onsets over every other pitched member sounding then
+}
+BAND = {"tempo": TEMPO, "chords": (0, 16)}   # BPM; chords a bar
+# "steps": [[16ths of the bar, 0-15], low, high, source]: each step listed is hit in low-high % of the bars played
+DRUM_LANES = ("kick", "snare", "hats", "cymbals", "toms")   # snare holds the clap, hats the open and pedal ones
+NOTE = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
 
 
 class StyleError(ValueError):
@@ -56,9 +77,12 @@ def _keys(d, known, where):
 
 def check(entry, name):
     """Raise a StyleError saying where, when a style file isn't one the book can read."""
-    _keys(entry, ("style", "license", "sources", "time", "harmony", "form", "members", "mix", "arrange"), name)
+    _keys(entry, ("style", "license", "sources", "time", "harmony", "form", "members", "mix", "arrange", "judge"),
+          name)
     if "mix" in entry:
         check_mix(entry["mix"], f"{name}: mix")
+    if "judge" in entry:
+        check_judge(entry["judge"], entry.get("members", {}), f"{name}: judge")
     if entry.get("style") != name:
         raise StyleError(f"{name}: its \"style\" is {entry.get('style')!r}, not its file name")
     if entry.get("license") != LICENSE:
@@ -100,6 +124,69 @@ def check_mix(mix, where):
     for k, v in mix.items():
         if k != "why" and not (isinstance(v, list) and len(v) == 2 and all(map(_number, v)) and v[0] <= v[1]):
             raise StyleError(f"{where}.{k} must be [low, high] in dB, got {v!r}")
+
+
+def midi(name):
+    """A note name ("E1", "C#4", "Bb3") as its MIDI number, C4 = 60; None when it isn't one."""
+    if not isinstance(name, str) or not name or name[0] not in NOTE:
+        return None
+    pc, rest = NOTE[name[0]], name[1:]
+    if rest[:1] in ("#", "b"):
+        pc, rest = pc + (1 if rest[0] == "#" else -1), rest[1:]
+    try:
+        return pc + 12 * (int(rest) + 1)
+    except ValueError:
+        return None
+
+
+def _trait(v, rule, where):
+    if not (isinstance(v, list) and len(v) == 3 and isinstance(v[2], str) and v[2]):
+        raise StyleError(f"{where} must be [low, high, its source], got {v!r}")
+    lo, hi = (midi(v[0]), midi(v[1])) if rule == "names" else v[:2]
+    if rule == "names":
+        if lo is None or hi is None:
+            raise StyleError(f"{where}: expected note names like \"E1\", got {v[:2]!r}")
+    elif not (_number(lo) and _number(hi) and rule[0] <= lo and hi <= rule[1]):
+        raise StyleError(f"{where}: expected numbers from {rule[0]} to {rule[1]}, got {v[:2]!r}")
+    if lo > hi:
+        raise StyleError(f"{where}: low over high, {v[:2]!r}")
+
+
+def _card(card, where):
+    _keys(card, tuple(TRAITS) + ("steps",), where)
+    for k, v in card.items():
+        if k == "steps":
+            if not isinstance(v, list) or not v:
+                raise StyleError(f"{where}.steps must list [[16ths], low, high, its source]")
+            for s in v:
+                if not (isinstance(s, list) and len(s) == 4 and isinstance(s[0], list) and s[0] and all(
+                        isinstance(i, int) and not isinstance(i, bool) and 0 <= i <= 15 for i in s[0])):
+                    raise StyleError(f"{where}.steps: expected [[16ths 0-15], low, high, its source], got {s!r}")
+                _trait(s[1:], (0, 100), f"{where}.steps {s[0]}")
+        elif k != "why":
+            _trait(v, TRAITS[k], f"{where}.{k}")
+
+
+def check_judge(judge, members, where):
+    """The style's cards: "band" (tempo, chords a bar), then a role's traits; drums and percussion by lane (the
+    drum lanes, the percussion's own parts)."""
+    _keys(judge, ("band",) + ROLES, where)
+    for role, card in judge.items():
+        if role == "why":
+            continue
+        if role == "band":
+            _keys(card, tuple(BAND), f"{where}.band")
+            for k, v in card.items():
+                if k != "why":
+                    _trait(v, BAND[k], f"{where}.band.{k}")
+        elif role in ("drums", "percussion"):
+            lanes = DRUM_LANES if role == "drums" else tuple(members.get("percussion", {}).get("parts", {}))
+            _keys(card, lanes, f"{where}.{role}")
+            for lane, c in card.items():
+                if lane != "why":
+                    _card(c, f"{where}.{role}.{lane}")
+        else:
+            _card(card, f"{where}.{role}")
 
 
 def load(folder=HERE):

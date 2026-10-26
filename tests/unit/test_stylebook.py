@@ -4,7 +4,7 @@ import shutil
 
 import pytest
 
-from maestro.stylebook import BOOK, HERE, ROLES, STYLES, StyleError, load, make
+from maestro.stylebook import BOOK, HERE, ROLES, STYLES, StyleError, load, make, midi
 from maestro.theory.chords import Vocabulary
 from maestro.theory.form import FORM, Form
 from maestro.theory.rhythm import Feel, Rhythm
@@ -67,6 +67,14 @@ def _book(tmp_path, style="trap", change=None):
     (lambda e: e["members"].update({"808": {"sound": 38}}), "members: unknown part '808'"),
     (lambda e: e["members"]["pad"].update(sound=128), "members.pad.sound must be a whole number from 0 to 127"),
     (lambda e: e["harmony"].update(chords={}), "harmony: unknown part 'chords'"),
+    (lambda e: e["judge"]["bass"].update(groove=[0, 1, "x"]), "judge.bass: unknown part 'groove'"),
+    (lambda e: e["judge"]["bass"].update(notes=[1, 5]), "judge.bass.notes must be \\[low, high, its source\\]"),
+    (lambda e: e["judge"]["bass"].update(notes=[5, 1, "x"]), "judge.bass.notes: low over high"),
+    (lambda e: e["judge"]["bass"].update(slides=[0, 120, "x"]), "judge.bass.slides: expected numbers from 0 to 100"),
+    (lambda e: e["judge"]["bass"].update(register=["E1", "H2", "x"]), "judge.bass.register: expected note names"),
+    (lambda e: e["judge"]["drums"].update(cowbell={}), "judge.drums: unknown part 'cowbell'"),
+    (lambda e: e["judge"]["drums"]["snare"].update(steps=[[[16], 0, 100, "x"]]), "judge.drums.snare.steps"),
+    (lambda e: e["judge"]["band"].update(tempo=[10, 140, "x"]), "judge.band.tempo: expected numbers from 20"),
 ])
 def test_a_bad_file_says_where(tmp_path, change, says):
     with pytest.raises(StyleError, match=f"trap: .*{says}"):
@@ -82,3 +90,15 @@ def test_the_book_and_its_folder_agree(tmp_path):
     (folder / "trap.json").write_text("{not json")
     with pytest.raises(StyleError, match="trap: not valid JSON"):
         load(folder)
+
+
+def test_the_judges_cards():
+    """Task 3.5a: every style but plain carries a card, each trait with its source; percussion by its own parts."""
+    assert [s for s in STYLES if "judge" in BOOK[s]] == ["trap", "synthwave", "salsa", "power_rock"]
+    assert set(BOOK["salsa"]["judge"]["percussion"]) <= set(BOOK["salsa"]["members"]["percussion"]["parts"])
+    assert (midi("C4"), midi("E1"), midi("C#4"), midi("Bb3"), midi("C-1"), midi("H2")) == (60, 28, 61, 58, 0, None)
+
+
+def test_a_percussion_card_names_the_styles_parts(tmp_path):
+    with pytest.raises(StyleError, match="judge.percussion: unknown part 'cowbell'"):
+        load(_book(tmp_path, "salsa", lambda e: e["judge"]["percussion"].update(cowbell={})))

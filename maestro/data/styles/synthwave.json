@@ -137,5 +137,47 @@
         "riser": 25
       }
     }
+  },
+  "judge": {
+    "why": "Written from DadCraft's production notes (docs/taste.md), the Synthwave MIDI Reimaginer's preset (docs/data.md, ideas only) and what's widely known of the style (the LinnDrum's backbeat), not from the entry's patterns.",
+    "band": {"tempo": [60, 170, "docs/taste.md: calm about 60-100, menace 120-140, boss or fanfare 135-170"]},
+    "drums": {
+      "snare": {
+        "steps": [
+          [
+            [4, 12],
+            40,
+            100,
+            "the drum machine's backbeat on 2 and 4 (Reimaginer: a gated snare); half time in the calm parts (docs/taste.md)"
+          ]
+        ]
+      },
+      "kick": {"steps": [[[0], 80, 100, "the Reimaginer: four on the floor; docs/taste.md: a motorik pulse"]]},
+      "hats": {
+        "notes": [4, 16, "the Reimaginer: 8th or 16th hats"],
+        "triplets": [0, 5, "docs/taste.md: a machine's straight pulse"]
+      }
+    },
+    "bass": {
+      "chord tones": [85, 100, "docs/taste.md: locked to the kick, or a clean sub under the melody"],
+      "triplets": [0, 5, "docs/taste.md: straight 8ths and 16ths"],
+      "register": ["E1", "C4", "the Reimaginer: the bass around A2"]
+    },
+    "arp": {
+      "notes": [4, 16, "docs/taste.md: a sparkle arp, cold new-wave arps"],
+      "chord tones": [80, 100, "an arp runs round the chord's tones"],
+      "repeats": [60, 100, "an arp's figure goes round"],
+      "triplets": [0, 5, "docs/taste.md: straight"]
+    },
+    "melody": {
+      "register": ["C4", "C6", "the Reimaginer: the lead centred on G#4 (docs/data.md, an open point)"],
+      "chord tones": [50, 100, "Open Music Theory, \"Embellishing tones\" (CC BY-SA 4.0): the strong beats take the chord's tones"],
+      "top": [70, 100, "docs/taste.md, \"Failures to check for\": the melody must stay on top"]
+    },
+    "pad": {
+      "length": [2, 16, "docs/taste.md: supersaw pads stand in for an orchestra; chillwave pads float"],
+      "voices": [3, 5, "docs/taste.md: supersaw chords, sevenths and ninths"],
+      "chord tones": [85, 100, "a pad holds the chord"]
+    }
   }
 }
