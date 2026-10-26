@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.5, the style judge: plan to DadCraft first. Synthwave's open points (below, after 3.4b's listen)
-wait for its next round; trap waits for DadCraft's reference for the cascade.
+**Next:** 3.5a, the style cards for our own style judge (plan approved Oct 26). Synthwave's open points (below,
+after 3.4b's listen) wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -406,8 +406,23 @@ For each chosen style, how each member plays it, written from sources.
       a style.
 - [ ] Later (DadCraft, Oct 26): Maestro's own metal sounds for power rock (a high-gain guitar, a tight metal kit, a
       scooped mix) in place of the GM stand-ins. Ask DadCraft when to pick it up.
-- [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
-      that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
+- [ ] 3.5 The style judge scores the clips before DadCraft listens. **Our own judge** (DadCraft, Oct 26: "Own
+      judge"): no outside weights, offline, safe to ship. The license check ruled the planned ones out: CLaMP 3's
+      code and weights are MIT, but its symbolic model (C2) learned from M4-RAG (CC BY-NC-ND, research only; music
+      found by searching song titles and artists, its 0.75M symbolic pairs unpublished), so fan MIDI of copyrighted
+      songs can't be ruled out (decision 7: no weights trained on it). TinyMU (arXiv 2604.15849) has no code, weights
+      or license we could find; look again if it gets a release. A small classifier trained only on our practice MIDI
+      and openly licensed sets can join the judge in buckets 4-5, and 5.4 improves against this judge.
+  - [ ] 3.5a Style cards: a "judge" part in each style file, a few measurable traits a member (notes a bar, which
+        steps it hits, syncopation, register, chord tones, velocity spread, repetition) as ranges, each with its
+        source. Written from the sources (`docs/research.md`, `docs/taste.md`, the style's references), not copied
+        from the generator's own numbers, so the judge doesn't just grade the rules against themselves.
+  - [ ] 3.5b `maestro/judge.py`: measures a clip's MIDI (its `.json` gives the roles), scores each member against
+        its style's card and names the trait that's off ("trap hats: too few rolls"); a cross check scores each
+        clip against every style's card, and a clip should fit its own style best.
+  - [ ] 3.5c Check the judge: today's clips pass their own cards; wrong clips (a member from another style, the
+        velocities flattened, the notes shuffled off the style's steps) score low; SynTheory (MIT) tests the chord
+        and tempo measures where it fits. Tests and fuzz clean. Then every listen gets the judge's table first.
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
       out as it eases (after Ouralia's Calm builds: pad, room notes, chimes, then harmony and reverb, each joining
       further along the rise; `docs/format.md`), and sections thin or fill the band. Each style's entry says who

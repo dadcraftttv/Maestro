@@ -299,3 +299,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 26: power rock's third round closed: "lets save the metal sounds for later. no thrash." Next: 3.5.
 - Oct 26: Checkpoint 3's rule: "yes, make that the rule for Checkpoint 3": each style needs a sound baseline, not a
   finished one; rounds that only fine-tune a style's sound wait for the desk (PLAN.md decision 16).
+- Oct 26: 3.5's style judge: "Own judge", a style card check of our own; CLaMP 3 (weights trained on M4-RAG's
+  web-found music) and TinyMU (no license found) stay out.
