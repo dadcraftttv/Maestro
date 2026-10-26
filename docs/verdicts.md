@@ -290,3 +290,6 @@ isn't reloaded every session; grep for the part a task needs.
   guitars, akin to Bill and Ted, among others." The next round's plan approved: "all of it, 150, both, pull the solo
   forward" (double bass drums, two leads trading and in twin harmony, shred licks, a duel section pulled forward
   from 3.6, the rhythm guitars a little lower; the tempo 150; the target named 80s hair metal and shred).
+- Oct 26: the A/B listen after power rock's second round. B: "it doesn't sound like 80's hair metal or thrash, but
+  it's better than it was. i almost didn't hear the double bass pedal kicks." The duel trading and the twin
+  harmony: "yes and yes". Logged as power rock's third round (PLAN.md).

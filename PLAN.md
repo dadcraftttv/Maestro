@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** the A/B listen after power rock's second round (`clips/ab/power_rock`), then 3.5. Synthwave's open points (below, after 3.4b's listen)
+**Next:** power rock's third round, once DadCraft picks from its list (below), then 3.5. Synthwave's open points (below, after 3.4b's listen)
 wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -381,10 +381,16 @@ For each chosen style, how each member plays it, written from sources.
       A gallop in the drive group too, locking the bass. Tempo 150. Mix: rhythm guitars gain -11 (6-7 dB under the
       lead), drums -1; every member in its target on 8 clips. A verse's timekeeping now never on the ride or crash.
       226 tests, fuzz 2000 seeds a style clean, drift every target met, the other styles' clips byte-identical.
-- [ ] Listen after power rock's second round, as A/B: `clips/ab/power_rock` (seed 63, 48 bars; A: the first round,
+- [x] Listen after power rock's second round, as A/B: `clips/ab/power_rock` (seed 63, 48 bars; A: the first round,
       6543892; B: today's: verse, pre-chorus with the snare build, a chorus in twin harmony, a duel, a chorus, a
       duel; double plagal then the anthem loop). Listen for: hair metal and shred; the double bass in the loud parts;
       the duel trading left and right, the turns shorter and hotter, landing home together; the twin harmony.
+      Oct 26: B. "it doesn't sound like 80's hair metal or thrash, but it's better than it was. i almost didn't hear
+      the double bass pedal kicks." The duel and the twin harmony: "yes and yes".
+- [ ] Power rock, third round (logged Oct 26): the double bass barely heard (the GM kick soft and masked by the
+      bass's 8ths: louder, clickier kicks in the runs, the bass out of their way); still not hair metal or thrash,
+      most likely the sound (GM stand-ins: Maestro's own high-gain guitar, a tight metal kit, a scooped mix), maybe
+      thrash's faster tempo and riffs. Ask DadCraft which first.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
