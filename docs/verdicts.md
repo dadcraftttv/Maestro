@@ -301,3 +301,5 @@ isn't reloaded every session; grep for the part a task needs.
   finished one; rounds that only fine-tune a style's sound wait for the desk (PLAN.md decision 16).
 - Oct 26: 3.5's style judge: "Own judge", a style card check of our own; CLaMP 3 (weights trained on M4-RAG's
   web-found music) and TinyMU (no license found) stay out.
+- Oct 26: 3.5a's cards: "syncopation is fine": an onset off the beat with no onset of the member's on the next
+  beat (straight 8ths 0, the tumbao's push high).
