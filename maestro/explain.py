@@ -17,11 +17,13 @@ from .stylebook import part
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
 from .theory.flow import ARPS, BASS, FLOW, arp_part, bass_808, check_arp, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
     check_loop, held, loop_melody, LOOPS, phrase_melody, plain_phrase, progression, _nearest, _tone
-from .theory.drums import DRUMMER, check_drums, drum_part, quiet_spans
+from .theory.drums import DRUMMER, KIT, _fill, _vel, check_drums, drum_part, quiet_spans
+from .theory.guitar import GUITAR, VOICINGS, _root as guitar_root, bends as lead_bends, check_guitar, guitar_part, \
+    lock_bass, pentatonic, power, vibrato
 from .theory.arrange import ARRANGE, check_parts, cut as silence, phrase_parts
 from .theory.horns import HORNS, check_horns, harmonize, hits, horn_part, strokes
 from .theory.keys import KEYS, ahead, check_keys, montuno_part, voice
-from .theory.form import DEVELOPS, FORM, WORDS, Play, Theme, explain_section
+from .theory.form import DEVELOPS, FORM, WORDS, Play, Theme, _draw, explain_section
 from .theory.percussion import PERCUSSION, check_percussion, percussion_part
 from .theory.pitch import Key
 from .theory.rhythm import CLAVES, METERS, RHYTHM, check_clave, check_onsets, choose_onsets, explain_feel, explain_onsets, \
@@ -287,6 +289,89 @@ def band(rng, style, plan, play, spans, key_at, bass, melody, percussion, clave,
     return keys, horns, parts, breaks, bass, melody, percussion
 
 
+def rock_band(rng, style, plan, play, spans, key_at, bass, melody, drums, kit_why, ruled):
+    """Power rock's band over the whole play (task 3.4d): a part each phrase (`arrange.py`: verse, pre-chorus,
+    chorus), the rhythm guitar a phrase in its part's group, the bass locking to the guitar where its pattern says,
+    the snare building at a pre-chorus's end, the band stopping on the one at some section ends; then the lead's
+    bends and vibrato. `ruled`: the parts, drawn before the drums (`phrase_parts`). (guitar {track: notes}, muted
+    steps, parts, breaks, builds, bass, drums, bends, vibrato)."""
+    met, ar, phrase, gf = METERS["4/4"], ARRANGE[style], FORM[style].phrase, GUITAR[style]
+    whole = play.bar * met.bar
+    parts, breaks, said = ruled
+    for ln in said:
+        bar = _bar_of(ln) - 1
+        next(p for p in plan if p["section"].start <= bar < p["section"].end)["lines"].append(ln)
+    for p in plan:
+        p["parts"] = [(at, x.name) for at, s, x in parts if s is p["section"]]
+    kit_why.append(("arrangement", check_parts(parts, ar)))
+    # the rhythm guitar a phrase, the bass locked to it where its pattern says
+    guitar, muted, pats, near, bnear = {t.name: [] for t in gf.tracks}, [], {}, None, None
+    for at, s, x in parts:
+        notes, mu, pat, near, lines = guitar_part(rng, gf, x.guitar, spans, key_at, at, phrase, met,
+                                                  pats.get(x.guitar), near)
+        pats[x.guitar] = pat
+        for k, ns in notes.items():
+            guitar[k] += ns
+        muted += mu
+        p = next(p for p in plan if p["section"] is s)
+        p["lines"] += lines
+        p.setdefault("guitar", []).append((at, x.name, pat))
+        if pat.bass:
+            lo, hi = at * met.bar, (at + phrase) * met.bar
+            bnear = next((m for st, _, m in reversed(bass) if st < lo), bnear)
+            locked, bnear = lock_bass(notes[gf.tracks[0].name], spans, key_at, met, bnear)
+            bass = sorted(silence(bass, lo, hi) + locked, key=lambda n: n[0])
+            p["lines"].append(f"  bass, bars {at + 1}-{at + phrase}: locks to the guitar's {pat.name}")
+    # the pre-chorus's last bar: the snare building into the chorus
+    builds = [at + phrase - 1 for at, _, x in parts if x.name == ar.build]
+    dr = DRUMMER[style]
+    for b in builds:
+        lo = b * met.bar
+        drums = [h for h in drums if not lo <= h[0] < lo + met.bar]
+        drums += [(lo, 6, KIT["kick"], _vel(dr, "kick", 0, 1.0), "kick"),
+                  (lo, 6, KIT["crash"], _vel(dr, "crash", 0, 1.0), "crash")]
+        steps = list(range(lo + 12, lo + met.bar // 2, 12)) + list(range(lo + met.bar // 2, lo + met.bar, 6))
+        for k, st in enumerate(steps):
+            drums.append((st, 6, KIT["snare"], 60 + 55 * k // len(steps), "snare"))
+        p = next(p for p in plan if p["section"].start <= b < p["section"].end)
+        p["drums"] = [ln for ln in p["drums"] if not ln.startswith(f"  drums, bar {b + 1}:")] + [
+            f"  drums, bar {b + 1}: the snare builds, 8ths then 16ths, into the chorus"]
+    # the stops: the band hits the one and lets it ring, the drums fill in (or build, at a pre-chorus's end)
+    r = member_range("bass")
+    for b in breaks:
+        lo, hi = b * met.bar, (b + 1) * met.bar
+        key, ch = key_at(lo), chord_at(spans, lo).chord
+        for t in gf.tracks:
+            was = [n for n in guitar[t.name] if n[0] < lo]
+            last = min((m for st, _, m in was if st == was[-1][0]), default=None) if was else None
+            root = guitar_root(key.tonic + ch.root, last, VOICINGS[t.voicing])
+            guitar[t.name] = silence(guitar[t.name], lo, hi) + [(lo, met.bar, m) for m in power(ch, root).values()]
+        muted = [m for m in muted if not lo <= m < hi]
+        near = next((m for st, _, m in reversed(bass) if st < lo), round(r.mid))
+        bass = sorted(silence(bass, lo, hi) + [(lo, met.bar, _nearest(key.tonic + ch.root, near, r))],
+                      key=lambda n: n[0])
+        if b not in builds:
+            e = play.section_at(b).energy_at(b)
+            drums = [h for h in drums if not lo <= h[0] < hi]
+            drums += [(lo, 6, KIT["kick"], _vel(dr, "kick", 0, e), "kick"),
+                      (lo, 6, KIT["crash"], _vel(dr, "crash", 0, e), "crash")]
+            fill, words = _fill(rng, dr, hi - met.bar // 2, hi, e, False)
+            drums += [(st, 6, KIT[v], _vel(dr, v, (st % met.bar) // 6, e), v) for st, v in fill]
+            p = next(p for p in plan if p["section"].start <= b < p["section"].end)
+            p["drums"] = [ln for ln in p["drums"] if not ln.startswith(f"  drums, bar {b + 1}:")] + [
+                f"  drums, bar {b + 1}: the stop, kick and crash on the one, then {words}"]
+    drums.sort(key=lambda h: (h[0], h[2]))
+    for k in guitar:
+        guitar[k].sort(key=lambda n: (n[0], n[2]))
+    kit_why.append(("guitar", check_guitar(guitar, gf, spans, key_at, met)))
+    kit_why.append(("drums after the stops and builds", check_drums(drums, met, whole)))
+    # the lead's bends and vibrato
+    lead = part(style, "members", "melody")
+    bent = lead_bends(rng, melody, key_at, lead["bends"]) if lead.get("bends") else []
+    shakes = vibrato(melody) if lead.get("vibrato") else []
+    return guitar, sorted(muted), parts, breaks, builds, bass, drums, bent, shakes
+
+
 def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, room=0.5):
     """Task 3.2's choices for `bars` bars: (lines of plain words, the take). The take holds the notes ("pad",
     "bass", "melody": (step, length, MIDI note)), a record a bar like `choices`' (bar, section, key, energy, its
@@ -298,6 +383,8 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     met = METERS["4/4"]
     end = bars * met.bar
     clave = CLAVES[rhythm.clave] if rhythm.clave else None
+    if form.home:                                # the style draws its home's mode (power rock: mostly major)
+        home = Key(home.tonic, _draw(rng, form.home) or home.scale)
     play = Play(rng, home, form, bpm, met)
     while play.bar < bars:
         play.next_section(room)
@@ -315,6 +402,12 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
                      "passes": [ln.split(": ", 2)[-1] for ln in lines if ln.startswith("  bars ")]})
     every = [{"bar": b, "section": play.section_at(b), "energy": play.section_at(b).energy_at(b)}
              for b in range(play.bar)]
+    ruled = None
+    if GUITAR[style]:                            # power rock's parts first, so the drummer keeps time by them
+        ruled = phrase_parts(rng, ARRANGE[style], play.sections, form.phrase, play.bar)
+        for r in every:
+            first = next(x for at, s, x in ruled[0] if s is r["section"])
+            r["loud"] = first.when == "high"
     whole, half = play.bar * met.bar, feel_for(style, "drums").pulse == "half"
     kit_why = []
     for p in plan:
@@ -389,6 +482,10 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
             for tries in range(REDRAWS + 2):         # drawn again when the check rules it out, then the plain one
                 notes, lines = plain_phrase(spans, s.key, at, form.phrase, met, floor, two) if tries > REDRAWS else \
                     phrase_melody(rng, theme, spans, s.key, at, form.phrase, met, floor, clave, sung)
+                if part(style, "members", "melody").get("scale") == "pentatonic":    # power rock's lead
+                    notes, moved = pentatonic(notes, spans, s.key)
+                    lines = lines + ([f"    on the pentatonic: {moved} note{'s' * (moved != 1)} moved onto it"]
+                                     if moved else [])
                 notes, under, said = give_way(rng, notes, pad, bass, spans, key_at, lo, hi, leading)
                 bad = check_phrase(notes, spans, s.key, met, form.phrase, at, two, sung)
                 if not bad:
@@ -420,9 +517,16 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         kit_why.append(("percussion", check_percussion(percussion, met, whole, clave)))
     # salsa's band (task 3.4c): the part each phrase plays, the breaks, the bass's walk-ups, the montuno, the horns
     keys, horns, parts, breaks = [], [], [], []
-    if ARRANGE[style]:
+    if ARRANGE[style] and not GUITAR[style]:
         keys, horns, parts, breaks, bass, melody, percussion = band(rng, style, plan, play, spans, key_at, bass, melody,
                                                                     percussion, clave, kit_why, end)
+        why = check_bass(bass, met, clave)
+    # power rock's band (task 3.4d): the parts, the doubled rhythm guitar, the builds and stops, the lead's bends
+    guitar, muted, builds, bent, shakes = {}, [], [], [], []
+    if GUITAR[style]:
+        guitar, muted, parts, breaks, builds, bass, drums, bent, shakes = rock_band(rng, style, plan, play, spans,
+                                                                                    key_at, bass, melody, drums,
+                                                                                    kit_why, ruled)
         why = check_bass(bass, met, clave)
     for p in plan:
         p["lines"] += p["drums"] + p["percussion"]
@@ -449,7 +553,9 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
                      "chord": chord_at(spans, b * met.bar).chord})
     take = {"pad": cut(pad), "bass": cut(bass), "melody": cut(melody), "arp": cut(arp), "bars": recs,
             "keys": cut(keys), "horns": cut(horns), "parts": [x for x in parts if x[0] < bars],
-            "breaks": [b for b in breaks if b < bars],
+            "breaks": [b for b in breaks if b < bars], "builds": [b for b in builds if b < bars],
+            "guitar": {k: cut(ns) for k, ns in guitar.items()}, "muted": [m for m in muted if m < end],
+            "bends": [x for x in bent if x[0] < end], "vibrato": [(st, min(n, end - st)) for st, n in shakes if st < end],
             "slides": [sl for sl in slides if sl[0] + sl[1] < end],
             "drums": [h for h in drums if h[0] < end], "percussion": [h for h in percussion if h[0] < end],
             "plan": [p for p in plan if p["section"].start < bars], "spans": [s for s in spans if s.at < end]}
@@ -495,6 +601,10 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         else:
             out.append(f"Bass, bars {a}-{b}: {p['pattern'].name}"
                        + (f": {p['pattern'].why}." if p['pattern'].why else "."))
+        for at, x, pat in p.get("guitar", []):     # power rock's rhythm guitar, a phrase at a time (task 3.4d)
+            if at < bars:
+                out.append(f"Guitars, bars {at + 1}-{min(at + FORM[style].phrase, bars)} ({x}): {pat.name}"
+                           + (f": {pat.why}." if pat.why else "."))
         if p.get("keys"):
             out.append(f"Keys, bars {a}-{b}: the montuno, {p['keys'].name}" + (f": {p['keys'].why}." if p['keys'].why
                                                                                else "."))
@@ -507,16 +617,19 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
             closes = [ln for ln in p["percussion"][1:] if _bar_of(ln) <= b]
             out.append(f"Percussion, bars {a}-{b}: {parts}" + ("; an abanico into the next section" if closes else "")
                        + ".")
-    if take.get("parts"):                       # salsa's parts (task 3.4c)
+    if take.get("parts"):                       # salsa's parts (task 3.4c), power rock's (task 3.4d)
         runs = [(k, [at for at, _ in g]) for k, g in groupby(((at, x.name) for at, _, x in take["parts"]),
                                                              key=lambda y: y[1])]
         words = {"cuerpo": "the cuerpo (the lead sings the verse, the horns punch its ends)",
                  "montuno": "the montuno (the lead calls, the horns answer with the coro)",
                  "mambo": "a mambo (the horns' riff, the lead out)"}
+        stop = ARRANGE[style].stop
         out.append("Parts: " + "; ".join(f"bars {ats[0] + 1}-{min(ats[-1] + FORM[style].phrase, bars)}, "
                                          f"{words.get(k, 'the ' + k)}" for k, ats in runs)
-                   + "".join(f"; a break in bar {b + 1}, the band hitting the clave's strokes together"
-                             for b in take["breaks"]) + ".")
+                   + "".join(f"; a stop in bar {b + 1}, the band hitting the one and letting it ring" if stop else
+                             f"; a break in bar {b + 1}, the band hitting the clave's strokes together"
+                             for b in take["breaks"])
+                   + "".join(f"; the snare builds in bar {b + 1}" for b in take.get("builds", [])) + ".")
     if take.get("horns"):                       # what the horns play, part by part (task 3.4c)
         said = []
         for p in plan:
@@ -527,6 +640,9 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         out.append("Horns, two trombones in harmony: " + "; ".join(f"from bar {b}, {w}" for b, w in said) + ".")
     if part(style, "members", "pad").get("plays", True):
         out.append("Pad: holds each chord, its voices moving the shortest way, under the melody.")
+    elif GUITAR[style]:
+        out.append("Pad: sits out; two guitars play the chords as power chords, one left and one right, each in its "
+                   "own octave.")
     else:
         out.append("Pad: sits out; the montuno piano plays the chords.")
     if take.get("arp"):
@@ -542,6 +658,9 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         out.append(f"Melody: {len(phrases)} phrase{'s' * (len(phrases) > 1)} of {n} bars. Each states the motif, "
                    f"climbs to a peak about two-thirds in, ends its first half open and lands home on the cadence: "
                    + "; ".join(ln.strip() for ph in phrases for ln in ph[1:] if "then" in ln) + ".")
+    if take.get("bends") or take.get("vibrato"):
+        out.append(f"Lead: on the pentatonic; {len(take['bends'])} held note{'s' * (len(take['bends']) != 1)} bend up "
+                   f"into place, {len(take['vibrato'])} long one{'s' * (len(take['vibrato']) != 1)} with vibrato.")
     if take.get("drums"):
         kicks = {h[0] for h in take["drums"] if h[4] == "kick"}
         locked = sum(1 for n in take["bass"] if n[0] in kicks)
@@ -558,6 +677,16 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
                    "big on 2 and 4, the arp sparkling in 16ths) and turn dreamy when it's low (a held bass, the drums "
                    "at half time, the arp in 8ths); does the lead stay on top and sing; do the pad and bass breathe "
                    "with the kick without pumping like EDM; do the tom fills lead into the next section.")
+        return out
+    if GUITAR[style]:                           # power rock's own questions (task 3.4d)
+        names = {x.name for _, _, x in take["parts"]}
+        out.append("Listen for: does it sound like 80s arena rock; do the two guitars sound wide, left and right, "
+                   "palm-muted and tight in the verse"
+                   + (", opening up big in the chorus" if "chorus" in names else "")
+                   + ("; does the pre-chorus build into it, the snare doubling up" if take.get("builds") else "")
+                   + ("; does the stop hit together and ring" if take["breaks"] else "")
+                   + "; does the bass drive with the kick; does the lead sound like a guitar on the pentatonic, its "
+                   "bends landing in tune; do the chords feel like rock (the flat seventh, the anthem loop).")
         return out
     if take.get("parts"):                       # salsa's own questions (task 3.4c)
         names = {x.name for _, _, x in take["parts"]}

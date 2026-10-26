@@ -120,11 +120,14 @@ class Form:
     gap: float = 3.0                        # minutes between key changes, at least
     hops: int = 2                           # key changes away from home before it has to come back
     life: int = 8                           # statements before a motif is reborn from its own fragment
+    home: dict = field(default_factory=dict)   # the home key's mode a play draws, by weight (power rock: mostly
+    #                                            major); empty: the play's home as given
 
     def __post_init__(self):
         if self.opening not in ("swell", "full"):
             raise ValueError(f"unknown opening {self.opening!r}")
         for what, names, known in (("key move", self.moves, MOVES), ("mode", self.modes, SCALES),
+                                   ("home mode", self.home, SCALES),
                                    ("section kind", self.grow, KINDS)):
             for n in names:
                 if n not in known:

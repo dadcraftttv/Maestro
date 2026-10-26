@@ -183,7 +183,7 @@ material only if DadCraft wants those styles later.
 | Progressions, loops, pop schemas (all four styles) | Open Music Theory (viva.pressbooks.pub/openmusictheory): popular music part with loops and four-chord schemas | SAFE: "licensed under a Creative Commons Attribution-ShareAlike 4.0 International License, except where otherwise noted" (DadCraft read it on the site, Oct 24; Gotham, Gullings, Hamm, Hughes, Jarvis, Lavengood, Peterson, 2023). Each chapter used is checked for its own note first (the rules table's "except where noted") | book: progressions, loops, schemas, form; credited in CREDITS.md when used |
 | Progressions in folk and pop | Chord Progression Handbook (Matney, Niemuth, KU ScholarWorks 2019) | NC (CC BY-NC 4.0) | reader; ideas for the book |
 | Tumbao, guajeo (montuno), clave, salsa's sections | Wikipedia's articles on them | SAFE (CC BY-SA 4.0, text) | book: theory in our own words, credited |
-| Rock progressions | the Rock Corpus (above) | statistics only | book |
+| Rock progressions | the Rock Corpus (above) | statistics only | book: used in 3.4d (Oct 26), `tools/rock_stats.py` counts the RS 200's timed chord lists (one analyst's, dt) into `maestro/data/rock.json`; the files stay in `private/rockcorpus` |
 | Sevenths, ii-V, progressions | jazznet (above) | SAFE | book, data |
 | Drums: rock, hip hop, latin, afrocuban, funk | Groove MIDI and E-GMD (chosen, above) | SAFE | data (3.3) |
 | Afro-Cuban drums | ClaveNet (2024): GMD grooves with Afro-Cuban seed patterns swapped in; no data release found | - | ideas: the same trick on our own grooves |

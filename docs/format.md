@@ -128,7 +128,11 @@ its member) plus a **JSON file** beside it with everything MIDI can't hold: the 
 where it came from and its license. MIDI keeps the clips playable in any player (task 2.7); the JSON keeps the
 labels readable. Ticks: 480 a beat. A member that slides (trap's 808, task 3.4a) carries pitch bends: its track
 opens by setting the bend range to an octave (RPN 0), each slide bends over its last 8th to the next note's pitch,
-and the bend is back at rest when the next note starts (a glide in Ouralia, bucket 6). A member's sound in the JSON
+and the bend is back at rest when the next note starts (a glide in Ouralia, bucket 6). Power rock's lead (task 3.4d)
+bends up into a held note instead: the note starts a step under, bends up over its first 8th and holds there to the
+note's end; its long notes carry vibrato (the mod wheel, CC 1, up after the first 8th and back to 0 at the end). A
+member may sit to one side (CC 10, its `pan` in the JSON: -64 left to 63 right; power rock's two guitars). A
+member's sound in the JSON
 may name one of Maestro's own (`"808"`, `"808 kit"`): the player renders that track itself (`synth.py`).
 
 ```json
@@ -277,6 +281,11 @@ part may carry a `"why"` in plain words.
 | `members.<role>.plays` | `false`: the member sits out (salsa's pad: still voiced, so the lead keeps its room) | 3.4c |
 | `members.bass.walk` | % of section ends (without a break) the bass walks up into the next section, on the clave's 3 side | 3.4c |
 | `arrange` | the parts a phrase plays: each `when`, `weight`, `after` (the part it must follow), `lead` (phrase, call, out), `horns` (punches, coro, riff, out); `opens` (the part the first section keeps); `breaks` (% of section ends the band hits the clave's strokes together) | `arrange.Arrange` (3.4c) |
+| `members.guitar` | power rock's rhythm guitar: `tracks` (each `pan`, `voicing` low from E2 or high from E3, `sound`: the doubled takes), `patterns` (`hits` as `[16th, 16ths or null, shape power/dyad/root, "now" or "ahead"]` over `bars` 1 or 2, a `group` mute/drive/open, `weight`, `bass`: true locks the bass to its rhythm) | 3.4d |
+| `members.melody` (a guitar lead) | `scale`: `"pentatonic"` (off its chord's tones the lead keeps to the five), `bends` (% of held notes bending up into place), `vibrato` (true: long notes shake) | 3.4d |
+| `members.drums."loud time"` | the timekeeping weights when the section's part is loud (power rock's chorus: ride or crash), `time` otherwise | 3.4d |
+| `form.home` | weights for the home key's mode a play draws (power rock: major 3, minor 1) | 3.4d |
+| `arrange` (power rock) | each part's `guitar` (the group it plays); `build` and `builds` (the part a quiet section's last phrase may turn into before a loud one, and how often: the pre-chorus); `stop`: true makes the breaks stops (the band on the one, ringing, the drums filling in) | 3.4d |
 
 Roles are the band's members (decision 11). The loader says where a file goes wrong (`trap: form.moves: unknown key
 move 'leap'`): unknown parts and fields, the wrong kind of value, a missing source or the wrong license, and any name

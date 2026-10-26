@@ -18,6 +18,7 @@ from .song import Song
 from .stylebook import STYLES, StyleError, part
 from .theory.chords import name
 from .theory.form import FORM
+from .theory.guitar import GUITAR
 from .theory.pitch import Key
 from .theory.rhythm import CLAVES, METERS, RHYTHM, VALUES, check_band_rhythm, choose_onsets, feel_for, roll, \
     velocity
@@ -36,6 +37,7 @@ for _s, _h in HATS.items():
     if _h not in VALUES:
         raise StyleError(f"{_s}: members.drums.hats: unknown note value {_h!r}")
 KICK, SNARE, HAT, CRASH, COWBELL, CLAVES_NOTE = 36, 38, 42, 49, 56, 75
+MUTED = 6    # velocity a palm-muted guitar hit gives up (task 3.4d)
 
 
 def _melody_base(key, steps, top):
@@ -100,11 +102,29 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
         member, feel = song.member(role, role, program), feel_for(style, role)
         member.pump = part(style, "members", role).get("pump", 0)
         member.gain = part(style, "members", role).get("gain", 0)
+        bent = {st: (steps, semis) for st, steps, semis in take["bends"]} if role == "melody" else {}
         for st, length, m in take[role]:
-            member.add(st, length, m, level if role == "pad" else velocity(st % met.bar, met, feel, level))
+            vel = level if role == "pad" else velocity(st % met.bar, met, feel, level)
+            if st in bent:                   # power rock's lead bends up into its note
+                steps, semis = bent[st]
+                member.add(st, length, m - semis, vel)
+                member.slide(st, steps, semis, length - steps)
+            else:
+                member.add(st, length, m, vel)
         if role == "bass":                   # trap's 808 slides, as pitch bends
             for sl in take["slides"]:
                 member.slide(*sl)
+        if role == "melody":
+            for sh in take["vibrato"]:
+                member.shake(*sh)
+    if take["guitar"]:                       # power rock's doubled rhythm guitar (task 3.4d), palm mutes softer
+        g, feel, muted = part(style, "members", "guitar"), feel_for(style, "guitar"), set(take["muted"])
+        for t in GUITAR[style].tracks:
+            member = song.member(t.name, "guitar", t.sound)
+            member.pan, member.gain = t.pan, g.get("gain", 0)
+            for st, length, m in take["guitar"][t.name]:
+                v = velocity(st % met.bar, met, feel, g.get("level", 90))
+                member.add(st, length, m, max(1, v - MUTED) if st in muted else v)
     for role in ("keys", "horns"):            # salsa's montuno and horns (task 3.4c)
         if take[role]:
             a = part(style, "members", role)

@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.4d (power rock). Synthwave's open points (below,
-after 3.4b's listen) wait for its next round; trap waits for DadCraft's reference for the cascade.
+**Next:** the A/B listen after 3.4d (`clips/ab/power_rock`). Synthwave's open points (below, after 3.4b's listen)
+wait for its next round; trap waits for DadCraft's reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -228,7 +228,7 @@ For each chosen style, how each member plays it, written from sources.
       section, and the change between sections is what to hear).
       Heard Oct 24: "good first pass on the drums and percussion. both feel like they should. still a long way to
       go, but absolutely a good first run." The drummer "sounds steady, not restless" (Oct 24).
-- [ ] 3.4 One task per style, each entry covering every role it uses: 3.4a trap, 3.4b synthwave, 3.4c salsa,
+- [x] 3.4 One task per style, each entry covering every role it uses: 3.4a trap, 3.4b synthwave, 3.4c salsa,
       3.4d power rock.
       Before 3.4a (DadCraft, Oct 24): a closer look at trap's data and theory, in `docs/data.md` ("Trap, a closer
       look"): no open trap MIDI anywhere, so trap's training data is the entry's practice MIDI and open audio turned
@@ -341,6 +341,30 @@ For each chosen style, how each member plays it, written from sources.
       more horns playing together, a little quieter, "so that we get that full horn section sound". Today's two
       trombones already play in harmony but on one GM track; look at each voice on its own (its own channel and
       pan) and adding the trumpets (and sax where a style has them), set in the mix check.
+- [x] 3.4d Power rock. Plan (Oct 26), approved; DadCraft chose: all seven proposals, 80s arena rock, the tempo
+      kept at 130, the guitar solo later (3.6). Done Oct 26: the **guitar** member (`theory/guitar.py`): power chords
+      (root, fifth, octave) doubled on two tracks, left and right (pan ±48), each in its own octave (from E2, from
+      E3), sliding as one shape; patterns in three groups (palm-muted chugs, a gallop; driving 8ths; the anthem's
+      3-3-2 push, ringing chords), two of them locking the bass to their rhythm; checked (roots and fifths of the
+      chord sounding or pushed, each track in its octave). **Harmony** from the Rock Corpus (CC BY 4.0;
+      `tools/rock_stats.py` counts one analyst's RS 200 chord lists into `maestro/data/rock.json`, the files kept in
+      `private/`): I, IV, V hold most of the time; 1975-1991, bVII in 51% of songs (36% overall), bVI in 35%. Eight
+      families (anthem, double plagal, the I-IV vamp, fifties, the bVI-bVII climb; three minor), every phrase landing
+      home; the home key drawn mostly major (`form.home`: major 3, minor 1). **The bass**: root 8ths, the octave pump,
+      the push, sparser verse roots. **The lead**: on the pentatonic off its chord tones, 16% of held notes bending up
+      a step into place (held to the note's end), vibrato (CC 1) on long notes. **The parts** (`arrange`: verse,
+      chorus, drive, pre-chorus): the play opens on a palm-muted verse, 70% of quiet sections leading into a loud one
+      build through a pre-chorus (the snare in 8ths then 16ths, rising), 40% of section ends stop (the band on the
+      one, ringing, the drums filling in); the drummer keeps time on the hat in a verse, the ride or crash in a chorus
+      (`"loud time"`, by the part). The pad sits out. The song file gained pan (CC 10), vibrato and held bends. Mix:
+      guitar target 3-8 dB under the lead each, gain -9 from the mix check on 8 clips. A fix found by the fuzzer (any
+      style): a phrase's half landing on a borrowed chord with no other tone in the key stepped up instead of landing
+      home. 223 tests (`tests/unit/test_power_rock.py`), exam, fuzz 2000 seeds a style clean, drift every target met
+      (melody copies 4%); the other styles' clips byte-identical (80 seeds).
+- [ ] Listen after 3.4d, as A/B: `clips/ab/power_rock` (seed 65, 32 bars; A: 3.3's round, ee7fe99; B: today's: an
+      8-bar verse, an 8-bar pre-chorus ending in a stop with the snare build, 8 bars of chorus on the double plagal,
+      8 driven). Listen for: 80s arena rock; the two guitars wide, tight palm mutes in the verse, big in the chorus;
+      the build and the stop; the bass driving with the kick; the lead's bends in tune; the flat seventh.
 - [ ] 3.5 The style judge (CLaMP 3, license checked) scores the clips first. TinyMU as a second, small local judge
       that says what it hears, if its license allows (research round 3, DadCraft, Oct 24).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop

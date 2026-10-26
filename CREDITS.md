@@ -39,6 +39,13 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
   (c) Cambridge University Press: the idea of triplet figures over a duple beat (the motif's `triplet`, task 3.4a),
   ideas only.
 
+- **The Rock Corpus**, by Trevor de Clercq and David Temperley, CC BY 4.0: our counts of the RS 200's harmonic
+  analyses (`tools/rock_stats.py`, `maestro/data/rock.json`), power rock's progressions (task 3.4d); the songs
+  themselves are copyrighted and nothing of them is kept. T. de Clercq, D. Temperley, "A Corpus Analysis of Rock
+  Harmony", Popular Music 30/1 (2011). http://rockcorpus.midside.com
+- **Wikipedia**, "Power chord", "Palm mute", "Pentatonic scale", "String bending", "Verse-chorus form", "Arena
+  rock", CC BY-SA 4.0: power rock's guitars, lead and parts (task 3.4d).
+
 ## Non-commercial (PC only, never in the phone model)
 
 - **Aria-MIDI**, CC BY-NC-SA 4.0. Louis Bradshaw, Simon Colton, "Aria-MIDI: A Dataset of Piano MIDI Files for

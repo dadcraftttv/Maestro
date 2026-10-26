@@ -26,7 +26,7 @@ a calm kick pattern says so, and fills into a section with the toms, high to flo
 step, more than two hands at once and a groove without its backbeat (with a fixed backbeat: a snare anywhere
 else). Tendencies, never a fixed part (decision 9)."""
 import json, os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ..stylebook import STYLES, StyleError, part
 from .form import _draw
@@ -82,6 +82,8 @@ class Drummer:
     fixed: bool = False   # the snare only on the backbeat (trap: on 3 at half time)
     turns: int = 0     # % of beats the hats turn to another rate, at energy 0.5 (trap)
     turn_rates: tuple = ()   # ((rate, weight), ...)
+    loud_time: dict = field(default_factory=dict)   # the timekeeping when the energy is up (power rock: the ride
+    #                                                 or the crash in a chorus), else `time` throughout
 
 
 def _mix(parts):
@@ -142,15 +144,17 @@ def _drummer(style):
     if d.get("turns", 0) and not any(rates.values()):
         raise StyleError(f"{where}: turns need their \"turn rates\"")
     time = {k: max(0, round(v)) for k, v in time.items()}
-    for k, w in d.get("time", {}).items():
-        if k == "why":
-            continue
-        if k not in TIMES or not isinstance(w, int) or w < 0:
-            raise StyleError(f"{where}.time.{k}: one of {', '.join(TIMES)}, a whole-number weight")
-        time[k] = w
+    loud_time = {}
+    for field_, into in (("time", time), ("loud time", loud_time)):
+        for k, w in d.get(field_, {}).items():
+            if k == "why":
+                continue
+            if k not in TIMES or not isinstance(w, int) or w < 0:
+                raise StyleError(f"{where}.{field_}.{k}: one of {', '.join(TIMES)}, a whole-number weight")
+            into[k] = w
     return Drummer(grooves, stay, odds, time, loud, fills, tuple(s for s, _ in parts),
                    d.get("busy", 100), d.get("fills", 70), d.get("rolls", 0), backbeat == "fixed",
-                   d.get("turns", 0), tuple(rates.items()))
+                   d.get("turns", 0), tuple(rates.items()), loud_time)
 
 
 @dataclass(frozen=True)
@@ -447,10 +451,12 @@ def _vel(dr, voice, p16, energy):
     return max(1, min(127, round(v * (0.8 + 0.4 * energy))))
 
 
-def _time(rng, dr, energy):
-    """The section's timekeeping, (voice, rate): busier as the energy rises."""
+def _time(rng, dr, energy, loud=None):
+    """The section's timekeeping, (voice, rate): busier as the energy rises; its own when loud (power rock's: `loud`
+    the section's part, else by the energy)."""
     lean = {"quarter": 1.5 - energy, "8th": 1.0, "16th": 0.5 + energy}
-    k = _draw(rng, {k: round(10 * w * lean[k.split()[1]]) for k, w in dr.time.items()})
+    time = dr.loud_time if dr.loud_time and (energy >= 0.5 if loud is None else loud) else dr.time
+    k = _draw(rng, {k: round(10 * w * lean[k.split()[1]]) for k, w in time.items()})
     return tuple(k.split()) if k else ("hat", "8th")
 
 
@@ -488,7 +494,7 @@ def drum_part(rng, dr, recs, met, phrase, end, half=False):
         at = b * met.bar
         first = s is not sec
         if first:                                # a new section: its timekeeping, a groove (the last one likelier)
-            sec, keeper = s, _time(rng, dr, e)
+            sec, keeper = s, _time(rng, dr, e, r.get("loud"))
             groove = _draw(rng, {g: g.weight * (3 if g == groove else 1) for g in dr.grooves})
             lines.append((s, f"  drums: {keeper[0]} in {keeper[1]}s; {groove.name(met, half)}"))
         elif not _chance(rng, dr.stay):          # the bar keeps its groove as often as GMD's drummers do

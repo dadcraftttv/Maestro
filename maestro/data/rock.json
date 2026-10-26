@@ -1,0 +1,121 @@
+{
+ "why": "Our own counts from the Rock Corpus (de Clercq and Temperley, CC BY 4.0), tools/rock_stats.py: the RS 200's chords, one analyst's files (dt), never the analyses themselves. 'all': every song; 'era': 1975-1991, around 80s arena rock (task 3.4d).",
+ "license": "CC BY 4.0 (the Rock Corpus), our counts CC BY-SA 4.0",
+ "all": {
+  "songs": 195,
+  "roots": {
+   "I": 44.8,
+   "IV": 19.5,
+   "V": 15.7,
+   "VI": 5.1,
+   "bVII": 5.1,
+   "II": 3.9,
+   "bVI": 2.5,
+   "III": 1.6,
+   "bIII": 1.4
+  },
+  "moves": {
+   "5": 27.5,
+   "7": 23.5,
+   "2": 15.7,
+   "10": 14.0,
+   "9": 4.9,
+   "3": 4.4,
+   "8": 3.5,
+   "4": 3.1,
+   "11": 1.6,
+   "1": 1.4
+  },
+  "loops": {
+   "I IV I IV": 31,
+   "I IV I V": 16,
+   "I V I IV": 15,
+   "I V I V": 9,
+   "I bVII I bVII": 7,
+   "I vi IV V": 7,
+   "i bVI i bVI": 4,
+   "I vi ii V": 4,
+   "i bVII bVI bVII": 3,
+   "ii V ii V": 3,
+   "i bVII i bVII": 3,
+   "I ii I ii": 3
+  },
+  "vamps": {
+   "I IV": 71,
+   "I V": 36,
+   "IV V": 13,
+   "I bVII": 9,
+   "I vi": 7,
+   "I ii": 6,
+   "i bVII": 6,
+   "V IV": 6,
+   "ii V": 5,
+   "V ii": 5,
+   "i IV": 5,
+   "i bVI": 4
+  },
+  "flat_sides": {
+   "bVII": 36,
+   "bVI": 21,
+   "bIII": 19
+  }
+ },
+ "era": {
+  "songs": 43,
+  "roots": {
+   "I": 39.2,
+   "IV": 20.8,
+   "V": 17.2,
+   "bVII": 7.1,
+   "VI": 6.0,
+   "bVI": 3.5,
+   "bIII": 2.6,
+   "II": 2.3
+  },
+  "moves": {
+   "5": 25.0,
+   "7": 18.5,
+   "2": 17.3,
+   "10": 15.5,
+   "3": 5.9,
+   "9": 5.6,
+   "8": 4.7,
+   "4": 3.9,
+   "11": 2.2,
+   "1": 1.3
+  },
+  "loops": {
+   "I IV I IV": 7,
+   "I V I V": 3,
+   "i bVI i bVI": 2,
+   "I vi IV V": 2,
+   "i bVII i bVII": 2,
+   "i bIII i bIII": 2,
+   "I vi V IV": 2,
+   "I V I IV": 2,
+   "I IV I V": 2,
+   "I V vi IV": 2,
+   "I bVII I bVII": 1,
+   "i iv i iv": 1
+  },
+  "vamps": {
+   "I IV": 11,
+   "I V": 9,
+   "i bVII": 4,
+   "IV V": 3,
+   "I bVII": 2,
+   "i bVI": 2,
+   "i iv": 2,
+   "i bIII": 2,
+   "I vi": 2,
+   "ii iii": 1,
+   "iii ii": 1,
+   "iii vi": 1
+  },
+  "flat_sides": {
+   "bVII": 51,
+   "bVI": 35,
+   "bIII": 28
+  }
+ }
+}

@@ -1,72 +1,864 @@
 {
-  "style": "power_rock",
-  "license": "CC BY-SA 4.0",
-  "sources": ["Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)", "Tempo: DadCraft, Oct 24 (Checkpoint 2)", "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)"],
-  "time": {
-    "tempo": 130,
-    "rhythm": {
-      "why": "Driving 8ths, the odd triplet fill.",
-      "triplet": 1,
-      "lift": 3
-    },
-    "feel": {
-      "why": "Straight, driving: big accents on the beat.",
-      "*": {
-        "accent": 20
-      },
-      "drums": {
-        "accent": 24
-      },
-      "bass": {}
-    }
+ "style": "power_rock",
+ "license": "CC BY-SA 4.0",
+ "sources": [
+  "Maestro's first drafts, from the theory core's notes (PLAN.md tasks 2.2 to 2.5)",
+  "Tempo: DadCraft, Oct 24 (Checkpoint 2)",
+  "Drums: the Groove MIDI Dataset's counts (Google LLC, CC BY 4.0), maestro/data/grooves.json (task 3.3)",
+  "Harmony: our counts from the Rock Corpus (de Clercq and Temperley, CC BY 4.0), maestro/data/rock.json (task 3.4d)",
+  "The guitar, the lead and the parts: Wikipedia's \"Power chord\", \"Palm mute\", \"Pentatonic scale\", \"String bending\", \"Verse-chorus form\" and \"Arena rock\" (CC BY-SA 4.0), the ideas in our own words (task 3.4d)",
+  "80s arena rock, the tempo kept at 130: DadCraft, Oct 26"
+ ],
+ "time": {
+  "tempo": 130,
+  "rhythm": {
+   "why": "Driving 8ths, the odd triplet fill.",
+   "triplet": 1,
+   "lift": 3
   },
-  "harmony": {
-    "vocabulary": {
-      "why": "Power chords and the bVII.",
-      "kinds": ["borrowed", "diatonic"],
-      "qualities": ["maj", "min", "power"],
-      "borrow": ["mixolydian", "minor"]
-    },
-    "leading": {
-      "why": "Power chords slide as one shape.",
-      "fifths": -4,
-      "octaves": -2,
-      "max_step": 7,
-      "leap": 1
-    }
-  },
-  "form": {
-    "phrase": 8,
-    "wave": [3, 5],
-    "depth": 0.6,
-    "opening": "full",
-    "moves": {
-      "step_up": 2,
-      "tone_up": 2,
-      "fifth_down": 1,
-      "relative": 1
-    },
-    "modes": ["minor", "major", "mixolydian"]
-  },
-  "members": {
-    "why": "Distortion guitar, picked bass, overdriven guitar.",
-    "pad": {
-      "sound": 30
-    },
-    "bass": {
-      "sound": 34
-    },
-    "melody": {
-      "sound": 29
-    },
-    "drums": {
-      "why": "GMD's rock drummers: hat or ride in 8ths (the crash ridden now and then), a fill into most phrases.",
-      "kicks": 3,
-      "hats": "8th",
-      "grooves": {"rock": 1},
-      "time": {"hat quarter": 3, "ride quarter": 2, "crash quarter": 3, "crash 8th": 3},
-      "busy": 100,
-      "fills": 70
-    }
+  "feel": {
+   "why": "Straight, driving: big accents on the beat.",
+   "*": {
+    "accent": 20
+   },
+   "drums": {
+    "accent": 24
+   },
+   "bass": {}
   }
+ },
+ "harmony": {
+  "vocabulary": {
+   "why": "Power chords and the bVII.",
+   "kinds": [
+    "borrowed",
+    "diatonic"
+   ],
+   "qualities": [
+    "maj",
+    "min",
+    "power"
+   ],
+   "borrow": [
+    "mixolydian",
+    "minor"
+   ]
+  },
+  "leading": {
+   "why": "Power chords slide as one shape.",
+   "fifths": -4,
+   "octaves": -2,
+   "max_step": 7,
+   "leap": 1
+  },
+  "progressions": {
+   "why": "80s arena rock (DadCraft, Oct 26), from our Rock Corpus counts (maestro/data/rock.json): I, IV and V carry most of the time; around the era (1975-1991) half the songs reach for bVII, a third for bVI. Four-bar loops a chord a bar: the anthem's I-V-vi-IV, the double plagal (bVII to IV to I), the I-IV vamp turned home by V, the fifties loop; in a minor key the climb home through bVI and bVII. Loops mostly come round as written; every phrase lands home, so the lead's last note sits on its own chord.",
+   "families": {
+    "anthem": {
+     "chords": "I | V | vi | IV",
+     "weight": 3,
+     "why": "the big major loop: home, the fifth, the relative minor, the fourth"
+    },
+    "double plagal": {
+     "chords": "I | bVII | IV | I",
+     "weight": 3,
+     "why": "the flat seventh to the fourth to home: rock's own way round, the era's most borrowed chord"
+    },
+    "rock vamp": {
+     "chords": "I IV | I IV | I IV | I V",
+     "weight": 2,
+     "why": "the commonest vamp in the counts, home and the fourth, turned by the fifth"
+    },
+    "fifties": {
+     "chords": "I | vi | IV | V",
+     "weight": 1,
+     "why": "the old loop the ballads keep"
+    },
+    "climb home": {
+     "chords": "I | IV | bVI | bVII",
+     "weight": 2,
+     "why": "the arena lift: the flat sixth and seventh climbing back to home"
+    },
+    "aeolian climb": {
+     "chords": "i | bVI | bVII | i",
+     "weight": 3,
+     "why": "for a minor key: home, then the two chords that climb back to it"
+    },
+    "minor rock": {
+     "chords": "i | bVII | bVI | bVII",
+     "weight": 2,
+     "why": "for a minor key: rocking down the steps under home and back"
+    },
+    "dark vamp": {
+     "chords": "i | i | bVI | bVII",
+     "weight": 2,
+     "why": "for a minor key: home held, then the climb"
+    }
+   },
+   "variants": {
+    "again": 8,
+    "swap": 1,
+    "colour": 1,
+    "approach": 1,
+    "turnaround": 1
+   },
+   "stay": 3,
+   "cadence": 100
+  }
+ },
+ "form": {
+  "phrase": 8,
+  "wave": [
+   3,
+   5
+  ],
+  "depth": 0.6,
+  "opening": "full",
+  "moves": {
+   "step_up": 2,
+   "tone_up": 2,
+   "fifth_down": 1,
+   "relative": 1
+  },
+  "modes": [
+   "minor",
+   "major",
+   "mixolydian"
+  ],
+  "home": {
+   "major": 3,
+   "minor": 1
+  }
+ },
+ "members": {
+  "why": "Two distortion guitars on power chords, left and right (the pad sits out), a picked bass driving 8ths, an overdriven lead on the pentatonic, GMD's rock drummers.",
+  "pad": {
+   "sound": 30,
+   "plays": false
+  },
+  "guitar": {
+   "why": "Power chords doubled left and right, each in its own octave: palm-muted chugs in a verse, open 8ths to build, big ringing chords and the dotted push in a chorus.",
+   "sound": 30,
+   "level": 92,
+   "gain": -9,
+   "tracks": {
+    "guitar L": {
+     "pan": -48,
+     "voicing": "low",
+     "sound": 30
+    },
+    "guitar R": {
+     "pan": 48,
+     "voicing": "high",
+     "sound": 30
+    }
+   },
+   "patterns": {
+    "why": "Each hit [16th, 16ths or null (rings to the next), shape, now or ahead]; a group a part (arrange).",
+    "chugs": {
+     "group": "mute",
+     "weight": 3,
+     "hits": [
+      [
+       0,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       2,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       4,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       6,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       8,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       10,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       12,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       14,
+       1,
+       "dyad",
+       "now"
+      ]
+     ],
+     "why": "palm-muted 8ths on the root and fifth"
+    },
+    "chug and push": {
+     "group": "mute",
+     "weight": 2,
+     "hits": [
+      [
+       0,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       2,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       4,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       6,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       8,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       10,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       12,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       14,
+       1,
+       "dyad",
+       "ahead"
+      ]
+     ],
+     "why": "muted 8ths, the and of 4 pushing the next chord in"
+    },
+    "gallop": {
+     "group": "mute",
+     "weight": 1,
+     "bass": true,
+     "hits": [
+      [
+       0,
+       2,
+       "dyad",
+       "now"
+      ],
+      [
+       2,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       3,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       4,
+       2,
+       "dyad",
+       "now"
+      ],
+      [
+       6,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       7,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       8,
+       2,
+       "dyad",
+       "now"
+      ],
+      [
+       10,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       11,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       12,
+       2,
+       "dyad",
+       "now"
+      ],
+      [
+       14,
+       1,
+       "dyad",
+       "now"
+      ],
+      [
+       15,
+       1,
+       "dyad",
+       "now"
+      ]
+     ],
+     "why": "an 8th and two 16ths a beat, the bass locked to it"
+    },
+    "driving 8ths": {
+     "group": "drive",
+     "weight": 3,
+     "hits": [
+      [
+       0,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       2,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       4,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       6,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       8,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       10,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       12,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       14,
+       2,
+       "power",
+       "now"
+      ]
+     ],
+     "why": "open power chords in 8ths"
+    },
+    "push 8ths": {
+     "group": "drive",
+     "weight": 2,
+     "bass": true,
+     "hits": [
+      [
+       0,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       2,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       4,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       6,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       8,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       10,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       12,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       14,
+       null,
+       "power",
+       "ahead"
+      ]
+     ],
+     "why": "open 8ths, the and of 4 pushing in, the bass locked to it"
+    },
+    "anthem": {
+     "group": "open",
+     "weight": 3,
+     "hits": [
+      [
+       0,
+       3,
+       "power",
+       "now"
+      ],
+      [
+       3,
+       3,
+       "power",
+       "now"
+      ],
+      [
+       6,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       8,
+       3,
+       "power",
+       "now"
+      ],
+      [
+       11,
+       3,
+       "power",
+       "now"
+      ],
+      [
+       14,
+       null,
+       "power",
+       "ahead"
+      ]
+     ],
+     "why": "the dotted push, three-three-two, the and of 4 into the next chord"
+    },
+    "ringing": {
+     "group": "open",
+     "weight": 2,
+     "hits": [
+      [
+       0,
+       null,
+       "power",
+       "now"
+      ],
+      [
+       8,
+       null,
+       "power",
+       "now"
+      ]
+     ],
+     "why": "big chords left to ring, struck each half bar"
+    },
+    "open 8ths": {
+     "group": "open",
+     "weight": 2,
+     "hits": [
+      [
+       0,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       2,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       4,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       6,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       8,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       10,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       12,
+       2,
+       "power",
+       "now"
+      ],
+      [
+       14,
+       2,
+       "power",
+       "now"
+      ]
+     ],
+     "why": "the whole band driving 8ths"
+    }
+   }
+  },
+  "bass": {
+   "why": "A picked bass driving 8ths on the root, locked to the kick; the octave pumping when loud, the push on the and of 4; sparser in a quiet verse.",
+   "sound": 34,
+   "level": 100,
+   "patterns": {
+    "root eighths": {
+     "notes": [
+      [
+       0,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       2,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       4,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       6,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       8,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       10,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       12,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       14,
+       2,
+       "root",
+       "now"
+      ]
+     ],
+     "weight": 4,
+     "why": "8ths on the root"
+    },
+    "octave pump": {
+     "notes": [
+      [
+       0,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       2,
+       2,
+       "octave",
+       "now"
+      ],
+      [
+       4,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       6,
+       2,
+       "octave",
+       "now"
+      ],
+      [
+       8,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       10,
+       2,
+       "octave",
+       "now"
+      ],
+      [
+       12,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       14,
+       2,
+       "octave",
+       "now"
+      ]
+     ],
+     "weight": 2,
+     "when": "high",
+     "why": "the root and its octave in 8ths"
+    },
+    "eighths and push": {
+     "notes": [
+      [
+       0,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       2,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       4,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       6,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       8,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       10,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       12,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       14,
+       2,
+       "root",
+       "ahead"
+      ]
+     ],
+     "weight": 3,
+     "when": "high",
+     "why": "8ths, the and of 4 pushing the next chord in"
+    },
+    "verse roots": {
+     "notes": [
+      [
+       0,
+       4,
+       "root",
+       "now"
+      ],
+      [
+       6,
+       2,
+       "root",
+       "now"
+      ],
+      [
+       8,
+       4,
+       "root",
+       "now"
+      ],
+      [
+       14,
+       2,
+       "root",
+       "ahead"
+      ]
+     ],
+     "weight": 2,
+     "when": "low",
+     "why": "the root on 1 and 3 with pickups"
+    },
+    "held roots": {
+     "notes": [
+      [
+       0,
+       null,
+       "root",
+       "now"
+      ],
+      [
+       8,
+       null,
+       "root",
+       "now"
+      ]
+     ],
+     "weight": 1,
+     "when": "low",
+     "why": "the root held each half bar under a quiet verse"
+    }
+   }
+  },
+  "melody": {
+   "why": "An overdriven lead on the pentatonic, a hook in the chorus; some held notes bend up into place, long ones shake.",
+   "sound": 29,
+   "scale": "pentatonic",
+   "bends": 16,
+   "vibrato": true
+  },
+  "drums": {
+   "why": "GMD's rock drummers: the hat in 8ths in a verse, the ride or the crash in a chorus, a fill into most phrases; a snare build at a pre-chorus's end.",
+   "kicks": 3,
+   "hats": "8th",
+   "grooves": {
+    "rock": 1
+   },
+   "time": {
+    "hat quarter": 2,
+    "ride quarter": 0,
+    "ride 8th": 0,
+    "crash quarter": 0,
+    "crash 8th": 0
+   },
+   "busy": 100,
+   "fills": 70,
+   "loud time": {
+    "ride 8th": 4,
+    "crash quarter": 1,
+    "crash 8th": 1,
+    "hat 8th": 2
+   }
+  }
+ },
+ "arrange": {
+  "why": "Verse to chorus (Wikipedia's \"Verse-chorus form\" and \"Arena rock\", in our own words): the play opens on a verse, palm-muted; loud phrases are the chorus, big and open, or driven in 8ths; a quiet section leading into a loud one most often builds through a pre-chorus; some section ends stop, the band hitting the one together and letting it ring while the drums fill in.",
+  "opens": "verse",
+  "parts": {
+   "verse": {
+    "when": "low",
+    "weight": 1,
+    "guitar": "mute",
+    "why": "the lead sings over palm-muted chugs"
+   },
+   "chorus": {
+    "when": "high",
+    "weight": 3,
+    "guitar": "open",
+    "why": "big open chords, the lead's hook up high"
+   },
+   "drive": {
+    "when": "high",
+    "weight": 1,
+    "guitar": "drive",
+    "why": "a loud phrase driven in open 8ths"
+   },
+   "pre-chorus": {
+    "when": "any",
+    "weight": 0,
+    "guitar": "drive",
+    "why": "open 8ths building, the snare doubling up into the chorus"
+   }
+  },
+  "breaks": 40,
+  "stop": true,
+  "build": "pre-chorus",
+  "builds": 70
+ }
 }

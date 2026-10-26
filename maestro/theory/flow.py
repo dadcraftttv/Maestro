@@ -697,6 +697,8 @@ def phrase_melody(rng, theme, spans, key, start, bars, met, floor, clave=None, s
                 word = "lands home"
             else:
                 d = _degree_near(key, {t % 12 for t in ch.tones} - {0}, near)
+                if key.degree(d) % 12 == 0:      # a borrowed chord with no other tone in the key: the step over
+                    d += 1
                 word = "ends open"
             line.append([land_at, b0 + met.bar - land_at, d])
             words.append(f"bar {start + i + 1}: {how}, then {word} on {key.name(key.degree(d) % 12)} "
@@ -739,6 +741,8 @@ def plain_phrase(spans, key, start, bars, met, floor, clave=None):
             d = 0 if abs(d) < abs(d - 7) else 7
         else:
             d = _degree_near(key, pcs - ({0} if i == bars // 2 - 1 else set()), d)
+            if i == bars // 2 - 1 and key.degree(d) % 12 == 0:   # no other tone of the chord in the key
+                d += 1
         notes.append([st, met.bar - at, d])
     return _register(key, notes, floor), [f"  melody, bars {start + 1}-{start + bars}: the plain phrase (no drawn "
                                           "one passed the check), a chord tone a bar"]

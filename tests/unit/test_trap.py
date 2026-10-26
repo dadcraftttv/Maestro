@@ -144,7 +144,7 @@ def test_slides_are_written_as_pitch_bends(tmp_path):
         elif m.type == "note_on":
             ons.append(now)
     assert len([p for _, p in bends if p]) >= len(bass.slides)
-    for at, steps, _ in bass.slides:                         # back at rest when the next note starts
+    for at, steps, *_ in bass.slides:                         # back at rest when the next note starts
         rest = [p for t, p in bends if t <= (at + steps) * 20]
         assert rest[-1] == 0
 

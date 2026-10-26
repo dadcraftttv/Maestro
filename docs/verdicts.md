@@ -281,3 +281,6 @@ isn't reloaded every session; grep for the part a task needs.
   together, albeit a little bit quieter, so that we get that full horn section sound. The break hits together, and
   the progression feels right. It still feels like salsa." The fuller horn section is logged in PLAN.md (salsa,
   next round).
+- Oct 26: 3.4d's plan approved, with DadCraft's choices: "all seven, 80s arena rock, keep 130, solo later" (the
+  doubled rhythm guitar, Rock Corpus harmony, the rock bass, the pentatonic lead with bends, the parts with builds
+  and stops, two guitars left and right, the checks and an A/B); the guitar solo waits for 3.6.
