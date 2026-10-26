@@ -303,3 +303,7 @@ isn't reloaded every session; grep for the part a task needs.
   web-found music) and TinyMU (no license found) stay out.
 - Oct 26: 3.5a's cards: "syncopation is fine": an onset off the beat with no onset of the member's on the next
   beat (straight 8ths 0, the tumbao's push high).
+- Oct 26: 3.5b's first run, his calls for 3.5c: salsa's "tumbao on the one" "only for a few bars"; power rock's
+  chords, "why not both?" (the timeline follows the riff and the card allows passing tones); guitar R's octave-up
+  double stays, "yes". On anticipations he asked "what would you suggest?": count a note on the last beat before
+  a change that fits the next chord (to confirm with him).

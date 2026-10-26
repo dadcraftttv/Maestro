@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.5c, checking the judge, starting with DadCraft's calls on what 3.5b's first run flagged (in 3.5b
-below). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.5c, checking the judge: first the four fixes from DadCraft's calls on 3.5b's first run (listed in 3.5c
+below; ask him to confirm the anticipation rule before building it), then the checks. Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -445,6 +445,18 @@ For each chosen style, how each member plays it, written from sources.
   - [ ] 3.5c Check the judge: today's clips pass their own cards; wrong clips (a member from another style, the
         velocities flattened, the notes shuffled off the style's steps) score low; SynTheory (MIT) tests the chord
         and tempo measures where it fits. Tests and fuzz clean. Then every listen gets the judge's table first.
+        The plan (Oct 26, from DadCraft's calls on 3.5b's flags), first the fixes, then the checks above:
+        1. Salsa's "tumbao on the one" plays only for a few bars, not a whole clip (DadCraft: "only for a few
+           bars"). The bass entry limits it; the card's beat 1 range (0-40% of bars) stays.
+        2. Chord tones count anticipations: a note on the last beat before a chord change that fits the coming
+           chord counts, held over the bar line or not (Open Music Theory, "Embellishing tones": the anticipation).
+           Claude's suggestion, asked for by DadCraft ("what would you suggest?"): confirm with him first. The
+           narrower choice was to keep "held into" only.
+        3. Power rock, both (DadCraft: "why not both?"): the timeline names the riff's chords as it moves (A5, D5,
+           E5, not "A" all clip; the bass and lead read it too), and the guitar card allows the riff's passing
+           tones, its floor set from a rock riff source, not from the generator's numbers.
+        4. Guitar R keeps its octave-up double (DadCraft: "yes"); the guitar card's register widens to cover it,
+           from a source on doubled guitars.
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
       out as it eases (after Ouralia's Calm builds: pad, room notes, chimes, then harmony and reverb, each joining
       further along the rise; `docs/format.md`), and sections thin or fill the band. Each style's entry says who
