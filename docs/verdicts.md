@@ -349,3 +349,6 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 27: 3.9's second listen (DadCraft): "the nudges are fine." 3.9 done; register nudges later.
 - Oct 27: 3.10's plan (DadCraft): "power rock only, heavier sections, go ahead." Built; A/B in `clips/ab/scratch`.
 - Oct 27: 3.10's A/B (DadCraft): "B sounds better, keep the scratch lane." 3.10 done.
+- Oct 27: 3.11's plan (DadCraft): "synthwave first, gentle", then "build it as planned". Built; A/B in
+  `clips/ab/distance` (seed 10, 240 bars).
+- Oct 27: 3.11's A/B (DadCraft): "the distance sounds good to me." 3.11 done.
