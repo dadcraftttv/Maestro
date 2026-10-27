@@ -542,7 +542,7 @@ For each chosen style, how each member plays it, written from sources.
       Checks: 283 tests (the layering tests run trap too; the 808's kick test uses the plain take, since a resting
       beat leaves the 808 alone), fuzz 2000/2000 clean (trap, synthwave), drift met except trap's "same bar, same
       place" at 2% (it was before too), judge 100% in A and B (the riff's triplets 0% in both). Mix: the 808 and
-      drums about 0.5 dB over the riff in A and B alike (levels unchanged so the A/B is only the layering).
+      drums about 0.5 dB over the riff in A and B alike (levels unchanged; DadCraft, Oct 27: "the 808s are fine").
       Listen: `clips/ab/trap` (A: 4e59e36, no layering; B: layered; seed 74, 84 bars, 2.5 minutes).
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
