@@ -330,3 +330,6 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 27: 3.6's trap A/B (`clips/ab/trap`, seed 74, 84 bars): "B is better, keep it." Trap's layering stays.
 - Oct 27: 3.6's salsa A/B (`clips/ab/salsa`, seed 12, 84 bars): "everything sound good." B's layering stays: the
   breakdowns to the montuno over the percussion, the slow changes, and a breakdown in about 1 play of 4.
+- Oct 27: power rock's layering, before its build (its songs open loud, so the energy alone never played "the
+  guitars first"): "guitars alone, then crash" (the first phrase the rhythm guitars and the lead, the bass and drums
+  crashing in), and the band thinning "only in real calm dips" (the bass at 0.2, the drums at 0.3).

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Layering (task 3.6): who plays when, a phrase at a time by the energy; the band never thinner than two (DadCraft,
 Oct 26), breakdowns, rotation and slow change (after Tangerine, research round 6). Synthwave first, then trap, then
-salsa."""
+salsa, then power rock."""
 import pytest
 
 from maestro.explain import flow_choices
@@ -13,7 +13,7 @@ from maestro.theory.rhythm import METERS
 
 MET = METERS["4/4"]
 A_MINOR = Key(9, "minor")
-LAYERED = {"synthwave": 112, "trap": 140, "salsa": 180}   # the styles with a layer map, at their tempo
+LAYERED = {"synthwave": 112, "trap": 140, "salsa": 180, "power_rock": 130}   # the styles with a layer map, at their tempo
 
 
 def _plays(style, n=30, bars=84):
@@ -45,7 +45,9 @@ def test_a_resting_member_plays_nothing_in_its_phrase_and_the_rest_is_the_same_n
             for r in [*LAYERS[style].join, "melody"]:     # salsa's pad sits out unlisted (task 3.4c)
                 rests = r not in x.playing if r != "melody" else not x.melody
                 if rests:
-                    assert not [n for n in take[r] if lo <= n[0] < hi], (r, x.at)
+                    notes = ([n for ns in take[r].values() for n in ns] if r == "guitar" else    # power rock's L and R
+                             take[r] + take.get("lead2", []) * (r == "melody"))                # its second lead too
+                    assert not [n for n in notes if lo <= n[0] < hi], (r, x.at)
         # the pad and melody aren't slowly changed: what plays is what was drawn
         for r in ("pad", "melody"):
             assert {(n[0], n[2]) for n in take[r]} <= {(n[0], n[2]) for n in plain[r]}
@@ -56,8 +58,10 @@ def test_the_band_grows_with_the_energy(style):    # salsa's band plays througho
     sizes = {}
     for take, _ in ALL[style]:
         for x in take["layers"]:
-            if not x.down:                   # breakdowns aside
-                sizes.setdefault(x.section.energy_at(x.at) >= 0.6, []).append(len(x.playing))
+            if not x.down and not x.first:   # breakdowns and power rock's opening aside
+                e = x.section.energy_at(x.at)    # quiet: below the last member's join (power rock's drums, 0.3)
+                if e >= 0.6 or e < max(LAYERS[style].join.values()):
+                    sizes.setdefault(e >= 0.6, []).append(len(x.playing))
     low, high = (sum(v) / len(v) for v in (sizes[False], sizes[True]))
     full = len(LAYERS[style].join)              # trap lists three, synthwave four: less room to grow
     assert high > full - 0.5 and high > low + 0.3, (low, high)
@@ -105,14 +109,30 @@ def test_salsa_keeps_its_clave_and_breaks_down_to_the_montuno():
             assert [n for n in take["keys"] if lo <= n[0] < hi]
 
 
+def test_power_rock_opens_on_its_guitars_and_breaks_down_to_the_bass_and_drums():
+    for take, _ in ALL["power_rock"]:
+        first, *rest = take["layers"]
+        assert first.first and first.playing == {"guitar"} and first.melody      # the rhythm guitars and the lead
+        assert not [n for r in ("bass", "drums") for n in take[r] if n[0] < first.bars * MET.bar]
+        assert not any(x.first for x in rest)
+        for x in rest:
+            if x.down:
+                lo, hi = x.at * MET.bar, (x.at + x.bars) * MET.bar
+                assert not [n for r in ("guitar L", "guitar R") for n in take["guitar"][r] if lo <= n[0] < hi]
+                assert not [n for r in ("melody", "lead2") for n in take[r] if lo <= n[0] < hi]
+                assert [n for n in take["drums"] if lo <= n[0] < hi]
+
+
 def test_bad_entries_are_refused():
     roles = {"pad", "bass", "arp", "drums"}
     good = {"join": {"pad": 0, "drums": 0.5}, "breakdowns": 20, "breakdown": ["pad", "drums"]}
     assert layers_from(good, roles, "t").least == 2
     assert layers_from({**good, "breakdown": ["melody", "pad"]}, roles, "t").breakdown == ("melody", "pad")
+    assert layers_from({**good, "opens": ["melody", "pad"]}, roles, "t").opens == ("melody", "pad")
     for bad in ({"join": {"melody": 0.2, "pad": 0}}, {"join": {"drums": 0.2}}, {"join": {"pad": 1.5}},
                 {"least": 1}, {"breakdown": []}, {"breakdown": ["drums"]}, {"breakdown": ["pad", "bass"]},
                 {"breakdown": ["melody", "drums"]}, {"breakdown": ["melody"]},
+                {"opens": ["pad"]}, {"opens": ["melody", "drums"]}, {"opens": ["pad", "bass"]},
                 {"rotate": [8]}, {"changes": [3, 2]}, {"loud": 1}):
         with pytest.raises(StyleError):
             layers_from({**good, **bad}, roles, "t")

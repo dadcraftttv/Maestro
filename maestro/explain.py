@@ -568,7 +568,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     if ly:
         lrng = ComposerRng()
         lrng.seed(seed ^ 0x1A7E5)
-        layered = plan_layers(lrng, ly, play.sections, form.phrase)
+        layered = plan_layers(lrng, ly, play.sections, form.phrase, bars)
         kit_why.append(("layers", check_layers(layered, ly)))
         notes = {"pad": pad, "bass": bass, "arp": arp, "melody": melody, "keys": keys, "horns": horns,
                  "drums": drums, "percussion": percussion}
@@ -585,6 +585,9 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
                 if r == "melody":
                     bent = [b for b in bent if not lo <= b[0] < hi]
                     shakes = [v for v in shakes if not lo <= v[0] < hi]
+                    second = rest(second, lo, hi)                  # power rock's second lead rests with it
+                    bent2 = [b for b in bent2 if not lo <= b[0] < hi]
+                    shakes2 = [v for v in shakes2 if not lo <= v[0] < hi]
             band_ = ", ".join(sorted(x.playing)) + (" and the melody" if x.melody else "")
             words = [f"  band, bars {x.at + 1}-{x.at + x.bars}: {band_}" + "".join(f"; {w}" for w in x.said)]
             words += [f"  bars {x.at + 1}-{x.at + x.bars}: {w}" for y, w in changed if y is x]

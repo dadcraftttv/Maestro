@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.6, layering: power rock's map (approved Oct 26) and its A/B. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.6, layering: DadCraft's power rock A/B (`clips/ab/power_rock`, seed 12). Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -555,6 +555,17 @@ For each chosen style, how each member plays it, written from sources.
       mix in its targets, levels unchanged. Listen: `clips/ab/salsa` (A: 4753c5e, no layering; B: layered; seed 12,
       84 bars, about 2 minutes; 3.4c's pair moved to `clips/ab/salsa/3.4c`). Heard Oct 27: "everything sound good"
       (`docs/verdicts.md`).
+      Power rock built Oct 27: songs open loud (energy 0.6-0.7 in all 40 seeds measured), so "the guitars first"
+      takes a new setting, `opens`: the first phrase plays its own band whatever the energy, the rest crashing in
+      after it (skipped when the play is one phrase). DadCraft chose (Oct 27): "guitars alone, then crash" (the
+      rhythm guitars and the lead, two members), and the band thinning "only in real calm dips" (the bass joins at
+      0.2, the drums at 0.3; drawn at 0.3 and 0.45 the drums sat out a quarter of the bars, now 7%). Breakdowns (35%)
+      to the bass and drums, both leads resting (the second lead now rests with the melody), the guitars slamming
+      back; a stop inside a breakdown is the bass and drums'. Slow change every 2-3 phrases on the bass and drums, no
+      rotation. A breakdown in 15 of 40 seeds. Checks: 292 tests, fuzz 2000/2000 clean, drift all met, judge 94% in
+      A and B alike (the second lead's slides and height under target in both, as before), mix: guitar L 0.6 dB
+      under its target in B (0.1 in A), the drums now inside theirs. Listen: `clips/ab/power_rock` (A: f415824, no
+      layering; B: layered; seed 12, 84 bars, about 2:35; 3.4d's pair moved to `clips/ab/power_rock/3.4d`).
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.

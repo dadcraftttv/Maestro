@@ -27,6 +27,11 @@ def _takes(n=12, bars=40):
     return [flow_choices("power_rock", seed, bars, A, TEMPO["power_rock"]) for seed in range(1, 1 + n)]
 
 
+def _rests(take, b):
+    """Bar b sits in a phrase where the guitars rest (task 3.6: a breakdown to the bass and drums)."""
+    return any(x.at <= b < x.at + x.bars and "guitar" not in x.playing for x in take["layers"])
+
+
 def test_the_band_passes_its_checks_and_the_pad_sits_out():
     for lines, take in _takes():
         assert not [ln for ln in lines if " check: " in ln], [ln for ln in lines if " check: " in ln]
@@ -66,7 +71,7 @@ def test_the_parts_go_verse_to_chorus_with_builds_and_stops():
             assert len(snares) >= 8 and snares[-1][3] > snares[0][3]
         for b in take["breaks"]:                                       # a stop: one chord ringing through the bar
             hits = {st for st, _, _ in take["guitar"]["guitar L"] if b * MET.bar <= st < (b + 1) * MET.bar}
-            assert hits == {b * MET.bar}
+            assert hits == {b * MET.bar} or not hits and _rests(take, b)   # a breakdown's stop: the bass and drums
     assert {"verse", "chorus", "pre-chorus"} <= seen and builds and stops
 
 

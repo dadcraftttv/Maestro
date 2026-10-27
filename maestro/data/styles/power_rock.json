@@ -1033,6 +1033,16 @@
   "build": "pre-chorus",
   "builds": 70
  },
+  "layers": {
+    "why": "DadCraft's map (Oct 26, \"maps sound right\"): the guitars alone for the first phrase (the rhythm guitars and the lead), the bass and drums crashing in after them (DadCraft, Oct 27: \"guitars alone, then crash\"); the band thins only in calm dips (the bass at 0.2, the drums at 0.3; DadCraft, Oct 27: \"only in real calm dips\"); a section rising into a louder one may break down for its last phrase to the bass and drums, the guitars slamming back in. Slow change on the bass and drums after Tangerine (research round 6), no rotation.",
+    "join": {"guitar": 0.0, "bass": 0.2, "drums": 0.3},
+    "spread": 0.08,
+    "least": 2,
+    "breakdowns": 35,
+    "breakdown": ["bass", "drums"],
+    "opens": ["guitar", "melody"],
+    "changes": [2, 3]
+  },
   "judge": {
     "why": "Written from GMD's rock drummers (maestro/data/grooves.json, CC BY 4.0) and Wikipedia's \"Power chord\", \"Palm mute\", \"String bending\", \"Double bass drum\" and \"Twin lead guitar\", not from the entry's patterns.",
     "drums": {

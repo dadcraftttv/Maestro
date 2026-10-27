@@ -8,7 +8,9 @@ after another, the lower ones first, and as it eases they leave, the last in fir
 counted, and keeps one that carries the chords or the bass; at its thinnest it holds one phrase, then a member
 joins (two thin phrases of looping members would copy themselves, decision 9's drift). A section that leads into a louder one may break down
 for its last phrase ("breakdowns", % of such sections): only the "breakdown" members play, the melody too when
-listed there (trap's riff plays on while the beat cuts out, DadCraft, Oct 26), else it rests.
+listed there (trap's riff plays on while the beat cuts out, DadCraft, Oct 26), else it rests. A style may open on
+a band of its own ("opens", the melody among them or not) for the first phrase, whatever the energy, the rest
+crashing in after it (power rock's guitars alone, DadCraft, Oct 27); a play of one phrase skips it.
 
 From Tangerine (research round 6), for long plays: rotation ("rotate": [fewest, most] bars between swaps; [0, 0]
 off): when the band's size holds, one member rests and one resting member comes back, the longest-playing likelier
@@ -38,6 +40,7 @@ class Layers:
     least: int = 2                      # members always playing, the melody counted (DadCraft, Oct 26)
     breakdowns: int = 0                 # % of sections before a louder one that break down for their last phrase
     breakdown: tuple = ()               # who plays in a breakdown, the melody among them or not
+    opens: tuple = ()                   # who plays the first phrase, the melody among them or not; () the energy
     rotate: tuple = (0, 0)              # bars between swaps
     changes: tuple = (0, 0)             # phrases between slow changes
 
@@ -50,6 +53,7 @@ class Phrase:
     playing: frozenset                  # the listed members playing (the melody apart)
     melody: bool = True
     down: bool = False                  # a breakdown
+    first: bool = False                 # the style's opening band
     said: list = field(default_factory=list)
 
 
@@ -66,7 +70,7 @@ def _layers(style):
 
 def layers_from(d, roles, where):
     """A style entry's "layers" as Layers, its members among `roles`; StyleError when it breaks the rules."""
-    known = ("why", "join", "spread", "least", "breakdowns", "breakdown", "rotate", "changes")
+    known = ("why", "join", "spread", "least", "breakdowns", "breakdown", "opens", "rotate", "changes")
     extra = set(d) - set(known)
     if extra:
         raise StyleError(f"{where}: unknown part {sorted(extra)[0]!r} (known: {', '.join(known[1:])})")
@@ -87,7 +91,12 @@ def layers_from(d, roles, where):
             breakdown and (len(breakdown) < least or not any(r in ANCHORS for r in breakdown))):
         raise StyleError(f"{where}.breakdown: members from join (the melody may join them), at least \"least\" of "
                          "them and one carrying the chords or bass, with its share in \"breakdowns\"")
-    return Layers(dict(join), spread, least, breakdowns, breakdown, _range(d.get("rotate", [0, 0]), f"{where}.rotate"),
+    opens = tuple(d.get("opens", ()))
+    if any(r not in join and r != "melody" for r in opens) or (
+            opens and (len(opens) < least or not any(r in ANCHORS for r in opens))):
+        raise StyleError(f"{where}.opens: members from join (the melody may join them), at least \"least\" of them "
+                         "and one carrying the chords or bass")
+    return Layers(dict(join), spread, least, breakdowns, breakdown, opens, _range(d.get("rotate", [0, 0]), f"{where}.rotate"),
                   _range(d.get("changes", [0, 0]), f"{where}.changes"))
 
 
@@ -115,7 +124,7 @@ def _weighted(rng, weights):
             return k
 
 
-def plan_layers(rng, ly, sections, phrase):
+def plan_layers(rng, ly, sections, phrase, bars=None):
     """The band a phrase, over the whole play: [Phrase], each saying in words who joins, leaves or swaps."""
     listed = sorted(ly.join)
     playing, out = set(), []
@@ -135,6 +144,15 @@ def plan_layers(rng, ly, sections, phrase):
             p = Phrase(at, min(phrase, s.end - at), s, frozenset())
             last = out[-1] if out else None
             down = frozenset(ly.breakdown) - {"melody"}, "melody" in ly.breakdown
+            if ly.opens and not out and (bars or sections[-1].end) > phrase:   # a one-phrase play has no crash to wait for
+                (p.playing, p.melody), p.first = (frozenset(ly.opens) - {"melody"}, "melody" in ly.opens), True
+                playing = set(p.playing)
+                for r in listed:
+                    since[r] = 1
+                p.said.append(f"opens: {', '.join(sorted(p.playing))}" + (" and the melody" if p.melody else
+                                                                          ", the melody resting"))
+                out.append(p)
+                continue
             if breaking and at + phrase >= s.end and not (last and (last.playing, last.melody) == down):
                 # a breakdown thins the band: none when the phrase before already played it
                 (p.playing, p.melody), p.down = down, True
@@ -185,7 +203,7 @@ def check_layers(phrases, ly):
             return f"bar {p.at + 1}: {size} member{'s' * (size != 1)} playing, fewer than {ly.least}"
         if not any(r in ANCHORS for r in p.playing):
             return f"bar {p.at + 1}: nothing carrying the chords or the bass"
-        if not p.melody and not p.down:
+        if not p.melody and not p.down and not p.first:
             return f"bar {p.at + 1}: the melody rests outside a breakdown"
     return None
 
