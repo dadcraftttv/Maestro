@@ -7,6 +7,7 @@ intervals). Everything else is a tendency a style sets as a cost: smooth moves, 
 fifths are not banned: power rock likes them, a plain style avoids them. The choose picks among the smoothest few,
 seeded, so the voicing is never locked to one path (decision 9)."""
 from dataclasses import dataclass
+from functools import lru_cache
 from itertools import combinations
 
 from ..stylebook import table
@@ -142,10 +143,15 @@ def _mud(v, key):
 
 def voicings(chord, key, n, span, leading=LEADING["plain"], on_bass=False, ceiling=None):
     """Every voicing of n notes (distinct MIDI notes, so doublings are octaves) that passes the check."""
+    return list(_voicings(chord, key, n, span, leading, on_bass, ceiling))
+
+
+@lru_cache(maxsize=8192)        # the same chords come back all play long: worked out once, not every bar
+def _voicings(chord, key, n, span, leading, on_bass, ceiling):
     pcs = {(key.tonic + t) % 12 for t in chord.tones}
     notes = [m for m in range(span.low, span.high + 1) if m % 12 in pcs]
-    return [v for v in combinations(notes, n)
-            if check_voicing(v, chord, key, span, leading, on_bass, ceiling) is None]
+    return tuple(v for v in combinations(notes, n)
+                 if check_voicing(v, chord, key, span, leading, on_bass, ceiling) is None)
 
 
 def parallels(prev, nxt):

@@ -7,7 +7,7 @@ requires-python = ">=3.12"
 dependencies = ["mido", "numpy"]   # numpy: the clip player's own sounds (synth.py)
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "pytest-xdist", "psutil"]   # psutil: -n auto counts real cores, not hyperthreads
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -21,3 +21,4 @@ maestro = ["data/*.json", "data/styles/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "-n auto"     # every core; -n 0 for one process (a debugger, a print)

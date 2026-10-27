@@ -591,7 +591,8 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
                         key, ch = key_at(st), chord_at(spans, st).chord
                         for t in GUITAR[style].tracks:
                             was = [y for y in guitar[t.name] if y[0] < st]
-                            near = min(m for a, _, m in was if a == max(a for a, _, _ in was)) if was else None
+                            last = max((a for a, _, _ in was), default=None)   # once, not once a note
+                            near = min(m for a, _, m in was if a == last) if was else None
                             guitar[t.name].append((st, sc.length, guitar_root(key.tonic + ch.root, near,
                                                                               VOICINGS[t.voicing])))
                     scratched += got

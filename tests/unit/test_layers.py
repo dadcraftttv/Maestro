@@ -2,6 +2,8 @@
 """Layering (task 3.6): who plays when, a phrase at a time by the energy; the band never thinner than two (DadCraft,
 Oct 26), breakdowns, rotation and slow change (after Tangerine, research round 6). Synthwave first, then trap, then
 salsa, then power rock."""
+from functools import cache
+
 import pytest
 
 from maestro.explain import flow_choices
@@ -22,14 +24,19 @@ def _plays(style, n=30, bars=84):
              flow_choices(style, seed, bars, A_MINOR, bpm, layers=False)[1]) for seed in range(1, 1 + n)]
 
 
-ALL = {s: _plays(s) for s in LAYERED}
-PLAYS, LY = ALL["synthwave"], LAYERS["synthwave"]
+@cache
+def plays(style):
+    """A style's plays, made on first use: at import they cost every test worker a minute before any test ran."""
+    return _plays(style)
+
+
+LY = LAYERS["synthwave"]
 each = pytest.mark.parametrize("style", sorted(LAYERED))
 
 
 @each
 def test_every_phrase_keeps_two_members_one_carrying_the_chords_or_bass(style):
-    for take, _ in ALL[style]:
+    for take, _ in plays(style):
         assert check_layers(take["layers"], LAYERS[style]) is None
         for x in take["layers"]:
             assert len(x.playing) + x.melody >= 2 and any(r in ANCHORS for r in x.playing)
@@ -39,7 +46,7 @@ def test_every_phrase_keeps_two_members_one_carrying_the_chords_or_bass(style):
 
 @each
 def test_a_resting_member_plays_nothing_in_its_phrase_and_the_rest_is_the_same_notes(style):
-    for take, plain in ALL[style]:
+    for take, plain in plays(style):
         for x in take["layers"]:
             lo, hi = x.at * MET.bar, (x.at + x.bars) * MET.bar
             for r in [*LAYERS[style].join, "melody"]:     # salsa's pad sits out unlisted (task 3.4c)
@@ -56,7 +63,7 @@ def test_a_resting_member_plays_nothing_in_its_phrase_and_the_rest_is_the_same_n
 @pytest.mark.parametrize("style", sorted(s for s in LAYERED if any(LAYERS[s].join.values())))
 def test_the_band_grows_with_the_energy(style):    # salsa's band plays throughout: its parts lead (DadCraft, Oct 26)
     sizes = {}
-    for take, _ in ALL[style]:
+    for take, _ in plays(style):
         for x in take["layers"]:
             if not x.down and not x.first:   # breakdowns and power rock's opening aside
                 e = x.section.energy_at(x.at)    # quiet: below the last member's join (power rock's drums, 0.3)
@@ -71,7 +78,7 @@ def test_the_band_grows_with_the_energy(style):    # salsa's band plays througho
 def test_rotation_keeps_the_size_and_breakdowns_come_before_a_louder_section(style):
     swaps = downs = 0
     ly = LAYERS[style]
-    for take, _ in ALL[style]:
+    for take, _ in plays(style):
         ls = take["layers"]
         for k, x in enumerate(ls):
             if any(w.startswith("rotation") for w in x.said):
@@ -88,7 +95,7 @@ def test_rotation_keeps_the_size_and_breakdowns_come_before_a_louder_section(sty
 
 def test_slow_change_one_member_at_a_time_and_the_arp_stays_on_its_chords():
     changes = 0
-    for (take, _), seed in zip(PLAYS, range(1, 31)):
+    for (take, _), seed in zip(plays("synthwave"), range(1, 31)):
         lines, _ = flow_choices("synthwave", seed, 84, A_MINOR, 112)
         said = [ln for ln in lines if "slow change" in ln]
         changes += len(said)
@@ -100,7 +107,7 @@ def test_slow_change_one_member_at_a_time_and_the_arp_stays_on_its_chords():
 
 
 def test_salsa_keeps_its_clave_and_breaks_down_to_the_montuno():
-    for take, plain in ALL["salsa"]:
+    for take, plain in plays("salsa"):
         clave = [h for h in take["percussion"] if h[4] == "clave"]
         downs = [(x.at * MET.bar, (x.at + x.bars) * MET.bar) for x in take["layers"] if x.down]
         assert clave == [h for h in plain["percussion"] if h[4] == "clave"]     # the percussion plays throughout
@@ -110,7 +117,7 @@ def test_salsa_keeps_its_clave_and_breaks_down_to_the_montuno():
 
 
 def test_power_rock_opens_on_its_guitars_and_breaks_down_to_the_bass_and_drums():
-    for take, _ in ALL["power_rock"]:
+    for take, _ in plays("power_rock"):
         first, *rest = take["layers"]
         assert first.first and first.playing == {"guitar"} and first.melody      # the rhythm guitars and the lead
         assert not [n for r in ("bass", "drums") for n in take[r] if n[0] < first.bars * MET.bar]

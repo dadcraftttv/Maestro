@@ -100,6 +100,12 @@ band member play, the way its style plays it?
     bass in a trap band keeps its E1 floor and its tumbao), the judge scores each member against its own style's
     card (a song file's `members.<name>.style`), and the guardrails check a swapped member against the band it
     joins (the chords, the clave). Building it: 5.3 (style blends) and 6.2 (a style per member in `dcs_composer`).
+18. **Checks sized to the change** (DadCraft, Oct 27: "the workflow needs to be optimized", after a one-style task
+    took 30-45 minutes of checks). A task that changes one style fuzzes and drifts that style only
+    (`tools/fuzz.py <style>`, `python -m maestro.drift --flow <style>`); the other styles are covered by their clips
+    staying byte-identical, as their output hasn't moved. Every style is fuzzed and drifted when shared code changes
+    (theory, flow, sketch, song, the player) and before each Checkpoint; GitHub runs the tests on every push. The
+    checks use every core: pytest runs parallel by default (`-n 0` for one process), fuzz and drift spread their work.
 
 ## How each bucket runs
 
@@ -588,7 +594,7 @@ For each chosen style, how each member plays it, written from sources.
       - **A/B listens:** when a style has an earlier round, both clips go to DadCraft side by side (same seed and
         bars where they can be), and he says which is better and why;
       - **tests on every push:** a GitHub Actions run of pytest (the parity test skips there: no Ouralia build).
-      Done Oct 26. CI: `.github/workflows/tests.yml`. Fuzzing: `tools/fuzz.py` (2000 seeds a style, every style
+      Which styles each check runs on: decision 18. Done Oct 26. CI: `.github/workflows/tests.yml`. Fuzzing: `tools/fuzz.py` (2000 seeds a style, every style
       clean; 40 a style in the tests). It found the phrase melody over C7, salsa's melody crossing the clave, a
       phrase's first half ending home, and the checks only saying what they ruled out. Fixed, as DadCraft picked:
       the pad gives way under a phrase that runs over C7; a phrase the check rules out (range, ending, clave) is

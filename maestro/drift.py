@@ -22,7 +22,7 @@ Repeats are allowed: a theme coming back and a groove holding are musical. The t
     python -m maestro.drift --flow salsa [trap ...]        # task 3.2's flow sketch, two plays per style
     python -m maestro.drift a.mid [b.mid]                  # song files (the JSON beside each gives tempo and roles)
 """
-import argparse, json, os, random
+import argparse, json, multiprocessing, os, random
 
 from .song import read_notes
 from .theory.rhythm import STEPS
@@ -185,6 +185,22 @@ def table(rows):
     return lines
 
 
+def _flow_row(job):
+    """One style's row for --flow: two plays from seeds s and s+1, staleness and sameness."""
+    from .sketch import TEMPO, flow_sketch
+    from .theory.flow import LOOPS
+    from .theory.nudge import nudged, parse
+    style, nudge, minutes, s = job
+    style = nudged(style, parse(nudge)) if nudge else style
+    bars = round(minutes * TEMPO[style] / 4)
+    p, q = (from_song(flow_sketch(style, x, bars)[0]) for x in (s, s + 1))
+    m = staleness(p)
+    m.update(sameness(p, q))
+    if LOOPS[style]:                 # a riff repeats: shown beside the grooves, never capped
+        m["riff_bars_copied"] = m.pop("melody_bars_copied", 0.0)
+    return style, m
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("files", nargs="*", help="one song file (staleness) or two (and sameness)")
@@ -202,19 +218,9 @@ def main(argv=None):
         return
     seed = a.seed if a.seed is not None else random.SystemRandom().randrange(1, 1 << 24)
     if a.flow:
-        from .sketch import TEMPO, flow_sketch
-        from .theory.flow import LOOPS
-        from .theory.nudge import nudged, parse
-        rows = []
-        for i, style in enumerate(a.flow):
-            style = nudged(style, parse(a.nudge)) if a.nudge else style
-            bars = round(a.minutes * TEMPO[style] / 4)
-            p, q = (from_song(flow_sketch(style, s, bars)[0]) for s in (seed + 2 * i, seed + 2 * i + 1))
-            m = staleness(p)
-            m.update(sameness(p, q))
-            if LOOPS[style]:                 # a riff repeats: shown beside the grooves, never capped
-                m["riff_bars_copied"] = m.pop("melody_bars_copied", 0.0)
-            rows.append((style, m))
+        jobs = [(style, a.nudge, a.minutes, seed + 2 * i) for i, style in enumerate(a.flow)]
+        with multiprocessing.get_context("fork").Pool(min(len(jobs), os.cpu_count())) as pool:
+            rows = pool.map(_flow_row, jobs)          # a style a process: the slowest style sets the time
         print(f"flow sketch, {a.minutes:g} minutes a play, seeds from {seed} (two plays per style)")
         print("\n".join(table(rows)))
         return

@@ -7,10 +7,11 @@ band check finds members out of sync. Notes off the grid can't be made (`song.No
 
     .venv/bin/python tools/fuzz.py                     # 2000 seeds a style
     .venv/bin/python tools/fuzz.py synthwave --seeds 200 --first 1
+    .venv/bin/python tools/fuzz.py --jobs 1              # one core (every core by default)
 
 prints a line a style and the first failing seeds, each replayable with `python -m maestro.sketch <style> --seed N
 --seeds 1 --bars B`; exits 1 when any seed fails."""
-import argparse, os, sys
+import argparse, multiprocessing, os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -54,17 +55,36 @@ def faults(style, seed, bars):
     return out
 
 
-def fuzz(style, seeds, first=1, show=5):
-    """(seeds that failed, the first few as lines)."""
+def _seed(job):
+    style, seed = job
+    bars = BARS[seed % len(BARS)]
+    return seed, bars, faults(style, seed, bars)
+
+
+def fuzz(style, seeds, first=1, show=5, jobs=1):
+    """(seeds that failed, the first few as lines). Forked workers, so a nudged style (made in this process) is
+    in theirs too."""
     bad, shown = 0, []
-    for seed in range(first, first + seeds):
-        bars = BARS[seed % len(BARS)]
-        f = faults(style, seed, bars)
-        if f:
-            bad += 1
-            if len(shown) < show:
-                shown.append(f"  seed {seed}, {bars} bars: {'; '.join(f[:3])}")
+    work = [(style, seed) for seed in range(first, first + seeds)]
+    with multiprocessing.get_context("fork").Pool(jobs) if jobs > 1 else _Serial() as pool:
+        for seed, bars, f in pool.imap(_seed, work, chunksize=8):
+            if f:
+                bad += 1
+                if len(shown) < show:
+                    shown.append(f"  seed {seed}, {bars} bars: {'; '.join(f[:3])}")
     return bad, shown
+
+
+class _Serial:
+    """A pool of one, in this process."""
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        return False
+
+    def imap(self, fn, work, chunksize=1):
+        return map(fn, work)
 
 
 def main(argv=None):
@@ -73,11 +93,12 @@ def main(argv=None):
     ap.add_argument("--seeds", type=int, default=2000)
     ap.add_argument("--first", type=int, default=1, help="the first seed")
     ap.add_argument("--nudge", help="DNA nudges on each style (task 3.9), as maestro.sketch takes them")
+    ap.add_argument("--jobs", type=int, default=os.cpu_count(), help="processes (every core by default)")
     a = ap.parse_args(argv)
     failed = False
     for style in a.styles or sorted(s for s in FORM if "~" not in s):
         style = nudged(style, parse(a.nudge)) if a.nudge else style
-        bad, shown = fuzz(style, a.seeds, a.first)
+        bad, shown = fuzz(style, a.seeds, a.first, jobs=a.jobs)
         print(f"{style}: {a.seeds - bad}/{a.seeds} seeds clean")
         for line in shown:
             print(line)
