@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's second listen after 3.9 (`clips/nudges`); then 3.10-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.10-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -599,7 +599,7 @@ For each chosen style, how each member plays it, written from sources.
 - [x] Listen after 3.8, as A/B. `clips/ab/synthwave` (A: what DadCraft heard, 1bad590; B: the pad and lead 3 dB
       down and today's gains), `clips/ab/trap` (the same notes; B: the riff about 22 dB up against the 808). Oct 26:
       B in both ("cleaner, maybe? less hiss or fuzziness?"). The default mix target holds; no style overrides it.
-- [ ] 3.9 DNA nudges (DadCraft, Oct 26, from Fase Groove Piano's "Musical DNA": `docs/research.md` round 5). A few
+- [x] 3.9 DNA nudges (DadCraft, Oct 26, from Fase Groove Piano's "Musical DNA": `docs/research.md` round 5). A few
       named directions (more energetic, more minimal, funkier, more soulful, more sophisticated), each one step a
       click. A step shifts the style's tendencies, not its notes: density, syncopation, accents and velocity, chord
       colour, register. It always stays inside the style's ranges (decision 9), so the rules never have to fight it
@@ -623,8 +623,8 @@ For each chosen style, how each member plays it, written from sources.
       the floor (pad, bass) joins as before so a short calm play has it, the others later, and rotation swaps less
       (at +5 it brought the drums into calm bars, half time only). Fuzz found an old trap bug on the way: a riff
       round landing home over V sang the tonic against it; it now lands on the chord's nearest tone there.
-- [ ] Listen after 3.9, round 2: `clips/nudges` (synthwave, seed 12, 48 bars, plain then each at +4). Each clip
-      still takes its own path (a changed weight reshuffles the draws), so listen for the character.
+- [x] Listen after 3.9, round 2 (Oct 27): `clips/nudges` (synthwave, seed 12, 48 bars, plain then each at +4).
+      DadCraft: "the nudges are fine." 3.9 done; register nudges stay for later.
 - [ ] 3.10 The scratch lane (DadCraft, Oct 26, from Fase Groove Guitar: `docs/research.md` round 5). The rhythm
       guitar gets a lane of muted, unpitched scratch strokes that fills the empty 16ths between its chord hits by
       itself: palm-mute chugs in power rock, funk scratch where a style asks for it (afrobeat, later). It's a

@@ -346,3 +346,4 @@ isn't reloaded every session; grep for the part a task needs.
   +5 keeps synthwave's backbeat (0.06 dropped it on one seed in 12).
   Trap's riff, landing a round over V, now takes the chord's nearest tone instead of the tonic (fuzz, trap
   soulful+5 seed 167): a change to plain trap too, on those landings only.
+- Oct 27: 3.9's second listen (DadCraft): "the nudges are fine." 3.9 done; register nudges later.
