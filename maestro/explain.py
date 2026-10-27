@@ -23,6 +23,7 @@ from .theory.guitar import GUITAR, VOICINGS, _root as guitar_root, bends as lead
 from .theory.arrange import ARRANGE, check_parts, cut as silence, phrase_parts
 from .theory.horns import HORNS, check_horns, harmonize, hits, horn_part, strokes
 from .theory.keys import KEYS, ahead, check_keys, montuno_part, voice
+from .theory.layers import LAYERS, check_layers, plan_layers, silence as rest, slow_changes
 from .theory.form import DEVELOPS, FORM, WORDS, Play, Theme, _draw, explain_section
 from .theory.percussion import PERCUSSION, check_percussion, percussion_part
 from .theory.pitch import Key
@@ -406,11 +407,12 @@ def rock_band(rng, style, plan, play, spans, key_at, bass, melody, drums, kit_wh
         vibrato(second) if lead.get("vibrato") else []
 
 
-def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, room=0.5):
+def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, room=0.5, layers=True):
     """Task 3.2's choices for `bars` bars: (lines of plain words, the take). The take holds the notes ("pad",
     "bass", "melody": (step, length, MIDI note)), a record a bar like `choices`' (bar, section, key, energy, its
     first chord) and a record a section ("plan": its family, its passes in words, its bass pattern, its phrases)
-    for the summary. Whole sections are drawn, then cut at the clip's end."""
+    for the summary. Whole sections are drawn, then cut at the clip's end. `layers`: who plays when (task 3.6),
+    for the styles that list it; off, every member plays throughout (the A/B's earlier side)."""
     rng = ComposerRng()
     rng.seed(seed)
     form, leading, rhythm, vocab = FORM[style], LEADING[style], RHYTHM[style], VOCAB[style]
@@ -561,6 +563,32 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         guitar, muted, parts, breaks, builds, bass, drums, bent, shakes, melody, second, bent2, shakes2 = rock_band(
             rng, style, plan, play, spans, key_at, bass, melody, drums, kit_why, ruled)
         why = check_bass(bass, met, clave, BASS[style])
+    # who plays when (task 3.6): the band a phrase by the energy, with its own seed so the notes stay the same
+    layered, ly = [], LAYERS[style] if layers else None
+    if ly:
+        lrng = ComposerRng()
+        lrng.seed(seed ^ 0x1A7E5)
+        layered = plan_layers(lrng, ly, play.sections, form.phrase)
+        kit_why.append(("layers", check_layers(layered, ly)))
+        notes = {"pad": pad, "bass": bass, "arp": arp, "melody": melody, "keys": keys, "horns": horns,
+                 "drums": drums, "percussion": percussion}
+        changed = slow_changes(lrng, ly, layered, notes, spans, key_at, met)
+        for x in layered:
+            lo, hi = x.at * met.bar, (x.at + x.bars) * met.bar
+            for r in [r for r in ly.join if r not in x.playing] + ["melody"] * (not x.melody):
+                if r == "guitar":
+                    guitar = {k: rest(ns, lo, hi) for k, ns in guitar.items()}
+                    continue
+                notes[r][:] = rest(notes[r], lo, hi)
+                if r == "bass":
+                    slides = [sl for sl in slides if not lo <= sl[0] < hi]
+                if r == "melody":
+                    bent = [b for b in bent if not lo <= b[0] < hi]
+                    shakes = [v for v in shakes if not lo <= v[0] < hi]
+            band_ = ", ".join(sorted(x.playing)) + (" and the melody" if x.melody else "")
+            words = [f"  band, bars {x.at + 1}-{x.at + x.bars}: {band_}" + "".join(f"; {w}" for w in x.said)]
+            words += [f"  bars {x.at + 1}-{x.at + x.bars}: {w}" for y, w in changed if y is x]
+            next(p for p in plan if p["section"] is x.section)["lines"] += words
     for p in plan:
         p["lines"] += p["drums"] + p["percussion"]
     # cut at the clip's end, in words and notes
@@ -596,7 +624,8 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
             "vibrato2": [(st, min(n, end - st)) for st, n in shakes2 if st < end],
             "slides": [sl for sl in slides if sl[0] + sl[1] < end],
             "drums": [h for h in drums if h[0] < end], "percussion": [h for h in percussion if h[0] < end],
-            "plan": [p for p in plan if p["section"].start < bars], "spans": [s for s in spans if s.at < end]}
+            "plan": [p for p in plan if p["section"].start < bars], "spans": [s for s in spans if s.at < end],
+            "layers": [x for x in layered if x.at < bars]}
     return out, take
 
 
@@ -718,6 +747,16 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         locked = sum(1 for n in take["bass"] if n[0] in kicks)
         out.append(f"Kick and bass: the kick lands with {round(100 * locked / max(1, len(take['bass'])))}% of the bass "
                    f"notes.")
+    if take.get("layers"):                      # who plays when (task 3.6)
+        ls = take["layers"]
+        full = sum(1 for x in ls if len(x.playing) == len(LAYERS[style].join) and x.melody)
+        downs = [x.at + 1 for x in ls if not x.melody]
+        swaps = sum(1 for x in ls for w in x.said if w.startswith("rotation"))
+        moves = sum(1 for x in ls for w in x.said if w.startswith("the "))
+        out.append(f"Band: the whole band in {full} of {len(ls)} phrases; {moves} phrase{'s' * (moves != 1)} where "
+                   f"members join or rest with the energy, {swaps} rotation{'s' * (swaps != 1)}"
+                   + (f", a breakdown at bar{'s' * (len(downs) > 1)} {', '.join(map(str, downs))}" if downs else "")
+                   + ". Each phrase's band in the detail below.")
     if BASS[style].kick:                        # trap's own questions (DadCraft's, after the first round)
         out.append("Listen for: does the 808 feel like the bass and the kick at once, and do its slides come through; "
                    "do the hats roll rather than tick, the clap staying put on 3; does the bell's riff go round like "
@@ -728,7 +767,10 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         out.append("Listen for: does it feel like outrun when the energy is up (the bass driving in 8ths, the snare "
                    "big on 2 and 4, the arp sparkling in 16ths) and turn dreamy when it's low (a held bass, the drums "
                    "at half time, the arp in 8ths); does the lead stay on top and sing; do the pad and bass breathe "
-                   "with the kick without pumping like EDM; do the tom fills lead into the next section.")
+                   "with the kick without pumping like EDM; do the tom fills lead into the next section"
+                   + ("; does the band thin and fill with the energy, the parts coming and going without jolts; does "
+                      "the breakdown (arp and pad alone) set up what follows; do the slow changes keep the loops "
+                      "fresh without sounding like mistakes" if take.get("layers") else "") + ".")
         return out
     if GUITAR[style]:                           # power rock's own questions (task 3.4d)
         names = {x.name for _, _, x in take["parts"]}

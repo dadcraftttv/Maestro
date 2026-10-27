@@ -20,7 +20,8 @@ A_MINOR = Key(9, "minor")
 
 
 def _takes(n=12, bars=32):
-    return [flow_choices("synthwave", seed, bars, A_MINOR, 112)[1] for seed in range(1, 1 + n)]
+    # each member as drawn, every bar: layering (task 3.6, its own tests) would rest some of them
+    return [flow_choices("synthwave", seed, bars, A_MINOR, 112, layers=False)[1] for seed in range(1, 1 + n)]
 
 
 def _in(notes, s):

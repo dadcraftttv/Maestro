@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.6, layering: present its plan to DadCraft first. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.6, layering: synthwave built, DadCraft's A/B listen (`clips/ab/synthwave`), then the other styles. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -518,6 +518,18 @@ For each chosen style, how each member plays it, written from sources.
       fall on chord changes, never on a cadence. And **slow change**: every so many passes of a loop, one detail of
       one member changes (a hit on or off, a note a step up or down, an octave, an accent), never two members at
       once; how often is a style's tendency.
+      Plan (Oct 26), approved; DadCraft chose: proposals 1-5 now (a layer map a style, builds and eases on phrase
+      starts, breakdowns taking over the kick drop-outs, rotation, slow change), never fewer than two members,
+      synthwave's long clip first (A/B against today); a style per section later.
+      Synthwave built Oct 26: `theory/layers.py` (the style book's new `layers`: each member's join energy, the
+      spread, least 2, breakdowns, rotate, changes), drawn after every member with its own seed, so the same seed
+      plays the same notes with or without it; each phrase's band in the clip's words, a "Band" line in its summary.
+      Synthwave: the pad, then the bass at 0.3, the arp at 0.45, the drums at 0.55; breakdowns (35%) to the arp and
+      pad; a swap every 16-32 bars, never on a section's first phrase; a slow change every 2-3 phrases. The drums'
+      last-bar kick drop stays as it was (a one-bar fill, not a layering choice). Checks: `tests/unit/test_layers.py`,
+      fuzz 2000/2000 clean, drift all met, judge 99% (every member 80%+), mix in its targets. Listen:
+      `clips/ab/synthwave` (A: 0f50ba5, no layering; B: layered; seed 14, 84 bars, 3 minutes). Then the other
+      styles' layer maps.
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.

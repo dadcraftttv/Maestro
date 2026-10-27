@@ -139,6 +139,16 @@
       }
     }
   },
+  "layers": {
+    "why": "Our own first tendencies (task 3.6), for DadCraft's ear to tune: the pad first, the bass under it, the arp then the drums as the energy rises (after Ouralia's Calm builds); a section rising into a louder one may drop to the arp and pad for its last phrase. Rotation and slow change after Tangerine (research round 6).",
+    "join": {"pad": 0.0, "bass": 0.3, "arp": 0.45, "drums": 0.55},
+    "spread": 0.08,
+    "least": 2,
+    "breakdowns": 35,
+    "breakdown": ["arp", "pad"],
+    "rotate": [16, 32],
+    "changes": [2, 3]
+  },
   "judge": {
     "why": "Written from DadCraft's production notes (docs/taste.md), the Synthwave MIDI Reimaginer's preset (docs/data.md, ideas only) and what's widely known of the style (the LinnDrum's backbeat), not from the entry's patterns.",
     "band": {"tempo": [60, 170, "docs/taste.md: calm about 60-100, menace 120-140, boss or fanfare 135-170"]},

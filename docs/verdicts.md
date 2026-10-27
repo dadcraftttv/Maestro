@@ -314,3 +314,6 @@ isn't reloaded every session; grep for the part a task needs.
   card stays. And (decision 17): "in the end we should be able to keep trap elements and swap one of them for
   salsa. same with every style. everything can run how it should be it should be able to get hot-swapped and still
   make sense."
+- Oct 26: 3.6's plan, "1-5 now, at least two, synthwave first, 6 can come up later": the layer map, builds and
+  eases, breakdowns, rotation and slow change now; the band never thinner than two members; synthwave's long clip
+  first; a style per section later.

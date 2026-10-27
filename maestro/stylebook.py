@@ -79,7 +79,7 @@ def _keys(d, known, where):
 
 def check(entry, name):
     """Raise a StyleError saying where, when a style file isn't one the book can read."""
-    _keys(entry, ("style", "license", "sources", "time", "harmony", "form", "members", "mix", "arrange", "judge"),
+    _keys(entry, ("style", "license", "sources", "time", "harmony", "form", "members", "mix", "arrange", "layers", "judge"),
           name)
     if "mix" in entry:
         check_mix(entry["mix"], f"{name}: mix")

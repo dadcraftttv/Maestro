@@ -1,0 +1,91 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+"""Layering (task 3.6): who plays when, a phrase at a time by the energy; the band never thinner than two (DadCraft,
+Oct 26), breakdowns, rotation and slow change (after Tangerine, research round 6). Synthwave first."""
+import pytest
+
+from maestro.explain import flow_choices
+from maestro.stylebook import StyleError
+from maestro.theory.flow import check_arp, chord_at
+from maestro.theory.layers import ANCHORS, LAYERS, check_layers, layers_from
+from maestro.theory.pitch import Key
+from maestro.theory.rhythm import METERS
+
+MET = METERS["4/4"]
+A_MINOR = Key(9, "minor")
+LY = LAYERS["synthwave"]
+
+
+def _plays(n=30, bars=84):
+    return [(flow_choices("synthwave", seed, bars, A_MINOR, 112)[1],
+             flow_choices("synthwave", seed, bars, A_MINOR, 112, layers=False)[1]) for seed in range(1, 1 + n)]
+
+
+PLAYS = _plays()
+
+
+def test_every_phrase_keeps_two_members_one_carrying_the_chords_or_bass():
+    for take, _ in PLAYS:
+        assert check_layers(take["layers"], LY) is None
+        for x in take["layers"]:
+            assert len(x.playing) + x.melody >= 2 and any(r in ANCHORS for r in x.playing)
+
+
+def test_a_resting_member_plays_nothing_in_its_phrase_and_the_rest_is_the_same_notes():
+    for take, plain in PLAYS:
+        for x in take["layers"]:
+            lo, hi = x.at * MET.bar, (x.at + x.bars) * MET.bar
+            for r in ("pad", "bass", "arp", "drums", "melody"):
+                rests = r not in x.playing if r != "melody" else not x.melody
+                if rests:
+                    assert not [n for n in take[r] if lo <= n[0] < hi], (r, x.at)
+        # the pad and melody aren't slowly changed: what plays is what was drawn
+        for r in ("pad", "melody"):
+            assert {(n[0], n[2]) for n in take[r]} <= {(n[0], n[2]) for n in plain[r]}
+
+
+def test_the_band_grows_with_the_energy():
+    sizes = {}
+    for take, _ in PLAYS:
+        for x in take["layers"]:
+            if x.melody:                     # breakdowns aside
+                sizes.setdefault(x.section.energy_at(x.at) >= 0.6, []).append(len(x.playing))
+    low, high = (sum(v) / len(v) for v in (sizes[False], sizes[True]))
+    assert high > low + 0.5, (low, high)
+
+
+def test_rotation_keeps_the_size_and_breakdowns_come_before_a_louder_section():
+    swaps = downs = 0
+    for take, _ in PLAYS:
+        ls = take["layers"]
+        for k, x in enumerate(ls):
+            if any(w.startswith("rotation") for w in x.said):
+                swaps += 1
+                assert len(x.playing) == len(ls[k - 1].playing) and x.playing != ls[k - 1].playing
+            if not x.melody:
+                downs += 1
+                assert x.playing == set(LY.breakdown) and x.at + x.bars == x.section.end
+    assert swaps and downs
+
+
+def test_slow_change_one_member_at_a_time_and_the_arp_stays_on_its_chords():
+    changes = 0
+    for (take, _), seed in zip(PLAYS, range(1, 31)):
+        lines, _ = flow_choices("synthwave", seed, 84, A_MINOR, 112)
+        said = [ln for ln in lines if "slow change" in ln]
+        changes += len(said)
+        bars_ = [ln.split(":")[0] for ln in said]
+        assert len(bars_) == len(set(bars_))
+        assert check_arp(take["arp"], take["spans"], lambda st: next(
+            x.section.key for x in take["layers"] if x.at * MET.bar <= st < (x.at + x.bars) * MET.bar)) is None
+    assert changes
+
+
+def test_bad_entries_are_refused():
+    roles = {"pad", "bass", "arp", "drums"}
+    good = {"join": {"pad": 0, "drums": 0.5}, "breakdowns": 20, "breakdown": ["pad", "drums"]}
+    assert layers_from(good, roles, "t").least == 2
+    for bad in ({"join": {"melody": 0.2, "pad": 0}}, {"join": {"drums": 0.2}}, {"join": {"pad": 1.5}},
+                {"least": 1}, {"breakdown": []}, {"breakdown": ["drums"]}, {"breakdown": ["pad", "bass"]},
+                {"rotate": [8]}, {"changes": [3, 2]}, {"loud": 1}):
+        with pytest.raises(StyleError):
+            layers_from({**good, **bad}, roles, "t")
