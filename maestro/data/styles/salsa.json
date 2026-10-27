@@ -358,6 +358,7 @@
       "gain": -6
     },
     "bass": {
+      "lowest": "E1",
       "sound": 32,
       "patterns": {
         "why": "The tumbao: the bass skips the one and plays ahead of the chord.",

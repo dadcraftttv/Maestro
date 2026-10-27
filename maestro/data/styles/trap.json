@@ -346,6 +346,7 @@
       },
       "hats": {
         "notes": [8, 36, "Wikipedia, \"Trap music\": hats in double and triple time"],
+        "velocity": [8, 45, "GMD hip hop (maestro/data/grooves.json): hats 88-107 on the beat, 76-86 on the and, 40-56 on the 16ths (a spread of 24)"],
         "triplets": [5, 50, "Wikipedia, \"Trap music\": triple-time hats; DadCraft's specs file: 32nd rolls"],
         "rolls": [
           25,

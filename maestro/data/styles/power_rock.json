@@ -657,6 +657,7 @@
    }
   },
   "bass": {
+   "lowest": "E1",
    "why": "A picked bass driving 8ths on the root, locked to the kick; the octave pumping when loud, the push on the and of 4; sparser in a quiet verse.",
    "sound": 34,
    "level": 100,

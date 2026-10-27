@@ -309,3 +309,8 @@ isn't reloaded every session; grep for the part a task needs.
   a change that fits the next chord (to confirm with him).
 - Oct 26: 3.5c, the anticipation rule confirmed ("Count anticipations"): a note on the last beat before a chord
   change that fits the coming chord counts as a chord tone, held over the change or not.
+- Oct 26: 3.5c's leniency points, "yes to all four": a clip passes only when every member scores 80% or more;
+  velocity traits from sources; the bass's floor is its style's (E1 for the bass guitar styles); salsa's chord rate
+  card stays. And (decision 17): "in the end we should be able to keep trap elements and swap one of them for
+  salsa. same with every style. everything can run how it should be it should be able to get hot-swapped and still
+  make sense."

@@ -45,6 +45,11 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
   Harmony", Popular Music 30/1 (2011). http://rockcorpus.midside.com
 - **Wikipedia**, "Power chord", "Palm mute", "Pentatonic scale", "String bending", "Verse-chorus form", "Arena
   rock", CC BY-SA 4.0: power rock's guitars, lead and parts (task 3.4d).
+- **SynTheory**, MIT. Megan Wei, Michael Freeman, Chris Donahue, Chen Sun, "Do Music Generation Models Encode Music
+  Theory?", ISMIR 2024. https://github.com/brown-palm/syntheory: its chord progressions and their recipe (two triads
+  a bar at 120 BPM, every key), rebuilt in our own code to check the style judge (task 3.5c).
+- **Wikipedia**, "Double tracking", "Nashville tuning (high strung)", CC BY-SA 4.0: power rock's guitar card, the
+  octave-up double (task 3.5c).
 
 ## Non-commercial (PC only, never in the phone model)
 

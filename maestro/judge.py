@@ -9,7 +9,9 @@ member's score is the mean of its traits' (a kit's over all its lanes); a card's
 scores, the band's tempo and chords counted as one member, so a busy drum card doesn't outweigh the melody. A member
 the style has no card for scores 0 (another style's band with no guitar can't claim power rock's guitars). A trait
 the clip can't show (chord tones with no chords on the timeline) isn't scored. Shares are counted on the bars the
-member (or lane) plays.
+member (or lane) plays. A clip passes when every member scores WEAKEST (80%) or more: one wrong member hardly moves
+the mean of a big band. Each member is scored against its own style (a member swapped in from another style, the
+song file's `members.<name>.style`), so a hot-swapped band is judged by what each member is meant to be.
 
     python -m maestro.judge clip.mid [...]        # each clip's table (the JSON beside it gives roles and style)
     python -m maestro.judge clip.mid --all        # every trait, not only the ones off
@@ -32,6 +34,7 @@ LANES = {"kick": {35, 36}, "snare": {37, 38, 39, 40}, "hats": {42, 44, 46},
          "cymbals": {49, 51, 52, 53, 55, 57, 59}, "toms": {41, 43, 45, 47, 48, 50}}   # GM kit notes
 assert set(LANES) == set(DRUM_LANES)
 KITS = ("drums", "percussion")
+WEAKEST = 0.8        # a clip passes when every member scores this or more
 FLOOR = {"notes": 1, "register": 12, "velocity": 5, "length": 0.5, "voices": 1, "tempo": 10, "chords": 0.25}
 #        the least width a range counts as when scoring a miss (shares: 10 points)
 WORDS = {   # (under, over)
@@ -118,6 +121,7 @@ def _bars(timeline, players, bar_steps):
 def from_song(song, styles=None):
     """A Clip from a Song in memory (`source["style"]` its style; `styles` {member: style} for a blend)."""
     players = {m.name: Player(m.role, list(m.notes), len(m.slides), m.kit) for m in song.members if m.notes}
+    styles = {**{m.name: m.style for m in song.members if m.style}, **(styles or {})}
     bar = song.bar_steps()
     bars = _bars(song.timeline, players, bar)
     return Clip(song.tempo, bar, bars, _chords(song.timeline, bar, bar // song.meter[0]), players,
@@ -141,6 +145,8 @@ def _slides(path):
 def from_file(mid, styles=None):
     """A Clip from a song file (the JSON beside it gives tempo, meter, roles, the timeline and the style)."""
     info = json.load(open(os.path.splitext(mid)[0] + ".json"))
+    own = {name: max(m["style"], key=m["style"].get) for name, m in info["members"].items() if m.get("style")}
+    styles = {**own, **(styles or {})}    # a member's own style (format.md: {"salsa": 1.0}), its strongest
     num, den = (int(x) for x in info["meter"].split("/"))
     notes, slides = read_notes(mid), _slides(mid)
     players = {name: Player(m["role"], notes[name], slides.get(name, 0), m["sound"] == "kit" or m["role"] in KITS)
@@ -360,12 +366,30 @@ def score(clip, style=None):
     return rows
 
 
-def fit(rows):
-    """The mean of the members' scores (0-1), each the mean of its rows'; None with nothing scored."""
+def members(rows):
+    """{member: its score (0-1), the mean of its rows'}."""
     by = {}
     for r in rows:
         by.setdefault(r.member, []).append(r.score)
-    return sum(sum(v) / len(v) for v in by.values()) / len(by) if by else None
+    return {m: sum(v) / len(v) for m, v in by.items()}
+
+
+def fit(rows):
+    """The mean of the members' scores (0-1); None with nothing scored."""
+    by = members(rows)
+    return sum(by.values()) / len(by) if by else None
+
+
+def weakest(rows):
+    """(member, score) of the member scoring lowest: one wrong member hardly moves the mean of a big band, so a
+    clip passes only when every member scores WEAKEST or more (DadCraft, Oct 26)."""
+    by = members(rows)
+    return min(by.items(), key=lambda kv: kv[1]) if by else None
+
+
+def passes(rows):
+    w = weakest(rows)
+    return w is not None and w[1] >= WEAKEST
 
 
 def cross(clip):
@@ -403,8 +427,9 @@ def main(argv=None):
             continue
         rows = score(clip, style)
         off = sum(not r.ok for r in rows)
+        who, low = weakest(rows)
         print(f"{os.path.basename(path)} against {style}: fit {fit(rows):.0%}, {len(rows) - off} of {len(rows)} "
-              f"traits inside")
+              f"traits inside, weakest {who} {low:.0%}" + ("" if passes(rows) else f" (FAILS: under {WEAKEST:.0%})"))
         print("\n".join(table(rows, a.all)) or "  every trait inside its range")
         c = cross(clip)
         best = next(iter(c))

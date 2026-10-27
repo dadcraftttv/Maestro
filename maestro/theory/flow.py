@@ -22,11 +22,11 @@ from bisect import bisect_right
 from collections import namedtuple
 from dataclasses import dataclass, field
 
-from ..stylebook import STYLES, StyleError, part
+from ..stylebook import STYLES, StyleError, midi, part
 from .chords import Chord, _resolves_to, function, name, outside, parse_roman, pool, two_five
 from .form import WORDS, _draw
 from .rhythm import VALUES, check_clave
-from .voicing import member_range
+from .voicing import Range, member_range
 
 SIXTEENTH = 6        # grid steps in a 16th
 Span = namedtuple("Span", "at length chord")   # a chord sounding from step `at` for `length` steps
@@ -383,6 +383,7 @@ class BassFlow:
     variants: dict = field(default_factory=lambda: dict(BASS_VARIANTS))
     stay: int = 3
     kick: bool = False      # an 808: no pattern of its own, a note on every kick (trap, task 3.4a)
+    lowest: int = 0         # its instrument's lowest note (a bass guitar's E1), over the member's range
     tones: tuple = ()       # the 808's tones, ((tone, weight), ...)
     slides: int = 0         # % of the 808's notes sliding into the next
 
@@ -392,6 +393,9 @@ SLIDE = 12                  # steps: an 808 slides over the last 8th of its note
 
 def _bass_flow(style):
     d, where = part(style, "members", "bass"), f"{style}: members.bass"
+    lowest = midi(d["lowest"]) if "lowest" in d else 0
+    if lowest is None or lowest > member_range("bass").high - 24:
+        raise StyleError(f"{where}.lowest: a note name (\"E1\"), two octaves under the bass's top at least")
     if d.get("with", "pattern") == "kick":
         tones = {k: w for k, w in d.get("tones", {"root": 1}).items() if k != "why"}
         for k, w in tones.items():
@@ -400,7 +404,7 @@ def _bass_flow(style):
         slides = d.get("slides", 0)
         if not isinstance(slides, int) or not 0 <= slides <= 100:
             raise StyleError(f"{where}.slides: a share in %, 0 to 100")
-        return BassFlow(kick=True, tones=tuple(tones.items()), slides=slides)
+        return BassFlow(kick=True, tones=tuple(tones.items()), slides=slides, lowest=lowest)
     if d.get("with", "pattern") != "pattern":
         raise StyleError(f"{where}.with: \"pattern\" (its own) or \"kick\" (an 808 on the drummer's kicks)")
     pats = []
@@ -418,10 +422,17 @@ def _bass_flow(style):
     variants = {**BASS_VARIANTS, **_weights(d.get("variants", {}), BASS_VARIANTS, f"{where}.variants")}
     if pats and all(p.most for p in pats):
         raise StyleError(f"{where}.patterns: one pattern at least with no \"most\", to take over")
-    return BassFlow(tuple(pats) or PATTERNS, variants)
+    return BassFlow(tuple(pats) or PATTERNS, variants, lowest=lowest)
 
 
 BASS = {s: _bass_flow(s) for s in STYLES}
+
+
+def bass_range(bf):
+    """The bass's range as its style plays it: the member's, floored at its instrument's lowest note. It goes with
+    the member's style, so a salsa bass in a trap band keeps its E1 (decision 17)."""
+    r = member_range("bass")
+    return Range(max(r.low, bf.lowest), r.high)
 
 
 def _tone(chord, tone):
@@ -519,7 +530,7 @@ def bass_part(rng, bf, spans, key_at, start, bars, met, energy, prev=None, clave
             out.append([step, None if length is None else length * SIXTEENTH, tone, which])
     # the pitches: each tone of its chord, the nearest note to the one before; an approach note a half step under
     # (or a step over) the note it leads into
-    r = member_range("bass")
+    r = bass_range(bf)
     for n in out:
         step, _, tone, which = n
         if tone == "approach":
@@ -558,7 +569,7 @@ def bass_808(rng, bf, spans, key_at, kicks, start, bars, met, energy, near=None,
     def hush(st):
         return next((q0 for q0, q1 in quiet if q0 <= st < q1), None)
     steps = sorted(st for st in {k for k in kicks if lo <= k < hi} | changes if hush(st) is None)
-    r, out = member_range("bass"), []
+    r, out = bass_range(bf), []
     if near is None:
         near = round(r.mid) - 4
     home = None
@@ -611,9 +622,10 @@ def check_808(notes, slides, kicks, spans, key_at, quiet=()):
     return None
 
 
-def check_bass(notes, met, clave=None):
-    """None when the bass line fits, else the reason: in its range, on the grid, one note a step, with the clave."""
-    r = member_range("bass")
+def check_bass(notes, met, clave=None, bf=None):
+    """None when the bass line fits, else the reason: in its range (its style's, `bf`), on the grid, one note a
+    step, with the clave."""
+    r = bass_range(bf) if bf else member_range("bass")
     for s, _, m in notes:
         if not r.low <= m <= r.high:
             return f"{m} is outside the bass range"

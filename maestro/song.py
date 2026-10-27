@@ -44,6 +44,7 @@ class Member:
     pump: int = 0             # % it ducks under the kick in the clip player's mix (synthwave's pad and bass)
     gain: int = 0             # dB in the clip player's mix (the mix check's, task 3.8)
     pan: int = 0              # -64 (left) to 63 (right): power rock's doubled guitars (task 3.4d)
+    style: str | None = None  # its own style when it isn't the song's (a member swapped in, decision 17)
     notes: list = field(default_factory=list)
     slides: list = field(default_factory=list)   # (step, steps, semitones, hold): a bend from step, reached at its
     #                                              end and held `hold` steps more (a lead's bend up into its note)
@@ -128,7 +129,8 @@ class Song:
                 "listen": self.listen,
                 "members": {m.name: {"role": m.role, "sound": m.program if isinstance(m.program, str) else
                                      "kit" if m.kit else m.program, **({"pump": m.pump} if m.pump else {}),
-                                     **({"gain": m.gain} if m.gain else {}), **({"pan": m.pan} if m.pan else {})}
+                                     **({"gain": m.gain} if m.gain else {}), **({"pan": m.pan} if m.pan else {}),
+                                     **({"style": {m.style: 1.0}} if m.style else {})}
                             for m in self.members},
                 "timeline": self.timeline}
         with open(f"{stem}.json", "w") as f:

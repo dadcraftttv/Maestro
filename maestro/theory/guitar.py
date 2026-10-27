@@ -151,10 +151,10 @@ def guitar_part(rng, gf, group, spans, key_at, start, bars, met, prev=None, near
     return out, muted, pat, near, lines
 
 
-def lock_bass(notes, spans, key_at, met, near):
+def lock_bass(notes, spans, key_at, met, near, r=None):
     """The bass on the guitar's rhythm (one track's notes): the root of each hit's chord, the nearest to the note
-    before, held to the next hit. (notes, the last bass note)."""
-    r, out = member_range("bass"), []
+    before, held to the next hit, inside `r` (the bass's range). (notes, the last bass note)."""
+    r, out = r or member_range("bass"), []
     near = round(r.mid) - 4 if near is None else near
     for st in sorted({n[0] for n in notes}):
         length = max(n[1] for n in notes if n[0] == st)

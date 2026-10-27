@@ -86,6 +86,19 @@ All 13 of its genres are house. DadCraft took two ideas (Oct 26): the **DNA nudg
 indra, soundbox, SoundForge Studio) don't serve Maestro; SoundForge's physical-model sound effects might interest
 Ouralia's sounds.
 
+## Round 6: one more from DadCraft's list (Oct 26)
+
+**Tangerine** (Quick-Eyed-Sky, MIT) is a browser instrument for endless electronic sequences over slow harmony, all
+rules: an engine, a theory file and a synth, MIDI out optional. Its theory counts the notes two chords share and
+the scale notes two keys differ by (0 for the relative key, up to 7), and voices chords against rubs (semitones,
+minor ninths, tritones), movement and a wide span. Its layers run loops of different lengths (16, 12 and 7 steps
+meet every 336), accents 0-7 setting the velocity in place of drums. Slow change alters one step of one layer
+every so many passes (64 when fixed, about 7 when restless); rotation swaps one playing layer for a resting one
+every few bars, on chord changes, the longest-playing likelier to leave. DadCraft took all three (Oct 26): rotation
+and slow change into the layering (PLAN.md 3.6), chord moves by shared notes (3.11), loops of different lengths
+(3.12). Ideas only; MIT would allow its code, credited, if a task needs it. A Reddit post on r/SATNA_PROJECT on the
+same list couldn't be read (Reddit blocks the fetch); waiting for DadCraft to paste it.
+
 ## Data and tools found
 
 | Name | License | Use |
@@ -120,3 +133,4 @@ Ouralia's sounds.
 - Aria-MIDI: https://arxiv.org/pdf/2504.15071 · MidiTok: https://github.com/Natooz/MidiTok
 - Basic Pitch: https://github.com/spotify/basic-pitch · Beat This!: https://huggingface.co/cstr/beat-this-GGUF
 - Fase Groove: https://github.com/wsx79/fasegroovearranger · https://github.com/wsx79/fasegroovepiano · https://github.com/wsx79/fasegrooveguitar
+- Tangerine: https://github.com/Quick-Eyed-Sky/tangerine

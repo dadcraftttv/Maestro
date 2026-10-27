@@ -68,6 +68,7 @@
       "pump": 35
     },
     "bass": {
+      "lowest": "E1",
       "why": "The bass carries the groove (DadCraft's notes): octave or root 8ths locked to the kick when the energy is up (outrun), a held sub when it's low (dreamy).",
       "sound": "saw bass",
       "gain": -2,

@@ -29,7 +29,8 @@ MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "
           "plays": bool, "walk": (0, 100), "coro": dict, "riff": dict,   # task 3.4c: a member sitting out, the
 #                                                                          bass's walk-ups, the horns' loops
           "tracks": dict, "scale": str, "bends": (0, 100), "vibrato": bool,
-          "double": dict, "licks": dict, "fast": (0, 100), "pan": (-64, 63)}   # the second round: double bass,
+          "double": dict, "licks": dict, "fast": (0, 100), "pan": (-64, 63),
+          "lowest": str}   # 3.5c: the bass's lowest note, its instrument's (a bass guitar's E1)   # the second round: double bass,
 #                                                                          the duel's licks, a lead to one side   # task 3.4d: the doubled guitars, the
 #                                                                          lead's pentatonic, bends and vibrato
 TEMPO = (20, 400)

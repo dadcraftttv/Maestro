@@ -15,7 +15,7 @@ from itertools import groupby
 from .rng import ComposerRng, fresh_seed
 from .stylebook import part
 from .theory.chords import VOCAB, _resolves_to, choose_in_style, function, name, outside, roman
-from .theory.flow import ARPS, BASS, FLOW, arp_part, bass_808, check_arp, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
+from .theory.flow import ARPS, BASS, bass_range, FLOW, arp_part, bass_808, check_arp, bass_part, chart, check_808, check_bass, check_phrase, chord_at, \
     check_loop, held, loop_melody, LOOPS, phrase_melody, plain_phrase, progression, _nearest, _tone
 from .theory.drums import DOUBLE, DRUMMER, KIT, _fill, _vel, check_drums, double_kick, drum_part, quiet_spans
 from .theory.guitar import GUITAR, VOICINGS, _root as guitar_root, bends as lead_bends, check_guitar, check_leads, \
@@ -245,7 +245,7 @@ def band(rng, style, plan, play, spans, key_at, bass, melody, percussion, clave,
             next(p for p in plan if p["section"] is s)["lines"].append(
                 f"  melody, bar {at + 1}: sings on through the horns' bars, to stay with the clave")
     # the bass's walk-ups, and the breaks
-    walk, r = part(style, "members", "bass").get("walk", 0), member_range("bass")
+    walk, r = part(style, "members", "bass").get("walk", 0), bass_range(BASS[style])
     for s in play.sections[:-1]:
         b = s.end - 1
         lo, side = b * met.bar, strokes(clave, b, met)
@@ -321,7 +321,8 @@ def rock_band(rng, style, plan, play, spans, key_at, bass, melody, drums, kit_wh
         if pat.bass:
             lo, hi = at * met.bar, (at + phrase) * met.bar
             bnear = next((m for st, _, m in reversed(bass) if st < lo), bnear)
-            locked, bnear = lock_bass(notes[gf.tracks[0].name], spans, key_at, met, bnear)
+            locked, bnear = lock_bass(notes[gf.tracks[0].name], spans, key_at, met, bnear,
+                                           bass_range(BASS[style]))
             bass = sorted(silence(bass, lo, hi) + locked, key=lambda n: n[0])
             p["lines"].append(f"  bass, bars {at + 1}-{at + phrase}: locks to the guitar's {pat.name}")
     # the pre-chorus's last bar: the snare building into the chorus
@@ -339,7 +340,7 @@ def rock_band(rng, style, plan, play, spans, key_at, bass, melody, drums, kit_wh
         p["drums"] = [ln for ln in p["drums"] if not ln.startswith(f"  drums, bar {b + 1}:")] + [
             f"  drums, bar {b + 1}: the snare builds, 8ths then 16ths, into the chorus"]
     # the stops: the band hits the one and lets it ring, the drums fill in (or build, at a pre-chorus's end)
-    r = member_range("bass")
+    r = bass_range(BASS[style])
     for b in breaks:
         lo, hi = b * met.bar, (b + 1) * met.bar
         key, ch = key_at(lo), chord_at(spans, lo).chord
@@ -474,7 +475,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         near = notes[-1][2] if notes else near
         p["pattern"], p["bass"], p["lines"] = pat, lines[0].split(": ", 1)[1], p["lines"] + lines
     bass = held(bass, play.bar * met.bar)
-    why = check_bass(bass, met, clave) or (check_808(bass, slides, kicks, spans, key_at, quiet) if bf.kick
+    why = check_bass(bass, met, clave, bf) or (check_808(bass, slides, kicks, spans, key_at, quiet) if bf.kick
                                           else None)
     # the pad: each chord voiced under the melody's room, moving smoothly, not muddy with the bass under it
     pad, prev, again, rests = [], None, 0, 0
@@ -553,13 +554,13 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     if ARRANGE[style] and not GUITAR[style]:
         keys, horns, parts, breaks, bass, melody, percussion = band(rng, style, plan, play, spans, key_at, bass, melody,
                                                                     percussion, clave, kit_why, end)
-        why = check_bass(bass, met, clave)
+        why = check_bass(bass, met, clave, BASS[style])
     # power rock's band (task 3.4d): the parts, the doubled rhythm guitar, the builds and stops, the lead's bends
     guitar, muted, builds, bent, shakes, second, bent2, shakes2 = {}, [], [], [], [], [], [], []
     if GUITAR[style]:
         guitar, muted, parts, breaks, builds, bass, drums, bent, shakes, melody, second, bent2, shakes2 = rock_band(
             rng, style, plan, play, spans, key_at, bass, melody, drums, kit_why, ruled)
-        why = check_bass(bass, met, clave)
+        why = check_bass(bass, met, clave, BASS[style])
     for p in plan:
         p["lines"] += p["drums"] + p["percussion"]
     # cut at the clip's end, in words and notes

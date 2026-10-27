@@ -4,8 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.5c, checking the judge: the four fixes are done; DadCraft's calls on the judge's leniency (three points,
-in 3.5c below) and on the bass floor under E1, then the checks (the wrong clips, SynTheory's progressions). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.6, layering: present its plan to DadCraft first. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -94,6 +93,13 @@ band member play, the way its style plays it?
     sound (salsa's fuller horn section, synthwave's lead register and the like), that tuning waits for the desk (D),
     where DadCraft does it himself, offline, and it tests the desk too. Each style passes Checkpoint 3 when it is good
     enough to be a sound baseline: for the practice MIDI, the guardrails and the fallback bar (decision 15).
+17. **Every member can be hot-swapped** (DadCraft, Oct 26: "in the end we should be able to keep trap elements and
+    swap one of them for salsa. same with every style. everything can run how it should be it should be able to get
+    hot-swapped and still make sense"). Any member of any style can be swapped for another style's while the band
+    plays, and the band still makes sense. So each member's rules travel with its own style, not the song's (a salsa
+    bass in a trap band keeps its E1 floor and its tumbao), the judge scores each member against its own style's
+    card (a song file's `members.<name>.style`), and the guardrails check a swapped member against the band it
+    joins (the chords, the clave). Building it: 5.3 (style blends) and 6.2 (a style per member in `dcs_composer`).
 
 ## How each bucket runs
 
@@ -407,7 +413,7 @@ For each chosen style, how each member plays it, written from sources.
       a style.
 - [ ] Later (DadCraft, Oct 26): Maestro's own metal sounds for power rock (a high-gain guitar, a tight metal kit, a
       scooped mix) in place of the GM stand-ins. Ask DadCraft when to pick it up.
-- [ ] 3.5 The style judge scores the clips before DadCraft listens. **Our own judge** (DadCraft, Oct 26: "Own
+- [x] 3.5 The style judge scores the clips before DadCraft listens. **Our own judge** (DadCraft, Oct 26: "Own
       judge"): no outside weights, offline, safe to ship. The license check ruled the planned ones out: CLaMP 3's
       code and weights are MIT, but its symbolic model (C2) learned from M4-RAG (CC BY-NC-ND, research only; music
       found by searching song titles and artists, its 0.75M symbolic pairs unpublished), so fan MIDI of copyrighted
@@ -442,7 +448,7 @@ For each chosen style, how each member plays it, written from sources.
         against 25%; power rock's timeline says "A" for all 16 bars while the riff moves A5-D5-E5 (guitars 77%
         chord tones, bass 62-66%), guitar R doubles an octave up (A3-A4 against E2-E4), and seed 8's bass plays 12
         notes a bar against 2-8. One-offs: trap's melody at 9 notes a bar (seed 7) and no triplets (seed 9).
-  - [ ] 3.5c Check the judge: today's clips pass their own cards; wrong clips (a member from another style, the
+  - [x] 3.5c Check the judge: today's clips pass their own cards; wrong clips (a member from another style, the
         velocities flattened, the notes shuffled off the style's steps) score low; SynTheory (MIT) tests the chord
         and tempo measures where it fits. Tests and fuzz clean. Then every listen gets the judge's table first.
         The plan (Oct 26, from DadCraft's calls on 3.5b's flags), first the fixes, then the checks above:
@@ -477,6 +483,27 @@ For each chosen style, how each member plays it, written from sources.
           the swapped bass's own score falls (57-86%);
         - only power rock's drums have a velocity trait, so flattened velocities go unseen elsewhere;
         - every note shifted a 16th: the drums and percussion fall (22-86%), trap's melody barely (96%).
+        DadCraft, Oct 26: "yes to all four" (the weakest member, velocity traits, the bass floor, salsa's chord rate
+        left as it is), and decision 17 (any member hot-swapped). Done Oct 26:
+        - A clip passes when every member scores 80% or more (`judge.weakest`, `judge.passes`); the table names the
+          weakest. Each member is scored against its own style: `Member.style` writes `members.<name>.style` in the
+          song file and the judge reads it.
+        - The bass's floor is its style's (`"lowest"` in the bass's entry, `flow.bass_range`): E1 for power rock,
+          salsa and synthwave (their cards' bass guitar, double bass and E1 floor); trap's 808 keeps C1.
+        - Velocity: trap's hats get a trait (8-45, from GMD's hip hop hats: 88-107 on the
+          beat, 40-56 on the 16ths). Synthwave's drum machine plays flat hats on some seeds (the LinnDrum had no
+          per-hit velocity), so no trait there; salsa's percussion and the melodic members have no source with
+          numbers yet: open.
+        - `tests/unit/test_judge_check.py` (25 tests): today's clips (seeds 1-3) pass and fit their own style
+          best; a bass or drummer from another style fails, named as the weakest (8 pairs); a drummer swapped in
+          with its own style scores by it, and its style reads back from the file; flattened velocities are named
+          (trap, power rock); every note a 16th late leaves the steps and fails (trap's hats roll on every 16th, so
+          only its clap's step is named); SynTheory's 19 progressions in 12 keys read back with 100% chord tones and
+          the right chord rate, and a timeline a chord late is caught. SynTheory credited (MIT).
+        Open, for later tasks: the melody cards hardly tell styles apart (another style's melody scores 75-100%);
+        a bass moved into another band can fail its own card, since its notes follow its first band's chords (a
+        true hot-swap draws the member over the band's chords: 5.3, 6.2); the riff's passing tones (when it gets
+        them, with a source). Every listen from now on gets the judge's table first.
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
       out as it eases (after Ouralia's Calm builds: pad, room notes, chimes, then harmony and reverb, each joining
       further along the rise; `docs/format.md`), and sections thin or fill the band. Each style's entry says who
@@ -485,6 +512,12 @@ For each chosen style, how each member plays it, written from sources.
       Also a style per section (after HeartMuLa, research round 3, DadCraft, Oct 24): the blend can shift as the
       song moves (the band turns salsa for a breakdown), as tendencies too.
       In bucket 6 it becomes the way Calm builds and Maestro's arc stop stacking (DadCraft, Oct 23).
+      From Tangerine (DadCraft, Oct 26: `docs/research.md` round 6), for long plays: **rotation**, every few bars
+      (a style's tendency, a little random) one playing member rests and one resting member comes back, so the
+      band's size holds while its colour turns; the longer a member has played the likelier it rests, and swaps
+      fall on chord changes, never on a cadence. And **slow change**: every so many passes of a loop, one detail of
+      one member changes (a hit on or off, a note a step up or down, an octave, an accent), never two members at
+      once; how often is a style's tendency.
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.
@@ -520,6 +553,19 @@ For each chosen style, how each member plays it, written from sources.
       tendency in the style entry (how often, on which 16ths, how loud), never on top of a chord hit, and it eases
       off in stops and builds. Check: never under another hit, in its mix target, fuzz clean; then an A/B against
       the guitar without it. Plan to DadCraft before starting; it may join power rock's next round.
+- [ ] 3.11 Chord moves by shared notes (DadCraft, Oct 26, from Tangerine: `docs/research.md` round 6). Where
+      the style's families leave a choice (the next family at a section, a variant, a key change), the closer move
+      is likelier: chords counted by the notes they share, keys by the scale notes that differ (0 for the relative
+      key, up to 7). A **distance** tendency in the style entry sets how far the harmony likes to travel (calm
+      sections near, a lift further), always inside the style's families (decisions 6, 9). Check: the shared notes
+      at each change measured against the style's distance, drift measures pass, fuzz clean; then an A/B against
+      today's draws. Plan to DadCraft before starting.
+- [ ] 3.12 Loops of different lengths (DadCraft, Oct 26, from Tangerine: `docs/research.md` round 6). A member's
+      loop can run a length other than the bar (an arp of 5 or 7 steps against the bass's 16), so the parts meet in
+      new places each time round, with accents carrying the pulse. A style's tendency (which members, which
+      lengths); the loops line up again at each section or cadence so the form stays clear. Synthwave's arp and
+      calm sections first. Check: every loop back in line at its section, notes on the grid and in range, drift
+      measures pass, fuzz clean; then an A/B. Plan to DadCraft before starting.
 - [ ] Checkpoint 3 (decision 16: a sound baseline per style, not a finished one; fine-tuning waits for the desk):
       each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve
