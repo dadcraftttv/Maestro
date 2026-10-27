@@ -333,3 +333,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 27: power rock's layering, before its build (its songs open loud, so the energy alone never played "the
   guitars first"): "guitars alone, then crash" (the first phrase the rhythm guitars and the lead, the bass and drums
   crashing in), and the band thinning "only in real calm dips" (the bass at 0.2, the drums at 0.3).
+- Oct 27: 3.6's power rock A/B (`clips/ab/power_rock`, seed 12, 84 bars): "B is better, keep it." Power rock's
+  layering stays: the guitars alone then the crash, the breakdowns to the bass and drums, the calm dips.
