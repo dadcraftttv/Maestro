@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listen after 3.10 (`clips/ab/scratch`); then 3.11-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.11-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -625,7 +625,7 @@ For each chosen style, how each member plays it, written from sources.
       round landing home over V sang the tonic against it; it now lands on the chord's nearest tone there.
 - [x] Listen after 3.9, round 2 (Oct 27): `clips/nudges` (synthwave, seed 12, 48 bars, plain then each at +4).
       DadCraft: "the nudges are fine." 3.9 done; register nudges stay for later.
-- [ ] 3.10 The scratch lane (DadCraft, Oct 26, from Fase Groove Guitar: `docs/research.md` round 5). The rhythm
+- [x] 3.10 The scratch lane (DadCraft, Oct 26, from Fase Groove Guitar: `docs/research.md` round 5). The rhythm
       guitar gets a lane of muted, unpitched scratch strokes that fills the empty 16ths between its chord hits by
       itself: palm-mute chugs in power rock, funk scratch where a style asks for it (afrobeat, later). It's a
       tendency in the style entry (how often, on which 16ths, how loud), never on top of a chord hit, and it eases
@@ -638,8 +638,9 @@ For each chosen style, how each member plays it, written from sources.
       or a build. The chorus and drive patterns ring through every 16th, so in practice it lands in the heavier
       verses. Checked: `check_scratch` (never under a ringing note), 4 new tests, fuzz 2000/2000 clean (and
       energetic+5), mix and judge unchanged (99% fit).
-- [ ] Listen after 3.10: `clips/ab/scratch` (power rock, seed 16, 84 bars; A without the lane, B with it, in bars
-      9-24). Listen to the verses there: do the strokes add drive, or clutter the chugs?
+- [x] Listen after 3.10 (Oct 27): `clips/ab/scratch` (power rock, seed 16, 84 bars; A without the lane, B with it,
+      in bars 9-24). DadCraft: "B sounds better, keep the scratch lane." 3.10 done. Open, his call when: strokes in
+      the chorus would need its patterns' chords shortened.
 - [ ] 3.11 Chord moves by shared notes (DadCraft, Oct 26, from Tangerine: `docs/research.md` round 6). Where
       the style's families leave a choice (the next family at a section, a variant, a key change), the closer move
       is likelier: chords counted by the notes they share, keys by the scale notes that differ (0 for the relative
