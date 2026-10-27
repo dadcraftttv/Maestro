@@ -320,3 +320,8 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 26: 3.6's synthwave A/B (`clips/ab/synthwave`, seed 14, 84 bars): "B is better, keep the kick drop." The band
   thinning and filling with the energy and the breakdown setting up what follows: yes to both; "the rotations sound
   good. and the slow changes keep it fresh."
+- Oct 26: 3.6's other layer maps, "maps sound right, one style at a time, trap first": trap (pad and riff from the
+  start, the drums then the 808 joining; its breakdown the beat cutting out, the riff and pad playing on; rotation
+  and slow change), salsa (its parts lead; keys, bass and percussion throughout; a breakdown of the montuno over the
+  percussion; slow change, no rotation), power rock (the guitars first, the bass and drums joining; a breakdown of
+  bass and drums, the guitars slamming back; no rotation; slow change on the bass and drums). An A/B each.
