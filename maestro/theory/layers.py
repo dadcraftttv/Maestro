@@ -168,7 +168,7 @@ def plan_layers(rng, ly, sections, phrase, bars=None):
             while len(playing) < want:
                 playing.add(min((r for r in listed if r not in playing), key=jitter))
             while len(playing) > want:
-                keep = [r for r in playing if anchored(playing - {r})]
+                keep = [r for r in sorted(playing) if anchored(playing - {r})]   # in order: jitter draws per member
                 playing.discard(max(keep, key=jitter))
             if not anchored(playing):
                 playing.add(min((r for r in listed if r in ANCHORS), key=lambda r: ly.join[r]))

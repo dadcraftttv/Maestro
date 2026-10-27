@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Checkpoint 3 (power rock seed 3 isn't the same between runs: fix it first, his call). Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -681,7 +681,8 @@ For each chosen style, how each member plays it, written from sources.
       fuzz 2000/2000 clean, drift met, exam 106/106. A/B: `clips/ab/loops` (seed 10, 48 bars; A 7ba3f7a, B loops):
       only the calm section, bars 17-32, differs (a loop of 3, up and down cut to 0 1 2). Judge 99% and mix the
       same on both. Found: power rock seed 3's bass and drums differ between runs (set order under Python's hash
-      seed), before 3.12; open.
+      seed), before 3.12. Fixed Oct 27 (DadCraft: "commit the power rock seed 3 fix"): the layer plan drops members
+      in sorted order, so each draws its jitter the same whatever the hash seed (a test runs three hash seeds).
       Heard Oct 27: "B sounds better, keep the loops." 3.12 done. Other members and styles wait for their rounds.
 - [ ] Checkpoint 3 (decision 16: a sound baseline per style, not a finished one; fine-tuning waits for the desk):
       each member in each style, by ear; plus a long clip and two plays of the same settings, with the

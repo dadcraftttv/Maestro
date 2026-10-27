@@ -143,3 +143,29 @@ def test_bad_entries_are_refused():
                 {"rotate": [8]}, {"changes": [3, 2]}, {"loud": 1}):
         with pytest.raises(StyleError):
             layers_from({**good, **bad}, roles, "t")
+
+
+LAYERING = """
+from maestro.rng import ComposerRng
+from maestro.theory.flow import FLOW
+from maestro.theory.form import FORM, Play
+from maestro.theory.layers import LAYERS, plan_layers
+from maestro.theory.pitch import Key
+from maestro.theory.rhythm import METERS
+for style in sorted(s for s in LAYERS if LAYERS[s]):
+    for seed in range(1, 41):
+        rng = ComposerRng(); rng.seed(seed)
+        play = Play(rng, Key(9, "minor"), FORM[style], 112, METERS["4/4"], FLOW[style].distance)
+        while play.bar < 300:
+            play.next_section(0.5)
+        rng.seed(seed ^ 0x1A7E5)
+        print([(x.at, sorted(x.playing), x.melody) for x in plan_layers(rng, LAYERS[style], play.sections, 4, 300)])
+"""
+
+
+def test_who_plays_when_is_the_same_whatever_python_hash_seed():
+    # power rock seed 3 rested other members at bar 200 when a set's order chose who drew which jitter (Oct 27)
+    import os, subprocess, sys
+    runs = {subprocess.run([sys.executable, "-c", LAYERING], capture_output=True, text=True, check=True,
+                           env={**os.environ, "PYTHONHASHSEED": h}).stdout for h in ("0", "2", "5")}
+    assert len(runs) == 1
