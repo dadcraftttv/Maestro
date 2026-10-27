@@ -1057,6 +1057,14 @@
     },
     "breaks": 60
   },
+  "layers": {
+    "why": "DadCraft's map (Oct 26, \"maps sound right\"): the parts lead (the cuerpo, montuno and mambo already say what the lead and horns play), so the keys, bass, percussion and horns play throughout; a section rising into a louder one may break down for its last phrase to the piano's montuno over the percussion, the band slamming back in. Slow change after Tangerine (research round 6), no rotation.",
+    "join": {"keys": 0.0, "bass": 0.0, "percussion": 0.0, "horns": 0.0},
+    "least": 2,
+    "breakdowns": 35,
+    "breakdown": ["keys", "percussion"],
+    "changes": [2, 3]
+  },
   "judge": {
     "why": "Written from salsa's sources (Wikipedia's \"Tumbao\", \"Guajeo\", \"Montuno\", \"Clave (rhythm)\", \"Mambo (music)\"; the percussion parts as players teach them), against the son 2-3 clave.",
     "band": {"chords": [0.5, 2, "Wikipedia, \"Montuno\": a vamp of two to four chords over two bars"]},

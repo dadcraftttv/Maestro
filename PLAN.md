@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.6, layering: salsa's layer map (approved Oct 26) and its A/B; then power rock. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.6, layering: DadCraft's salsa A/B (`clips/ab/salsa`, seed 12); then power rock's map and its A/B. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -545,6 +545,15 @@ For each chosen style, how each member plays it, written from sources.
       drums about 0.5 dB over the riff in A and B alike (levels unchanged; DadCraft, Oct 27: "the 808s are fine").
       Listen: `clips/ab/trap` (A: 4e59e36, no layering; B: layered; seed 74, 84 bars, 2.5 minutes). Heard Oct 27:
       "B is better, keep it" (`docs/verdicts.md`).
+      Salsa built Oct 27: its parts lead, so the keys, bass, percussion and horns play throughout (the cuerpo, montuno
+      and mambo already say what the lead and horns play); breakdowns (35%) to the piano's montuno over the
+      percussion, the melody, bass and horns resting; a slow change every 2-3 phrases, no rotation. Slow change now
+      reaches the keys (a hit dropped) and the percussion (a hit dropped or accented), never the clave (nor the
+      drums' snare, as before). Salsa's montunos are mostly loud already, so few sections rise into a louder one: a
+      breakdown in 9 of 40 seeds. Checks: 287 tests (the layering tests run salsa too; the clave stays as drawn),
+      fuzz 2000/2000 clean, drift all met, judge 100% in A and B (A's horns 14% syncopation, B's every trait in),
+      mix in its targets, levels unchanged. Listen: `clips/ab/salsa` (A: 4753c5e, no layering; B: layered; seed 12,
+      84 bars, about 2 minutes; 3.4c's pair moved to `clips/ab/salsa/3.4c`).
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.

@@ -13,8 +13,8 @@ listed there (trap's riff plays on while the beat cuts out, DadCraft, Oct 26), e
 From Tangerine (research round 6), for long plays: rotation ("rotate": [fewest, most] bars between swaps; [0, 0]
 off): when the band's size holds, one member rests and one resting member comes back, the longest-playing likelier
 to leave and the longest-resting likelier to come back; never on a section's first phrase. And slow change ("changes": [fewest, most] phrases between
-changes): one detail of one member changes (a hit dropped, an arp note an octave or a chord tone away, a drum hit's
-accent) and stays changed while the section's loop goes round, never two members at once.
+changes): one detail of one member changes (a hit dropped, an arp note an octave or a chord tone away, a drum or
+percussion hit's accent; never the snare's backbeat or the clave) and stays changed while the section's loop goes round, never two members at once.
 
 Drawn after every member's notes, with its own seed, so the same seed with and without layering plays the same
 notes (the A/B)."""
@@ -25,7 +25,9 @@ from .flow import chord_at
 from .voicing import member_range
 
 ANCHORS = ("bass", "pad", "keys", "guitar", "arp")   # members that carry the chords or the bass
-CHANGES = {"arp": ("off", "octave", "note"), "bass": ("off",), "drums": ("off", "accent")}
+CHANGES = {"arp": ("off", "octave", "note"), "bass": ("off",), "drums": ("off", "accent"), "keys": ("off",),
+           "percussion": ("off", "accent")}
+KEPT = {"drums": "snare", "percussion": "clave"}   # hits a slow change never touches: the backbeat, the clave
 ACCENT = 16   # velocity a changed drum hit gains or loses
 
 
@@ -211,17 +213,17 @@ def slow_changes(rng, ly, phrases, take, spans, key_at, met):
         role = who[rng.rnd(len(who))]
         lo, hi = p.at * bar, (p.at + p.bars) * bar
         notes = take[role]
-        here = [n for n in notes if lo <= n[0] < hi and n[0] % bar and (role != "drums" or n[4] != "snare")]
+        here = [n for n in notes if lo <= n[0] < hi and n[0] % bar and (role not in KEPT or n[4] != KEPT[role])]
         if not here:
             continue
         pick, kind = here[rng.rnd(len(here))], CHANGES[role][rng.rnd(len(CHANGES[role]))]
         offset, up = (pick[0] - lo) % (p.bars * bar), rng.rnd(2) == 1
         later = [q for q in phrases[k:] if q.section is p.section and role in q.playing]
         at = {q.at * bar + offset for q in later if q.bars == p.bars} | {pick[0]}
-        r = member_range(role) if role != "drums" else None
+        r = member_range(role) if role not in KEPT else None
         changed = []
         for n in notes:
-            if n[0] not in at or (role == "drums" and n[2] != pick[2]):
+            if n[0] not in at or (role in KEPT and n[2] != pick[2]):
                 changed.append(n)
                 continue
             if kind == "off":

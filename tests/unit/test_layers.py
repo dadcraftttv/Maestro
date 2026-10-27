@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Layering (task 3.6): who plays when, a phrase at a time by the energy; the band never thinner than two (DadCraft,
-Oct 26), breakdowns, rotation and slow change (after Tangerine, research round 6). Synthwave first, then trap."""
+Oct 26), breakdowns, rotation and slow change (after Tangerine, research round 6). Synthwave first, then trap, then
+salsa."""
 import pytest
 
 from maestro.explain import flow_choices
@@ -12,7 +13,7 @@ from maestro.theory.rhythm import METERS
 
 MET = METERS["4/4"]
 A_MINOR = Key(9, "minor")
-LAYERED = {"synthwave": 112, "trap": 140}   # the styles with a layer map, at their tempo
+LAYERED = {"synthwave": 112, "trap": 140, "salsa": 180}   # the styles with a layer map, at their tempo
 
 
 def _plays(style, n=30, bars=84):
@@ -41,7 +42,7 @@ def test_a_resting_member_plays_nothing_in_its_phrase_and_the_rest_is_the_same_n
     for take, plain in ALL[style]:
         for x in take["layers"]:
             lo, hi = x.at * MET.bar, (x.at + x.bars) * MET.bar
-            for r in ("pad", "bass", "arp", "drums", "melody"):
+            for r in [*LAYERS[style].join, "melody"]:     # salsa's pad sits out unlisted (task 3.4c)
                 rests = r not in x.playing if r != "melody" else not x.melody
                 if rests:
                     assert not [n for n in take[r] if lo <= n[0] < hi], (r, x.at)
@@ -50,8 +51,8 @@ def test_a_resting_member_plays_nothing_in_its_phrase_and_the_rest_is_the_same_n
             assert {(n[0], n[2]) for n in take[r]} <= {(n[0], n[2]) for n in plain[r]}
 
 
-@each
-def test_the_band_grows_with_the_energy(style):
+@pytest.mark.parametrize("style", sorted(s for s in LAYERED if any(LAYERS[s].join.values())))
+def test_the_band_grows_with_the_energy(style):    # salsa's band plays throughout: its parts lead (DadCraft, Oct 26)
     sizes = {}
     for take, _ in ALL[style]:
         for x in take["layers"]:
@@ -78,7 +79,7 @@ def test_rotation_keeps_the_size_and_breakdowns_come_before_a_louder_section(sty
                 assert x.at + x.bars == x.section.end
             else:
                 assert x.melody
-    assert swaps and downs
+    assert downs and (swaps or not ly.rotate[1])
 
 
 def test_slow_change_one_member_at_a_time_and_the_arp_stays_on_its_chords():
@@ -92,6 +93,16 @@ def test_slow_change_one_member_at_a_time_and_the_arp_stays_on_its_chords():
         assert check_arp(take["arp"], take["spans"], lambda st: next(
             x.section.key for x in take["layers"] if x.at * MET.bar <= st < (x.at + x.bars) * MET.bar)) is None
     assert changes
+
+
+def test_salsa_keeps_its_clave_and_breaks_down_to_the_montuno():
+    for take, plain in ALL["salsa"]:
+        clave = [h for h in take["percussion"] if h[4] == "clave"]
+        downs = [(x.at * MET.bar, (x.at + x.bars) * MET.bar) for x in take["layers"] if x.down]
+        assert clave == [h for h in plain["percussion"] if h[4] == "clave"]     # the percussion plays throughout
+        for lo, hi in downs:
+            assert not [n for r in ("bass", "horns", "melody") for n in take[r] if lo <= n[0] < hi]
+            assert [n for n in take["keys"] if lo <= n[0] < hi]
 
 
 def test_bad_entries_are_refused():
