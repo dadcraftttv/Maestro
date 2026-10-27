@@ -24,7 +24,7 @@ from dataclasses import dataclass, field
 
 from ..stylebook import StyleError, midi, part, per_style
 from .chords import Chord, _resolves_to, function, name, outside, parse_roman, pool, two_five
-from .form import WORDS, _draw
+from .form import DISTANCE_PULL, KINDS, WORDS, _draw, lean
 from .rhythm import VALUES, check_clave
 from .voicing import Range, member_range
 
@@ -103,6 +103,8 @@ class Flow:
     stay: int = 3
     cadence: int = 100   # % of phrases whose last pass is made to land home (trap: few, its loops just go round)
     still: bool = False  # a loop of one chord allowed (trap)
+    distance: dict = field(default_factory=dict)   # by section kind, how hard the harmony leans to near moves
+    #                                                (above 0) or far ones (below 0), -2 to 2 (task 3.11)
 
 
 def _families(d, where):
@@ -134,7 +136,7 @@ def _weights(d, known, where):
 
 def _flow(style):
     d, where = part(style, "harmony", "progressions"), f"{style}: harmony.progressions"
-    known = ("families", "variants", "stay", "cadence", "still")
+    known = ("families", "variants", "stay", "cadence", "still", "distance")
     extra = set(d) - {"why", *known}
     if extra:
         raise StyleError(f"{where}: unknown part {sorted(extra)[0]!r} (known: {', '.join(known)})")
@@ -145,7 +147,13 @@ def _flow(style):
         raise StyleError(f"{where}.still: true or false")
     fams = _families(d["families"], f"{where}.families") if "families" in d else FAMILIES
     variants = {**VARIANT_WEIGHTS, **_weights(d.get("variants", {}), VARIANT_WEIGHTS, f"{where}.variants")}
-    return Flow(fams, variants, d.get("stay", 3), cad, still)
+    dist = {k: v for k, v in d.get("distance", {}).items() if k != "why"}
+    for k, v in dist.items():
+        if k not in KINDS:
+            raise StyleError(f"{where}.distance.{k}: unknown section kind (known: {', '.join(KINDS)})")
+        if v not in DISTANCE_PULL or isinstance(v, bool):
+            raise StyleError(f"{where}.distance.{k}: a pull from -2 (far) to 2 (near)")
+    return Flow(fams, variants, d.get("stay", 3), cad, still, dist)
 
 
 FLOW = per_style(_flow)
@@ -173,11 +181,21 @@ def chart(spans, key, met):
     return " | ".join(" ".join(b) for _, b in sorted(bars.items()))
 
 
+def shared(a, ka, b, kb):
+    """Notes two chords share, each read in its own key (task 3.11, from Tangerine)."""
+    return len({(t + ka.tonic) % 12 for t in a.tones} & {(t + kb.tonic) % 12 for t in b.tones})
+
+
+def closeness(a, ka, b, kb):
+    """0 (no note shared) to 1 (every note of the smaller chord shared)."""
+    return shared(a, ka, b, kb) / min(len(a.tones), len(b.tones))
+
+
 def _fits(ch, key, vocab):
     return outside(ch, key, vocab) is None
 
 
-def _swap(rng, sp, key, vocab, met):
+def _swap(rng, sp, key, vocab, met, pull=0):
     i = 1 + rng.rnd(len(sp) - 1)
     old = sp[i].chord
     job = function(old, key)[0]
@@ -187,7 +205,12 @@ def _swap(rng, sp, key, vocab, met):
              and (job != "tension" or _resolves_to(c) == _resolves_to(old))]   # tension still leads the same way
     if not cands:
         return None
-    new = cands[rng.rnd(len(cands))]
+    if pull:                                    # closer to its neighbours, likelier (3.11)
+        n = {j: (closeness(c, key, sp[i - 1].chord, key) + closeness(c, key, sp[(i + 1) % len(sp)].chord, key)) / 2
+             for j, c in enumerate(cands)}
+        new = cands[_draw(rng, lean(dict.fromkeys(n, 1), n, pull))]
+    else:
+        new = cands[rng.rnd(len(cands))]
     return (sp[:i] + [sp[i]._replace(chord=new)] + sp[i + 1:],
             f"{name(old, key)} swapped for {name(new, key)} (the same job: {job})")
 
@@ -256,15 +279,15 @@ def _turnaround(rng, sp, key, vocab, met):
 VARIANTS = {"swap": _swap, "colour": _colour, "approach": _approach, "turnaround": _turnaround}
 
 
-def vary(rng, sp, key, vocab, met, weights):
+def vary(rng, sp, key, vocab, met, weights, pull=0):
     """(the pass, in words how it varies, or None when it plays as written): a variant drawn by weight, among
-    those that fit."""
+    those that fit. `pull` leans a swap to the chords closer to their neighbours (3.11)."""
     weights = dict(weights)
     while True:
         v = _draw(rng, weights)
         if v is None or v == "again":
             return sp, None
-        got = VARIANTS[v](rng, sp, key, vocab, met)
+        got = _swap(rng, sp, key, vocab, met, pull) if v == "swap" else VARIANTS[v](rng, sp, key, vocab, met)
         if got is not None:
             return got
         weights[v] = 0
@@ -301,9 +324,11 @@ def cadence(sp, key, vocab, met):
     return out, f"lands home: {name(pull, key)} to {name(tonic, key)}"
 
 
-def progression(rng, flow, key, vocab, start, bars, met, phrase, prev=None):
+def progression(rng, flow, key, vocab, start, bars, met, phrase, prev=None, kind="home", seam=None):
     """One section's chords: (spans, its family, lines). The family is drawn among those that fit (the one before
-    weighs `stay` times more); its first pass plays as written, later ones may vary, a phrase's last pass lands."""
+    weighs `stay` times more; with the style's `distance`, a family whose first chord shares more notes with
+    `seam`, the (chord, key) heard last, weighs up to twice as much, task 3.11); its first pass plays as written,
+    later ones may vary, a phrase's last pass lands."""
     lines, fits = [], []
     for f in flow.families:
         why = "its loop doesn't divide the phrase" if phrase % f.loop else check_family(f, key, vocab, flow.still)
@@ -313,7 +338,12 @@ def progression(rng, flow, key, vocab, start, bars, met, phrase, prev=None):
             lines.append(f"  ruled out: {f.name} ({why})")
     if not fits:
         raise ValueError(f"no progression family fits {key} in this style")
-    fam = fits[_draw(rng, {i: f.weight * (flow.stay if f == prev else 1) for i, f in enumerate(fits)})]
+    pull = flow.distance.get(kind, 0)
+    weights = {i: f.weight * (flow.stay if f == prev else 1) for i, f in enumerate(fits)}
+    if seam is not None:
+        weights = lean(weights, {i: closeness(f.spans(key, 0, met)[0].chord, key, *seam)
+                                 for i, f in enumerate(fits)}, pull)
+    fam = fits[_draw(rng, weights)]
     lines.insert(0, f"  progression: {fam.name}, {fam.chords} ({chart(fam.spans(key, 0, met), key, met)})"
                     + (f": {fam.why}" if fam.why else "") + (" (kept from the section before)" if fam == prev else ""))
     out = []
@@ -321,7 +351,7 @@ def progression(rng, flow, key, vocab, start, bars, met, phrase, prev=None):
         at = start + p * fam.loop
         sp, words = fam.spans(key, at * met.bar, met), []
         if p:
-            sp, w = vary(rng, sp, key, vocab, met, flow.variants)
+            sp, w = vary(rng, sp, key, vocab, met, flow.variants, pull)
             words += [w] if w else []
         if (p + 1) * fam.loop % phrase == 0 and (flow.cadence == 100 or rng.rnd(100) < flow.cadence):
             sp, w = cadence(sp, key, vocab, met)

@@ -102,6 +102,29 @@ def fifths_apart(a, b):
     return min(d, 12 - d)
 
 
+def notes_apart(a, b):
+    """Scale notes two keys differ by (task 3.11, from Tangerine): 0 for the relative key, 1 a fifth away, 5 a
+    semitone up, up to 7."""
+    sa = {(a.tonic + s) % 12 for s in a.steps}
+    return len(sa - {(b.tonic + s) % 12 for s in b.steps})
+
+
+def lean(weights, near, pull):
+    """Weights leaned by closeness (task 3.11): `near` maps each choice to how close it is (0 far, 1 nearest);
+    `pull` is how hard the harmony leans (above 0 to the near, below 0 to the far, -2 to 2). Closeness is read
+    against the choices on offer (the nearest of them 1, the farthest 0), so gentle by design: the nearest on offer
+    weighs at most twice the farthest. No pull, or every choice as close: the weights as they are, so styles
+    without one draw as before."""
+    lo, hi = min(near[k] for k in weights), max(near[k] for k in weights)
+    if not pull or lo == hi:
+        return dict(weights)
+    rel = {k: (near[k] - lo) / (hi - lo) for k in weights}
+    return {k: w * (4 + round(2 * abs(pull) * (rel[k] if pull > 0 else 1 - rel[k]))) for k, w in weights.items()}
+
+
+DISTANCE_PULL = (-2, -1, 0, 1, 2)
+
+
 # ---- a style's form ----
 
 @dataclass(frozen=True)
@@ -193,8 +216,9 @@ class Play:
     """A long play planned a section at a time. Draw sections with `next_section(room)`, where `room` is the
     room's energy (0-1) as that section starts; `energy_at(bar)` reads the plan back."""
 
-    def __init__(self, rng, home, form=FORM["plain"], bpm=100, meter=METERS["4/4"]):
+    def __init__(self, rng, home, form=FORM["plain"], bpm=100, meter=METERS["4/4"], distance=None):
         self.rng, self.home, self.form = rng, home, form
+        self.distance = distance or {}           # pull to near keys by section kind (harmony's distance, 3.11)
         self.bars_a_minute = bpm * STEPS / meter.bar
         self.sections, self.waves = [], []
         self.key, self.last_change, self.hops = home, 0, 0
@@ -245,6 +269,10 @@ class Play:
         for m in f.moves:                        # its own modes three times as often; the rest stay possible
             new = MOVES[m](self.key)
             moves[m] *= 3 if new.scale in f.modes or PARENT.get(new.scale) in f.modes else 1
+        if self.distance.get(kind):              # how far each move travels, in scale notes (3.11)
+            near = {m: 1 - notes_apart(self.key, self.home if m == "home" else MOVES[m](self.key)) / 7
+                    for m in moves}
+            moves = lean(moves, near, self.distance[kind])
         if self.rng.rnd(100) >= f.change + 15 * self.hops:
             return None, self.key
         while True:

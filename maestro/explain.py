@@ -73,7 +73,7 @@ def choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, room=0
     form, leading, rhythm = FORM[style], LEADING[style], RHYTHM[style]
     met = METERS["4/4"]
     clave = CLAVES[rhythm.clave] if rhythm.clave else None
-    play = Play(rng, home, form, bpm, met)
+    play = Play(rng, home, form, bpm, met, FLOW[style].distance)
     while play.bar < bars:
         play.next_section(room)
     theme = Theme(rng, life=form.life)
@@ -422,7 +422,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     clave = CLAVES[rhythm.clave] if rhythm.clave else None
     if form.home:                                # the style draws its home's mode (power rock: mostly major)
         home = Key(home.tonic, _draw(rng, form.home) or home.scale)
-    play = Play(rng, home, form, bpm, met)
+    play = Play(rng, home, form, bpm, met, FLOW[style].distance)
     while play.bar < bars:
         play.next_section(room)
     theme = Theme(rng, life=form.life, develop=DEVELOPS[style])
@@ -433,7 +433,9 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     # the chords, section by section
     spans, plan, fam = [], [], None
     for s in play.sections:
-        sp, fam, lines = progression(rng, FLOW[style], s.key, vocab, s.start, s.bars, met, form.phrase, fam)
+        seam = (spans[-1].chord, play.section_at(s.start - 1).key) if spans else None
+        sp, fam, lines = progression(rng, FLOW[style], s.key, vocab, s.start, s.bars, met, form.phrase, fam,
+                                     s.kind, seam)
         spans += sp
         plan.append({"section": s, "family": fam, "lines": lines,
                      "passes": [ln.split(": ", 2)[-1] for ln in lines if ln.startswith("  bars ")]})

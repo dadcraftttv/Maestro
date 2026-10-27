@@ -41,7 +41,8 @@
       },
       "variants": {"again": 8, "swap": 1, "colour": 2, "approach": 0, "turnaround": 0},
       "stay": 4,
-      "cadence": 50
+      "cadence": 50,
+      "distance": {"why": "Gentle (DadCraft, Oct 27): calm sections keep to keys and chords that share notes, a Lift may travel a little further; never more than twice as likely.", "calm": 2, "home": 1, "turn": 0, "lift": -1}
     }
   },
   "form": {

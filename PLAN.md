@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.11-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** DadCraft's A/B for 3.11 (`clips/ab/distance`), then 3.12 planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -648,6 +648,16 @@ For each chosen style, how each member plays it, written from sources.
       sections near, a lift further), always inside the style's families (decisions 6, 9). Check: the shared notes
       at each change measured against the style's distance, drift measures pass, fuzz clean; then an A/B against
       today's draws. Plan to DadCraft before starting.
+      Plan approved (Oct 27): "synthwave first, gentle". Built: a `distance` entry in synthwave's
+      `harmony.progressions` (calm 2, home 1, turn 0, lift -1: near above 0, far below) leans three choices
+      (`theory/form.py` `lean`, `notes_apart`; `theory/flow.py` `shared`): the key move at a section (scale notes
+      apart), the family after a seam (notes its first chord shares with the chord heard last), a swapped chord
+      (notes shared with its neighbours). Closeness is read against the choices on offer, so the nearest weighs at
+      most twice the farthest. Odds from A minor: a calm move to the relative key 67% -> 80%; a Lift's semitone
+      lift 33% -> 41%. The seam lean does little in synthwave (nearly every loop opens on i). Other styles name no
+      distance and play bit for bit as before (300-bar plays compared). 9 new tests (`test_distance.py`), 316
+      pass; fuzz 2000/2000 clean, drift met, exam 106/106. Key changes sit 3 minutes apart, so the A/B is long:
+      `clips/ab/distance` (seed 10, 240 bars; A 0fe729e, B distance): bar 121, a Calm, A goes down a fifth to D minor, B to the relative C major; bar 217, a Lift, A goes home to A minor, B a tone up to D major. The play is drawn before its parts, so after a different key draw the rest of B is a different roll too (drums, arp). Judge 99% and mix the same on both (drums -3, as before).
 - [ ] 3.12 Loops of different lengths (DadCraft, Oct 26, from Tangerine: `docs/research.md` round 6). A member's
       loop can run a length other than the bar (an arp of 5 or 7 steps against the bass's 16), so the parts meet in
       new places each time round, with accents carrying the pulse. A style's tendency (which members, which
