@@ -347,3 +347,4 @@ isn't reloaded every session; grep for the part a task needs.
   Trap's riff, landing a round over V, now takes the chord's nearest tone instead of the tonic (fuzz, trap
   soulful+5 seed 167): a change to plain trap too, on those landings only.
 - Oct 27: 3.9's second listen (DadCraft): "the nudges are fine." 3.9 done; register nudges later.
+- Oct 27: 3.10's plan (DadCraft): "power rock only, heavier sections, go ahead." Built; A/B in `clips/ab/scratch`.

@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.10-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** DadCraft's listen after 3.10 (`clips/ab/scratch`); then 3.11-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -631,6 +631,15 @@ For each chosen style, how each member plays it, written from sources.
       tendency in the style entry (how often, on which 16ths, how loud), never on top of a chord hit, and it eases
       off in stops and builds. Check: never under another hit, in its mix target, fuzz clean; then an A/B against
       the guitar without it. Plan to DadCraft before starting; it may join power rock's next round.
+      Plan approved (Oct 27): "power rock only, heavier sections". Built: a `scratch` entry in power rock's guitar
+      (`theory/guitar.py`, wired in `explain.py`, with its own seed so every other note stays put): in a phrase
+      from energy 0.45 up (not the opening phrase), short palm-muted root strokes fill free 16ths, likeliest
+      either side of the backbeat, 18 under the hits (velocity 52 against 78); none in a stop, the bar before one,
+      or a build. The chorus and drive patterns ring through every 16th, so in practice it lands in the heavier
+      verses. Checked: `check_scratch` (never under a ringing note), 4 new tests, fuzz 2000/2000 clean (and
+      energetic+5), mix and judge unchanged (99% fit).
+- [ ] Listen after 3.10: `clips/ab/scratch` (power rock, seed 16, 84 bars; A without the lane, B with it, in bars
+      9-24). Listen to the verses there: do the strokes add drive, or clutter the chugs?
 - [ ] 3.11 Chord moves by shared notes (DadCraft, Oct 26, from Tangerine: `docs/research.md` round 6). Where
       the style's families leave a choice (the next family at a section, a variant, a key change), the closer move
       is likelier: chords counted by the notes they share, keys by the scale notes that differ (0 for the relative

@@ -136,12 +136,14 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
             member.shake(*sh)
     if take["guitar"]:                       # power rock's doubled rhythm guitar (task 3.4d), palm mutes softer
         g, feel, muted = part(style, "members", "guitar"), feel_for(style, "guitar"), set(take["muted"])
+        scratched, soft = set(take.get("scratch", ())), GUITAR[style].scratch.soft if GUITAR[style].scratch else 0
         for t in GUITAR[style].tracks:
             member = song.member(t.name, "guitar", t.sound)
             member.pan, member.gain = t.pan, g.get("gain", 0)
             for st, length, m in take["guitar"][t.name]:
                 v = velocity(st % met.bar, met, feel, g.get("level", 90))
-                member.add(st, length, m, max(1, v - MUTED) if st in muted else v)
+                member.add(st, length, m, max(1, v - MUTED - soft) if st in scratched else
+                           max(1, v - MUTED) if st in muted else v)
     for role in ("keys", "horns"):            # salsa's montuno and horns (task 3.4c)
         if take[role]:
             a = part(style, "members", role)

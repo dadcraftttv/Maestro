@@ -2,6 +2,7 @@
 """Power rock's entry (task 3.4d), 80s arena rock (DadCraft, Oct 26): the doubled rhythm guitar on power chords,
 harmony from our Rock Corpus counts, the rock bass, the pentatonic lead with bends and vibrato, the song's parts
 (verse, pre-chorus, chorus) with the snare's build and the stops, the pad sitting out."""
+import dataclasses
 import json
 import os
 
@@ -11,10 +12,10 @@ import pytest
 from maestro.explain import flow_choices
 from maestro.sketch import TEMPO, flow_sketch
 from maestro.song import Song
-from maestro.stylebook import StyleError
+from maestro.stylebook import BOOK, StyleError
 from maestro.theory.arrange import ARRANGE
 from maestro.theory.chords import parse_roman
-from maestro.theory.guitar import GUITAR, VOICINGS, _guitar_flow, bends, pentatonic, scale_of
+from maestro.theory.guitar import GUITAR, VOICINGS, _guitar_flow, _scratch, bends, pentatonic, scale_of
 from maestro.theory.pitch import Key
 from maestro.theory.rhythm import METERS
 
@@ -211,3 +212,47 @@ def test_the_leads_check_refuses_clashing_leads():
     assert check_leads([(0, 24, 81)], [(0, 24, 78)], lambda st: key, spans) is None   # A over F#, a third
     assert "not a third" in check_leads([(0, 24, 81)], [(0, 24, 79)], lambda st: key, spans)
     assert "held note" in check_leads([(0, 48, 81)], [(24, 12, 76)], lambda st: key, spans)
+
+
+def test_the_scratch_lane_fills_free_16ths_in_the_heavier_phrases_only():
+    sc, n = GUITAR["power_rock"].scratch, 0
+    for _, take in _takes(12, 48):
+        quiet = set(take["breaks"]) | {b - 1 for b in take["breaks"]} | set(take["builds"])
+        heavy = {b for at, s, x in take["parts"] if at and s.energy_at(at) >= sc.energy and x.name in sc.parts
+                 for b in range(at, at + 8)}
+        notes = take["guitar"]["guitar L"]
+        for st in take["scratch"]:
+            b = st // MET.bar
+            assert b in heavy and b not in quiet                           # never the opening, a stop or a build
+            assert (st % MET.bar) // 6 in sc.on and st % 6 == 0
+            assert not any(a < st < a + k for a, k, _ in notes)           # nothing still ringing under it
+        n += len(take["scratch"])
+    assert n > 0
+
+
+def test_a_scratch_stroke_plays_softer_than_the_hits():
+    song, _ = flow_sketch("power_rock", seed=16, bars=24)
+    _, take = flow_choices("power_rock", 16, 24, A, TEMPO["power_rock"])
+    strokes = set(take["scratch"])
+    for g in [m for m in song.members if m.role == "guitar"]:
+        soft = [x.velocity for x in g.notes if x.step in strokes]
+        hits = [x.velocity for x in g.notes if x.step not in strokes]
+        assert len(soft) == len(strokes) > 0 and max(soft) < min(hits)
+
+
+def test_the_scratch_lane_leaves_every_other_note_where_it_was(monkeypatch):
+    _, take = flow_choices("power_rock", 16, 48, A, TEMPO["power_rock"])
+    monkeypatch.setitem(GUITAR, "power_rock", dataclasses.replace(GUITAR["power_rock"], scratch=None))
+    _, plain = flow_choices("power_rock", 16, 48, A, TEMPO["power_rock"])
+    strokes = set(take["scratch"])
+    assert strokes and not plain["scratch"]
+    for k in ("bass", "melody", "drums", "lead2"):
+        assert take[k] == plain[k]
+    for t, ns in take["guitar"].items():
+        assert [y for y in ns if y[0] not in strokes] == plain["guitar"][t]
+
+
+def test_the_book_refuses_a_scratch_lane_off_the_bar():
+    sc = dict(BOOK["power_rock"]["members"]["guitar"]["scratch"], on={"16": 1})
+    with pytest.raises(StyleError):
+        _scratch(sc, "power_rock: members.guitar")

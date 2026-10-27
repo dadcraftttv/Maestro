@@ -14,6 +14,11 @@ rhythm on the roots, as rock bassists double a riff).
 The check: every note a root or fifth of its chord (now, or the chord it pushes), each track inside its own octave
 of the guitar's range, every hit on the grid.
 
+**The scratch lane** (task 3.10, from Fase Groove Guitar): in a heavier phrase the rhythm guitar fills some of the
+empty 16ths between its hits by itself, with short palm-muted strokes on the root, well under the hits. The style
+entry says how often, on which 16ths and how soft ("scratch"); a stroke never lands where a hit still rings, and
+the lane sits out the play's first phrase, the stops, the bar before each stop and the builds.
+
 **The lead** (the melody member) keeps to the pentatonic: off the chord's own tones, its notes leave the scale's two
 extra degrees for the nearest of the five; some held notes bend up into their note from a step under, and long
 ones get vibrato. Sources: Wikipedia's "Power chord", "Palm mute", "Pentatonic scale" and "String bending"
@@ -56,10 +61,22 @@ class Track:
 
 
 @dataclass(frozen=True)
+class Scratch:
+    energy: float        # a phrase from this energy up gets the lane
+    chance: float        # the odds a free 16th of weight 1 gets a stroke (more for a heavier weight)
+    on: dict             # {16th of the bar: weight}: the 16ths it fills, and how much likelier each
+    soft: int = 18       # velocity a stroke gives up against a hit
+    length: int = 3      # grid steps a stroke rings: shorter than a 16th
+    parts: tuple = ()    # the parts it plays in (empty: all)
+    why: str = ""
+
+
+@dataclass(frozen=True)
 class GuitarFlow:
     patterns: tuple
     tracks: tuple
     stay: int = 4        # times likelier a phrase keeps the pattern before (of its group)
+    scratch: Scratch = None
 
 
 def _guitar_flow(style):
@@ -97,7 +114,22 @@ def _guitar_flow(style):
         tracks.append(Track(n, t.get("pan", 0), t.get("voicing", "low"), t.get("sound", d.get("sound", 30))))
     if not pats or not tracks:
         raise StyleError(f"{where}: at least one pattern and one track")
-    return GuitarFlow(tuple(pats), tuple(tracks), d.get("stay", 4))
+    return GuitarFlow(tuple(pats), tuple(tracks), d.get("stay", 4), _scratch(d.get("scratch"), where))
+
+
+def _scratch(d, where):
+    if not d:
+        return None
+    extra = set(d) - {"energy", "chance", "on", "soft", "length", "parts", "why"}
+    on = d.get("on", {})
+    if extra or not 0 <= d.get("energy", 0) <= 1 or not 0 < d.get("chance", 0) <= 1 or not on or any(
+            not k.isdigit() or not 0 <= int(k) < 16 or not isinstance(w, int) or w < 1 for k, w in on.items()) or \
+            not 0 <= d.get("soft", 18) <= 64 or not 1 <= d.get("length", 3) < SIXTEENTH:
+        raise StyleError(f"{where}.scratch: energy 0 to 1, a chance above 0 up to 1, on {{16th 0-15: a whole-number "
+                         "weight from 1}, soft 0 to 64, a length of 1 to 5 steps, parts (known: energy, chance, on, "
+                         "soft, length, parts, why)")
+    return Scratch(d["energy"], d["chance"], {int(k): w for k, w in on.items()}, d.get("soft", 18),
+                   d.get("length", 3), tuple(d.get("parts", ())), d.get("why", ""))
 
 
 GUITAR = per_style(_guitar_flow)   # None: no rhythm guitar
@@ -151,6 +183,20 @@ def guitar_part(rng, gf, group, spans, key_at, start, bars, met, prev=None, near
     return out, muted, pat, near, lines
 
 
+def scratch(rng, sc, notes, lo, hi, met):
+    """The scratch strokes' steps over one bar of a guitar track (`notes`, steps `lo` to `hi`): each on a free 16th
+    the style names, no note ringing there."""
+    rings = [(st, st + n) for st, n, _ in notes]
+    out = []
+    for st in range(lo, hi, SIXTEENTH):
+        w = sc.on.get((st % met.bar) // SIXTEENTH)
+        if not w or any(a <= st < b for a, b in rings):
+            continue
+        if rng.rnd(1000) < min(1000, round(1000 * sc.chance * w)):
+            out.append(st)
+    return out
+
+
 def lock_bass(notes, spans, key_at, met, near, r=None):
     """The bass on the guitar's rhythm (one track's notes): the root of each hit's chord, the nearest to the note
     before, held to the next hit, inside `r` (the bass's range). (notes, the last bass note)."""
@@ -185,6 +231,21 @@ def check_guitar(tracks, gf, spans, key_at, met):
                 ok |= {(key.tonic + ch.root) % 12, (key.tonic + ch.root + fifth) % 12}
             if m % 12 not in ok:
                 return f"{t.name}: {m} at step {st} is neither a root nor a fifth of its chord"
+    return None
+
+
+def check_scratch(tracks, strokes, sc, met):
+    """None when the scratch lane fits, else the reason: each stroke on a 16th the style names, short, with no
+    other guitar note sounding at its step."""
+    for name, ns in tracks.items():
+        mine = {st for st in strokes}
+        for st, length, m in ns:
+            if st not in mine:
+                continue
+            if st % SIXTEENTH or (st % met.bar) // SIXTEENTH not in sc.on or length != sc.length:
+                return f"{name}: a scratch stroke at step {st} off its 16ths or its length"
+            if any(a < st < a + n or a == st and (n, k) != (length, m) for a, n, k in ns):
+                return f"{name}: a scratch stroke at step {st} under another note"
     return None
 
 

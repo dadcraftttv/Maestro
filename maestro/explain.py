@@ -19,6 +19,7 @@ from .theory.flow import ARPS, BASS, bass_range, FLOW, arp_part, bass_808, check
     check_loop, held, loop_melody, LOOPS, phrase_melody, plain_phrase, progression, _nearest, _tone
 from .theory.drums import DOUBLE, DRUMMER, KIT, _fill, _vel, check_drums, double_kick, drum_part, quiet_spans
 from .theory.guitar import GUITAR, VOICINGS, _root as guitar_root, bends as lead_bends, check_guitar, check_leads, \
+    check_scratch, scratch as scratch_lane, \
     duel, guitar_part, lock_bass, pentatonic, power, twin, vibrato
 from .theory.arrange import ARRANGE, check_parts, cut as silence, phrase_parts
 from .theory.horns import HORNS, check_horns, harmonize, hits, horn_part, strokes
@@ -559,10 +560,42 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         why = check_bass(bass, met, clave, BASS[style])
     # power rock's band (task 3.4d): the parts, the doubled rhythm guitar, the builds and stops, the lead's bends
     guitar, muted, builds, bent, shakes, second, bent2, shakes2 = {}, [], [], [], [], [], [], []
+    scratched = []
     if GUITAR[style]:
         guitar, muted, parts, breaks, builds, bass, drums, bent, shakes, melody, second, bent2, shakes2 = rock_band(
             rng, style, plan, play, spans, key_at, bass, melody, drums, kit_why, ruled)
         why = check_bass(bass, met, clave, BASS[style])
+        sc = GUITAR[style].scratch
+        if sc:                               # the scratch lane (task 3.10), with its own seed so the rest stays
+            srng = ComposerRng()
+            srng.seed(seed ^ 0x5C2A7)
+            quiet = set(breaks) | {b - 1 for b in breaks} | set(builds)
+            for at, s, x in parts:
+                if at == 0 or s.energy_at(at) < sc.energy or sc.parts and x.name not in sc.parts:
+                    continue
+                n = 0
+                for b in range(at, at + form.phrase):
+                    if b in quiet:
+                        continue
+                    lo, hi = b * met.bar, (b + 1) * met.bar
+                    lead = GUITAR[style].tracks[0].name
+                    got = scratch_lane(srng, sc, [y for y in guitar[lead] if y[0] < hi], lo, hi, met)
+                    for st in got:
+                        key, ch = key_at(st), chord_at(spans, st).chord
+                        for t in GUITAR[style].tracks:
+                            was = [y for y in guitar[t.name] if y[0] < st]
+                            near = min(m for a, _, m in was if a == max(a for a, _, _ in was)) if was else None
+                            guitar[t.name].append((st, sc.length, guitar_root(key.tonic + ch.root, near,
+                                                                              VOICINGS[t.voicing])))
+                    scratched += got
+                    n += len(got)
+                if n:
+                    next(p for p in plan if p["section"] is s)["lines"].append(
+                        f"  guitar, bars {at + 1}-{at + form.phrase}: {n} scratch strokes between the hits")
+            for k in guitar:
+                guitar[k].sort(key=lambda y: (y[0], y[2]))
+            kit_why.append(("scratch lane", check_scratch(guitar, scratched, sc, met)
+                            or check_guitar(guitar, GUITAR[style], spans, key_at, met)))
     elif part(style, "members", "melody").get("bends") or part(style, "members", "melody").get("vibrato"):
         lead = part(style, "members", "melody")    # a soulful nudge's (task 3.9): any lead bends and shakes
         bent = lead_bends(rng, melody, key_at, lead["bends"]) if lead.get("bends") else []
@@ -628,6 +661,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
             "keys": cut(keys), "horns": cut(horns), "parts": [x for x in parts if x[0] < bars],
             "breaks": [b for b in breaks if b < bars], "builds": [b for b in builds if b < bars],
             "guitar": {k: cut(ns) for k, ns in guitar.items()}, "muted": [m for m in muted if m < end],
+            "scratch": [m for m in scratched if m < end],
             "bends": [x for x in bent if x[0] < end], "vibrato": [(st, min(n, end - st)) for st, n in shakes if st < end],
             "lead2": cut(second), "bends2": [x for x in bent2 if x[0] < end],
             "vibrato2": [(st, min(n, end - st)) for st, n in shakes2 if st < end],
