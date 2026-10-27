@@ -24,7 +24,7 @@ MEMBER = {"sound": (0, 127), "level": (1, 127), "kicks": (1, 24), "hats": str, "
           "grooves": dict, "time": dict, "busy": (0, 200), "fills": (0, 100), "rolls": (0, 100), "parts": dict,
           "with": str, "tones": dict, "slides": (0, 100), "develop": dict, "backbeat": str, "turns": (0, 100),
           "turn rates": dict, "loud time": dict, "shape": str, "loop": dict,
-          "voices": (2, 4), "shapes": dict, "rate": dict, "calm": str, "pump": (0, 100), "echo": (0, 100),
+          "voices": (2, 4), "shapes": dict, "rate": dict, "calm": str, "loops": dict, "pump": (0, 100), "echo": (0, 100),
           "gain": (-40, 20),   # gain: dB in the clip player's mix, set from the mix check (task 3.8)
           "plays": bool, "walk": (0, 100), "coro": dict, "riff": dict,   # task 3.4c: a member sitting out, the
 #                                                                          bass's walk-ups, the horns' loops

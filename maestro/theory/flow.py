@@ -989,6 +989,8 @@ class ArpFlow:
     calm: str = "8th"              # its rate under energy 0.5: slower, colder (the dreamy sections)
     stay: int = 3                  # times likelier a section keeps the shape before
     floor: int = ARP_FLOOR
+    loops: tuple = ()              # (steps, weight): a calm section's figure runs that many notes, not the bar (3.12)
+    accent: int = 0                # the loop sections' accent, so the beat stays heard while the figure drifts
 
 
 def _arp_flow(style):
@@ -1006,7 +1008,13 @@ def _arp_flow(style):
     rates = tuple((k, w) for k, w in d.get("rate", {"16th": 1}).items() if k != "why")
     if any(k not in ARP_RATES for k, _ in rates) or d.get("calm", "8th") not in ARP_RATES:
         raise StyleError(f"{where}: rate and calm among {', '.join(ARP_RATES)}")
-    return ArpFlow(tuple(shapes), rates, d.get("calm", "8th"))
+    lp = d.get("loops", {})
+    loops = tuple((int(k), w) for k, w in lp.get("lengths", {}).items())
+    if any(not 3 <= n <= 15 or 16 % n == 0 or not isinstance(w, int) or w < 1 for n, w in loops) \
+            or not isinstance(lp.get("accent", 0), int) or not 0 <= lp.get("accent", 0) <= 60:
+        raise StyleError(f"{where}.loops: \"lengths\" of 3 to 15 notes that don't divide the bar, each a weight; "
+                         f"\"accent\" 0-60")
+    return ArpFlow(tuple(shapes), rates, d.get("calm", "8th"), loops=loops, accent=lp.get("accent", 0))
 
 
 ARPS = per_style(_arp_flow)   # None: the band has no arp
@@ -1018,23 +1026,33 @@ def _ladder(chord, key, floor, top):
     return [m for m in range(floor, top + 1) if m % 12 in pcs]
 
 
-def arp_part(rng, af, spans, key_at, start, bars, met, energy, prev=None):
-    """One section's arp: (notes as (step, length, MIDI note), its shape, lines). A shape and a rate a section (the
-    slower rate when the energy is low), round and round over each chord's tones, starting again on each chord."""
+def arp_part(rng, af, spans, key_at, start, bars, met, energy, prev=None, phrase=4, loop_rng=None):
+    """One section's arp: (notes as (step, length, MIDI note), its shape, lines, its loop's length or 0). A shape and
+    a rate a section (the slower rate when the energy is low), round and round over each chord's tones, starting
+    again on each chord. A style with loops (task 3.12) runs a calm section's figure a length that doesn't divide
+    the bar instead: the shape cut or carried round to that many notes, its place kept across the chord changes, so
+    it meets the bar somewhere new each time round, and back in line at each phrase. The length is drawn from
+    `loop_rng`, so the rest of the play is the same with loops or without."""
     shape = af.shapes[_draw(rng, {i: s[2] * (af.stay if s == prev else 1) for i, s in enumerate(af.shapes)})]
     rate = af.calm if energy < 0.5 else _draw(rng, dict(af.rates))
+    n = _draw(loop_rng or rng, dict(af.loops)) if af.loops and energy < 0.5 else 0
+    tones = tuple(shape[1][i % len(shape[1])] for i in range(n)) if n else shape[1]
     step, r = VALUES[rate], member_range("arp")
-    lo, hi = start * met.bar, (start + bars) * met.bar
+    lo, hi, length = start * met.bar, (start + bars) * met.bar, phrase * met.bar
     out = []
     for sp in spans:
         if not lo <= sp.at < hi:
             continue
         ladder = _ladder(sp.chord, key_at(sp.at), max(af.floor, r.low), r.high)
         for k, at in enumerate(range(sp.at, sp.at + sp.length, step)):
-            out.append((at, step, ladder[min(shape[1][k % len(shape[1])], len(ladder) - 1)]))
-    lines = [f"  arp: {shape[0]} in {rate}s over each chord's tones" + (" (kept)" if shape == prev else "")
+            if n:
+                k = (at - lo) % length // step        # counted from the phrase's start, not the chord's
+            out.append((at, step, ladder[min(tones[k % len(tones)], len(ladder) - 1)]))
+    loop = f", cut to a loop of {n} ({' '.join(str(t) for t in tones)}) against the bar's {met.bar // step}, " \
+           "back in line each phrase" if n else ""
+    lines = [f"  arp: {shape[0]} in {rate}s over each chord's tones" + (" (kept)" if shape == prev else "") + loop
              + (", slower for the low energy" if energy < 0.5 else "")]
-    return out, shape, lines
+    return out, shape, lines, n
 
 
 def check_arp(notes, spans, key_at):

@@ -11,6 +11,7 @@ seed, unexplained; salsa's is the clave and a cowbell). Sounds are GM stand-ins.
 
 writes `<style>_<seed>.mid`, `.json` and the explanation as `.txt`, with a fresh seed each (decision 9)."""
 import argparse, os
+from dataclasses import replace
 
 from .explain import SAY, choices, flow_choices, summary
 from .rng import ComposerRng, fresh_seed
@@ -18,6 +19,7 @@ from .song import Song
 from .stylebook import StyleError, part, per_style
 from .theory.nudge import nudged, parse
 from .theory.chords import name
+from .theory.flow import ARPS
 from .theory.form import FORM
 from .theory.guitar import GUITAR
 from .theory.pitch import Key
@@ -155,8 +157,11 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
         a = part(style, "members", "arp")
         member, feel = song.member("arp", "arp", a.get("sound", 81)), feel_for(style, "arp")
         member.gain = a.get("gain", 0)
+        looped = take.get("looped", ())            # its loops' sections (task 3.12): the beat leant on harder
+        drift = replace(feel, accent=ARPS[style].accent) if looped else feel
         for st, length, m in take["arp"]:
-            member.add(st, length, m, velocity(st % met.bar, met, feel, a.get("level", 64)))
+            f = drift if any(lo <= st < hi for lo, hi in looped) else feel
+            member.add(st, length, m, velocity(st % met.bar, met, f, a.get("level", 64)))
     for r in take["bars"]:
         song.timeline.append({"bar": r["bar"], "tempo": bpm, "meter": met.name, "key": str(r["key"]),
                               "chord": name(r["chord"], r["key"]), "section": {"kind": r["section"].kind},

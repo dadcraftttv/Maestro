@@ -539,14 +539,19 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
     if not bf.kick:
         drums = draw_drums()
     # the arp (synthwave): a shape a section, round and round over each chord's tones
-    arp, shape = [], None
+    arp, shape, looped = [], None, []
     if ARPS[style]:
+        arng = ComposerRng()                      # the loops' own seed (task 3.12): the play is the same without them
+        arng.seed(seed ^ 0x100B5)
         for p in plan:
             s = p["section"]
-            notes, shape, lines = arp_part(rng, ARPS[style], spans, key_at, s.start, s.bars, met, s.energy, shape)
+            notes, shape, lines, n = arp_part(rng, ARPS[style], spans, key_at, s.start, s.bars, met, s.energy, shape,
+                                              form.phrase, arng)
             p["lines"] += lines
             p["arp"] = lines[0].split(": ", 1)[1]
             arp += notes
+            if n:
+                looped.append((s.start * met.bar, (s.start + s.bars) * met.bar))
         kit_why.append(("arp", check_arp(arp, spans, key_at)))
     percussion = []
     if PERCUSSION[style]:
@@ -663,7 +668,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
             "keys": cut(keys), "horns": cut(horns), "parts": [x for x in parts if x[0] < bars],
             "breaks": [b for b in breaks if b < bars], "builds": [b for b in builds if b < bars],
             "guitar": {k: cut(ns) for k, ns in guitar.items()}, "muted": [m for m in muted if m < end],
-            "scratch": [m for m in scratched if m < end],
+            "scratch": [m for m in scratched if m < end], "looped": [(a, min(b, end)) for a, b in looped if a < end],
             "bends": [x for x in bent if x[0] < end], "vibrato": [(st, min(n, end - st)) for st, n in shakes if st < end],
             "lead2": cut(second), "bends2": [x for x in bent2 if x[0] < end],
             "vibrato2": [(st, min(n, end - st)) for st, n in shakes2 if st < end],

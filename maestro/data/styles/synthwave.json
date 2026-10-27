@@ -97,7 +97,12 @@
         "pedal": {"tones": [0, 2, 0, 3, 0, 4], "weight": 1}
       },
       "rate": {"16th": 3, "8th": 1},
-      "calm": "8th"
+      "calm": "8th",
+      "loops": {
+        "why": "Task 3.12, after Tangerine (research round 6): in the calm sections the cold 8th figure runs 3 or 5 notes against the bar's 8, so it meets the bar somewhere new each time round, back in line at each phrase; the beat played harder (accent) so the pulse stays heard. DadCraft, Oct 27: calm sections only, in line each phrase, beats louder.",
+        "lengths": {"3": 1, "5": 2},
+        "accent": 30
+      }
     },
     "melody": {
       "why": "A singable lead on top, shaped over the phrase (DadCraft's notes: the melody must stay on top).",
