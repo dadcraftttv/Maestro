@@ -647,142 +647,241 @@ def _bars_said(lines, last):
     return out
 
 
-def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
-    """The clip in a few plain lines (3.7's shape, a first draft): style, bars, key, tempo; the chords as a loop and
-    how they vary; the bass; the pad; the melody's phrase; what to listen for."""
-    plan = take["plan"]
+def _merge(items, name_at, bars):
+    """Labels said section by section ((first bar, end bar, label), bars from 0) as one clause: "X throughout", or
+    each label once with where it plays ("in the verses", or its bars when its places share a name with another's)."""
+    items = [(a, min(b, bars), x) for a, b, x in items if a < bars and x]
+    order = list(dict.fromkeys(x for _, _, x in items))
+    if len(order) == 1:
+        span = sum(b - a for a, b, _ in items)
+        return order[0] + (" throughout" if span == bars else f" ({_bars(items)})")
+    names = {x: {name_at(b) for a, e, y in items if y == x for b in range(a, e)} for x in order}
+    out = []
+    for x in order:
+        mine = [(a, b, y) for a, b, y in items if y == x]
+        shared = any(names[x] & names[y] for y in order if y != x)
+        out.append(f"{x} ({_bars(mine) if shared or not names[x] else _places(names[x], name_at, bars)})")
+    return "; ".join(out)
+
+
+def _bars(items):
+    runs = []
+    for a, b, _ in sorted(items):
+        if runs and runs[-1][1] == a:
+            runs[-1][1] = b
+        else:
+            runs.append([a, b])
+    return "bar" + "s" * (len(runs) > 1 or runs[0][1] - runs[0][0] > 1) + " " + ", ".join(
+        f"{a + 1}-{b}" if b - a > 1 else f"{a + 1}" for a, b in runs)
+
+
+def _places(names, name_at, bars):
+    """ "the verses and the chorus": each name, plural when it comes round more than once."""
+    said = []
+    for n in sorted(names, key=lambda n: min(b for b in range(bars) if name_at(b) == n)):
+        times = sum(1 for b in range(bars) if name_at(b) == n and (b == 0 or name_at(b - 1) != n))
+        said.append("the " + (n + ("es" if n.endswith("s") else "s") if times > 1 else n))
+    return "in " + " and ".join(", ".join(said[:-1]) and [", ".join(said[:-1]), said[-1]] or said)
+
+
+def _short(why, most=50):
+    """A pattern's why, cut to its first clause when it runs long."""
+    return why if len(why) <= most else why.split(", ")[0]
+
+
+def _events(lines, bars):
+    """A member's moments ("a fill of 2 beats in 16ths (snare, kick)" at bar 8, ...) counted by kind: "a fill (9
+    times), the snare builds"."""
+    kinds = []
+    for ln in lines:
+        if _bar_of(ln) > bars:
+            continue
+        w = re.sub(r" \([^)]*\)", "", ln.split(": ", 1)[1])
+        kinds.append(re.split(r" of \d|, |: | for the ", w)[0])
+    count = {k: kinds.count(k) for k in dict.fromkeys(kinds)}
+    return ", ".join(k + (f" ({n} times)" if n > 1 else "") for k, n in count.items())
+
+
+def _said(style, seed, bars, bpm, take, met=METERS["4/4"]):
+    """The summary's lines by member (task 3.7: the shape agreed Oct 24, grouped by member across the clip and kept
+    to about a dozen lines however long the clip; DadCraft, Oct 27)."""
+    plan, n = take["plan"], FORM[style].phrase
     home = plan[0]["section"].key
-    out = [f"{style.replace('_', ' ')}, {bars} bars, {home}, {bpm} BPM, seed {seed}"]
+    out = {"head": f"{style.replace('_', ' ')}, {bars} bars (about {bars * 4 * 60 // bpm // 60}:"
+                   f"{bars * 4 * 60 // bpm % 60:02d}), {home}, {bpm} BPM, seed {seed}"}
+    spans = [(p["section"].start, p["section"].end) for p in plan]
+    parts = {at + i: x.name for at, _, x in take.get("parts", []) for i in range(n)}
+    if parts:
+        def name_at(b):
+            return parts.get(b, "")
+    else:
+        def name_at(b):
+            return next(p["section"].kind for p in plan if p["section"].start <= b < p["section"].end) + " section"
+    # the form: the parts (salsa's, power rock's) or the sections, then what breaks it
+    if parts:
+        runs = [(k, [b for b, _ in g]) for k, g in groupby(((b, parts.get(b, "")) for b in range(bars)),
+                                                          key=lambda y: y[1]) if k]
+    else:
+        runs = [(p["section"].kind, list(range(p["section"].start, min(p["section"].end, bars)))) for p in plan]
+    words = {"cuerpo": "cuerpo", "montuno": "montuno (the coro)", "mambo": "mambo (the horns' riff)"}
+    stop = ARRANGE[style].stop if ARRANGE.get(style) else False
+    downs = [str(x.at + 1) for x in take.get("layers", []) if x.down]
+    extra = ([f"a stop at bar {b + 1}" if stop else f"a break at bar {b + 1}" for b in take["breaks"]]
+             + [f"the snare builds at bar {b + 1}" for b in take.get("builds", [])]
+             + [f"a breakdown at bar{'s' * (len(downs) > 1)} {', '.join(downs)}" for _ in downs[:1]])
+    out["form"] = ("Form: " + " · ".join(f"{words.get(k, k)} {bs[0] + 1}-{bs[-1] + 1}" for k, bs in runs)
+                   + (f"; {', '.join(extra)}" if extra else "") + ".")
+    # the chords: each family once, where it plays, then how its rounds vary
+    items, varied, rounds = [], [], 0
     for p in plan:
         s, f = p["section"], p["family"]
-        a, b = s.start + 1, min(s.end, bars)
         per = {len(x) for x in f.bars}
-        runs = [len(list(g)) for _, g in groupby(" ".join(x) for x in f.bars)]
-        pace = ("one chord throughout" if len(runs) == 1 and per == {1} else
-                "a chord a bar" if per == {1} and set(runs) == {1} else
-                f"a chord every {runs[0]} bars" if per == {1} and len(set(runs)) == 1 else
+        runs_ = [len(list(g)) for _, g in groupby(" ".join(x) for x in f.bars)]
+        pace = ("one chord throughout" if len(runs_) == 1 and per == {1} else
+                "a chord a bar" if per == {1} and set(runs_) == {1} else
+                f"a chord every {runs_[0]} bars" if per == {1} and len(set(runs_)) == 1 else
                 "a chord every bar or two" if per == {1} else "two chords a bar" if per == {2} else
-                "chords changing every bar or half bar")
-        passes = p["passes"][:(b - s.start) // f.loop]
-        varied = [w for w in passes if w != "as written"]
-        line = (f"Chords, bars {a}-{b}{f' (in {s.key})' if s.key != home else ''}: {f.name}, "
-                f"{chart(f.spans(s.key, 0, met), s.key, met)} ({f.chords}), {pace}, round every "
-                f"{f.loop} bar{'s' * (f.loop > 1)}. ")
-        line += (f"{len(varied)} of its {len(passes)} rounds vary: " + "; ".join(varied) + "."
-                 if varied else "Every round as written.")
-        out.append(line)
-        if p["pattern"] is None:
-            out.append(f"Bass, bars {a}-{b}: {p['bass']}.")
-        else:
-            out.append(f"Bass, bars {a}-{b}: {p['pattern'].name}"
-                       + (f": {p['pattern'].why}." if p['pattern'].why else "."))
-        for at, x, pat in p.get("guitar", []):     # power rock's rhythm guitar, a phrase at a time (task 3.4d)
-            if at < bars:
-                out.append(f"Guitars, bars {at + 1}-{min(at + FORM[style].phrase, bars)} ({x}): {pat.name}"
-                           + (f": {pat.why}." if pat.why else "."))
-        if p.get("keys"):
-            out.append(f"Keys, bars {a}-{b}: the montuno, {p['keys'].name}" + (f": {p['keys'].why}." if p['keys'].why
-                                                                               else "."))
-        if p.get("drums"):
-            said = _bars_said(p["drums"][1:], b)
-            out.append(f"Drums, bars {a}-{b}: {p['drums'][0].split('drums: ', 1)[1]}"
-                       + (f"; then {'; '.join(said)}" if said else "") + ".")
-        if p.get("percussion"):
-            parts = re.sub(r" \([^)]*\)", "", p["percussion"][0].split("percussion: ", 1)[1])
-            closes = [ln for ln in p["percussion"][1:] if _bar_of(ln) <= b]
-            out.append(f"Percussion, bars {a}-{b}: {parts}" + ("; an abanico into the next section" if closes else "")
-                       + ".")
-    if take.get("parts"):                       # salsa's parts (task 3.4c), power rock's (task 3.4d)
-        runs = [(k, [at for at, _ in g]) for k, g in groupby(((at, x.name) for at, _, x in take["parts"]),
-                                                             key=lambda y: y[1])]
-        words = {"cuerpo": "the cuerpo (the lead sings the verse, the horns punch its ends)",
-                 "montuno": "the montuno (the lead calls, the horns answer with the coro)",
-                 "mambo": "a mambo (the horns' riff, the lead out)"}
-        stop = ARRANGE[style].stop
-        out.append("Parts: " + "; ".join(f"bars {ats[0] + 1}-{min(ats[-1] + FORM[style].phrase, bars)}, "
-                                         f"{words.get(k, 'the ' + k)}" for k, ats in runs)
-                   + "".join(f"; a stop in bar {b + 1}, the band hitting the one and letting it ring" if stop else
-                             f"; a break in bar {b + 1}, the band hitting the clave's strokes together"
-                             for b in take["breaks"])
-                   + "".join(f"; the snare builds in bar {b + 1}" for b in take.get("builds", [])) + ".")
-    if take.get("horns"):                       # what the horns play, part by part (task 3.4c)
+                "chords every bar or half bar")
+        items.append((s.start, s.end, f"{f.name}{f' in {s.key}' if s.key != home else ''}, "
+                                      f"{chart(f.spans(s.key, 0, met), s.key, met)} ({f.chords}), {pace}"))
+        passes = p["passes"][:max(1, (min(s.end, bars) - s.start) // f.loop)]
+        rounds += len(passes)
+        varied += [[x for x in w.split("; ") if not x.startswith("lands home")] for w in passes if w != "as written"]
+    varied = [w for w in varied if w]
+    kinds = list(dict.fromkeys(w[0] for w in varied))
+    out["chords"] = (f"Chords: {_merge(items, name_at, bars)}. {len(varied)} of {rounds} rounds vary beyond landing "
+                     "home"
+                     + (f", for example {'; '.join(kinds[:3])}" if kinds else "") + ".")
+    # the bass, the kick under it
+    items = [(p["section"].start, p["section"].end,
+              p["bass"].split("; ")[0] if p["pattern"] is None else p["pattern"].name
+              + (f": {_short(p['pattern'].why)}" if p["pattern"].why else "")) for p in plan]
+    kicks = {h[0] for h in take["drums"] if h[4] == "kick"}
+    locked = sum(1 for x in take["bass"] if x[0] in kicks)
+    out["bass"] = (f"Bass: {_merge(items, name_at, bars)}"
+                   + (f"; {len(take['slides'])} slides" if take.get("slides") else "")
+                   + (f"; the kick lands with {round(100 * locked / max(1, len(take['bass'])))}% of its notes"
+                      if kicks else "") + ".")
+    if take.get("guitar"):                     # power rock's rhythm guitars, a phrase at a time (task 3.4d)
+        items = [(at, at + n, pat.name + (f": {_short(pat.why)}" if pat.why else ""))
+                 for p in plan for at, _, pat in p.get("guitar", [])]
+        out["guitar"] = ("Guitars (two, left and right, power chords in their own octaves; no pad): "
+                         + _merge(items, name_at, bars) + ".")
+    if any(p.get("keys") for p in plan):        # salsa's montuno piano (task 3.4c)
+        items = [(p["section"].start, p["section"].end, p["keys"].name) for p in plan if p.get("keys")]
+        out["keys"] = "Keys (the montuno piano plays the chords; no pad): " + _merge(items, name_at, bars) + "."
+    if take.get("horns"):                       # the trombones, part by part (task 3.4c)
         said = []
         for p in plan:
             for ln in p["lines"]:
                 m = re.match(r"\s*bar (\d+), horns: (.*)", ln)
-                if m and int(m[1]) <= bars and "(kept)" not in m[2] and not (said and said[-1][1] == m[2]):
-                    said.append((int(m[1]), m[2]))
-        out.append("Horns, two trombones in harmony: " + "; ".join(f"from bar {b}, {w}" for b, w in said) + ".")
-    if part(style, "members", "pad").get("plays", True):
-        out.append("Pad: holds each chord, its voices moving the shortest way, under the melody.")
-    elif GUITAR[style]:
-        out.append("Pad: sits out; two guitars play the chords as power chords, one left and one right, each in its "
-                   "own octave.")
-    else:
-        out.append("Pad: sits out; the montuno piano plays the chords.")
-    if take.get("arp"):
-        out.append("Arp: " + "; ".join(f"bars {p['section'].start + 1}-{min(p['section'].end, bars)}, {p['arp']}"
-                                      for p in plan) + ".")
-    phrases = [ph for p in plan for ph in p["phrases"]][:max(1, bars // FORM[style].phrase)]
-    n = FORM[style].phrase
-    if LOOPS[style]:
-        out.append("Melody: " + "; ".join(f"bars {p['section'].start + 1}-{min(p['section'].end, bars)}, {p['loop']}"
-                                          for p in plan) + "; each round fitted to its chord, a phrase's last "
-                   "round landing home.")
-    else:
-        out.append(f"Melody: {len(phrases)} phrase{'s' * (len(phrases) > 1)} of {n} bars. Each states the motif, "
-                   f"climbs to a peak about two-thirds in, ends its first half open and lands home on the cadence: "
-                   + "; ".join(ln.strip() for ph in phrases for ln in ph[1:] if "then" in ln) + ".")
-    if take.get("bends") or take.get("vibrato"):
-        out.append(f"Lead: on the pentatonic; {len(take['bends'])} held note{'s' * (len(take['bends']) != 1)} bend up "
-                   f"into place, {len(take['vibrato'])} long one{'s' * (len(take['vibrato']) != 1)} with vibrato.")
-    if take.get("lead2"):                       # power rock's second lead (its second round)
-        names = [(at, x.name, x.lead) for at, _, x in take.get("parts", [])]
-        twins = [at for at, _, ld in names if ld == "twin"]
-        duels = [at for at, _, ld in names if ld == "duel"]
-        n = FORM[style].phrase
-        out.append("Second lead, on the other side: " + "; ".join(
-            [f"bars {at + 1}-{min(at + n, bars)}, twin harmony a third under the first" for at in twins]
-            + [f"bars {at + 1}-{min(at + n, bars)}, the duel: the two trade licks (two bars each, then one, then half "
-               "a bar) and land home together" for at in duels]) + ".")
+                if m:
+                    said.append((int(m[1]) - 1, m[2].replace(" (kept)", "")))
+        items = [(a, said[i + 1][0] if i + 1 < len(said) else bars, w) for i, (a, w) in enumerate(said)]
+        out["horns"] = "Horns, two trombones in harmony: " + _merge(items, name_at, bars) + "."
     if take.get("drums"):
-        kicks = {h[0] for h in take["drums"] if h[4] == "kick"}
-        locked = sum(1 for n in take["bass"] if n[0] in kicks)
-        out.append(f"Kick and bass: the kick lands with {round(100 * locked / max(1, len(take['bass'])))}% of the bass "
-                   f"notes.")
+        items = [(p["section"].start, p["section"].end,
+                  re.sub(r"^programmed; ", "", p["drums"][0].split("drums: ", 1)[1]).split("; ")[0])
+                 for p in plan if p.get("drums")]
+        grooves = _merge(items, name_at, bars)
+        moments = _events([ln for p in plan for ln in p.get("drums", [])[1:]], bars)
+        out["drums"] = f"Drums: {grooves}" + (f"; then {moments}" if moments else "") + "."
+    if take.get("percussion"):
+        kit = {}                                # each drum on its own, its patterns merged
+        for p in plan:
+            for w in re.sub(r" \([^)]*\)", "", p["percussion"][0].split("percussion: ", 1)[1]).split("; ") \
+                    if p.get("percussion") else []:
+                who, what = w.split(": ", 1)
+                kit.setdefault(who, []).append((p["section"].start, p["section"].end, what))
+        moments = _events([ln for p in plan for ln in p.get("percussion", [])[1:]], bars)
+        out["percussion"] = ("Percussion: " + "; ".join(f"{who}, {_merge(its, name_at, bars).replace('; ', ', ')}"
+                                                        for who, its in kit.items())
+                             + (f"; then {moments}" if moments else "") + ".")
+    if part(style, "members", "pad").get("plays", True):
+        out["pad"] = "Pad: holds each chord, its voices moving the shortest way, under the melody."
+    if take.get("arp"):
+        items = [(p["section"].start, p["section"].end, p["arp"].replace(" (kept)", "")) for p in plan]
+        out["arp"] = "Arp: " + _merge(items, name_at, bars) + "."
+    # the melody, its lead's touches and the second lead
+    if LOOPS[style]:
+        items = [(p["section"].start, p["section"].end, p["loop"].replace(" (kept)", "").split(", ")[0]) for p in plan]
+        mel = (f"Melody: {_merge(items, name_at, bars)}; each round fitted to its chord, a phrase's last round "
+               "landing home")
+    else:
+        count = len([ph for p in plan for ph in p["phrases"]][:max(1, bars // n)])
+        mel = (f"Melody: {count} phrase{'s' * (count > 1)} of {n} bars, each a question and its answer: the motif, a "
+               "peak about two-thirds in, the half left open, home on the cadence")
+    if take.get("bends") or take.get("vibrato"):
+        mel += f"; on the pentatonic, {len(take['bends'])} notes bending up, {len(take['vibrato'])} with vibrato"
+    if take.get("lead2"):                       # power rock's second lead
+        items = [(at, at + n, {"twin": "twin harmony a third under", "duel": "the duel, trading licks"}[x.lead])
+                 for at, _, x in take.get("parts", []) if x.lead in ("twin", "duel")]
+        mel += f"; a second lead on the other side: {_merge(items, name_at, bars)}"
+    out["melody"] = mel + "."
     if take.get("layers"):                      # who plays when (task 3.6)
         ls = take["layers"]
         full = sum(1 for x in ls if len(x.playing) == len(LAYERS[style].join) and x.melody)
-        downs = [x.at + 1 for x in ls if x.down]
         swaps = sum(1 for x in ls for w in x.said if w.startswith("rotation"))
         moves = sum(1 for x in ls for w in x.said if w.startswith("the "))
-        out.append(f"Band: the whole band in {full} of {len(ls)} phrases; {moves} phrase{'s' * (moves != 1)} where "
-                   f"members join or rest with the energy, {swaps} rotation{'s' * (swaps != 1)}"
-                   + (f", a breakdown at bar{'s' * (len(downs) > 1)} {', '.join(map(str, downs))}" if downs else "")
-                   + ". Each phrase's band in the detail below.")
+        opens = next((w.split(": ", 1)[1] for w in ls[0].said if w.startswith("opens")), None)
+        downs = [w.split(": ", 1)[1] for x in ls for w in x.said if w.startswith("breakdown")]
+        out["band"] = (f"Band: the whole band in {full} of {len(ls)} phrases"
+                       + (f"; opens with {opens}" if opens else "")
+                       + (f"; {moves} phrase{'s' * (moves != 1)} where members join or rest" if moves else "")
+                       + (f", {swaps} rotation{'s' * (swaps != 1)}" if swaps else "")
+                       + (f"; the breakdown: {downs[0]}" if downs else "") + ".")
+    out["listen"] = _listen(style, bars, take)
+    return out
+
+
+def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
+    """The clip in a few plain lines (task 3.7): style, bars, key, tempo; the form; the chords as loops and how they
+    vary; each member once, where it changes; the melody's phrase; the band; what to listen for."""
+    return list(_said(style, seed, bars, bpm, take, met).values())
+
+
+MEMBER = {"bass": "does it lock with the kick and lead into each chord",
+          "drums": "does the groove feel like the style, its fills leading into the next phrase",
+          "percussion": "does each drum sit with the clave and with the others",
+          "pad": "do the chords move smoothly, never in the melody's way",
+          "melody": "does each phrase ask and answer, and come home",
+          "guitar": "are the chords tight and in time, the palm mutes clear",
+          "keys": "does the montuno lock with the clave and push each chord in early",
+          "horns": "do the two trombones sound together, in tune and on the clave",
+          "arp": "does it sparkle over each chord without crowding the lead"}
+
+
+def member_summary(style, seed, bars, bpm, take, member, met=METERS["4/4"]):
+    """A member's clip on its own (Checkpoint 3's solo clips; DadCraft, Oct 27: 2-3 lines): what it plays in the
+    style, and what to listen for."""
+    said = _said(style, seed, bars, bpm, take, met)
+    return [said["head"] + f", {member} alone", said[member],
+            f"Listen for: {MEMBER[member]}; does it sound like {style.replace('_', ' ')}'s {member}."]
+
+
+def _listen(style, bars, take):
+    plan = take["plan"]
     if BASS[style].kick:                        # trap's own questions (DadCraft's, after the first round)
-        out.append("Listen for: does the 808 feel like the bass and the kick at once, and do its slides come through; "
+        return ("Listen for: does the 808 feel like the bass and the kick at once, and do its slides come through; "
                    "do the hats roll rather than tick, the clap staying put on 3; does the bell's riff go round like "
                    "trap's, its triplets over the grid; do the hats-alone opening and the drop before a section "
                    "keep it from feeling stuck"
                    + ("; do the strings and riff hold the quiet starts, the drums then the 808 coming in as it rises; "
                       "does the breakdown (the beat cut, the riff and strings playing on) make the drop hit; do the "
                       "rotations and slow changes keep the loop fresh" if take.get("layers") else "") + ".")
-        return out
     if ARPS[style]:                             # synthwave's own questions (task 3.4b)
-        out.append("Listen for: does it feel like outrun when the energy is up (the bass driving in 8ths, the snare "
+        return ("Listen for: does it feel like outrun when the energy is up (the bass driving in 8ths, the snare "
                    "big on 2 and 4, the arp sparkling in 16ths) and turn dreamy when it's low (a held bass, the drums "
                    "at half time, the arp in 8ths); does the lead stay on top and sing; do the pad and bass breathe "
                    "with the kick without pumping like EDM; do the tom fills lead into the next section"
                    + ("; does the band thin and fill with the energy, the parts coming and going without jolts; does "
                       "the breakdown (arp and pad alone) set up what follows; do the slow changes keep the loops "
                       "fresh without sounding like mistakes" if take.get("layers") else "") + ".")
-        return out
     if GUITAR[style]:                           # power rock's own questions (task 3.4d)
         names = {x.name for _, _, x in take["parts"]}
         double = any("double bass" in ln for p in plan for ln in p.get("drums", []))
         leads = {x.lead for _, _, x in take["parts"]}
-        out.append("Listen for: does it sound like 80s hair metal and shred"
+        return ("Listen for: does it sound like 80s hair metal and shred"
                    + ("; does the double bass drive the loud parts" if double else "")
                    + ("; do the two leads duel, trading licks left and right, the turns getting shorter and hotter, "
                       "and land home together" if "duel" in leads else "")
@@ -791,11 +890,10 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
                    + ("; does the pre-chorus build into it, the snare doubling up" if take.get("builds") else "")
                    + ("; does the stop hit together and ring" if take["breaks"] else "")
                    + "; do the bends land in tune.")
-        return out
     if take.get("parts"):                       # salsa's own questions (task 3.4c)
         names = {x.name for _, _, x in take["parts"]}
         walks = [_bar_of(ln) for p in plan for ln in p["lines"] if "walks up" in ln and _bar_of(ln) < bars]
-        out.append("Listen for: does the piano's montuno lock with the clave and push each chord in early; do the "
+        return ("Listen for: does the piano's montuno lock with the clave and push each chord in early; do the "
                    "trombones sound like a Fania horn section ("
                    + ", ".join(w for k, w in (("cuerpo", "punching the ends of the lead's phrases"),
                                               ("montuno", "the coro answering the lead"),
@@ -804,8 +902,7 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
                    + ("; does the break hit together" if take["breaks"] else "")
                    + ("; does the bass walk up into the next section" if walks else "")
                    + "; does it all still feel like salsa.")
-        return out
-    out.append("Listen for: does it flow, chords going round and coming home rather than wandering; does the bass "
+    return ("Listen for: does it flow, chords going round and coming home rather than wandering; does the bass "
                "feel like the style; does each phrase sound like a question and its answer"
                + ("; does the drummer feel like the style, its fills leading into the next phrase"
                   if take.get("drums") else "")
@@ -815,7 +912,6 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
                   "habit; does the snare stay put on 3 while the hats turn to triplets and 32nds; do the lead's "
                   "triplets sit over the grid; does the harmony staying put feel like trap rather than stuck"
                   if BASS[style].kick else "") + ".")
-    return out
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])

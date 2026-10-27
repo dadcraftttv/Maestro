@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.7, clip summaries (plan to DadCraft first). Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.9, DNA nudges (plan to DadCraft first; then 3.10-3.12, each planned with him, then Checkpoint 3). Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -568,9 +568,18 @@ For each chosen style, how each member plays it, written from sources.
       layering; B: layered; seed 12, 84 bars, about 2:35; 3.4d's pair moved to `clips/ab/power_rock/3.4d`).
       Heard Oct 27: "B is better, keep it" (`docs/verdicts.md`). Done Oct 27, all four styles layered; a style per
       section stays for later (DadCraft, Oct 26).
-- [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
+- [x] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.
+      Done Oct 27 (plan approved; DadCraft chose: the mock-up's shape, about a dozen lines, and 2-3 lines for each
+      solo clip): `explain.summary` grouped by member across the clip, not by section: a form line (the parts or
+      sections, breaks, builds, breakdowns), each chord family once with where it plays and how many rounds vary
+      beyond landing home, then each member once ("throughout", "in the choruses", or its bars), moments counted
+      ("a fill (5 times)"), the melody, the band, the style's listen-for (unchanged). 8-10 lines in every style at 84
+      bars (was 22-36). `explain.member_summary`: a solo clip's three lines (header, the member, a listen-for), for
+      Checkpoint 3's solo clips. Test: 12 lines at most at 16 and 84 bars, every member who plays named, solo
+      summaries 3 lines; 293 tests pass. Samples: `clips/summaries/<style>_12.txt` (seed 12, 84 bars, with the solo
+      summaries).
 - [x] 3.8 Checks before every listen (outside reviews, DadCraft, Oct 26: `docs/research.md` round 4):
       - **seed fuzzing:** thousands of seeds a style through the theory modules and the sketch: nothing empty,
         every note on the grid and in its member's range, no choose left with nothing to pick;
