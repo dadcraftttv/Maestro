@@ -329,6 +329,16 @@
       }
     }
   },
+  "layers": {
+    "why": "DadCraft's map (Oct 26, \"maps sound right\"): the strings and the bell's riff from the start, the drums then the 808 joining as the energy rises; a section rising into a louder one may cut the beat for its last phrase, the riff and strings playing on. Rotation and slow change after Tangerine (research round 6).",
+    "join": {"pad": 0.0, "drums": 0.25, "bass": 0.4},
+    "spread": 0.08,
+    "least": 2,
+    "breakdowns": 35,
+    "breakdown": ["melody", "pad"],
+    "rotate": [16, 32],
+    "changes": [2, 3]
+  },
   "judge": {
     "why": "Written from trap's sources (Wikipedia's \"Trap music\" and \"Roland TR-808\", Duinker's triplet flow, producers' guides, ideas only) and DadCraft's verdicts, not from the entry's patterns.",
     "band": {

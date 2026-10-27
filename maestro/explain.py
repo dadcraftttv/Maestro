@@ -750,7 +750,7 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
     if take.get("layers"):                      # who plays when (task 3.6)
         ls = take["layers"]
         full = sum(1 for x in ls if len(x.playing) == len(LAYERS[style].join) and x.melody)
-        downs = [x.at + 1 for x in ls if not x.melody]
+        downs = [x.at + 1 for x in ls if x.down]
         swaps = sum(1 for x in ls for w in x.said if w.startswith("rotation"))
         moves = sum(1 for x in ls for w in x.said if w.startswith("the "))
         out.append(f"Band: the whole band in {full} of {len(ls)} phrases; {moves} phrase{'s' * (moves != 1)} where "
@@ -761,7 +761,10 @@ def summary(style, seed, bars, bpm, take, met=METERS["4/4"]):
         out.append("Listen for: does the 808 feel like the bass and the kick at once, and do its slides come through; "
                    "do the hats roll rather than tick, the clap staying put on 3; does the bell's riff go round like "
                    "trap's, its triplets over the grid; do the hats-alone opening and the drop before a section "
-                   "keep it from feeling stuck.")
+                   "keep it from feeling stuck"
+                   + ("; do the strings and riff hold the quiet starts, the drums then the 808 coming in as it rises; "
+                      "does the breakdown (the beat cut, the riff and strings playing on) make the drop hit; do the "
+                      "rotations and slow changes keep the loop fresh" if take.get("layers") else "") + ".")
         return out
     if ARPS[style]:                             # synthwave's own questions (task 3.4b)
         out.append("Listen for: does it feel like outrun when the energy is up (the bass driving in 8ths, the snare "

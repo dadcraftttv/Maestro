@@ -5,8 +5,10 @@ A style's "layers" gives each member the energy it tends to join at ("join"; the
 throughout). At each phrase's start the band holds as many members as the energy lets in: as it rises they join one
 after another, the lower ones first, and as it eases they leave, the last in first out. The order is a tendency
 ("spread": how loose it is), never fixed (decision 9). The band is never thinner than "least" members, the melody
-counted, and keeps one that carries the chords or the bass. A section that leads into a louder one may break down
-for its last phrase ("breakdowns", % of such sections): only the "breakdown" members play, the melody rests.
+counted, and keeps one that carries the chords or the bass; at its thinnest it holds one phrase, then a member
+joins (two thin phrases of looping members would copy themselves, decision 9's drift). A section that leads into a louder one may break down
+for its last phrase ("breakdowns", % of such sections): only the "breakdown" members play, the melody too when
+listed there (trap's riff plays on while the beat cuts out, DadCraft, Oct 26), else it rests.
 
 From Tangerine (research round 6), for long plays: rotation ("rotate": [fewest, most] bars between swaps; [0, 0]
 off): when the band's size holds, one member rests and one resting member comes back, the longest-playing likelier
@@ -33,7 +35,7 @@ class Layers:
     spread: float = 0.1                 # how loose the joining order is, in energy
     least: int = 2                      # members always playing, the melody counted (DadCraft, Oct 26)
     breakdowns: int = 0                 # % of sections before a louder one that break down for their last phrase
-    breakdown: tuple = ()               # who plays in a breakdown
+    breakdown: tuple = ()               # who plays in a breakdown, the melody among them or not
     rotate: tuple = (0, 0)              # bars between swaps
     changes: tuple = (0, 0)             # phrases between slow changes
 
@@ -45,6 +47,7 @@ class Phrase:
     section: object
     playing: frozenset                  # the listed members playing (the melody apart)
     melody: bool = True
+    down: bool = False                  # a breakdown
     said: list = field(default_factory=list)
 
 
@@ -78,10 +81,10 @@ def layers_from(d, roles, where):
     if not (isinstance(breakdowns, int) and 0 <= breakdowns <= 100):
         raise StyleError(f"{where}.breakdowns: a share in %, 0 to 100")
     breakdown = tuple(d.get("breakdown", ()))
-    if any(r not in join for r in breakdown) or bool(breakdown) != bool(breakdowns) or (
+    if any(r not in join and r != "melody" for r in breakdown) or bool(breakdown) != bool(breakdowns) or (
             breakdown and (len(breakdown) < least or not any(r in ANCHORS for r in breakdown))):
-        raise StyleError(f"{where}.breakdown: members from join, at least \"least\" of them and one carrying the "
-                         "chords or bass, with its share in \"breakdowns\"")
+        raise StyleError(f"{where}.breakdown: members from join (the melody may join them), at least \"least\" of "
+                         "them and one carrying the chords or bass, with its share in \"breakdowns\"")
     return Layers(dict(join), spread, least, breakdowns, breakdown, _range(d.get("rotate", [0, 0]), f"{where}.rotate"),
                   _range(d.get("changes", [0, 0]), f"{where}.changes"))
 
@@ -128,13 +131,19 @@ def plan_layers(rng, ly, sections, phrase):
         breaking = louder and s.bars > phrase and i > 0 and ly.breakdowns and rng.rnd(100) < ly.breakdowns
         for at in range(s.start, s.end, phrase):
             p = Phrase(at, min(phrase, s.end - at), s, frozenset())
-            if breaking and at + phrase >= s.end:
-                p.playing, p.melody = frozenset(ly.breakdown), False
-                p.said.append(f"breakdown: {', '.join(sorted(ly.breakdown))} alone, the melody rests")
+            last = out[-1] if out else None
+            down = frozenset(ly.breakdown) - {"melody"}, "melody" in ly.breakdown
+            if breaking and at + phrase >= s.end and not (last and (last.playing, last.melody) == down):
+                # a breakdown thins the band: none when the phrase before already played it
+                (p.playing, p.melody), p.down = down, True
+                band = ', '.join(sorted(p.playing))
+                p.said.append(f"breakdown: {band} and the melody alone" if p.melody else
+                              f"breakdown: {band} alone, the melody rests")
                 out.append(p)
                 continue
             e = s.energy_at(at)
-            want = max(sum(1 for r in listed if ly.join[r] <= e), ly.least - 1)
+            thin = last and len(last.playing) + last.melody <= ly.least
+            want = min(max(sum(1 for r in listed if ly.join[r] <= e), ly.least - 1 + bool(thin)), len(listed))
             before = set(playing)
             while len(playing) < want:
                 playing.add(min((r for r in listed if r not in playing), key=jitter))
@@ -174,7 +183,7 @@ def check_layers(phrases, ly):
             return f"bar {p.at + 1}: {size} member{'s' * (size != 1)} playing, fewer than {ly.least}"
         if not any(r in ANCHORS for r in p.playing):
             return f"bar {p.at + 1}: nothing carrying the chords or the bass"
-        if not p.melody and not any(s.startswith("breakdown") for s in p.said):
+        if not p.melody and not p.down:
             return f"bar {p.at + 1}: the melody rests outside a breakdown"
     return None
 

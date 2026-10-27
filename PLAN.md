@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.6, layering: trap's layer map (approved Oct 26), then its A/B; then salsa, then power rock. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.6, layering: DadCraft's trap A/B (`clips/ab/trap`, seed 74); then salsa, then power rock. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -533,6 +533,17 @@ For each chosen style, how each member plays it, written from sources.
       stays (`docs/verdicts.md`). The other maps approved Oct 26 (`docs/verdicts.md`), one style at a time with an
       A/B each: trap, then salsa, then power rock. Trap's breakdown keeps the melody (the riff), so a breakdown may
       list the melody.
+      Trap built Oct 27: the strings from the start, the drums at 0.25, the 808 at 0.4; breakdowns (35%) to the
+      strings and riff, the beat cut; rotation every 16-32 bars, a slow change every 2-3 phrases. A breakdown may
+      list the melody (a phrase marks itself `down`). Two rules for every style, after trap's drift measure (its
+      longest exact copy went from 3-7 bars to 8-12: the strings and riff alone for two phrases, both looping every
+      4 bars): the thinnest band holds one phrase, then a member joins; and no breakdown when the phrase before
+      already played its band. After them, 3-8 bars; synthwave's seed 14 plays the same band as its approved B.
+      Checks: 283 tests (the layering tests run trap too; the 808's kick test uses the plain take, since a resting
+      beat leaves the 808 alone), fuzz 2000/2000 clean (trap, synthwave), drift met except trap's "same bar, same
+      place" at 2% (it was before too), judge 100% in A and B (the riff's triplets 0% in both). Mix: the 808 and
+      drums about 0.5 dB over the riff in A and B alike (levels unchanged so the A/B is only the layering).
+      Listen: `clips/ab/trap` (A: 4e59e36, no layering; B: layered; seed 74, 84 bars, 2.5 minutes).
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.

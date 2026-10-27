@@ -30,14 +30,14 @@ def _rng(seed):
     return r
 
 
-def _takes(n=12, bars=32):
-    return [flow_choices("trap", seed, bars, A_MINOR, 140)[1] for seed in range(300, 300 + n)]
+def _takes(n=12, bars=32, layers=True):
+    return [flow_choices("trap", seed, bars, A_MINOR, 140, layers=layers)[1] for seed in range(300, 300 + n)]
 
 
 def test_the_808_plays_on_the_kicks_and_slides_about_one_note_in_six():
     assert BASS["trap"].kick and not BASS["salsa"].kick
     notes = slides = 0
-    for take in _takes():
+    for take in _takes(layers=False):        # as drawn: layering may rest the drums under the 808 (task 3.6)
         kicks = {h[0] for h in take["drums"] if h[4] == "kick"}
         changes = {s.at for s in take["spans"]}
         assert all(st in kicks | changes for st, _, _ in take["bass"])
