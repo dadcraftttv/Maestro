@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.6, layering: DadCraft's trap A/B (`clips/ab/trap`, seed 74); then salsa, then power rock. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.6, layering: salsa's layer map (approved Oct 26) and its A/B; then power rock. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -543,7 +543,8 @@ For each chosen style, how each member plays it, written from sources.
       beat leaves the 808 alone), fuzz 2000/2000 clean (trap, synthwave), drift met except trap's "same bar, same
       place" at 2% (it was before too), judge 100% in A and B (the riff's triplets 0% in both). Mix: the 808 and
       drums about 0.5 dB over the riff in A and B alike (levels unchanged; DadCraft, Oct 27: "the 808s are fine").
-      Listen: `clips/ab/trap` (A: 4e59e36, no layering; B: layered; seed 74, 84 bars, 2.5 minutes).
+      Listen: `clips/ab/trap` (A: 4e59e36, no layering; B: layered; seed 74, 84 bars, 2.5 minutes). Heard Oct 27:
+      "B is better, keep it" (`docs/verdicts.md`).
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.

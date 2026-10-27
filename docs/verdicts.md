@@ -327,3 +327,4 @@ isn't reloaded every session; grep for the part a task needs.
   bass and drums, the guitars slamming back; no rotation; slow change on the bass and drums). An A/B each.
 - Oct 27: trap's levels after its 3.6 build (the 808 and drums about 0.5 dB over the riff by the mix check, in A and
   B alike): "the 808s are fine." The gains stay.
+- Oct 27: 3.6's trap A/B (`clips/ab/trap`, seed 74, 84 bars): "B is better, keep it." Trap's layering stays.
