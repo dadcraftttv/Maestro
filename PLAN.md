@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Checkpoint 3, synthwave's listen (`clips/checkpoint3/synthwave`), then trap, salsa, power rock, one a
-session. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** Checkpoint 3, trap's set and listen (`python -m maestro.checkpoint trap`), then salsa, power rock, one
+a session (synthwave passed Oct 27). Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -699,6 +699,9 @@ For each chosen style, how each member plays it, written from sources.
       in the written MIDI, so the notes and the judge are unchanged. 2 new tests, 326 pass. Synthwave (seed 12):
       judge 99% on all three plays, only the melody's register high (E5-E6, an open point for the desk); drift
       met; the mix's drums about 4 dB loud, as before.
+      Synthwave heard Oct 27: "i'm good with how all of them sound": every member, the second and long plays, plain
+      for reference. Synthwave passes as a baseline. He didn't ask for the pocket, so the band stays on the grid
+      (decision 13) and the pocket stays in reserve.
 
 ### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a

@@ -357,3 +357,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 27: 3.12's A/B (DadCraft): "B sounds better, keep the loops." 3.12 done.
 - Oct 27: Checkpoint 3's plan (DadCraft): one style a session, plain only as a reference, the pocket A/B built now.
   Synthwave's set in `clips/checkpoint3/synthwave` (seed 12).
+- Oct 27: Checkpoint 3, synthwave's listen (DadCraft): "i'm good with how all of them sound." Synthwave passes as a
+  baseline; the pocket stays in reserve, the band on the grid.
