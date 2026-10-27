@@ -61,11 +61,25 @@ def test_the_tumbao_skips_the_one_and_sits_with_the_clave():
         bass = take["bass"]
         assert check_bass(bass, MET, clave) is None, seed
         plan = take["plan"][0]
-        if plan["pattern"].name != "tumbao on the one":
-            first = plan["section"]
-            # the section's last bar may walk up or break on the clave's strokes (task 3.4c), the one among them
-            ones = [s for s, _, _ in bass if s % MET.bar == 0 and first.start * MET.bar <= s < (first.end - 1) * MET.bar]
-            assert not ones, seed
+        first = plan["section"]
+        # "tumbao on the one" plays its first bars only (DadCraft, Oct 26: "only for a few bars"), then a plain one
+        start = first.start + (2 if plan["bass"].startswith("tumbao on the one") else 0)
+        # the section's last bar may walk up or break on the clave's strokes (task 3.4c), the one among them
+        ones = [s for s, _, _ in bass if s % MET.bar == 0 and start * MET.bar <= s < (first.end - 1) * MET.bar]
+        assert not ones, seed
+
+
+def test_the_tumbao_on_the_one_plays_a_few_bars():
+    seen = 0
+    for seed in range(1, 40):
+        lines, take = flow_choices("salsa", seed, 32, A_MINOR, TEMPO["salsa"])
+        for p in take["plan"]:
+            s = p["section"]
+            if p["bass"].startswith("tumbao on the one") and s.bars > 2:
+                seen += 1
+                assert p["pattern"].name != "tumbao on the one", seed   # the one taking over is the one kept
+                assert any(f"bar {s.start + 3}: " in x and "takes over" in x for x in p["lines"]), seed
+    assert seen
 
 
 def test_every_phrase_is_shaped():

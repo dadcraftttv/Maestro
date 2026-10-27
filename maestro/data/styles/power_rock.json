@@ -1049,7 +1049,7 @@
       "voices": [1, 2, "Wikipedia, \"Power chord\": the root and fifth, no third"],
       "chord tones": [90, 100, "Wikipedia, \"Power chord\": the chord's root and fifth"],
       "syncopation": [0, 30, "Wikipedia, \"Palm mute\": driving 8ths on the beat; the odd push"],
-      "register": ["E2", "E4", "Wikipedia, \"Power chord\": low on the guitar's bottom strings, from E2"]
+      "register": ["E2", "E5", "Wikipedia, \"Power chord\": low on the guitar's bottom strings, from E2; the second take an octave up (\"Double tracking\": the part recorded twice, panned left and right, each side its own sound; \"Power chord\": octave doubling; \"Nashville tuning (high strung)\": a session's rhythm guitar an octave higher)"]
     },
     "bass": {
       "notes": [2, 8, "GMD rock and Wikipedia, \"Arena rock\": a bass in 8ths locked to the kick"],

@@ -58,11 +58,23 @@ def test_each_measure():
     assert m("steps", [n for n in c.players["kit"].notes if n.pitch == 36], steps=[0, 4, 2]) == {0: 100, 4: 100, 2: 0}
 
 
-def test_a_note_held_into_the_next_chord_counts_its_tones():
+def test_a_note_held_into_or_anticipating_the_next_chord_counts_its_tones():
     c = judge.from_song(_clip(("Am", "C")))
     held, short = Note(BAR - STEPS, 2 * STEPS, 67), Note(BAR - STEPS, STEPS, 67)   # G on beat 4: not in Am, in C
     assert judge.measure("chord tones", [held], c, "lead") == 100
-    assert judge.measure("chord tones", [short], c, "lead") == 0
+    # the anticipation (DadCraft, Oct 26): the last beat before the change, held over or not
+    assert judge.measure("chord tones", [short], c, "lead") == 100
+    early = Note(BAR - 2 * STEPS, STEPS, 67)                                       # G on beat 3: too early
+    assert judge.measure("chord tones", [early], c, "lead") == 0
+
+
+def test_a_chord_changing_inside_a_bar_is_read_from_its_beat():
+    s = _clip(("A", "A"))
+    s.timeline += [{"bar": 0, "beat": 2, "chord": "D"}, {"bar": 1, "beat": 2, "chord": "E"}]
+    c = judge.from_song(s)
+    assert c.chord_at(2 * STEPS) == judge.chord_tones("D") and c.chord_at(BAR) == judge.chord_tones("A")
+    d = Note(2 * STEPS, STEPS, 62)                                                 # D on beat 3, under D
+    assert judge.measure("chord tones", [d], c, "lead") == 100
 
 
 def test_a_miss_is_named_and_scored_by_its_distance():

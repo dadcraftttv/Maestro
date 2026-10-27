@@ -351,10 +351,13 @@ class Pattern:
     weight: int = 1
     why: str = ""
     when: str = "any"    # the energy it plays at: "low" (under 0.5), "high" or "any" (synthwave's moods)
+    most: int = 0        # bars in a row at most, then another pattern takes over (0: no limit)
 
     def __post_init__(self):
         if self.bars not in (1, 2) or self.weight < 1:
             raise ValueError(f"{self.name}: 1 or 2 bars, weight at least 1")
+        if self.most < 0 or self.most % self.bars:
+            raise ValueError(f"{self.name}: most, in whole passes of its {self.bars} bar(s)")
         if self.when not in ("low", "high", "any"):
             raise ValueError(f"{self.name}: when low, high or any")
         ats = [n[0] for n in self.notes]
@@ -405,14 +408,16 @@ def _bass_flow(style):
         if n == "why":
             continue
         try:
-            extra = set(p) - {"notes", "bars", "weight", "why", "when"}
+            extra = set(p) - {"notes", "bars", "weight", "why", "when", "most"}
             if extra:
-                raise ValueError(f"unknown part {sorted(extra)[0]!r} (known: notes, bars, weight, why, when)")
+                raise ValueError(f"unknown part {sorted(extra)[0]!r} (known: notes, bars, weight, why, when, most)")
             pats.append(Pattern(n, tuple(tuple(x) for x in p["notes"]), p.get("bars", 1), p.get("weight", 1),
-                                p.get("why", ""), p.get("when", "any")))
+                                p.get("why", ""), p.get("when", "any"), p.get("most", 0)))
         except (ValueError, TypeError, KeyError) as e:
             raise StyleError(f"{where}.patterns.{n}: {e}") from None
     variants = {**BASS_VARIANTS, **_weights(d.get("variants", {}), BASS_VARIANTS, f"{where}.variants")}
+    if pats and all(p.most for p in pats):
+        raise StyleError(f"{where}.patterns: one pattern at least with no \"most\", to take over")
     return BassFlow(tuple(pats) or PATTERNS, variants)
 
 
@@ -464,10 +469,19 @@ def bass_part(rng, bf, spans, key_at, start, bars, met, energy, prev=None, clave
     """One section's bass: (notes as [step, length or None, MIDI note], its pattern, lines). `placed`: the onsets
     already played, so a pass is checked against the clave with what came before it in the cycle; `near`: the
     last bass note, so the line carries on from it. `key_at(step)`: the key there (a note ahead may fall in the
-    next section, after a key change)."""
+    next section, after a key change). A pattern with a "most" plays that many bars, then another takes over;
+    the one playing at the end comes back as the pattern, so the next section can keep it."""
     fits = [p for p in bf.patterns if bars % p.bars == 0]
     fits = [p for p in fits if p.when == "any" or (p.when == "low") == (energy < 0.5)] or fits   # by the mood
     pat = fits[_draw(rng, {i: p.weight * (bf.stay if p == prev else 1) for i, p in enumerate(fits)})]
+    after = pat
+    if pat.most and bars > pat.most:
+        alts = [p for p in fits if not p.most and p.bars == pat.bars] or \
+               [p for p in bf.patterns if not p.most and p.bars == pat.bars] or [pat]
+        after = alts[_draw(rng, {i: p.weight for i, p in enumerate(alts)})]
+
+    def pass_pat(i):     # the pattern of pass i
+        return pat if not pat.most or i * pat.bars < pat.most else after
     weights = dict(bf.variants)
     for k in ("approach", "octave"):
         weights[k] = weights.get(k, 0) * (1 + round(2 * energy))
@@ -476,8 +490,11 @@ def bass_part(rng, bf, spans, key_at, start, bars, met, energy, prev=None, clave
     lines = [f"  bass: {pat.name}" + (f": {pat.why}" if pat.why else "") + (" (kept)" if pat == prev else "")]
     out, onsets = [], list(placed)
     for p in range(bars // pat.bars):
-        base = (start + p * pat.bars) * met.bar
-        notes, w = list(pat.notes), None
+        base, cur = (start + p * pat.bars) * met.bar, pass_pat(p)
+        if cur != pass_pat(p - 1) and p:
+            lines.append(f"  bass, bar {start + p * pat.bars + 1}: {cur.name} takes over" +
+                         (f": {cur.why}" if cur.why else ""))
+        notes, w = list(cur.notes), None
         if p:
             notes, w = _bass_vary(rng, notes, weights)
         if clave is not None:
@@ -486,10 +503,10 @@ def bass_part(rng, bf, spans, key_at, start, bars, met, energy, prev=None, clave
 
             def crossed(ns):   # the whole cycle: what's played, this pass, the passes still to come as written
                 on = [s for s in onsets if s >= cycle] + [base + n[0] * SIXTEENTH for n in ns] + \
-                     [r + n[0] * SIXTEENTH for r in rest for n in pat.notes]
+                     [r + n[0] * SIXTEENTH for k, r in enumerate(rest, p + 1) for n in pass_pat(k).notes]
                 return check_clave([s % clave.length for s in on], clave)
             if w and crossed(notes):
-                notes, w = list(pat.notes), None
+                notes, w = list(cur.notes), None
                 lines.append(f"  bass, bar {start + p * pat.bars + 1}: the variant crossed the clave; as written")
             why = crossed(notes)
             if why:
@@ -521,7 +538,7 @@ def bass_part(rng, bf, spans, key_at, start, bars, met, energy, prev=None, clave
             nxt = next((x[4] for x in out[i + 1:] if len(x) == 5), None) or near
             up = rng.rnd(3) == 0 and nxt + 2 <= r.high
             n.append(nxt + 2 if up else max(r.low, nxt - 1))
-    return [(s, length, m) for s, length, _, _, m in out], pat, lines
+    return [(s, length, m) for s, length, _, _, m in out], after, lines
 
 
 def _chance(rng, pct):

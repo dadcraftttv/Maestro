@@ -42,7 +42,8 @@ TRAITS = {
     "triplets": (0, 100),      # % of onsets off the 16th grid (triplets, 32nds)
     "rolls": (0, 100),         # % of bars holding a run of three or more onsets closer than a 16th
     "register": "names",       # [lowest, highest] note names: its 10th and 90th percentile pitches lie inside
-    "chord tones": (0, 100),   # % of onsets on a beat that are tones of the chord there or the one they're held into
+    "chord tones": (0, 100),   # % of onsets on a beat that are tones of the chord there, the one they're held into
+                               # or, on a bar's last beat, the coming one (the anticipation)
     "velocity": (0, 127),      # the spread (standard deviation) of its velocities
     "repeats": (0, 100),       # % of bars whose onsets repeat one of the two bars it played before
     "length": (0, 64),         # its median note length, in beats

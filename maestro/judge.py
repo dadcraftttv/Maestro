@@ -16,6 +16,7 @@ member (or lane) plays.
     python -m maestro.judge clip.mid --style salsa   # against another style's card
 """
 import argparse, json, os, statistics
+from bisect import bisect_right
 from dataclasses import dataclass, field
 
 import mido
@@ -78,7 +79,7 @@ class Clip:
     tempo: float
     bar_steps: int
     bars: int
-    chords: list                 # each bar's chord tones (None when the timeline doesn't say)
+    chords: list                 # the chord changes, [(step, its tones or None when the timeline doesn't say)]
     players: dict                # {name: Player}
     style: str | None = None
     styles: dict = field(default_factory=dict)   # {name: style} for a member of another style (a blend)
@@ -86,14 +87,24 @@ class Clip:
     def style_of(self, name):
         return self.styles.get(name, self.style)
 
+    def chord_at(self, step):
+        """The chord tones sounding at a step (None before the first change, or where the timeline doesn't say)."""
+        i = bisect_right([at for at, _ in self.chords], step) - 1
+        return self.chords[i][1] if i >= 0 else None
 
-def _chords(timeline, bars):
-    out, now = [None] * bars, None
-    marks = {e["bar"]: e.get("chord") for e in timeline}
-    for b in range(bars):
-        if b in marks:
-            now = chord_tones(marks[b])
-        out[b] = now
+    def known(self):
+        """Whether the timeline names a chord all the way through."""
+        return bool(self.chords) and self.chords[0][0] == 0 and all(c is not None for _, c in self.chords)
+
+
+def _chords(timeline, bar, unit):
+    """The timeline's chord changes as [(step, tones)]: an entry from a bar, or a beat in it (in the meter's unit)."""
+    out = []
+    for e in sorted(timeline, key=lambda e: (e["bar"], e.get("beat", 0))):
+        at = e["bar"] * bar + round(e.get("beat", 0) * unit)
+        if e.get("beat") and "chord" not in e:
+            continue                       # a change of something else inside the bar: the chord carries on
+        out = [x for x in out if x[0] != at] + [(at, chord_tones(e.get("chord")))]
     return out
 
 
@@ -109,7 +120,8 @@ def from_song(song, styles=None):
     players = {m.name: Player(m.role, list(m.notes), len(m.slides), m.kit) for m in song.members if m.notes}
     bar = song.bar_steps()
     bars = _bars(song.timeline, players, bar)
-    return Clip(song.tempo, bar, bars, _chords(song.timeline, bars), players, song.source.get("style"),
+    return Clip(song.tempo, bar, bars, _chords(song.timeline, bar, bar // song.meter[0]), players,
+                song.source.get("style"),
                 styles or {})
 
 
@@ -135,7 +147,7 @@ def from_file(mid, styles=None):
                for name, m in info["members"].items() if name in notes}
     bar = num * STEPS * 4 // den
     bars = _bars(info["timeline"], players, bar)
-    return Clip(info["tempo"], bar, bars, _chords(info["timeline"], bars), players,
+    return Clip(info["tempo"], bar, bars, _chords(info["timeline"], bar, STEPS * 4 // den), players,
                 info.get("source", {}).get("style"), styles or {})
 
 
@@ -181,13 +193,16 @@ def measure(trait, notes, clip, name, slides=0, steps=None):
         pitches = [n.pitch for n in notes]
         return (_quantile(pitches, 0.1), _quantile(pitches, 0.9))
     if trait == "chord tones":
-        on_beat = [n for n in notes if n.step % STEPS == 0]
+        if not clip.known():
+            return None
+        on_beat, end = [n for n in notes if n.step % STEPS == 0], clip.bars * bar
+        changes = [at for at, _ in clip.chords]
         good = 0
         for n in on_beat:
-            b, last = n.step // bar, (n.step + n.steps - 1) // bar
-            held = [clip.chords[i] for i in {b, last} if i < clip.bars]
-            if any(c is None for c in held):
-                return None
+            # the chord there, the one it's held into and, on the last beat before a change, the coming one
+            # (the anticipation, held over or not)
+            coming = [at for at in changes if 0 < at - n.step <= STEPS]
+            held = [clip.chord_at(st) for st in [n.step, n.step + n.steps - 1] + coming if st < end]
             good += any(n.pitch % 12 in c for c in held)
         return _pct(good, len(on_beat))
     if trait == "velocity":
@@ -322,10 +337,11 @@ def score(clip, style=None):
         low, high, src = band[trait]
         if trait == "tempo":
             got = clip.tempo
-        elif any(c is None for c in clip.chords) or not clip.bars:
+        elif not clip.known() or not clip.bars:
             continue
         else:
-            got = sum(c != p for c, p in zip(clip.chords, [None] + clip.chords)) / clip.bars
+            tones = [c for _, c in clip.chords]
+            got = sum(c != p for c, p in zip(tones, [None] + tones)) / clip.bars
         rows.append(Row("band", "", trait, got, low, high, _score(trait, got, low, high), src))
     for name, p in clip.players.items():
         s = style or clip.style_of(name)

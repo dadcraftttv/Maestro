@@ -154,7 +154,9 @@ may name one of Maestro's own (`"808"`, `"808 kit"`): the player renders that tr
 ```
 
 ### The timeline (shared by the whole band)
-A list of changes, each from a bar (or a beat in that bar); anything not given carries on from before.
+A list of changes, each from a bar (or a beat in that bar: `"beat"`, counted from 0 in the meter's unit, so
+`{"bar": 3, "beat": 2, "chord": "D"}` is a chord changing on beat 3 of the fourth bar); anything not given
+carries on from before.
 - **Tempo:** BPM. In data, from the file; in Ouralia, from the walking clock as today.
 - **Meter:** `4/4` first; `3/4`, `6/8`, `12/8` allowed (salsa and afrobeat lean on 12/8 feels). Today's composer is
   4/4 only.

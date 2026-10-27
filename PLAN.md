@@ -4,8 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.5c, checking the judge: first the four fixes from DadCraft's calls on 3.5b's first run (listed in 3.5c
-below; ask him to confirm the anticipation rule before building it), then the checks. Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.5c, checking the judge: the four fixes are done; DadCraft's calls on the judge's leniency (three points,
+in 3.5c below) and on the bass floor under E1, then the checks (the wrong clips, SynTheory's progressions). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -457,6 +457,26 @@ For each chosen style, how each member plays it, written from sources.
            tones, its floor set from a rock riff source, not from the generator's numbers.
         4. Guitar R keeps its octave-up double (DadCraft: "yes"); the guitar card's register widens to cover it,
            from a source on doubled guitars.
+        Fixes done Oct 26 (DadCraft confirmed the anticipation rule: "Count anticipations"):
+        1. A bass pattern may say "most" (bars in a row, then another of the style's patterns takes over and is the
+           one a next section keeps); "tumbao on the one" has 2.
+        2. The judge counts a note on the beat before a chord change against the coming chord too.
+        3. The timeline now writes a chord changing inside a bar as its own entry, `{"bar", "beat", "chord"}`
+           (format.md already allowed "a beat in that bar"), and the judge reads the changes by step. Power rock's
+           "A" all clip was the timeline missing the second chord of "I IV" (and salsa's "i iv"): the guitars now
+           measure 100% chord tones. Today's riff plays only roots and fifths (`check_guitar`), so it has no
+           passing tones to allow; the card's 90% floor stays until the riff gets them, with a riff source then
+           (Wikipedia's "Riff" says nothing on its notes).
+        4. The guitar card's register is E2-E5: Wikipedia "Double tracking" (the part taken twice, left and right,
+           each its own sound), "Power chord" (octave doubling), "Nashville tuning (high strung)".
+        Rerun (seeds 7-9, 16 bars): every clip fits its own style best, 98-100%. Still flagged: synthwave's lead
+        (expected), the bass under E1 (power rock D1, synthwave C1: the bass range is C1-G3 for every style, an
+        808's floor), salsa's chords at 2.12 a bar against 0.5-2 (the vamp's variants add chords), a few one-offs.
+        The checks' first measure (Oct 26) shows the judge too lenient, three points for DadCraft:
+        - one wrong member hardly moves a clip's fit, the mean over members (trap 99% to 97% with salsa's bass);
+          the swapped bass's own score falls (57-86%);
+        - only power rock's drums have a velocity trait, so flattened velocities go unseen elsewhere;
+        - every note shifted a 16th: the drums and percussion fall (22-86%), trap's melody barely (96%).
 - [ ] 3.6 Layering (arrangement): which members play when. Members join one after another along a build and drop
       out as it eases (after Ouralia's Calm builds: pad, room notes, chimes, then harmony and reverb, each joining
       further along the rise; `docs/format.md`), and sections thin or fill the band. Each style's entry says who

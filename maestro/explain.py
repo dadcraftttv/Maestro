@@ -583,7 +583,10 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         s = play.section_at(b)
         recs.append({"bar": b, "section": s, "key": s.key, "energy": s.energy_at(b),
                      "chord": chord_at(spans, b * met.bar).chord})
-    take = {"pad": cut(pad), "bass": cut(bass), "melody": cut(melody), "arp": cut(arp), "bars": recs,
+    # a chord changing inside a bar (power rock's "I IV", salsa's "i iv"): its own entry, from the beat it sounds
+    changes = [{"bar": sp.at // met.bar, "at": sp.at % met.bar, "key": play.section_at(sp.at // met.bar).key,
+                "chord": sp.chord} for sp in spans if sp.at % met.bar and sp.at < end]
+    take = {"pad": cut(pad), "bass": cut(bass), "melody": cut(melody), "arp": cut(arp), "bars": recs, "changes": changes,
             "keys": cut(keys), "horns": cut(horns), "parts": [x for x in parts if x[0] < bars],
             "breaks": [b for b in breaks if b < bars], "builds": [b for b in builds if b < bars],
             "guitar": {k: cut(ns) for k, ns in guitar.items()}, "muted": [m for m in muted if m < end],

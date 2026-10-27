@@ -307,3 +307,5 @@ isn't reloaded every session; grep for the part a task needs.
   chords, "why not both?" (the timeline follows the riff and the card allows passing tones); guitar R's octave-up
   double stays, "yes". On anticipations he asked "what would you suggest?": count a note on the last beat before
   a change that fits the next chord (to confirm with him).
+- Oct 26: 3.5c, the anticipation rule confirmed ("Count anticipations"): a note on the last beat before a chord
+  change that fits the coming chord counts as a chord tone, held over the change or not.

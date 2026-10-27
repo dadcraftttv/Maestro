@@ -158,6 +158,10 @@ def flow_sketch(style="plain", seed=1, bars=16, home=Key(9, "minor"), room=0.5):
         song.timeline.append({"bar": r["bar"], "tempo": bpm, "meter": met.name, "key": str(r["key"]),
                               "chord": name(r["chord"], r["key"]), "section": {"kind": r["section"].kind},
                               "energy": round(r["energy"], 3)})
+    for c in take["changes"]:                # a chord changing inside a bar: from its beat, the rest carried on
+        song.timeline.append({"bar": c["bar"], "beat": c["at"] // met.unit if c["at"] % met.unit == 0 else c["at"] / met.unit,
+                              "chord": name(c["chord"], c["key"])})
+    song.timeline.sort(key=lambda e: (e["bar"], e.get("beat", 0)))
     clave = CLAVES[RHYTHM[style].clave] if RHYTHM[style].clave else None
     parts = {"bass": ([n[0] for n in take["bass"]], feel_for(style, "bass")),
              "melody": ([n[0] for n in take["melody"]], feel_for(style, "melody"))}
