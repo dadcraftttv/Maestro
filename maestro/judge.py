@@ -422,6 +422,8 @@ def main(argv=None):
     for path in a.clips:
         clip = from_file(path)
         style = a.style or clip.style
+        if style and style not in BOOK:     # a nudged style (task 3.9) is judged by its own style's cards
+            style = clip.style = style.split("~")[0]
         if style not in BOOK or "judge" not in BOOK[style]:
             print(f"{path}: no card for style {style!r}")
             continue

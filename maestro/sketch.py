@@ -15,7 +15,8 @@ import argparse, os
 from .explain import SAY, choices, flow_choices, summary
 from .rng import ComposerRng, fresh_seed
 from .song import Song
-from .stylebook import STYLES, StyleError, part
+from .stylebook import StyleError, part, per_style
+from .theory.nudge import nudged, parse
 from .theory.chords import name
 from .theory.form import FORM
 from .theory.guitar import GUITAR
@@ -27,12 +28,12 @@ from .theory.voicing import RANGES
 # From the style book: each style's felt tempo (DadCraft, Oct 24) and its members' sounds (GM programs) and levels
 # (velocities: pad, bass, melody), and the drum guide's kicks a bar (the downbeat included) and hats.
 _PLAYED = ("pad", "bass", "melody")
-TEMPO = {s: part(s, "time", "tempo") for s in STYLES}
-SOUNDS = {s: tuple(part(s, "members", r)["sound"] for r in _PLAYED) for s in STYLES}
-LEVELS = {s: tuple(part(s, "members", r)["level"] for r in _PLAYED) for s in STYLES
-          if all("level" in part(s, "members", r) for r in _PLAYED)}
-KICKS = {s: part(s, "members", "drums")["kicks"] for s in STYLES if "kicks" in part(s, "members", "drums")}
-HATS = {s: part(s, "members", "drums")["hats"] for s in STYLES if "hats" in part(s, "members", "drums")}
+TEMPO = per_style(lambda s: part(s, "time", "tempo"))
+SOUNDS = per_style(lambda s: tuple(part(s, "members", r)["sound"] for r in _PLAYED))
+LEVELS = per_style(lambda s: tuple(part(s, "members", r)["level"] for r in _PLAYED),
+                   lambda s: all("level" in part(s, "members", r) for r in _PLAYED))
+KICKS = per_style(lambda s: part(s, "members", "drums")["kicks"], lambda s: "kicks" in part(s, "members", "drums"))
+HATS = per_style(lambda s: part(s, "members", "drums")["hats"], lambda s: "hats" in part(s, "members", "drums"))
 for _s, _h in HATS.items():
     if _h not in VALUES:
         raise StyleError(f"{_s}: members.drums.hats: unknown note value {_h!r}")
@@ -245,15 +246,18 @@ def main(argv=None):
     ap.add_argument("--no-flow", dest="flow", action="store_false", help="Checkpoint 2's bar-by-bar draws")
     ap.add_argument("--seeds", type=int, default=2, help="clips per style")
     ap.add_argument("--seed", type=int, help="the first seed (the next ones count up); fresh by default")
+    ap.add_argument("--nudge", help="DNA nudges (task 3.9), e.g. energetic=2,bass:funky=1; directions: "
+                    "energetic, minimal, funky, soulful, sophisticated, 0-5 steps each")
     a = ap.parse_args(argv)
     a.out = a.out or ("clips/flow" if a.flow else "clips/checkpoint2")
     a.bars = a.bars or (16 if a.flow else 8)
     os.makedirs(a.out, exist_ok=True)
     seed = a.seed if a.seed is not None else fresh_seed()
-    for style in a.styles or [s for s in FORM if s != "plain"]:
+    for style in a.styles or [s for s in FORM if s != "plain" and "~" not in s]:
+        style = nudged(style, parse(a.nudge)) if a.nudge else style
         for _ in range(a.seeds):
             song, lines = (flow_sketch if a.flow else sketch)(style, seed, a.bars)
-            stem = os.path.join(a.out, f"{style}_{seed}")
+            stem = os.path.join(a.out, f"{style.translate(str.maketrans('~:,', '_-_'))}_{seed}")
             song.write(stem)
             with open(f"{stem}.txt", "w") as f:
                 f.write("\n".join(lines) + "\n")

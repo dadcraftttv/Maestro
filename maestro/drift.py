@@ -191,6 +191,7 @@ def main(argv=None):
     ap.add_argument("--minutes", type=float, default=20)
     ap.add_argument("--seed", type=int, help="the first play's seed; fresh by default")
     ap.add_argument("--flow", nargs="+", metavar="STYLE", help="measure task 3.2's flow sketch for these styles")
+    ap.add_argument("--nudge", help="DNA nudges on each --flow style (task 3.9), as maestro.sketch takes them")
     a = ap.parse_args(argv)
     if a.files:
         plays = [from_file(f) for f in a.files[:2]]
@@ -203,8 +204,10 @@ def main(argv=None):
     if a.flow:
         from .sketch import TEMPO, flow_sketch
         from .theory.flow import LOOPS
+        from .theory.nudge import nudged, parse
         rows = []
         for i, style in enumerate(a.flow):
+            style = nudged(style, parse(a.nudge)) if a.nudge else style
             bars = round(a.minutes * TEMPO[style] / 4)
             p, q = (from_song(flow_sketch(style, s, bars)[0]) for s in (seed + 2 * i, seed + 2 * i + 1))
             m = staleness(p)

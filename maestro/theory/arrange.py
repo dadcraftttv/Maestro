@@ -18,7 +18,7 @@ together and letting it ring while the drums fill in. Sources: Wikipedia's "Vers
 (CC BY-SA 4.0), the ideas in our own words."""
 from dataclasses import dataclass
 
-from ..stylebook import STYLES, StyleError, part
+from ..stylebook import StyleError, part, per_style
 from .form import _draw
 
 LEADS = ("phrase", "call", "out", "twin", "duel")   # twin, duel: power rock's two leads
@@ -86,7 +86,7 @@ def _arrange(style):
                    d.get("stop", False))
 
 
-ARRANGE = {s: _arrange(s) for s in STYLES}   # None: every member plays throughout
+ARRANGE = per_style(_arrange)   # None: every member plays throughout
 
 
 def phrase_parts(rng, ar, sections, phrase, end):

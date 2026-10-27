@@ -11,7 +11,7 @@ first beat, with a crash. The check rules out a hit off the grid or outside the 
 Sounds are GM stand-ins (Ouralia's own in bucket 6)."""
 from dataclasses import dataclass
 
-from ..stylebook import STYLES, StyleError, part
+from ..stylebook import StyleError, part, per_style
 from .form import _draw
 from .rhythm import check_clave, roll
 
@@ -78,7 +78,7 @@ def _parts(style):
     return tuple(out) or None
 
 
-PERCUSSION = {s: _parts(s) for s in STYLES}   # None: the style has no percussion member yet
+PERCUSSION = per_style(_parts)   # None: the style has no percussion member yet
 
 
 def _vel(v, energy):

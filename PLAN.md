@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.9, DNA nudges (plan to DadCraft first; then 3.10-3.12, each planned with him, then Checkpoint 3). Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** DadCraft's listen after 3.9 (`clips/nudges`); then 3.10-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -606,6 +606,16 @@ For each chosen style, how each member plays it, written from sources.
       (decision 6). It works on one member or the whole band and stacks with a blend (decision 4). Check before a
       listen: each step moves its own measures the way it says, the drift measures still pass, fuzz clean. Plan to
       DadCraft before starting; in bucket 6 it may become a control in Ouralia.
+      Plan approved (Oct 27): the directions as planned (energetic: denser, harder accents; minimal: the opposite;
+      funky: off-beat hits, accent contrast; soulful: a wider loudness spread, more coloured chords; sophisticated:
+      richer colours and more varied rounds, only colours the style lists), five clicks each, opposites cancel;
+      synthwave first. Built: `theory/nudge.py` (a nudged style joins the book under its own name,
+      `stylebook.derive`, every table built for it), `--nudge energetic=2,bass:funky=1` in sketch, fuzz and drift.
+      Register isn't moved yet (the ranges are the theory's, not the style's). Checked: each direction at +3 moves
+      its own measures over 12 seeds (`tests/unit/test_nudge.py`), the judge's fit holds, fuzz clean at +5.
+- [ ] Listen after 3.9: `clips/nudges` (synthwave, seed 12, 48 bars): plain, then each direction at +4. A changed
+      weight reshuffles the draws after it, so each clip takes its own path: listen for the character, not bar by
+      bar. Synthwave is straight, so funky has little to lean on (its bass and kicks have few off-beat options).
 - [ ] 3.10 The scratch lane (DadCraft, Oct 26, from Fase Groove Guitar: `docs/research.md` round 5). The rhythm
       guitar gets a lane of muted, unpitched scratch strokes that fills the empty 16ths between its chord hits by
       itself: palm-mute chugs in power rock, funk scratch where a style asks for it (afrobeat, later). It's a

@@ -28,7 +28,7 @@ else). Tendencies, never a fixed part (decision 9)."""
 import json, os
 from dataclasses import dataclass, field
 
-from ..stylebook import STYLES, StyleError, part
+from ..stylebook import StyleError, part, per_style
 from .form import _draw
 from .rhythm import VALUES, roll
 
@@ -436,7 +436,7 @@ def _drummer_for(style):
     return _drummer(style)
 
 
-DRUMMER = {s: _drummer_for(s) for s in STYLES}   # None: the style's band has no kit (salsa)
+DRUMMER = per_style(_drummer_for)   # None: the style's band has no kit (salsa)
 
 
 def _chance(rng, pct):
@@ -594,7 +594,7 @@ def _double(style):
     return Double(tuple(runs), tuple(d["parts"]), d.get("bursts", 0), level=d.get("level", 0))
 
 
-DOUBLE = {s: _double(s) for s in STYLES}   # None: one foot
+DOUBLE = per_style(_double)   # None: one foot
 
 
 def double_kick(rng, dbl, dr, hits, phrases, met, skip=()):

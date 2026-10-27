@@ -281,4 +281,36 @@ def make(cls, data, where):
 
 def table(cls, *path):
     """{style: cls} for every style, from the same part of each file."""
-    return {s: make(cls, part(s, *path), f"{s}: {'.'.join(path)}") for s in STYLES}
+    return per_style(lambda s: make(cls, part(s, *path), f"{s}: {'.'.join(path)}"))
+
+
+# A style made from another at run time (a nudge, `theory/nudge.py`, task 3.9) joins the book under its own name;
+# each table built with `per_style` gets its row then, so the theory reads it like any style. It never joins STYLES,
+# which stays the book's own.
+_TABLES = []
+
+
+def per_style(build, keep=lambda s: True):
+    """{style: build(style)} for each style in the book `keep` lets in, kept up to date as styles are derived."""
+    d = {s: build(s) for s in BOOK if keep(s)}
+    _TABLES.append((d, build, keep))
+    return d
+
+
+def derive(name, entry):
+    """Add a style made at run time: checked like a file, then each table's row built."""
+    check(entry, name)
+    BOOK[name] = entry
+    for d, build, keep in _TABLES:
+        if keep(name):
+            d[name] = build(name)
+    return name
+
+
+def forget(name):
+    """Take a derived style out of the book and its tables again (the book's own styles stay)."""
+    if name in STYLES:
+        raise StyleError(f"{name} is one of the book's own styles")
+    BOOK.pop(name, None)
+    for d, _, _ in _TABLES:
+        d.pop(name, None)

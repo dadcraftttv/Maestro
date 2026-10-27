@@ -20,7 +20,7 @@ ones get vibrato. Sources: Wikipedia's "Power chord", "Palm mute", "Pentatonic s
 (CC BY-SA 4.0), the ideas in our own words."""
 from dataclasses import dataclass
 
-from ..stylebook import STYLES, StyleError, part
+from ..stylebook import StyleError, part, per_style
 from .flow import chord_at
 from .form import _draw
 from .voicing import member_range
@@ -100,7 +100,7 @@ def _guitar_flow(style):
     return GuitarFlow(tuple(pats), tuple(tracks), d.get("stay", 4))
 
 
-GUITAR = {s: _guitar_flow(s) for s in STYLES}   # None: no rhythm guitar
+GUITAR = per_style(_guitar_flow)   # None: no rhythm guitar
 
 
 def _probe(step, which, met):

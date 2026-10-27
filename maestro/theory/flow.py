@@ -22,7 +22,7 @@ from bisect import bisect_right
 from collections import namedtuple
 from dataclasses import dataclass, field
 
-from ..stylebook import STYLES, StyleError, midi, part
+from ..stylebook import StyleError, midi, part, per_style
 from .chords import Chord, _resolves_to, function, name, outside, parse_roman, pool, two_five
 from .form import WORDS, _draw
 from .rhythm import VALUES, check_clave
@@ -148,7 +148,7 @@ def _flow(style):
     return Flow(fams, variants, d.get("stay", 3), cad, still)
 
 
-FLOW = {s: _flow(s) for s in STYLES}
+FLOW = per_style(_flow)
 
 
 def check_family(fam, key, vocab, still=False):
@@ -425,7 +425,7 @@ def _bass_flow(style):
     return BassFlow(tuple(pats) or PATTERNS, variants, lowest=lowest)
 
 
-BASS = {s: _bass_flow(s) for s in STYLES}
+BASS = per_style(_bass_flow)
 
 
 def bass_range(bf):
@@ -847,7 +847,7 @@ def loop_flow(lp, where):
     return LoopFlow(bars, cells, lp.get("stay", 2), lp.get("vary", 20), lp.get("every", 1))
 
 
-LOOPS = {s: _loop_flow(s) for s in STYLES}   # None: the melody is shaped over the phrase
+LOOPS = per_style(_loop_flow)   # None: the melody is shaped over the phrase
 
 
 def make_loop(rng, lf, met):
@@ -978,7 +978,7 @@ def _arp_flow(style):
     return ArpFlow(tuple(shapes), rates, d.get("calm", "8th"))
 
 
-ARPS = {s: _arp_flow(s) for s in STYLES}   # None: the band has no arp
+ARPS = per_style(_arp_flow)   # None: the band has no arp
 
 
 def _ladder(chord, key, floor, top):

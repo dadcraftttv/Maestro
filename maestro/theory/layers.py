@@ -22,7 +22,7 @@ Drawn after every member's notes, with its own seed, so the same seed with and w
 notes (the A/B)."""
 from dataclasses import dataclass, field
 
-from ..stylebook import STYLES, StyleError, part
+from ..stylebook import StyleError, part, per_style
 from .flow import chord_at
 from .voicing import member_range
 
@@ -100,7 +100,7 @@ def layers_from(d, roles, where):
                   _range(d.get("changes", [0, 0]), f"{where}.changes"))
 
 
-LAYERS = {s: _layers(s) for s in STYLES}   # None: every member plays throughout
+LAYERS = per_style(_layers)   # None: every member plays throughout
 
 
 def _the(roles, verb):

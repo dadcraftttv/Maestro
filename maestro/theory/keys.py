@@ -12,7 +12,7 @@ The check: every note a tone of its chord (now or ahead), inside the keys' range
 clave. Sources: Wikipedia's "Guajeo" and "Montuno" (CC BY-SA 4.0), the ideas in our own words."""
 from dataclasses import dataclass
 
-from ..stylebook import STYLES, StyleError, part
+from ..stylebook import StyleError, part, per_style
 from .flow import chord_at
 from .form import _draw
 from .rhythm import CLAVES, RHYTHM, check_clave
@@ -70,7 +70,7 @@ def _keys_flow(style):
     return KeysFlow(tuple(pats))
 
 
-KEYS = {s: _keys_flow(s) for s in STYLES}   # None: the band has no keys
+KEYS = per_style(_keys_flow)   # None: the band has no keys
 
 
 def ladder(chord, key, floor=FLOOR):

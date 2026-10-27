@@ -11,7 +11,7 @@ choose picks onsets seeded, so a pattern is never locked (decision 9)."""
 from dataclasses import dataclass, replace
 from itertools import combinations
 
-from ..stylebook import STYLES, make, part, table
+from ..stylebook import make, part, per_style, table
 
 STEPS = 24                 # grid steps a beat (quarter note)
 TICKS = 480                # MIDI ticks a beat
@@ -335,8 +335,8 @@ def velocity(step, met, feel=Feel(), level=96):
 
 
 # Each style's feel from the style book (time.feel): "*" for every member, then a role's own.
-FEEL = {s: {"*": Feel(), **{role: make(Feel, d, f"{s}: time.feel.{role}")
-                            for role, d in part(s, "time", "feel").items() if role != "why"}} for s in STYLES}
+FEEL = per_style(lambda s: {"*": Feel(), **{role: make(Feel, d, f"{s}: time.feel.{role}")
+                                             for role, d in part(s, "time", "feel").items() if role != "why"}})
 
 
 def feel_for(style, role, **override):

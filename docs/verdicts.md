@@ -335,3 +335,7 @@ isn't reloaded every session; grep for the part a task needs.
   crashing in), and the band thinning "only in real calm dips" (the bass at 0.2, the drums at 0.3).
 - Oct 27: 3.6's power rock A/B (`clips/ab/power_rock`, seed 12, 84 bars): "B is better, keep it." Power rock's
   layering stays: the guitars alone then the crash, the breakdowns to the bass and drums, the calm dips.
+- Oct 27: 3.9 plan approved (DadCraft): the five directions as proposed, "5 clicks, opposites cancel", synthwave for
+  the first listen. Built (`theory/nudge.py`); register left for later (the ranges are the theory's). First draft
+  read syncopation as density (half time counted funky): it now uses the judge's measure, and leans each "when"
+  group on its own, so a nudge never shifts the high/low balance the sections choose.

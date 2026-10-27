@@ -14,7 +14,7 @@ tendency a style sets, never a lock: a style's modes are the ones it leans to, a
 possible (DadCraft, Oct 23). The choose picks among what's left, seeded."""
 from dataclasses import dataclass, field
 
-from ..stylebook import STYLES, StyleError, part, table
+from ..stylebook import StyleError, part, per_style, table
 from .pitch import PARENT, SCALES, Key
 from .rhythm import METERS, STEPS, VALUES
 
@@ -425,7 +425,7 @@ def _develop(style):
     return w
 
 
-DEVELOPS = {s: _develop(s) for s in STYLES}
+DEVELOPS = per_style(_develop)
 
 
 class Theme:

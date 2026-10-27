@@ -13,7 +13,7 @@ import mido
 import numpy as np
 
 from . import play
-from .stylebook import STYLES, mix_targets
+from .stylebook import BOOK, mix_targets
 
 BLOCK, HOP = 0.4, 0.1    # BS.1770's blocks: 400 ms, overlapping by 75%
 
@@ -95,10 +95,10 @@ def main(argv=None):
     a = ap.parse_args(argv)
     for mid in a.clips:
         info = json.load(open(mid[:-4] + ".json"))
-        style = info["source"].get("style")
+        style = (info["source"].get("style") or "").split("~")[0] or None   # a nudge keeps its style's mix
         gains = {n: m.get("gain", 0) for n, m in info["members"].items()}
         lines, fit = check(members(mid), {n: m["role"] for n, m in info["members"].items()},
-                           mix_targets(style) if style in STYLES else {})
+                           mix_targets(style) if style in BOOK else {})
         print(f"{mid} ({style})")
         print("\n".join(lines))
         moves = {n: round(gains[n] + d) for n, d in fit.items() if round(gains[n] + d) != gains[n]}

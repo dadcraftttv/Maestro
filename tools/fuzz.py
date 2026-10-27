@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from maestro.sketch import flow_sketch
 from maestro.stylebook import part
 from maestro.theory.form import FORM
+from maestro.theory.nudge import nudged, parse
 from maestro.theory.rhythm import METERS
 from maestro.theory.voicing import RANGES
 
@@ -71,9 +72,11 @@ def main(argv=None):
     ap.add_argument("styles", nargs="*", choices=sorted(FORM), help="every style when left out")
     ap.add_argument("--seeds", type=int, default=2000)
     ap.add_argument("--first", type=int, default=1, help="the first seed")
+    ap.add_argument("--nudge", help="DNA nudges on each style (task 3.9), as maestro.sketch takes them")
     a = ap.parse_args(argv)
     failed = False
-    for style in a.styles or sorted(FORM):
+    for style in a.styles or sorted(s for s in FORM if "~" not in s):
+        style = nudged(style, parse(a.nudge)) if a.nudge else style
         bad, shown = fuzz(style, a.seeds, a.first)
         print(f"{style}: {a.seeds - bad}/{a.seeds} seeds clean")
         for line in shown:

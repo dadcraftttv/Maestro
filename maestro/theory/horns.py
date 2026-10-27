@@ -16,7 +16,7 @@ The check: inside the horns' range, no more voices than the section has, and the
 Sources: Wikipedia's "Salsa music" and "Mambo (music)" (CC BY-SA 4.0), the ideas in our own words."""
 from dataclasses import dataclass
 
-from ..stylebook import STYLES, StyleError, part
+from ..stylebook import StyleError, part, per_style
 from .flow import LoopFlow, _loop_words, chord_at, loop_flow, loop_melody
 from .rhythm import check_clave
 from .voicing import Range, member_range
@@ -45,7 +45,7 @@ def _horn_flow(style):
                     loop_flow(d.get("riff", {}), f"{where}.riff"))
 
 
-HORNS = {s: _horn_flow(s) for s in STYLES}   # None: the band has no horns
+HORNS = per_style(_horn_flow)   # None: the band has no horns
 
 
 def strokes(clave, bar, met):
