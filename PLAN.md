@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.12's A/B to DadCraft (`clips/ab/loops`), then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** Checkpoint 3 (power rock seed 3 isn't the same between runs: fix it first, his call). Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -659,7 +659,7 @@ For each chosen style, how each member plays it, written from sources.
       pass; fuzz 2000/2000 clean, drift met, exam 106/106. Key changes sit 3 minutes apart, so the A/B is long:
       `clips/ab/distance` (seed 10, 240 bars; A 0fe729e, B distance): bar 121, a Calm, A goes down a fifth to D minor, B to the relative C major; bar 217, a Lift, A goes home to A minor, B a tone up to D major. The play is drawn before its parts, so after a different key draw the rest of B is a different roll too (drums, arp). Judge 99% and mix the same on both (drums -3, as before).
       Heard Oct 27: "the distance sounds good to me." 3.11 done. Other styles' distance waits for their rounds.
-- [ ] 3.12 Loops of different lengths (DadCraft, Oct 26, from Tangerine: `docs/research.md` round 6). A member's
+- [x] 3.12 Loops of different lengths (DadCraft, Oct 26, from Tangerine: `docs/research.md` round 6). A member's
       loop can run a length other than the bar (an arp of 5 or 7 steps against the bass's 16), so the parts meet in
       new places each time round, with accents carrying the pulse. A style's tendency (which members, which
       lengths); the loops line up again at each section or cadence so the form stays clear. Synthwave's arp and
@@ -676,6 +676,7 @@ For each chosen style, how each member plays it, written from sources.
       only the calm section, bars 17-32, differs (a loop of 3, up and down cut to 0 1 2). Judge 99% and mix the
       same on both. Found: power rock seed 3's bass and drums differ between runs (set order under Python's hash
       seed), before 3.12; open.
+      Heard Oct 27: "B sounds better, keep the loops." 3.12 done. Other members and styles wait for their rounds.
 - [ ] Checkpoint 3 (decision 16: a sound baseline per style, not a finished one; fine-tuning waits for the desk):
       each member in each style, by ear; plus a long clip and two plays of the same settings, with the
       drift measures passed first. Ask DadCraft whether the on-grid band sounds too robotic; if so, the reserve

@@ -352,3 +352,6 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 27: 3.11's plan (DadCraft): "synthwave first, gentle", then "build it as planned". Built; A/B in
   `clips/ab/distance` (seed 10, 240 bars).
 - Oct 27: 3.11's A/B (DadCraft): "the distance sounds good to me." 3.11 done.
+- Oct 27: 3.12's plan (DadCraft): calm sections only, back in line each phrase, beats louder. Built; A/B in
+  `clips/ab/loops` (seed 10, 48 bars).
+- Oct 27: 3.12's A/B (DadCraft): "B sounds better, keep the loops." 3.12 done.
