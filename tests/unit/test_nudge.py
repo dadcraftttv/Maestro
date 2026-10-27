@@ -54,11 +54,12 @@ def test_a_nudged_style_joins_the_book_but_not_styles():
         assert name in BOOK and name in FLOW and name not in STYLES
         flow_sketch(name, 1, 16)                          # its tables built, it plays
         base, new = BOOK[style]["members"], BOOK[name]["members"]
-        assert set(base) == set(new)                      # nothing added
+        assert set(base) == set(new)                      # no member added
         for role, m in base.items():
             for kind in ("patterns", "shapes"):
                 if isinstance(m, dict) and isinstance(m.get(kind), dict):
-                    assert set(m[kind]) == set(new[role][kind])
+                    added = set(new[role][kind]) - set(m[kind])     # only funky's pushes (DadCraft, Oct 27)
+                    assert set(m[kind]) <= set(new[role][kind]) and all(k.endswith(", pushed") for k in added)
 
 
 def _means(style, seeds=range(1, 13), bars=32):
@@ -70,23 +71,39 @@ def _means(style, seeds=range(1, 13), bars=32):
             for t in ("notes", "syncopation", "velocity"):
                 acc.setdefault((p.role, t), []).append(judge.measure(t, p.notes, clip, name))
         acc.setdefault("fit", []).append(judge.fit(judge.score(clip)))
+        acc.setdefault("bends", []).append(sum(p.slides for p in clip.players.values() if p.role == "melody") / clip.bars)
+        acc.setdefault("band notes", []).append(sum(len(p.notes) for p in clip.players.values()) / clip.bars)
         ch = [e["chord"] for e in song.timeline if e.get("chord")]
         acc.setdefault("colour", []).append(sum(("7" in c or "9" in c) for c in ch) / len(ch))
     return {k: st.mean(v) for k, v in acc.items()}
 
 
 # each direction at three steps on synthwave (DadCraft's style for the first listen): what it says it moves
-MOVES = {"energetic": [(("drums", "notes"), 1), (("bass", "notes"), 1)],
-         "minimal": [(("drums", "notes"), -1), (("arp", "notes"), -1)],
+MOVES = {"energetic": [("band notes", 1), (("bass", "notes"), 1)],
+         "minimal": [("band notes", -1), (("arp", "notes"), -1)],   # fewer members too: notes a played bar may rise
          "funky": [(("bass", "syncopation"), 1), (("melody", "syncopation"), 1)],
-         "soulful": [(("bass", "velocity"), 1), (("melody", "velocity"), 1)],
+         "soulful": [(("bass", "velocity"), 1), (("melody", "velocity"), 1), ("bends", 1)],
          "sophisticated": [("colour", 1)]}
 
 
 def test_each_direction_moves_its_own_measures():
-    base = _means("synthwave")
+    base, got = _means("synthwave"), {}
     for d, moves in MOVES.items():
-        got = _means(nudged("synthwave", [("band", d, 3)]))
+        g = got[d] = _means(nudged("synthwave", [("band", d, 3)]))
         for key, sign in moves:
-            assert (got[key] - base[key]) * sign > 0, f"{d}+3 didn't move {key}: {base[key]:.2f} -> {got[key]:.2f}"
-        assert got["fit"] >= base["fit"] - 0.02, f"{d}+3 lowered the judge's fit"
+            assert (g[key] - base[key]) * sign > 0, f"{d}+3 didn't move {key}: {base[key]:.2f} -> {g[key]:.2f}"
+        assert g["fit"] >= base["fit"] - 0.02, f"{d}+3 lowered the judge's fit"
+    # DadCraft (Oct 27): soulful and sophisticated sounded alike; soulful is the feel, sophisticated the harmony
+    assert got["sophisticated"]["colour"] - base["colour"] > 2 * (got["soulful"]["colour"] - base["colour"])
+    assert got["sophisticated"]["bends"] == base["bends"] < got["soulful"]["bends"]
+
+
+@pytest.mark.parametrize("direction", sorted(MOVES))
+def test_five_steps_stay_inside_the_styles_card(direction):
+    """Decision 9 and 3.9's own rule: even at five steps the style's judge passes it (minimal at +4 once dropped
+    synthwave's backbeat, Oct 27)."""
+    name = nudged("synthwave", [("band", direction, 5)])
+    for s in range(1, 7):
+        clip = judge.from_song(flow_sketch(name, s, 48)[0])
+        clip.style = "synthwave"
+        assert judge.passes(judge.score(clip)), f"{direction}+5, seed {s}: {judge.weakest(judge.score(clip))}"

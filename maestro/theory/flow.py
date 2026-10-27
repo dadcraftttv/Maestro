@@ -914,8 +914,9 @@ def loop_melody(rng, lf, spans, key, start, bars, met, floor, prev=None, phrase=
             if st % met.unit == 0:
                 pcs = {t % 12 for t in chord_at(spans, st).chord.tones}
                 d = _degree_near(key, pcs, d)
-            if last and j == len(loop) - 1:
-                d = 0 if abs(d) < abs(d - 7) else 7
+            if last and j == len(loop) - 1:            # home, or over a chord without it (V) its nearest tone
+                pcs = {t % 12 for t in chord_at(spans, st).chord.tones}
+                d = (0 if abs(d) < abs(d - 7) else 7) if 0 in pcs else _degree_near(key, pcs, d)
             m = base + key.degree(d)
             while m <= floor and m + 12 <= r.high:   # never down in the pad
                 m += 12

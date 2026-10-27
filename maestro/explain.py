@@ -563,6 +563,12 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         guitar, muted, parts, breaks, builds, bass, drums, bent, shakes, melody, second, bent2, shakes2 = rock_band(
             rng, style, plan, play, spans, key_at, bass, melody, drums, kit_why, ruled)
         why = check_bass(bass, met, clave, BASS[style])
+    elif part(style, "members", "melody").get("bends") or part(style, "members", "melody").get("vibrato"):
+        lead = part(style, "members", "melody")    # a soulful nudge's (task 3.9): any lead bends and shakes
+        bent = lead_bends(rng, melody, key_at, lead["bends"]) if lead.get("bends") else []
+        sung = {st: m for st, _, m in melody}        # a bend starts under its note: never down in the pad
+        bent = [b for b in bent if not any(at <= b[0] < at + n and m >= sung[b[0]] - b[2] for at, n, m in pad)]
+        shakes = vibrato(melody) if lead.get("vibrato") else []
     # who plays when (task 3.6): the band a phrase by the energy, with its own seed so the notes stay the same
     layered, ly = [], LAYERS[style] if layers else None
     if ly:

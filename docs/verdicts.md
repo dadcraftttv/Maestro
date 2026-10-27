@@ -339,3 +339,10 @@ isn't reloaded every session; grep for the part a task needs.
   the first listen. Built (`theory/nudge.py`); register left for later (the ranges are the theory's). First draft
   read syncopation as density (half time counted funky): it now uses the judge's measure, and leans each "when"
   group on its own, so a nudge never shifts the high/low balance the sections choose.
+- Oct 27: 3.9's first listen (DadCraft): "energetic sounds fine. minimal doesn't sound very minimal. funky didn't
+  stand out. soulful and sophisticated don't sound very different from each other." His calls: minimal thins the
+  band and leans to the calm patterns; funky may add small pushes in a straight style; soulful is the feel,
+  sophisticated the harmony. Second round built (PLAN.md 3.9); the energy step held at 0.04 a click so that even
+  +5 keeps synthwave's backbeat (0.06 dropped it on one seed in 12).
+  Trap's riff, landing a round over V, now takes the chord's nearest tone instead of the tonic (fuzz, trap
+  soulful+5 seed 167): a change to plain trap too, on those landings only.

@@ -17,6 +17,7 @@ style's, so a register step waits until a style can set them.
     nudged("synthwave", [("band", "energetic", 2), ("bass", "funky", 1)])   # -> "synthwave~energetic+2,bass:funky+1"
 """
 import copy
+import re
 
 from ..stylebook import BOOK, MEMBER, ROLES, derive
 
@@ -24,6 +25,10 @@ STEPS = 5
 # direction: (axis, sign); opposites share an axis and cancel
 DIRECTIONS = {"energetic": ("energy", 1), "minimal": ("energy", -1), "funky": ("funk", 1),
               "soulful": ("soul", 1), "sophisticated": ("polish", 1)}
+BUSY = 4             # a step of the drummer's busyness (minimal +5 at 80%: 60% lost power rock's backbeat)
+ROTATE = 0.4         # minimal's step of the bars between rotation's swaps (+5: three times as long)
+JOIN = 0.05         # a step of when the later members join (minimal later, energetic sooner)
+LEAN = 0.04         # a step of the band's energy (minimal down, energetic up), as the room's 0-1
 TILT = 0.4          # a step's lean: at five steps the option measuring most weighs 4x the one measuring least
 RATES = {"32nd": 8, "16th": 4, "triplet": 3, "8th": 2, "quarter": 1}   # the arp's notes a beat
 HARMONY = ("pad", "keys")   # a member nudge here moves the chords too; the band's always does
@@ -68,6 +73,66 @@ def syncopation(o):
     return sync / n
 
 
+def length(o):
+    """An option's mean note length in 16ths (a note left ringing counts a bar); None for kits' bars."""
+    hits = o.get("notes") or o.get("hits")
+    if not hits:
+        return None
+    return sum(16 if h[1] is None else h[1] for h in hits) / len(hits)
+
+
+PUSHED = ("bass", "drums")
+FLOOR = ("pad", "bass")   # the band's floor: it joins as it did, so a short calm play still has it   # funky's pushes: the bass's and kick's last hit on a beat a 16th early, ghost hats
+
+
+def _pushed(o):
+    """The option with its last hit on a beat (past the one) a 16th early, or None when it has none to push."""
+    new = copy.deepcopy(o)
+    if "notes" in new or "hits" in new:
+        hits = new.get("notes") or new.get("hits")
+        on = [i for i, h in enumerate(hits) if h[0] % 4 == 0 and h[0] > 0 and h[0] - 1 not in {x[0] for x in hits}]
+        if not on:
+            return None
+        i = on[-1]
+        hits[i][0] -= 1
+        if i and hits[i - 1][1] is not None and hits[i - 1][0] + hits[i - 1][1] > hits[i][0]:
+            hits[i - 1][1] = max(1, hits[i][0] - hits[i - 1][0])
+        if hits[i][1] is not None:
+            hits[i][1] += 1
+        return new
+    bars = new.get("bars", [])
+    if bars and all(isinstance(b, str) for b in bars):     # hats: a ghost 16th before beats 3 and the next one
+        out = []
+        for b in bars:
+            t = b.split()
+            for j in (3, 7):
+                if j < len(t) and t[j] == "x":
+                    t[j] = "xx"
+            out.append(" ".join(t))
+        if out == bars:
+            return None
+        new["bars"] = out
+        return new
+    moved = False
+    for b in bars:
+        on = [s for s in b if s % 4 == 0 and s > 0 and s - 1 not in b]
+        if on:
+            b[b.index(on[-1])] -= 1
+            moved = True
+    return new if moved else None
+
+
+def _push(d, funk):
+    """Funky in a straight style (DadCraft, Oct 27: "small pushes"): beside each option, its pushed copy, weighed by
+    the steps (at five half again the option's own weight)."""
+    for k, o in [(k, o) for k, o in d.items() if isinstance(o, dict) and "weight" in o and o["weight"]]:
+        p = _pushed(o)
+        if p is not None and f"{k}, pushed" not in d:
+            p["weight"] = max(1, round(o["weight"] * 0.3 * funk))
+            p["why"] = f"funky's push of {k}"
+            d[f"{k}, pushed"] = p
+
+
 def lean(weights, measure, axis):
     """Whole-number weights leaned by `axis` steps towards the options measuring most. 0 stays 0; a weight over 0
     stays 1 or more; with nothing to tell the options apart they keep their weights."""
@@ -110,6 +175,7 @@ def _feel(entry, role, accent):
 
 
 def _member(entry, role, ax):
+    clave = entry["time"].get("rhythm", {}).get("clave")   # a clave style's hits stay where its clave puts them
     m = entry["members"].get(role)
     if not isinstance(m, dict):
         return
@@ -120,6 +186,9 @@ def _member(entry, role, ax):
             for sub in [d] + [v for v in d.values() if isinstance(v, dict) and "weight" not in v]:  # drums: kicks, hats
                 _options(sub, density, energy)
                 _options(sub, syncopation, funk)
+                _options(sub, length, soul)
+                if funk and role in PUSHED and not clave:
+                    _push(sub, funk)
     if isinstance(m.get("rate"), dict):
         m["rate"] = lean(m["rate"], lambda k: RATES.get(k), energy)
     if isinstance(m.get("variants"), dict):
@@ -128,14 +197,32 @@ def _member(entry, role, ax):
                                                               1 + 0.25 * polish if k == "approach" else 1)
                                                          * (1 - 0.1 * energy if k == "drop" else 1)))
                          for k, w in v.items()}
-    for k, per in (("busy", 8), ("fills", 6)):
+    for k, per in (("busy", BUSY), ("fills", 4)):
         if k in m or role == "drums" and energy:
             m[k] = _clamp(m.get(k, {"busy": 100, "fills": 70}[k]) + per * energy, MEMBER[k])
     if "level" in m:
         m["level"] = _clamp(m["level"] + 3 * energy - soul, MEMBER["level"])
+    if role == "melody" and soul:   # soulful: the lead bends into some notes and shakes its long ones
+        m["bends"] = _clamp(m.get("bends", 0) + 6 * soul, MEMBER["bends"])
+        m["vibrato"] = m.get("vibrato", False) or soul >= 2
     accent = 2 * energy + 2 * funk + 3 * soul
     if accent:
         _feel(entry, role, accent)
+
+
+def _coloured(chords, colours):
+    """A family's chords with each plain triad coloured by one of the style's own colours (major: maj7, else add9;
+    minor: 7, else add9); the rest as written."""
+    def one(tok):
+        m = re.fullmatch(r"([b#]?)([ivIV]+)", tok)
+        if not m:
+            return tok
+        major = m.group(2).isupper()
+        for c in (("maj7", "add9") if major else ("7", "add9")):
+            if c in colours:
+                return tok + c
+        return tok
+    return " ".join(one(t) for t in chords.split(" "))
 
 
 def _harmony(entry, ax):
@@ -147,9 +234,20 @@ def _harmony(entry, ax):
     if not polish and not soul:
         return
     prog["variants"] = {k: w if not w else max(1, round(4 * w * (1 - 0.12 * polish if k == "again" else
-                                                                 1 + 0.25 * polish + (0.5 * soul if k == "colour"
-                                                                                       else 0))))
+                                                                 1 + 0.25 * polish + (0.8 * polish + 0.05 * soul
+                                                                                      if k == "colour" else 0))))
                         for k, w in full.items()}
+    fams = prog.get("families")
+    colours = set(entry["harmony"].get("vocabulary", {}).get("colours", []))
+    if polish and isinstance(fams, dict):      # sophisticated: each loop beside its coloured copy
+        for k, f in [(k, f) for k, f in fams.items() if isinstance(f, dict) and f.get("weight")]:
+            c = _coloured(f["chords"], colours)
+            if c != f["chords"] and f"{k}, coloured" not in fams:
+                fams[f"{k}, coloured"] = {**copy.deepcopy(f), "chords": c, "weight": max(1, round(f["weight"] * 0.3 * polish)),
+                                          "why": f"sophisticated's colouring of {k}"}
+    if polish:      # sophisticated travels further: key changes a little more often
+        form = entry.setdefault("form", {})
+        form["change"] = min(100, form.get("change", 20) + 4 * polish)
 
 
 def axes(steps):
@@ -197,6 +295,17 @@ def nudged(base, nudges):
         _member(entry, role, ax)
     harmony = axes([(d, n) for t, d, n in nudges if t == "band" or t in HARMONY])
     _harmony(entry, harmony)
+    if band["energy"]:      # the band's energy: minimal plays calmer and thinner, energetic hotter and fuller
+        entry.setdefault("form", {})["lean"] = round(LEAN * band["energy"], 2)
+        ly = entry.get("layers")
+        if ly:
+            lean = entry["form"]["lean"]   # the floor joins at the same felt energy; the rest later (or sooner)
+            ly["join"] = {k: v if k == "why" else round(max(0.0, min(1.0, v + lean if k in FLOOR
+                                                                     else v - JOIN * band["energy"])), 2)
+                          for k, v in ly["join"].items()}
+            ly["breakdowns"] = _clamp(ly.get("breakdowns", 0) - 6 * band["energy"], (0, 100))
+            if band["energy"] < 0 and any(ly.get("rotate", [0, 0])):   # minimal swaps less: a calm band stays put
+                ly["rotate"] = [round(b * (1 - ROTATE * band["energy"])) for b in ly["rotate"]]
     rhythm = entry["time"].setdefault("rhythm", {})   # funkier plays across the beat: a lower lift
     if band["funk"]:
         rhythm["lift"] = max(0, rhythm.get("lift", 2) - round(0.4 * band["funk"]))

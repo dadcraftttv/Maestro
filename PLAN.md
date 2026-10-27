@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listen after 3.9 (`clips/nudges`); then 3.10-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** DadCraft's second listen after 3.9 (`clips/nudges`); then 3.10-3.12, each planned with him, then Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -613,9 +613,18 @@ For each chosen style, how each member plays it, written from sources.
       `stylebook.derive`, every table built for it), `--nudge energetic=2,bass:funky=1` in sketch, fuzz and drift.
       Register isn't moved yet (the ranges are the theory's, not the style's). Checked: each direction at +3 moves
       its own measures over 12 seeds (`tests/unit/test_nudge.py`), the judge's fit holds, fuzz clean at +5.
-- [ ] Listen after 3.9: `clips/nudges` (synthwave, seed 12, 48 bars): plain, then each direction at +4. A changed
-      weight reshuffles the draws after it, so each clip takes its own path: listen for the character, not bar by
-      bar. Synthwave is straight, so funky has little to lean on (its bass and kicks have few off-beat options).
+- [x] Listen after 3.9 (Oct 27): "energetic sounds fine. minimal doesn't sound very minimal. funky didn't stand out.
+      soulful and sophisticated don't sound very different from each other." His calls for the second round:
+      minimal thins the band (the energy leans down: members join later, more breakdowns, the calm patterns),
+      energetic the opposite; funky may add small pushes in a straight style (the bass's and kick's last hit on a
+      beat a 16th early, ghost 16th hats; not in a clave style); soulful is the feel (dynamics, longer notes, the
+      lead's bends and vibrato, in any style now), sophisticated the harmony (each loop beside a coloured copy in
+      the style's own colours, more colour passes, key changes more often). Even +5 passes the style's judge:
+      the floor (pad, bass) joins as before so a short calm play has it, the others later, and rotation swaps less
+      (at +5 it brought the drums into calm bars, half time only). Fuzz found an old trap bug on the way: a riff
+      round landing home over V sang the tonic against it; it now lands on the chord's nearest tone there.
+- [ ] Listen after 3.9, round 2: `clips/nudges` (synthwave, seed 12, 48 bars, plain then each at +4). Each clip
+      still takes its own path (a changed weight reshuffles the draws), so listen for the character.
 - [ ] 3.10 The scratch lane (DadCraft, Oct 26, from Fase Groove Guitar: `docs/research.md` round 5). The rhythm
       guitar gets a lane of muted, unpitched scratch strokes that fills the empty 16ths between its chord hits by
       itself: palm-mute chugs in power rock, funk scratch where a style asks for it (afrobeat, later). It's a

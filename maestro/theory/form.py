@@ -122,10 +122,13 @@ class Form:
     life: int = 8                           # statements before a motif is reborn from its own fragment
     home: dict = field(default_factory=dict)   # the home key's mode a play draws, by weight (power rock: mostly
     #                                            major); empty: the play's home as given
+    lean: float = 0.0                       # added to the room's energy: a DNA nudge's (task 3.9), -0.5 to 0.5
 
     def __post_init__(self):
         if self.opening not in ("swell", "full"):
             raise ValueError(f"unknown opening {self.opening!r}")
+        if not -0.5 <= self.lean <= 0.5:
+            raise ValueError("lean goes from -0.5 to 0.5")
         for what, names, known in (("key move", self.moves, MOVES), ("mode", self.modes, SCALES),
                                    ("home mode", self.home, SCALES),
                                    ("section kind", self.grow, KINDS)):
@@ -213,7 +216,7 @@ class Play:
         return next(w for w in self.waves if w.start <= bar < w.end).at(bar)
 
     def _energy(self, kind, bar, room):
-        return _clamp(room + self.form.depth * (self.arc(bar) - 0.5) + SHIFT[kind])
+        return _clamp(room + self.form.lean + self.form.depth * (self.arc(bar) - 0.5) + SHIFT[kind])
 
     def _kind(self, bar, room):
         prev = self.sections[-1] if self.sections else None
