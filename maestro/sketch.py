@@ -255,6 +255,9 @@ def main(argv=None):
     ap.add_argument("--seed", type=int, help="the first seed (the next ones count up); fresh by default")
     ap.add_argument("--nudge", help="DNA nudges (task 3.9), e.g. energetic=2,bass:funky=1; directions: "
                     "energetic, minimal, funky, soulful, sophisticated, 0-5 steps each")
+    ap.add_argument("--pocket", type=int, default=0, help="the reserve pocket (decision 13), ms either way: the "
+                    "same notes, each step shared by the band nudged off the grid (for listening; the judge reads "
+                    "the on-grid clip)")
     a = ap.parse_args(argv)
     a.out = a.out or ("clips/flow" if a.flow else "clips/checkpoint2")
     a.bars = a.bars or (16 if a.flow else 8)
@@ -265,6 +268,7 @@ def main(argv=None):
         for _ in range(a.seeds):
             song, lines = (flow_sketch if a.flow else sketch)(style, seed, a.bars)
             stem = os.path.join(a.out, f"{style.translate(str.maketrans('~:,', '_-_'))}_{seed}")
+            song.pocket = a.pocket
             song.write(stem)
             with open(f"{stem}.txt", "w") as f:
                 f.write("\n".join(lines) + "\n")

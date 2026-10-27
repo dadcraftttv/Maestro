@@ -216,8 +216,9 @@ carries on from before.
     grid step** (PLAN.md decision 13): no member plays ahead or behind, nothing is loosened at random, and members
     playing the same step land on it together (a swung part over a straight one is ruled out). Human-played data
     (the Groove MIDI drums) gets its notes rounded to the grid when it's tokenized, so the model never learns to
-    drift. A shared band pocket (one small timing draw per step for the whole band) is kept in reserve in commit
-    `56888cc`, in case checkpoint 3 sounds too robotic.
+    drift. A shared band pocket (one small timing draw per step for the whole band) is kept in reserve, in case
+    checkpoint 3 sounds too robotic: `Song.pocket` (ms either way) moves only the written MIDI, the notes stay on
+    the grid, and the song file's JSON says `pocket_ms`.
   - **repetition:** how much it repeats the bars before versus moves on (MidiTok's repetition control); with the
     seed it is how decision 9 gets measured and steered.
 - **Sound is not here.** Each member's sound is a name in `sound` (an Ouralia kit), never in the notes or tokens,

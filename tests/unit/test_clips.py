@@ -2,6 +2,7 @@
 """Song files, the baseline clips and the clip player."""
 import array, json, os, wave
 
+import mido
 import pytest
 
 from maestro import baseline, play
@@ -26,6 +27,34 @@ def test_song_file_round_trip(tmp_path):
     assert read_notes(mid)["bass"] == sorted(m.notes, key=lambda n: (n.step, n.pitch))
     info = json.load(open(tmp_path / "t.json"))
     assert info["listen"] == "a test" and info["members"]["bass"] == {"role": "bass", "sound": 38}
+
+
+def _onsets(mid):
+    out = {}
+    for tr in mido.MidiFile(mid).tracks[1:]:
+        now = 0
+        for msg in tr:
+            now += msg.time
+            if msg.type == "note_on":
+                out.setdefault(tr.name, []).append(now)
+    return out
+
+
+def test_the_pocket_moves_the_band_together_and_keeps_the_notes(tmp_path):
+    def band(pocket):
+        s = Song(tempo=100, source={"seed": 7}, pocket=pocket)
+        for name in ("bass", "pad"):
+            m = s.member(name, name, 38)
+            for k in range(16):
+                m.add(k * 24, 12, 40)
+        return s
+    grid, held = _onsets(band(0).write(str(tmp_path / "a"))), _onsets(band(5).write(str(tmp_path / "b")))
+    assert grid["bass"] == [k * 480 for k in range(16)]
+    assert held["bass"] == held["pad"]                          # one shared draw a step: the band stays together
+    assert held["bass"] != grid["bass"]
+    limit = round(5 * 480 * 100 / 60000)                        # 5 ms in ticks at 100 BPM
+    assert all(abs(h - g) <= limit for h, g in zip(held["bass"], grid["bass"]))
+    assert held == _onsets(band(5).write(str(tmp_path / "c")))  # the same seed, the same pocket
 
 
 def test_baseline_same_seed_same_clip_and_the_pad_is_the_composers(tmp_path):

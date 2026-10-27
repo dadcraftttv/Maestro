@@ -4,12 +4,15 @@ JSON file beside it with what MIDI can't hold (the timeline, each member's role 
 and what to listen for). Ticks: 480 a beat. Notes are kept in grid steps (24 a beat, `theory/rhythm.py`), so every
 note starts and ends on point on the grid (decision 13); a note that isn't on a step can't be written. A member's
 slides (trap's 808, power rock's lead) are pitch bends, the bend range set to an octave; the bend is back at rest by
-the next note. A member may sit to one side (its pan) and shake a held note (the mod wheel: vibrato)."""
+the next note. A member may sit to one side (its pan) and shake a held note (the mod wheel: vibrato). The reserve
+pocket (decision 13, Checkpoint 3's A/B) is the one exception to the grid, and only in the written MIDI: one small
+timing draw per step, the same for every member, so the band moves together; the notes themselves stay on the grid."""
 import json
 from dataclasses import dataclass, field
 
 import mido
 
+from .rng import ComposerRng
 from .synth import SYNTHS
 from .theory.rhythm import STEPS, TICK, TICKS
 
@@ -73,6 +76,7 @@ class Song:
     timeline: list = field(default_factory=list)   # one entry per bar or change (format.md, "The timeline")
     source: dict = field(default_factory=dict)     # where it came from: set, license, seed...
     listen: str = ""                               # what DadCraft listens for (said before the clip plays)
+    pocket: int = 0                                # the reserve pocket, ms either way (0: on the grid, decision 13)
 
     def member(self, name, role, program=0, kit=False):
         if isinstance(program, str) and program not in SYNTHS:
@@ -85,6 +89,15 @@ class Song:
         num, den = self.meter
         return num * STEPS * 4 // den
 
+    def shifts(self, last):
+        """Each step's pocket shift in ticks up to step `last`: drawn in step order from the song's seed (apart from
+        its choices, so the notes are the same with or without it), shared by every member."""
+        if not self.pocket:
+            return None
+        rng, per_ms = ComposerRng(), TICKS * self.tempo / 60000
+        rng.seed(self.source.get("seed", 0) ^ 0x90C7)
+        return [round((rng.rnd(2 * self.pocket + 1) - self.pocket) * per_ms) for _ in range(last + 1)]
+
     def write(self, stem):
         """Writes `<stem>.mid` and `<stem>.json`; returns the MIDI path."""
         mid = mido.MidiFile(type=1, ticks_per_beat=TICKS)
@@ -94,6 +107,10 @@ class Song:
         head.append(mido.MetaMessage("time_signature", numerator=self.meter[0], denominator=self.meter[1], time=0))
         mid.tracks.append(head)
         chan = iter(c for c in range(16) if c != DRUMS_CHANNEL)
+        last = max((n.step + n.steps for m in self.members for n in m.notes), default=0)
+        last = max([last] + [a + st + h for m in self.members for a, st, _, h in m.slides]
+                   + [a + st for m in self.members for a, st in m.vibrato])
+        shift = self.shifts(last)
         for m in self.members:
             ch = DRUMS_CHANNEL if m.kit else next(chan)
             tr = mido.MidiTrack()
@@ -119,6 +136,8 @@ class Song:
             for at, steps in m.vibrato:
                 ev.append((at * TICK, 1, mido.Message("control_change", channel=ch, control=1, value=VIBRATO)))
                 ev.append(((at + steps) * TICK, 0, mido.Message("control_change", channel=ch, control=1, value=0)))
+            if shift:   # every event moves with its step's draw (a bend point 1 tick early keeps its step)
+                ev = [(max(0, t + shift[(t + 1) // TICK]), o, msg) for t, o, msg in ev]
             now = 0
             for t, _, msg in sorted(ev, key=lambda e: (e[0], e[1])):
                 tr.append(msg.copy(time=t - now))
@@ -126,7 +145,7 @@ class Song:
             mid.tracks.append(tr)
         mid.save(f"{stem}.mid")
         info = {"tempo": self.tempo, "meter": f"{self.meter[0]}/{self.meter[1]}", "source": self.source,
-                "listen": self.listen,
+                "listen": self.listen, **({"pocket_ms": self.pocket} if self.pocket else {}),
                 "members": {m.name: {"role": m.role, "sound": m.program if isinstance(m.program, str) else
                                      "kit" if m.kit else m.program, **({"pump": m.pump} if m.pump else {}),
                                      **({"gain": m.gain} if m.gain else {}), **({"pan": m.pan} if m.pan else {}),

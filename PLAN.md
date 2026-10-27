@@ -4,7 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Checkpoint 3. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** Checkpoint 3, synthwave's listen (`clips/checkpoint3/synthwave`), then trap, salsa, power rock, one a
+session. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -690,6 +691,14 @@ For each chosen style, how each member plays it, written from sources.
       pocket (decision 13) can be played to him next to the on-grid version. Ask too whether the chord rounds change
       too much or too little, on the long clip (open from the listen after 3.2). Also for his ear, from 2.5: the
       semitone key lift, how sections growing heavier comes across, and the layering (3.6).
+      Plan approved (Oct 27): one style a session (synthwave, trap, salsa, power rock), plain only as a reference,
+      the pocket A/B built now. Built: `maestro/checkpoint.py` writes a style's set to `clips/checkpoint3/<style>`
+      (the full 84-bar play with its summary and the judge's table; each member alone, the 16 bars of that play
+      where it plays most, with its 2-3 lines; the pocket clip; a second play; a 240-bar play; plain). The reserve
+      pocket is `Song.pocket` / `sketch --pocket MS`: one draw per step from its own seed, shared by the band, only
+      in the written MIDI, so the notes and the judge are unchanged. 2 new tests, 326 pass. Synthwave (seed 12):
+      judge 99% on all three plays, only the melody's register high (E5-E6, an open point for the desk); drift
+      met; the mix's drums about 4 dB loud, as before.
 
 ### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a

@@ -355,3 +355,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 27: 3.12's plan (DadCraft): calm sections only, back in line each phrase, beats louder. Built; A/B in
   `clips/ab/loops` (seed 10, 48 bars).
 - Oct 27: 3.12's A/B (DadCraft): "B sounds better, keep the loops." 3.12 done.
+- Oct 27: Checkpoint 3's plan (DadCraft): one style a session, plain only as a reference, the pocket A/B built now.
+  Synthwave's set in `clips/checkpoint3/synthwave` (seed 12).
