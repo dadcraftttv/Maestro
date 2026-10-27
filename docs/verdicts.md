@@ -317,3 +317,6 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 26: 3.6's plan, "1-5 now, at least two, synthwave first, 6 can come up later": the layer map, builds and
   eases, breakdowns, rotation and slow change now; the band never thinner than two members; synthwave's long clip
   first; a style per section later.
+- Oct 26: 3.6's synthwave A/B (`clips/ab/synthwave`, seed 14, 84 bars): "B is better, keep the kick drop." The band
+  thinning and filling with the energy and the breakdown setting up what follows: yes to both; "the rotations sound
+  good. and the slow changes keep it fresh."

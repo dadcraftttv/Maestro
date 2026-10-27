@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** 3.6, layering: synthwave built, DadCraft's A/B listen (`clips/ab/synthwave`), then the other styles. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
+**Next:** 3.6, layering: synthwave's heard and kept (Oct 26); the other styles' layer maps, proposal to DadCraft first. Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
 reference for the cascade.
 
 ## The goal (DadCraft, Oct 23)
@@ -528,8 +528,9 @@ For each chosen style, how each member plays it, written from sources.
       pad; a swap every 16-32 bars, never on a section's first phrase; a slow change every 2-3 phrases. The drums'
       last-bar kick drop stays as it was (a one-bar fill, not a layering choice). Checks: `tests/unit/test_layers.py`,
       fuzz 2000/2000 clean, drift all met, judge 99% (every member 80%+), mix in its targets. Listen:
-      `clips/ab/synthwave` (A: 0f50ba5, no layering; B: layered; seed 14, 84 bars, 3 minutes). Then the other
-      styles' layer maps.
+      `clips/ab/synthwave` (A: 0f50ba5, no layering; B: layered; seed 14, 84 bars, 3 minutes). Heard Oct 26: B
+      better; the thinning and filling, the breakdown, the rotations and the slow changes all good; the kick drop
+      stays (`docs/verdicts.md`). Next: the other styles' layer maps.
 - [ ] 3.7 Clip summaries: a short summary in plain words for each checkpoint clip (shape agreed Oct 24: style,
       bars, key, tempo; the chords as a loop and how it varies; the bass; the pad; the melody's phrase; a "listen
       for" line). The detailed per-bar explanation stays, for debugging.
