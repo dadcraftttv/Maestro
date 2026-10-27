@@ -4,9 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** Checkpoint 3, trap's set and listen (`python -m maestro.checkpoint trap`), then salsa, power rock, one
-a session (synthwave passed Oct 27). Every listen gets the judge's table first (3.5). Synthwave's open points (below, after 3.4b's listen) wait for its next round; trap waits for DadCraft's
-reference for the cascade.
+**Next:** paused (DadCraft, Oct 27: "log this so we can come back to it later"). On return, start from "Generic, Oct 27" under Checkpoint 3: his call on the melody fix (its A/B on synthwave), then the same-notes, better-sounds A/B on trap, before Checkpoint 3 goes on (salsa, power rock) or the plan changes.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -702,6 +700,32 @@ For each chosen style, how each member plays it, written from sources.
       Synthwave heard Oct 27: "i'm good with how all of them sound": every member, the second and long plays, plain
       for reference. Synthwave passes as a baseline. He didn't ask for the pocket, so the band stays on the grid
       (decision 13) and the pocket stays in reserve.
+      Trap's set built Oct 27 (seed 12): judge 100% on all three plays (the long play's riff triplets 4%, under
+      5%), mix in target, drift met over 20 minutes. On the 84-bar files two misses, both the measure's: the riff is
+      counted as a melody (file mode doesn't apply `--flow`'s riff rule; a 3-line fix), and 3 of 85 bars match
+      between the two plays (1% over 20 minutes).
+      **Generic, Oct 27.** DadCraft on trap's set: "all of this sounds painfully generic, across all the genres. the
+      trap bass and drums are dialed in, but everything else... ehhhh." Then: maybe "the sounds and mastering",
+      maybe "the notes occasionally sound like they're rushing ... tripping over themselves". Checkpoint 3 paused.
+      What was found (measured, nothing changed yet):
+      - The tripping: the motif's "diminish" move (`theory/form.py`, "twice as fast") can apply to a motif already
+        sped up, so 8ths become 16ths, then 32nds, for long stretches; `check_motif` only refuses notes under a
+        32nd. Melody 32nds: synthwave 119 of 395 (`clips/checkpoint3/synthwave/1_full_12`, about 0:24-0:51 and
+        1:09-1:24), power rock 86 of 381 (`clips/ab/power_rock/2_B_now_12`, 0:26-0:37, 1:26-1:45), salsa 35 of 177
+        (`clips/ab/salsa/2_B_now_12`, 0:31-0:45). Trap's riff has none; its triplets over straight hats (one
+        beat every few bars) are the only candidate there. Clean: no member's notes overlap, nothing off the grid,
+        bass and pad never faster than 16ths; the near-hits against the drums are trap's hat rolls.
+      - The sounds: trap's riff and strings are FluidR3 GM (`play.py`); only the 808 and the kit are Maestro's own
+        synths, the parts he called dialed in.
+      - Why generic (Opus): the parts drawn from real music (GMD grooves, the 808) are the ones that land; the
+        rule-written melody, pad and harmony are correct but middle-of-the-road. Bucket 4's practice MIDI from the
+        style book would teach a model the same thing.
+      Proposed, waiting for his call: (1) "diminish" only down to 16ths, A/B on synthwave, the rest of the play
+      unchanged; (2) the same notes through better, openly licensed sounds next to today's, trap first, to tell
+      notes from sounds; (3) his moments ("file, time, what's off") and a reference track or two per style, kept
+      in `inbox/`, ideas only; (4) then likely: stop Checkpoint 3's style-by-style listens, move the spike (S) to a
+      melodic member, and rethink bucket 4's sources (real music to MIDI, the desk) with the style book as the
+      guardrails. Not decided.
 
 ### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a

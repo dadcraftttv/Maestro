@@ -359,3 +359,8 @@ isn't reloaded every session; grep for the part a task needs.
   Synthwave's set in `clips/checkpoint3/synthwave` (seed 12).
 - Oct 27: Checkpoint 3, synthwave's listen (DadCraft): "i'm good with how all of them sound." Synthwave passes as a
   baseline; the pocket stays in reserve, the band on the grid.
+- Oct 27: Checkpoint 3, trap's set (seed 12; judge 100%, mix in target). DadCraft: "i have to be very honest - all
+  of this sounds painfully generic, across all the genres. the trap bass and drums are dialed in, but everything
+  else... ehhhh. same with various aspects of the other genres." Then: "it might be the sounds and mastering, it
+  could be that the notes occasionally sound like they're rushing and sound like theyre tripping over themselves."
+  Checkpoint 3 paused there: "log this so we can come back to it later." Findings in PLAN.md ("Generic, Oct 27").
