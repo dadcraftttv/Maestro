@@ -92,12 +92,13 @@ def check(levels, roles, targets):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("clips", nargs="+", help="MIDI clips (their JSON beside them)")
+    ap.add_argument("--sf2", help="another soundfont for the GM members")
     a = ap.parse_args(argv)
     for mid in a.clips:
         info = json.load(open(mid[:-4] + ".json"))
         style = (info["source"].get("style") or "").split("~")[0] or None   # a nudge keeps its style's mix
         gains = {n: m.get("gain", 0) for n, m in info["members"].items()}
-        lines, fit = check(members(mid), {n: m["role"] for n, m in info["members"].items()},
+        lines, fit = check(members(mid, a.sf2), {n: m["role"] for n, m in info["members"].items()},
                            mix_targets(style) if style in BOOK else {})
         print(f"{mid} ({style})")
         print("\n".join(lines))

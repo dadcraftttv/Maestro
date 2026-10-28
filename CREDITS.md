@@ -24,6 +24,10 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
 
 - **FluidR3 GM** soundfont, by Frank Wen (Toby Smithe and contributors), MIT license: the clip player's sounds
   (`tools/get_sounds.sh`, from Ubuntu's `fluid-soundfont-gm`). **FluidSynth** (LGPL-2.1), used as the system library.
+- **GeneralUser GS** v2.0.3 soundfont, by S. Christian Collins, its own license ("You may use GeneralUser GS without
+  restriction for your own music creation, private or commercial"; its author can't vouch for every sample's
+  origin): B of the sounds A/B on trap (Oct 28), on this PC only (`tools/get_sounds.sh`, from
+  github.com/mrbumpy409/GeneralUser-GS). Not shipped, not trained on.
 
 ## Written theory (ideas in our own words, cited in the style files' `sources`)
 

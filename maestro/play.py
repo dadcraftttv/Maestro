@@ -62,7 +62,8 @@ def _own(mid):
     return {n: (m["sound"], m.get("pump", 0) / 100) for n, m in members.items() if m.get("sound") in synth.SYNTHS}
 
 
-OWN = {"supersaw": synth.supersaw, "saw bass": synth.saw_bass, "pluck": synth.pluck, "saw lead": synth.saw_lead}
+OWN = {"supersaw": synth.supersaw, "saw bass": synth.saw_bass, "pluck": synth.pluck, "saw lead": synth.saw_lead,
+       "fm bell": synth.fm_bell, "dark strings": synth.dark_strings}
 
 
 def _synth_tracks(midi, own, length):

@@ -32,7 +32,8 @@ Ouralia's own sounds (bucket 6) start from these settings."""
 import numpy as np
 
 RATE = 44100
-SYNTHS = ("808", "808 kit", "supersaw", "saw bass", "pluck", "saw lead", "linn kit")   # the last five: synthwave
+SYNTHS = ("808", "808 kit", "supersaw", "saw bass", "pluck", "saw lead", "linn kit",   # synthwave: the five after the 808s
+          "fm bell", "dark strings")                                          # trap's, for the sounds A/B
 
 # the 808 bass
 DROP, DROP_S = 2.0, 0.02          # semitones the pitch falls from at the start, and how fast (s)
@@ -324,6 +325,41 @@ def saw_lead(notes, length):
     return 0.3 * out
 
 
+# ---- trap's bell and strings, our own (the sounds A/B, Oct 28) ----
+
+def fm_bell(notes, length):
+    """A clean FM bell: a sine carrier, its modulator at 3.5 (the bell's clang) fading fast, a second at 1 (the
+    body) fading slower; two copies a few cents apart, left and right."""
+    out = np.zeros((length, 2))
+    for a, held, n, pitch, vel in _notes_of(notes, 0.5):
+        t = np.arange(n) / RATE
+        for c, pan in ((-4, -0.35), (4, 0.35)):
+            f = _hz(pitch + c / 100)
+            clang = 2.2 * min(1.0, 700 / f)      # softer up high, so its sidebands stay under Nyquist
+            mod = clang * np.exp(-t / 0.12) * np.sin(2 * np.pi * 3.5 * f * t)
+            mod += 0.8 * np.exp(-t / 0.5) * np.sin(2 * np.pi * f * t)
+            y = np.sin(2 * np.pi * f * t + mod)
+            y *= np.exp(-t / 0.9) * _env(n, 0.002, held, 0.5) * _amp(vel)
+            _place(out, y, a, pan)
+    return 0.3 * out
+
+
+def dark_strings(notes, length):
+    """Dark synth strings: four saws spread left to right, a slow bow, a slow vibrato, closed down to about 1 kHz."""
+    out = np.zeros((length, 2))
+    rng = np.random.default_rng(49)
+    for a, held, n, pitch, vel in _notes_of(notes, 0.9):
+        t = np.arange(n) / RATE
+        vib = 0.06 * np.sin(2 * np.pi * 4.8 * t + rng.random() * 6.28)
+        x = np.zeros((n, 2))
+        for c, pan in ((-14, -0.7), (-5, -0.3), (9, 0.4), (16, 0.75)):
+            _place(x, _saw(_hz(pitch + c / 100 + vib), rng.random()), 0, pan)
+        x = _high(_tone(x.T, 1100), 120).T * _env(n, 0.35, held, 0.9)[:, None] * _amp(vel) / 2
+        b = min(length, a + n)
+        out[a:b] += x[:b - a]
+    return 0.3 * out
+
+
 def _linn_sounds():
     rng = np.random.default_rng(1982)       # fixed: the kit sounds the same every time
     s = {}
@@ -400,7 +436,8 @@ def linn_kit(hits, length):
 
 # each sound's own space: (echo wet, echo feedback, reverb wet, reverb seconds)
 MIX = {"supersaw": (0.0, 0.0, 0.35, 2.8), "saw bass": (0.0, 0.0, 0.0, 0.0), "pluck": (0.32, 0.38, 0.22, 1.8),
-       "saw lead": (0.2, 0.3, 0.28, 2.2), "linn kit": (0.0, 0.0, 0.1, 1.2)}
+       "saw lead": (0.2, 0.3, 0.28, 2.2), "linn kit": (0.0, 0.0, 0.1, 1.2),
+       "fm bell": (0.18, 0.3, 0.25, 2.0), "dark strings": (0.0, 0.0, 0.3, 2.6)}
 _IRS = {}
 
 
