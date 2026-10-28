@@ -394,3 +394,7 @@ isn't reloaded every session; grep for the part a task needs.
   rights inspection and S.1 dependencies/measures/budget review remain open; no training approval implied.
 - Oct 28, S.0a v2 rights: Claude Code found copyrighted songs in the CC0 sample and proposed reading all 419
   titles by eye and cutting known songs, arrangements and doubtful or unreadable entries. DadCraft: "yes".
+- Oct 28, C418's "Stall" (cut as doubtful): DadCraft asked whether C418's Minecraft music is public domain (it is
+  not; he keeps the rights). "Stall is one of his, so let's leave it out." On adding public-domain classical and
+  traditional scores (marked not original, so v1/v2 excluded them): "lets use as much as we possibly can."
+  Licence stays CC0/public domain only.

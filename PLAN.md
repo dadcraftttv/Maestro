@@ -4,7 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.1 review (bucket S): measures, dependencies and a fixed compute budget come back before training.
+**Next:** S.0a v3 (bucket S, Codex has the brief): add public-domain classical and traditional scores to the 327
+reviewed pieces (DadCraft, Oct 28: "lets use as much as we possibly can"). Then S.1 review before training.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
 254/35/38, families kept apart). Cut list: `private/s0a_v2/claude_rights_cuts.json`; findings: `REPORT.md`.
 
