@@ -409,3 +409,6 @@ isn't reloaded every session; grep for the part a task needs.
   limits and additional-source options: "make sure all of this is logged for Claude Code." Discussion recorded
   in docs/data.md, "Corpus-size follow-up", and Conductor's handoff. This is a logging request, not approval of
   new downloads, policy changes, spending or training.
+- Oct 28, after Claude's v3 review: "lets build the proper reader and have Codex do that plus any subsequent work."
+  Applied: S.0a v4 (music21 reader, cuts applied, repeats capped at 2 per work) briefed to Codex; later tasks
+  (S.1 prep) go to Codex too, each reviewed by Claude Code before the next.

@@ -4,10 +4,10 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft picks the order: S.1 pilot on the 514 kept pieces, or a proper MusicXML converter first to
-widen the data (see `docs/data.md`, "Corpus-size follow-up"). S.0a v3 is reviewed: Claude Code cut 23 of 537 (6 known
-in copyright or third-party, 15 doubtful, 2 unreadable titles); cut list `private/s0a_v3/claude_rights_cuts.json`.
-DadCraft's new-pool listen is still open.
+**Next:** S.0a v4 (bucket S, Codex has the brief): a proper MusicXML reader (music21), rerun OpenScore, apply
+Claude Code's 23 v3 cuts, cap repeats at 2 per work, recount (DadCraft, Oct 28: "lets build the proper reader and
+have Codex do that plus any subsequent work"). Then Claude reviews and S.1 prep goes to Codex.
+v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen is still open.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
 254/35/38, families kept apart). Cut list: `private/s0a_v2/claude_rights_cuts.json`; findings: `REPORT.md`.
 
