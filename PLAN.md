@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's call on the third proof (decision 19): a few human-written, openly licensed pieces from PDMX through Maestro's player, no transcription; then S on a melodic member trained on them.
+**Next:** the third proof under decision 19 (approved, on hold until DadCraft says go): PDMX's human-written open scores through Maestro's player, no transcription; steps under "Generic, Oct 27", after the second proof.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -132,6 +132,19 @@ band member play, the way its style plays it?
     Maestro's sounds (c), and with its own drum stem (d). His listen (Oct 28): "it's better, but not by much. it's
     like the aliens got a slightly better understanding of what the box was supposed to be." Transcribing audio
     is not the main source; next proposed: human-written open scores (PDMX) through the same player.
+    **The third proof, approved and on hold** (DadCraft, Oct 28: "yes, but hold off on that. log that as the next
+    step"; Claude Code or Codex may pick it up). The steps:
+    1. Check PDMX's license notice and its own license-conflict flags at the source; record what's found in
+       `docs/data.md` (it's listed SAFE there) before using it. Fetch only the files needed if the set allows it
+       (the full set is 14.4 GB), into `private/` (gitignored).
+    2. Pick 4-6 well-rated pieces tagged pop, electronic, game or film style, people's own originals only: no
+       arrangement of a copyrighted song, whatever its license (decision 7). Say why each was picked.
+    3. Map each piece's parts to Maestro's members (melody, pad, bass; drums left out) and render each two ways:
+       Maestro's synthwave sounds (saw lead, supersaw, saw bass) balanced with `python -m maestro.mix` to
+       synthwave's targets, and a plain GM piano (program 0). Into `private/pdmx_proof/`.
+    4. Measure first (the mix check, note counts and ranges), then tell DadCraft what to listen for: do
+       human-written notes through our player convince where ours and the transcribed ones didn't? Yes: S trains
+       on PDMX's melodies and chords. No: our sounds and rendering are fixed before any model work.
 
 ## How each bucket runs
 
