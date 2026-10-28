@@ -24,6 +24,7 @@ from dataclasses import dataclass, field
 
 from ..stylebook import StyleError, part, per_style
 from .flow import chord_at
+from .rhythm import check_clave
 from .voicing import member_range
 
 ANCHORS = ("bass", "pad", "keys", "guitar", "arp")   # members that carry the chords or the bass
@@ -214,9 +215,17 @@ def silence(notes, lo, hi):
             if not lo <= st < hi]
 
 
-def slow_changes(rng, ly, phrases, take, spans, key_at, met):
+def _crossed(notes, clave):
+    """The clave cycles (their first step) where the notes cross the clave."""
+    cycles = {n[0] - n[0] % clave.length for n in notes}
+    return {c for c in cycles
+            if check_clave([n[0] % clave.length for n in notes if c <= n[0] < c + clave.length], clave)}
+
+
+def slow_changes(rng, ly, phrases, take, spans, key_at, met, clave=None):
     """One detail of one member changed every few phrases, kept while its section goes round (Tangerine's slow
-    change). Changes the take's lists in place; returns the words, one a change, with its phrase."""
+    change). Changes the take's lists in place; returns the words, one a change, with its phrase. A dropped hit
+    that would cross the `clave` isn't dropped."""
     if not ly.changes[1]:
         return []
     said, due, bar = [], _between(rng, ly.changes), met.bar
@@ -260,6 +269,8 @@ def slow_changes(rng, ly, phrases, take, spans, key_at, met):
                     m += step
                 n = (n[0], n[1], m) if r.low <= m <= r.high else n
             changed.append(n)
+        if kind == "off" and clave is not None and _crossed(changed, clave) - _crossed(notes, clave):
+            continue
         take[role][:] = changed
         what = {"off": "a hit dropped", "accent": f"a hit {'louder' if up else 'softer'}",
                 "octave": f"a note an octave {'up' if up else 'down'}",

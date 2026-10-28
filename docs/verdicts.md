@@ -364,3 +364,5 @@ isn't reloaded every session; grep for the part a task needs.
   else... ehhhh. same with various aspects of the other genres." Then: "it might be the sounds and mastering, it
   could be that the notes occasionally sound like they're rushing and sound like theyre tripping over themselves."
   Checkpoint 3 paused there: "log this so we can come back to it later." Findings in PLAN.md ("Generic, Oct 27").
+- Oct 28: on the Oct 27 proposals, "yes to 1": the motif's "twice as fast" only down to 16ths, A/B on synthwave
+  (`clips/ab/sixteenths`). His listen pending.

@@ -325,6 +325,7 @@ class Motif:
 SPAN = 7          # scale steps from lowest to highest note, at most (an octave)
 LEAP = 4          # scale steps one move may leap (a fifth)
 SHORTEST = VALUES["32nd"]
+FASTEST = VALUES["16th"]  # a motif's quickest note: faster and the line trips over itself (DadCraft, Oct 27)
 STALE = 3         # the same statement this many times running is stale
 KIN = 0.5         # how related a development must stay to the motif it grew from
 
@@ -346,12 +347,15 @@ def kinship(a, b):
 
 
 def check_motif(m, origin=None, recent=(), bar=STEPS * 4):
-    """None when the motif fits, else the reason: every note on the grid (decision 13) and inside a `bar`-step bar
-    (two at most), a narrow span and no wild leaps, not stale, and still heard as the motif it grew from."""
+    """None when the motif fits, else the reason: every note on the grid (decision 13), none faster than a 16th,
+    inside a `bar`-step bar (two at most), a narrow span and no wild leaps, not stale, and still heard as the motif
+    it grew from."""
     if len(m.steps) < 2:
         return "one note isn't a motif"
     if any(not isinstance(n, int) or n < SHORTEST for n in m.lengths):
         return "a note shorter than a 32nd or between grid steps: off the grid"
+    if min(m.lengths) < FASTEST:
+        return "a note faster than a 16th: the line trips over itself"
     if sum(m.lengths) > 2 * bar:
         return "longer than two bars: more a phrase than a motif"
     if max(m.steps) - min(m.steps) > SPAN:

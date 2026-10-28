@@ -619,7 +619,7 @@ def flow_choices(style="plain", seed=1, bars=8, home=Key(9, "minor"), bpm=100, r
         kit_why.append(("layers", check_layers(layered, ly)))
         notes = {"pad": pad, "bass": bass, "arp": arp, "melody": melody, "keys": keys, "horns": horns,
                  "drums": drums, "percussion": percussion}
-        changed = slow_changes(lrng, ly, layered, notes, spans, key_at, met)
+        changed = slow_changes(lrng, ly, layered, notes, spans, key_at, met, clave)
         for x in layered:
             lo, hi = x.at * met.bar, (x.at + x.bars) * met.bar
             for r in [r for r in ly.join if r not in x.playing] + ["melody"] * (not x.melody):

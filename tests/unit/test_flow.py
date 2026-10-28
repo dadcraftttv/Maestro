@@ -69,6 +69,13 @@ def test_the_tumbao_skips_the_one_and_sits_with_the_clave():
         assert not ones, seed
 
 
+def test_a_slow_change_never_drops_a_hit_across_the_clave():
+    # seeds whose slow change dropped the tumbao's "and of 2" and crossed it, before the check (Oct 28)
+    for seed in (10, 12, 20, 22):
+        lines, take = flow_choices("salsa", seed, 32, A_MINOR, TEMPO["salsa"])
+        assert check_bass(take["bass"], MET, CLAVES["son_2-3"]) is None, seed
+
+
 def test_the_tumbao_on_the_one_plays_a_few_bars():
     seen = 0
     for seed in range(1, 40):

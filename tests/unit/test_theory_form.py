@@ -140,6 +140,8 @@ def test_motif_checks_give_their_reasons():
     e = VALUES["8th"]
     assert "one note" in check_motif(Motif((0,), (e,)))
     assert "off the grid" in check_motif(Motif((0, 1), (e, 2)))
+    assert "trips over itself" in check_motif(Motif((0, 1, 2), (3, 3, 3)))
+    assert "trips over itself" in check_motif(DEVELOP["diminish"](None, Motif((0, 1, 2), (6, 12, 12))))
     assert "two bars" in check_motif(Motif((0, 1, 2), (96, 96, 96)))
     assert "too wide" in check_motif(Motif((0, 4, 8), (e, e, e)))
     assert "too wild" in check_motif(Motif((0, 5), (e, e)))

@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** paused (DadCraft, Oct 27: "log this so we can come back to it later"). On return, start from "Generic, Oct 27" under Checkpoint 3: his call on the melody fix (its A/B on synthwave), then the same-notes, better-sounds A/B on trap, before Checkpoint 3 goes on (salsa, power rock) or the plan changes.
+**Next:** DadCraft's listen to `clips/ab/sixteenths` (the melody fix, (1) under "Generic, Oct 27"): is the tripping gone, does the melody still move. Then (2), the same-notes, better-sounds A/B on trap, before Checkpoint 3 goes on (salsa, power rock) or the plan changes.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -726,6 +726,13 @@ For each chosen style, how each member plays it, written from sources.
       in `inbox/`, ideas only; (4) then likely: stop Checkpoint 3's style-by-style listens, move the spike (S) to a
       melodic member, and rethink bucket 4's sources (real music to MIDI, the desk) with the style book as the
       guardrails. Not decided.
+      **(1) done, Oct 28** (DadCraft: "yes to 1"). `check_motif` refuses a note faster than a 16th (`FASTEST`), so
+      "twice as fast" stops at 16ths. Synthwave seed 12's melody: 104 notes a 32nd apart, now none; tests, exam
+      106/106, fuzz 2000/2000 on four styles and drift all pass. With one shared seed any melody change also redraws
+      the arp and drums, so the A/B `clips/ab/sixteenths` is his clip with only the melody track swapped (judge 99%
+      both). Found on the way: a slow change (task 3.5) could drop the tumbao's "and of 2" and cross the clave, in 15
+      of 80 salsa seeds before, seed 12 among them (so `clips/ab/salsa` likely has it); `slow_changes` now skips a
+      dropped hit that crosses. Waiting for his listen.
 
 ### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a
