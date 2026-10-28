@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listen to the second proof (decision 19, `private/refs/proof`): a against b tells whether the transcription holds; b against c whether our sounds are the problem. Then S on a melodic member and bucket 4's sources.
+**Next:** DadCraft's call on the third proof (decision 19): a few human-written, openly licensed pieces from PDMX through Maestro's player, no transcription; then S on a melodic member trained on them.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -129,7 +129,9 @@ band member play, the way its style plays it?
     chords, every note on a 16th. Measured against the stems: notes start a median 11 ms from the real ones
     (Underground, 80% within 40 ms); pitch match 0.66 / 0.80 / 0.70 (first round, ALttP: 0.65, off the grid). In
     `private/refs/proof`: each song's real bass and other stems (a), the notes on a GM piano (b), through
-    Maestro's sounds (c), and with its own drum stem (d). Waiting for his listen.
+    Maestro's sounds (c), and with its own drum stem (d). His listen (Oct 28): "it's better, but not by much. it's
+    like the aliens got a slightly better understanding of what the box was supposed to be." Transcribing audio
+    is not the main source; next proposed: human-written open scores (PDMX) through the same player.
 
 ## How each bucket runs
 

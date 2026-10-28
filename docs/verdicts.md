@@ -377,3 +377,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 28: "the timing of these notes is all over the place and just wrong. again, my box analogy from earlier - i
   can hear how alttp is supposed to be representive of that song, but it's just all kinds of wrong. same for the
   others." The plan for a second transcription: "yes, i'm fine with your plan" (UVR5's models to split).
+- Oct 28, the second proof (`private/refs/proof`, notes on the beat grid): "it's better, but not by much. it's like the aliens got a slightly better understanding of what the box was supposed to be." Two rounds: audio to MIDI with
+  these tools doesn't give convincing notes.
