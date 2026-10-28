@@ -28,6 +28,9 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
   restriction for your own music creation, private or commercial"; its author can't vouch for every sample's
   origin): B of the sounds A/B on trap (Oct 28), on this PC only (`tools/get_sounds.sh`, from
   github.com/mrbumpy409/GeneralUser-GS). Not shipped, not trained on.
+- **Demucs** (htdemucs, by Meta AI, MIT) splits recordings into stems and **Basic Pitch** (Spotify, Apache-2.0)
+  turns stems into notes: `tools/transcribe.py`, in its own environment under `private/` (decision 19's proof;
+  later task 4.3).
 
 ## Written theory (ideas in our own words, cited in the style files' `sources`)
 

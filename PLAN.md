@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's call on (4) under "Generic, Oct 27" (the rules as guardrails, the notes learned from real music), after "nothing about it sounds convincing"; a reference track a style still wanted.
+**Next:** DadCraft's listen to the proof (decision 19, `private/refs/proof`): do the real notes through Maestro's sounds convince where ours don't? Then S on a melodic member and bucket 4's sources.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -105,6 +105,20 @@ band member play, the way its style plays it?
     staying byte-identical, as their output hasn't moved. Every style is fuzzed and drifted when shared code changes
     (theory, flow, sketch, song, the player) and before each Checkpoint; GitHub runs the tests on every push. The
     checks use every core: pytest runs parallel by default (`-n 0` for one process), fuzz and drift spread their work.
+19. **The notes come from real music; the rules are the guardrails** (DadCraft, Oct 28: "i'm fine with it. we need
+    to get Maestro to a point where it's producing convincing music on the fly so it can integrate with Ouralia the
+    way it's supposed to"). After "nothing about it sounds convincing": the rule-written parts sound like a
+    description of the style, not the style. Checkpoint 3's style-by-style rounds stop; the rules keep key, chords,
+    range, the beat on time and the hot-swap (decision 6, 17); the spike (S) comes forward onto a melodic member;
+    bucket 4's sources are rethought (real music to MIDI and the desk; practice MIDI from the style book would only
+    teach the rules back). First, the proof: his three references (`inbox/`: Suno covers of Nintendo songs, his
+    prompts beside them; copyrighted, so ideas only, on this PC, never committed or sent out) turned into notes and
+    played through Maestro's own sounds, next to ours.
+    The proof built Oct 28 (`tools/transcribe.py`: Demucs stems, Basic Pitch notes, about 15 s a song on the GPU):
+    the three in `private/refs/proof`, each notes only (Maestro's synthwave sounds: saw lead, supersaw, saw bass)
+    and with its own drum stem, next to synthwave seed 12 (the same sounds) without and with its drums; all at
+    synthwave's mix targets. The transcription is rough (a few stray notes; the melody is the top voice of
+    Demucs's "other" stem). Waiting for his listen.
 
 ## How each bucket runs
 
@@ -744,7 +758,7 @@ For each chosen style, how each member plays it, written from sources.
       rebuilding a box from a description, "you can tell how it's supposed to be representative ... but it's just
       all wrong." No moments to give; (4) is on the table, his call.
 
-### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
+### S. A first model spike (draft; before D; DadCraft, Oct 26; brought forward onto a melodic member, decision 19)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a
 learned model finds out what buckets 4 and 5 need before the desk and the training data are built (outside reviews,
 `docs/research.md` round 4).
