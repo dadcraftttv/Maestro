@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listen to `clips/ab/sixteenths` (the melody fix, (1) under "Generic, Oct 27"): is the tripping gone, does the melody still move. Then (2), the same-notes, better-sounds A/B on trap, before Checkpoint 3 goes on (salsa, power rock) or the plan changes.
+**Next:** (2) under "Generic, Oct 27": the same trap notes through better, openly licensed sounds next to today's, to tell notes from sounds, before Checkpoint 3 goes on (salsa, power rock) or the plan changes.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -732,7 +732,8 @@ For each chosen style, how each member plays it, written from sources.
       the arp and drums, so the A/B `clips/ab/sixteenths` is his clip with only the melody track swapped (judge 99%
       both). Found on the way: a slow change (task 3.5) could drop the tumbao's "and of 2" and cross the clave, in 15
       of 80 salsa seeds before, seed 12 among them (so `clips/ab/salsa` likely has it); `slow_changes` now skips a
-      dropped hit that crosses. Waiting for his listen.
+      dropped hit that crosses. His listen (Oct 28): "the melody still moves. doesn't sound like it's tripping over
+      itself": (1) passes.
 
 ### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a
