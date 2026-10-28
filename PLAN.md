@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listen to the proof (decision 19, `private/refs/proof`): do the real notes through Maestro's sounds convince where ours don't? Then S on a melodic member and bucket 4's sources.
+**Next:** DadCraft's listen to the second proof (decision 19, `private/refs/proof`): a against b tells whether the transcription holds; b against c whether our sounds are the problem. Then S on a melodic member and bucket 4's sources.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -121,6 +121,15 @@ band member play, the way its style plays it?
     Demucs's "other" stem). His listen (Oct 28): "those notes for those songs through our system sound awful."
     The same sounds made our clip generic, not awful, so the rough transcription is the likely cause: not yet an
     answer, and a warning for bucket 4.3 (audio to MIDI is the data plan).
+    His second word (Oct 28): "the timing of these notes is all over the place and just wrong"; the plan
+    (snap to the beat, single lines, measure first, then a piano listen) "yes, i'm fine with your plan"; his UVR5
+    install offered. Second round: `tools/transcribe.py` splits with htdemucs_ft from UVR's model folder, fits one
+    tempo to the drum stem (measured: ALttP 100, P-Switch 158 not the prompt's 160, Underground 88 not 117) and
+    the 16ths' phase to the pitched stems' strikes; lead and bass by pYIN as single lines, the pad as half-bar
+    chords, every note on a 16th. Measured against the stems: notes start a median 11 ms from the real ones
+    (Underground, 80% within 40 ms); pitch match 0.66 / 0.80 / 0.70 (first round, ALttP: 0.65, off the grid). In
+    `private/refs/proof`: each song's real bass and other stems (a), the notes on a GM piano (b), through
+    Maestro's sounds (c), and with its own drum stem (d). Waiting for his listen.
 
 ## How each bucket runs
 

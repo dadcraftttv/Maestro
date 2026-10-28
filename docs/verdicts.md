@@ -374,3 +374,6 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 28, decision 19's proof (`private/refs/proof`: his three Suno covers transcribed, through Maestro's synthwave
   sounds): "i don't know if it's our instruments or what, but those notes for those songs through our system sound awful." Same sounds as synthwave seed 12, which he called generic, not awful: the transcription likely
   the cause; the proof doesn't answer yet.
+- Oct 28: "the timing of these notes is all over the place and just wrong. again, my box analogy from earlier - i
+  can hear how alttp is supposed to be representive of that song, but it's just all kinds of wrong. same for the
+  others." The plan for a second transcription: "yes, i'm fine with your plan" (UVR5's models to split).
