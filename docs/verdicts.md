@@ -367,3 +367,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 28: on the Oct 27 proposals, "yes to 1": the motif's "twice as fast" only down to 16ths, A/B on synthwave
   (`clips/ab/sixteenths`). His listen: "the melody still moves. doesn't sound like it's tripping over itself":
   the fix stays.
+- Oct 28: the sounds A/B on trap (`clips/ab/sounds_trap`: A FluidR3 GM, B GeneralUser GS, C Maestro's own bell and
+  strings, the same notes): "they still sound painfully generic and meandering. the sounds might be part of the problem, but they aren't the main culprit." The notes are the main cause; "meandering" is new.

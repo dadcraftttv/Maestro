@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listen to `clips/ab/sounds_trap` (A today's GM, B GeneralUser GS, C Maestro's own bell and strings): does any of B or C stop sounding generic? Then (3) and (4) under "Generic, Oct 27".
+**Next:** (3) under "Generic, Oct 27": his moments and a reference track or two a style, after the sounds A/B showed the notes are the main culprit ("generic and meandering"); plan to agree first.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -738,7 +738,8 @@ For each chosen style, how each member plays it, written from sources.
       ways in `clips/ab/sounds_trap`; only the bell riff and the strings change, the 808 and kit stay Maestro's own.
       A: today's FluidR3 GM. B: GeneralUser GS v2.0.3 (MuseScore General, first pick, is FluidR3 reworked, so too
       close to A). C: Maestro's own `fm bell` and `dark strings` (`synth.py`). Gains set so all three meet the mix
-      targets alike (the melody level with the drums, the pad 6-8 dB under). Waiting for his listen: notes or sounds.
+      targets alike (the melody level with the drums, the pad 6-8 dB under). His listen (Oct 28): "they still sound painfully generic and meandering. the sounds might be part of
+      the problem, but they aren't the main culprit." (2) answered: mostly the notes.
 
 ### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a
