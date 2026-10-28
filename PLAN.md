@@ -118,7 +118,9 @@ band member play, the way its style plays it?
     the three in `private/refs/proof`, each notes only (Maestro's synthwave sounds: saw lead, supersaw, saw bass)
     and with its own drum stem, next to synthwave seed 12 (the same sounds) without and with its drums; all at
     synthwave's mix targets. The transcription is rough (a few stray notes; the melody is the top voice of
-    Demucs's "other" stem). Waiting for his listen.
+    Demucs's "other" stem). His listen (Oct 28): "those notes for those songs through our system sound awful."
+    The same sounds made our clip generic, not awful, so the rough transcription is the likely cause: not yet an
+    answer, and a warning for bucket 4.3 (audio to MIDI is the data plan).
 
 ## How each bucket runs
 
