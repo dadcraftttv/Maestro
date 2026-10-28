@@ -13,11 +13,14 @@ you too. This file adds what's different for Codex.
 ## Handoffs (one agent in the repo at a time)
 - Only one of Codex or Claude Code works here at a time. Start only on a clean tree; if there are uncommitted
   changes you didn't make, stop and ask DadCraft.
-- Finish each task as `CLAUDE.md` says, in one commit: tick it in `PLAN.md`, move **Next**, note DadCraft's verdicts
-  in `docs/verdicts.md`. Also update Maestro's entry in Conductor's `docs/items.md`
-  (`/home/dadcraft/Conductor/docs/items.md`, a local-only repo: commit there, never push it).
-- Commit messages end with `Co-Authored-By: Codex <noreply@openai.com>`.
-- Push to GitHub only when DadCraft says so.
+- Before starting, check Maestro's line under "Who has it" at the top of Conductor's `docs/items.md`
+  (`/home/dadcraft/Conductor/docs/items.md`): start only if it says free, then set it to Codex with the date.
+- Finish each task as `CLAUDE.md` says: tick it in `PLAN.md`, move **Next**, note DadCraft's verdicts in
+  `docs/verdicts.md`, and update Maestro's entry in Conductor's `docs/items.md`.
+- Claude Code makes all commits and pushes (DadCraft, Oct 28). Leave your changes uncommitted, write a note in
+  `/home/dadcraft/Conductor/.handoff/to-claude.md` (files changed, how you checked them, what to watch in review)
+  and set Maestro's line to "Codex → Claude Code review". Claude Code reviews, commits with
+  `Co-Authored-By: Codex <noreply@openai.com>`, pushes and frees the line.
 
 ## Rules that matter most
 - Always call the user **DadCraft**; never a real name. This repo is public.
