@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** the third proof under decision 19 (approved, on hold until DadCraft says go): PDMX's human-written open scores through Maestro's player, no transcription; its four steps under decision 19 in "Decisions" (grep "third proof").
+**Next:** the third proof under decision 19 (started Oct 28, Codex has it): PDMX's human-written open scores rendered three ways (faithful, mapped on piano, mapped on Maestro's sounds), no transcription; its four steps under decision 19 in "Decisions" (grep "third proof").
 
 ## The goal (DadCraft, Oct 23)
 
@@ -139,12 +139,19 @@ band member play, the way its style plays it?
        (the full set is 14.4 GB), into `private/` (gitignored).
     2. Pick 4-6 well-rated pieces tagged pop, electronic, game or film style, people's own originals only: no
        arrangement of a copyrighted song, whatever its license (decision 7). Say why each was picked.
-    3. Map each piece's parts to Maestro's members (melody, pad, bass; drums left out) and render each two ways:
-       Maestro's synthwave sounds (saw lead, supersaw, saw bass) balanced with `python -m maestro.mix` to
-       synthwave's targets, and a plain GM piano (program 0). Into `private/pdmx_proof/`.
-    4. Measure first (the mix check, note counts and ranges), then tell DadCraft what to listen for: do
-       human-written notes through our player convince where ours and the transcribed ones didn't? Yes: S trains
-       on PDMX's melodies and chords. No: our sounds and rendering are fixed before any model work.
+    3. Render each piece three ways, into `private/pdmx_proof/` (Codex's review, Oct 28: one change per step, so a
+       bad result points at its cause). (a) Faithful: the score as written, all its parts on their own GM
+       instruments. DadCraft listens to (a) first and keeps only the pieces he finds convincing; the rest are
+       dropped. (b) Mapped: the kept pieces' parts mapped to Maestro's members (melody, pad, bass; drums left out),
+       on a plain GM piano (program 0). (c) The same mapped events as (b), the same timing, durations and
+       velocities, on Maestro's synthwave sounds (saw lead, supersaw, saw bass), balanced with `python -m
+       maestro.mix` to synthwave's targets.
+    4. Measure first: what the mapping lost (notes dropped, parts merged, register moved), the mix check, note
+       counts and ranges. Then tell DadCraft what to listen for. (a) → (b) is the mapping, (b) → (c) the sounds. If
+       (c) convinces where ours and the transcribed ones didn't, the notes are the gap: S trains on PDMX's
+       melodies and chords (whether PDMX is enough data is bucket 4's question). If it breaks at (b), the
+       mapping comes first; at (c), our sounds and rendering are fixed before any model work.
+    DadCraft, Oct 28: "i'd like to start the third proof", with the three-way render; Codex takes it.
 
 ## How each bucket runs
 
