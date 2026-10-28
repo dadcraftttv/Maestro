@@ -4,8 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.0a (bucket S): the PDMX melody inventory, the grid-snapping report and the token round trip, then
-DadCraft's listen to ~10 snapped melodies before any training. S.0's plan approved Oct 28 (melody only).
+**Next:** S.0a extraction review (bucket S): the conservative local pilot stopped at S.0's coverage gate.
+Review the authorship screen and accompaniment/chord extraction before completing the inventory, frozen split
+and DadCraft's ~10-melody grid listen. Local findings: `private/s0a/REPORT.md`. No training.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -862,6 +863,11 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       - **Out of scope:** the generic timbres (sound work, decision 16), bass/pad models, style tags and blends,
         Ouralia, the desk, distillation, audio transcription.
 - [ ] S.0a Data inventory, snapping report and token round trip; DadCraft's listen to the snapped melodies.
+      - Oct 28, Codex: conservative local MIDI/metadata pilot stopped at S.0's extraction/coverage gate.
+        Saved rules before execution; source checksums and diagnostic token round trips pass. Narrow evidence
+        screening and chord coverage leave too few pieces for the planned split/listen; this does not establish
+        PDMX's usable corpus size. No split, listening renders, new downloads, PyTorch or training. Details,
+        counts and limitations stay local in `private/s0a/REPORT.md`; extraction review is next. No sound verdict.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
