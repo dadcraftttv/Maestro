@@ -4,8 +4,10 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.0a v3 (bucket S, Codex has the brief): add public-domain classical and traditional scores to the 327
-reviewed pieces (DadCraft, Oct 28: "lets use as much as we possibly can"). Then S.1 review before training.
+**Next:** DadCraft picks the order: S.1 pilot on the 514 kept pieces, or a proper MusicXML converter first to
+widen the data (see `docs/data.md`, "Corpus-size follow-up"). S.0a v3 is reviewed: Claude Code cut 23 of 537 (6 known
+in copyright or third-party, 15 doubtful, 2 unreadable titles); cut list `private/s0a_v3/claude_rights_cuts.json`.
+DadCraft's new-pool listen is still open.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
 254/35/38, families kept apart). Cut list: `private/s0a_v2/claude_rights_cuts.json`; findings: `REPORT.md`.
 
@@ -881,6 +883,25 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         approved reading all 419 by eye: cut 62 known songs, 4 arrangements, 15 doubtful, 11 unreadable titles
         (mangled metadata). 327 left: 254/35/38 pieces, 218/32/31 families; two of the ten listen pieces were cut.
         Remaining risk: lesser-known songs not recognised by title. Cut list: `private/s0a_v2/claude_rights_cuts.json`.
+      - Oct 28, Codex v3: preserved all 327 reviewed v2 records/splits; added 153 classical and 53 traditional
+        PDMX candidates under frozen screening rules and unchanged musical helpers. DadCraft approved both
+        OpenScore downloads (about 59 MB): all 1,658 MusicXML score hashes verified; four Lieder candidates added,
+        zero quartets. Final 537 pieces, 470 families, 10,224 usable bars / 32,975 notes, 389,953 scalar tokens;
+        all token round trips pass. Split 444/46/47; families/works and uploaders separated, eight composers span
+        splits. Ten new PDMX and four OpenScore original/snapped pairs measured and checked; no sound verdict.
+        Rights review remains necessary: death-date/traditional filters do not prove worldwide public domain.
+        MusicXML reader rejects unsupported grace timing, pickups and ties; arranger fields often contain
+        transcriber prose that cannot be mapped to the uploader. These limits leave substantial music untested;
+        source counts are not maximum usable-corpus estimates. Other-source licence findings, per-piece credits,
+        hashes, seeded inspection and S.1 estimate stay in `private/s0a_v3/REPORT.md` and `sources_run/REPORT.md`.
+        No PyTorch or training. Next: review rights, conversion limits and composer separation, DadCraft's listen,
+        then dependencies, frozen measures/tokenizer/key conditioning and a fixed compute budget before S.1.
+      - Oct 28, Claude Code review of v3: cut 23 of 537, leaving 514. Known in copyright or third-party: the
+        "Albinoni" Adagio (Giazotto, 1958), Dragon Ball Z, El Condor Pasa (If I Could), Pytlik's "Möge die Straße",
+        Michael Schubert's Winterlandschaft, a Wesley Carr arrangement uploaded by someone else. 15 doubtful origins
+        and 2 unreadable titles. Copies of one work stay in one split, but some works repeat (Invention 13 six times,
+        all in test); cap copies per work before S.1. Composers spanning splits is fine for S.1 (works and families
+        are apart). The cuts still need applying to the corpus and recounting.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

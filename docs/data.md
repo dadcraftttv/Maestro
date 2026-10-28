@@ -13,6 +13,52 @@ styles either, so the style book fills them the same way.
 - **OUT:** not for training. Ideas only.
 - **CHECK:** license or source not clear yet. Not used until it is.
 
+### OpenScore source check (Oct 28, S.0a v3)
+
+DadCraft approved both MusicXML downloads (about 59 MB): [OpenScore Lieder](https://github.com/OpenScore/Lieder)
+and [OpenScore String Quartets](https://github.com/OpenScore/StringQuartets). Both repositories' README and
+LICENSE.txt state CC0-1.0; both request credit and a link for public-facing use. CC0 allows commercial reuse
+within the affirmer's rights; underlying compositions, revisions and arrangements still require screening.
+These are local inventory/listening candidates, not blanket training clearance. Voice/piano and quartet parts
+can supply independent lead/accompaniment; use accompaniment-derived chords, never invented melody harmony.
+Pinned URLs, per-file checksums/provenance and detailed licence findings stay in `private/s0a_v3/` and
+`private/sources/`. Nottingham's reuse permission and music21 encoding rights remain unresolved; The Session's
+current custom licence prohibits LLM processing, so it is excluded. Mutopia needs per-piece PD/CC0/CC BY evidence;
+SA/NC remain excluded. No other source corpus was approved or ingested.
+
+### Corpus-size follow-up (Oct 28, DadCraft; for Claude Code review)
+
+DadCraft asked about other datasets and the gigabytes of music available, concerned that 537 pieces seems small.
+**537 is the current pipeline's candidate yield, not the available-data ceiling or proof of sufficient training
+data.** The combined 10,224 usable bars permit a feasibility experiment; adequate musical variety/generalization
+has not been demonstrated. Overlapping training windows and transpositions do not add independent compositions.
+
+The limited custom MusicXML reader rejected 1,317 of 1,658 approved OpenScore files before musical screening.
+Grace timing, pickups and ties are major implementation limits; subsequent transcriber-as-arranger exclusions
+also need interpretation review. These counts do not establish musical or legal unsuitability. Codex's
+recommendation: use a mature notation converter (OpenScore documents batch conversion), resolve transcription
+versus arrangement metadata, and review extraction policy before treating this yield as a corpus-size estimate.
+Keep rights checks; do not silently remove grace notes, thin polyphony or weaken chord checks to increase counts.
+
+Further sources/opportunities discussed, **not approved for download or training**:
+- Revisit [PDMX](https://arxiv.org/abs/2409.10831), over 250,000 scores: separate fixed lead, 4/4 and accompaniment
+  chord coverage are deliberate narrow gates. Better conversion/extraction may recover more; any policy changes
+  require explicit review, and per-piece rights still matter.
+- [TiMauzi IMSLP MIDI CC0 collection](https://huggingface.co/datasets/TiMauzi/imslp-midi-cc0-1.0): 1,113 entries,
+  about 50.5 MB download in its dataset card; advertised PD/CC0 with source/provenance URLs. Investigate original
+  piece/encoding rights and duplicates before use; a dataset label alone is not clearance.
+- [Mutopia](https://www.mutopiaproject.org/): 2,124 pieces listed, with MIDI and editable LilyPond notation.
+  Build a per-piece PD/CC0/CC BY manifest; exclude SA/NC under the existing brief.
+- Commissioned or contributed original MIDI with explicit permission could fill target-style gaps. This is an
+  option, not authorization to contact contributors, spend money, or generate a synthetic substitute corpus.
+
+Large collections do exist, but audio bytes are not equivalent to usable symbolic notes/harmony; audio would
+need a separate transcription/representation plan. [GigaMIDI](https://huggingface.co/datasets/Metacreation/GigaMIDI)
+is CC BY-NC 4.0 and [Google MAESTRO](https://magenta.tensorflow.org/datasets/maestro) is CC BY-NC-SA 4.0;
+neither fits the current commercial phone-model rules. No change to those rules was requested. DadCraft asked
+that this discussion be logged for Claude; no new extraction policy, dependency install, downloads or training
+was approved by this follow-up.
+
 ### PDMX download recheck (Oct 28, third proof)
 
 Checked the [v9 source record](https://zenodo.org/records/15571083) and its API metadata before score use:

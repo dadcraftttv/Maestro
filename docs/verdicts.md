@@ -401,3 +401,11 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 28, widening S.0a v3: "as long as we aren't breaking any laws or going to get in any sort of trouble, i'd
   say lets include or use as much as we can." Applied: composers who died 1931–1955 allowed for works published
   by 1930 (Claude's dated list); covers of in-copyright songs and the doubtful cuts stay out.
+- Oct 28, S.0a v3 other-source downloads: DadCraft selected "Approve both sources (about 59 MB)" for the
+  revision-pinned OpenScore Lieder and String Quartets MusicXML files plus licence/catalogue records.
+  This approves those downloads; no new sound verdict or training approval was given.
+- Oct 28, corpus size: DadCraft asked "are there any other sources, music datasets, or anything we can use?"
+  and said the sample seems small, recalling gigabytes of available music. After Codex explained the conversion
+  limits and additional-source options: "make sure all of this is logged for Claude Code." Discussion recorded
+  in docs/data.md, "Corpus-size follow-up", and Conductor's handoff. This is a logging request, not approval of
+  new downloads, policy changes, spending or training.

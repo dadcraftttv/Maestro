@@ -20,6 +20,14 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
   https://zenodo.org/records/15734094 · https://zenodo.org/records/13257814 (RTRO-DRM: Zenodo record to add on
   download)
 
+## Local inventory candidates (not cleared for training)
+
+- **OpenScore Lieder**, OpenScore contributors, CC0-1.0. Credit and repository link requested:
+  https://github.com/OpenScore/Lieder · https://musescore.com/openscore-lieder-corpus
+- **OpenScore String Quartets**, OpenScore contributors, CC0-1.0. Credit and repository link requested:
+  https://github.com/OpenScore/StringQuartets · https://musescore.com/openscore-string-quartets
+  Per-piece provenance stays in the local inventory; underlying works/editions still require review.
+
 ## Tools (not data; never trained on)
 
 - **FluidR3 GM** soundfont, by Frank Wen (Toby Smithe and contributors), MIT license: the clip player's sounds
