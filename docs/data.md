@@ -13,6 +13,37 @@ styles either, so the style book fills them the same way.
 - **OUT:** not for training. Ideas only.
 - **CHECK:** license or source not clear yet. Not used until it is.
 
+### PDMX download recheck (Oct 28, third proof)
+
+Checked the [v9 source record](https://zenodo.org/records/15571083) and its API metadata before score use:
+dataset license CC BY 4.0. The maintainers report 31,221 internal/public license disagreements and recommend
+`subset:no_license_conflict` (222,856 entries). Require that flag, `license_conflict=False`, `is_original=True`,
+valid MIDI, and inspect selected titles/composer metadata for copyrighted arrangements; the flags alone do not
+establish authorship. This is a local listening experiment, not training or a blanket clearance of the corpus.
+Only the catalog and MIDI archive are requested initially; selected files and provenance stay in `private/pdmx_proof/`.
+No source music is modified for stage (a); GM synthesis changes its presentation. Scores will not be quantized or
+reduced before DadCraft's first listening checkpoint. CREDITS.md already records the dataset attribution.
+
+#### Third-proof stage (a) selection
+
+Catalog, MIDI and metadata archives match the v9 record's MD5 values. Four candidates use CC0 score metadata,
+`is_original=True`, `license_conflict=False`, and `subset:no_license_conflict=True`. Ratings are screening
+signals, not musical verdicts. Archived author descriptions support originality; no independent authorship
+verification is claimed. The catalog's flags alone are insufficient: flagged “original” entries included
+Nintendo covers and commercial-song arrangements, which were excluded from this proof.
+
+| Piece / composer | Rating (count) | Why selected / archived author statement | Original source |
+|---|---|---|---|
+| Film music / Isaac O'Shea | 4.56 (4) | Film-music tag; describes first coursework composition; piano baseline | https://musescore.com/user/9465681/scores/5826459 |
+| Creepy Title Theme Concept / Daniel Neufeld | 4.91 (9) | Original game-title concept explicitly described by author; contrasting piano mood | https://musescore.com/user/137765/scores/5912795 |
+| The Little Boat / Joshua Sommer | 4.85 (4) | Author describes composing for a short film; full orchestral contrast | https://musescore.com/user/6624501/scores/5851806 |
+| 6 Cinematic Scenes (Storyteller) / Brayden Meng | 4.66 (3) | Cinematic tags, six-scene original narrative described by author; second orchestral example | https://musescore.com/user/29636574/scores/5597356 |
+
+Only supplied MIDI is rendered, unchanged, using the existing FluidR3 GM player. This does not independently
+verify score-export fidelity or reproduce live performance. Local source metadata, exact filenames, MIDI hashes,
+measurements, listening guide and WAVs are in `private/pdmx_proof/`; no training and no source music committed.
+DadCraft must accept stage (a) before any mapping. Dataset attribution remains in CREDITS.md.
+
 ## Symbolic (MIDI, scores)
 
 | Set | License | Tag | Size | Format | Styles | Members | Status |

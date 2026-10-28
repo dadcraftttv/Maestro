@@ -379,3 +379,6 @@ isn't reloaded every session; grep for the part a task needs.
   others." The plan for a second transcription: "yes, i'm fine with your plan" (UVR5's models to split).
 - Oct 28, the second proof (`private/refs/proof`, notes on the beat grid): "it's better, but not by much. it's like the aliens got a slightly better understanding of what the box was supposed to be." Two rounds: audio to MIDI with
   these tools doesn't give convincing notes.
+- Oct 28, the third proof's stage (a) (`private/pdmx_proof`: four PDMX originals, the MIDI as written on GM
+  instruments), asked which sound convincing as music: "all of them". Human-written notes on plain GM sounds
+  convince, so the GM player alone isn't what made ours generic. All four go on to (b) and (c).

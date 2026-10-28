@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** the third proof under decision 19 (started Oct 28, Codex has it): PDMX's human-written open scores rendered three ways (faithful, mapped on piano, mapped on Maestro's sounds), no transcription; its four steps under decision 19 in "Decisions" (grep "third proof").
+**Next:** decision 19's third proof, stages (b) and (c) for all four pieces (DadCraft kept them all): mapped to melody/pad/bass on GM piano, then the same events on synthwave's sounds; Codex has it. Steps under decision 19 (grep "third proof"); stage (a) in `private/pdmx_proof/LISTEN.md`.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -132,7 +132,7 @@ band member play, the way its style plays it?
     Maestro's sounds (c), and with its own drum stem (d). His listen (Oct 28): "it's better, but not by much. it's
     like the aliens got a slightly better understanding of what the box was supposed to be." Transcribing audio
     is not the main source; next proposed: human-written open scores (PDMX) through the same player.
-    **The third proof, approved and on hold** (DadCraft, Oct 28: "yes, but hold off on that. log that as the next
+    **The third proof, in progress** (DadCraft, Oct 28: "yes, but hold off on that. log that as the next
     step"; Claude Code or Codex may pick it up). The steps:
     1. Check PDMX's license notice and its own license-conflict flags at the source; record what's found in
        `docs/data.md` (it's listed SAFE there) before using it. Fetch only the files needed if the set allows it
@@ -152,6 +152,16 @@ band member play, the way its style plays it?
        melodies and chords (whether PDMX is enough data is bucket 4's question). If it breaks at (b), the
        mapping comes first; at (c), our sounds and rendering are fixed before any model work.
     DadCraft, Oct 28: "i'd like to start the third proof", with the three-way render; Codex takes it.
+    **Stage (a), Oct 28 (Codex):** license rechecked and catalog/MIDI/metadata archive checksums verified.
+    Four rated originals selected using conflict flags plus archived author descriptions: *Film music*,
+    *Creepy Title Theme Concept*, *The Little Boat Composition for a short film*, and *6 Cinematic Scenes
+    (Storyteller)*. Selection rationale and source links: `docs/data.md`; full local provenance and listening
+    guide: `private/pdmx_proof/LISTEN.md`. All four supplied MIDI exports retained byte-for-byte, rendered by
+    the existing FluidSynth path with FluidR3 GM, gain 0.2. Respectively 1,118 / 1,391 / 5,179 / 7,368 notes;
+    106.5 / 223.2 / 238.5 / 575.2 seconds; zero clipped samples. Whole-piece WAVs plus first-90-second previews.
+    This preserves the supplied MIDI, not independently audited MusicXML expression. No part mapping yet;
+    mapping loss at this stage is zero. Stopped for DadCraft's selection, as agreed.
+    His listen (Oct 28), asked which sound convincing as music: "all of them". All four go on to (b) and (c).
 
 ## How each bucket runs
 
