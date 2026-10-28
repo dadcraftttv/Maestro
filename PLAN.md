@@ -4,7 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** decision 19's third proof, stages (b) and (c) for all four pieces (DadCraft kept them all): mapped to melody/pad/bass on GM piano, then the same events on synthwave's sounds; Codex has it. Steps under decision 19 (grep "third proof"); stage (a) in `private/pdmx_proof/LISTEN.md`.
+**Next:** S.0: present the revised melodic model-spike plan using PDMX melodies/chords under decision 19, for
+DadCraft's approval before training. Third proof complete: the reduction and synthwave rendering preserve
+convincing music; instrument timbres still sound generic (DadCraft, Oct 28).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -132,7 +134,7 @@ band member play, the way its style plays it?
     Maestro's sounds (c), and with its own drum stem (d). His listen (Oct 28): "it's better, but not by much. it's
     like the aliens got a slightly better understanding of what the box was supposed to be." Transcribing audio
     is not the main source; next proposed: human-written open scores (PDMX) through the same player.
-    **The third proof, in progress** (DadCraft, Oct 28: "yes, but hold off on that. log that as the next
+    **The third proof, complete (Oct 28)** (DadCraft, Oct 28: "yes, but hold off on that. log that as the next
     step"; Claude Code or Codex may pick it up). The steps:
     1. Check PDMX's license notice and its own license-conflict flags at the source; record what's found in
        `docs/data.md` (it's listed SAFE there) before using it. Fetch only the files needed if the set allows it
@@ -162,6 +164,25 @@ band member play, the way its style plays it?
     This preserves the supplied MIDI, not independently audited MusicXML expression. No part mapping yet;
     mapping loss at this stage is zero. Stopped for DadCraft's selection, as agreed.
     His listen (Oct 28), asked which sound convincing as music: "all of them". All four go on to (b) and (c).
+    **Stages (b)/(c), Oct 28 (Codex):** all four mapped by a fixed, documented reduction, with no audition-based
+    tuning: highest onset voice of the first piano staff / orchestral Violin 1 for melody, lowest onset voice
+    of the second piano staff / Contrabass for bass; remaining pitched notes merged into a five-voice pad.
+    Percussion and zero-duration source notes excluded; overlapping same-pitch pad notes and surplus voices
+    dropped; octave folding into melody C4–C6, pad C3–C6, bass E1–C4. Retained note starts, ends and
+    velocities and all tempo events preserved.
+    Controllers (including sustain), bends and original instrument changes removed in both mapped versions;
+    the reduction does not reproduce orchestral expression or follow melody handoffs between instruments.
+    Local per-piece reports give losses, source-track merges, ranges, gains, event hashes and loudness.
+    Existing synth sounds/FX and mix targets used. A local tempo-aware adapter is necessary because the current
+    synth player reads only the first tempo; production code unchanged. No drums, hence no kick pumping.
+    Matched a/b/c full WAVs and separately matched first-90-second previews in `private/pdmx_proof/`;
+    guide: `LISTEN_BC.md`. Steps 3 and 4 complete.
+    **DadCraft's listen (Oct 28), all files:** "the phrases, harmony and development still convince after
+    reducing to three members. the synthwave sounds preserve the sound, but i think the instruments still
+    sound generic." For these four pieces, neither the reduction nor synthwave rendering prevents convincing
+    music. This supports decision 19's next step: a melodic model spike using human-written PDMX notes;
+    it does not establish that a learned model will succeed or that PDMX covers the target styles sufficiently.
+    Generic instrument timbres remain an open sound-quality issue. No model/training work started.
 
 ## How each bucket runs
 
@@ -805,8 +826,10 @@ For each chosen style, how each member plays it, written from sources.
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a
 learned model finds out what buckets 4 and 5 need before the desk and the training data are built (outside reviews,
 `docs/research.md` round 4).
-- [ ] S.0 Plan approved: one member (the drums from Groove MIDI, CC BY 4.0, or a member from the style book's practice
-      MIDI), the smallest MIDI-GPT-style model that can learn it, a few days' work at most.
+- [ ] S.0 Plan approved: revise for a melodic member using human-written PDMX melodies/chords (decision 19,
+      third proof passed); propose the smallest MIDI-GPT-style model that can learn it, a few days' work at most.
+      Data selection/splits, conditioning, rules integration and success measures must be presented before training.
+      The earlier drums/style-book-practice draft is superseded by decision 19.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

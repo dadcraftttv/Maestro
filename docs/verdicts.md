@@ -382,3 +382,7 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 28, the third proof's stage (a) (`private/pdmx_proof`: four PDMX originals, the MIDI as written on GM
   instruments), asked which sound convincing as music: "all of them". Human-written notes on plain GM sounds
   convince, so the GM player alone isn't what made ours generic. All four go on to (b) and (c).
+- Oct 28, third proof stages (b)/(c), after listening to all files: "the phrases, harmony and development still
+  convince after reducing to three members. the synthwave sounds preserve the sound, but i think the instruments
+  still sound generic." Reduction and synth rendering preserve convincing music in these four pieces; generic
+  instrument timbres remain open. Decision 19's melodic PDMX spike is next to plan; no training verdict implied.

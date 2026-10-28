@@ -44,6 +44,22 @@ verify score-export fidelity or reproduce live performance. Local source metadat
 measurements, listening guide and WAVs are in `private/pdmx_proof/`; no training and no source music committed.
 DadCraft must accept stage (a) before any mapping. Dataset attribution remains in CREDITS.md.
 
+#### Third-proof stages (b)/(c), Oct 28
+
+DadCraft accepted all four faithful renders. The local reduction uses fixed lead/bass staves and merges the
+remaining pitched notes into a pad capped at five simultaneous voices; percussion, zero-duration notes, duplicate
+overlapping pad pitches and excess voices are omitted. Notes are octave-folded into the three members' registers.
+Controllers,
+bends and original program changes are removed, including piano sustain. Timings, durations, velocities and
+tempo changes of retained notes are identical between (b) piano and (c) synthwave. The fixed lead does not track
+orchestral melody handoffs. Exact per-piece loss accounting and merged source-track lists are local in
+`private/pdmx_proof/stage_bc_report.json`, with mapped note provenance and MIDI files. No quantization or training.
+The existing synth functions and effects are called through a local adapter respecting the full tempo map;
+the production synth player assumes one tempo. Both mapped stages and a copy of (a) are loudness matched,
+with separate matching for previews. Guide: `private/pdmx_proof/LISTEN_BC.md`. DadCraft's listen (Oct 28): phrases,
+harmony and development still convince after reduction; synthwave sounds preserve the music, but the instruments
+still sound generic. The third proof passes; model/data suitability still needs the planned spike.
+
 ## Symbolic (MIDI, scores)
 
 | Set | License | Tag | Size | Format | Styles | Members | Status |
