@@ -116,14 +116,18 @@ Other tools: **MusicBrainz** (CC0 metadata, no music) can check dates and credit
 
 **The big gap:** no open symbolic data exists for bass, pad or melody in any modern or popular style. Every large
 MIDI set of pop music is fan MIDI or transcriptions of copyrighted songs (OUT). Drums are the only member covered
-across many styles. The gaps are filled by:
-1. **The style book** (bucket 3) and its practice MIDI (4.2): each gap style's own theory, per member, written from
-   sources, labeled, ours (SAFE). See DadCraft's answer 3 below.
+across many styles. **Since decision 19 (Oct 28)** the notes come from real music and the rules are the guardrails:
+practice MIDI from the style book would only teach the rules back, so it's no longer a gap-filler for training. The
+gaps are filled by:
+1. **Human-written open scores** (PDMX): melodies and chords first, starting with the melodic spike (PLAN.md S.0).
+   They carry phrasing, harmony and development, not modern styles.
 2. **Open audio turned into MIDI** (4.3): the FMA CC0 and CC BY tracks (electronic, hip hop, rock), CC0 and CC BY
-   Freesound and ccMixter loops, transcribed with Demucs → Basic Pitch → Beat This!.
-3. **Theory and harmony** from PDMX and IMSLP, which carry over to every style (bucket 2).
+   Freesound and ccMixter loops, transcribed with Demucs → Basic Pitch → Beat This!. The second proof showed
+   transcription alone isn't enough as the main source (PLAN.md decision 19).
+3. **The style book** (bucket 3): each style's own theory per member, which drives the rules and guardrails.
+4. **Music DadCraft gives the desk** (4.5), tagged and licensed.
 
-Salsa and afrobeat have the least modern open audio. Expect them to lean most on the style book.
+Salsa and afrobeat have the least modern open audio. Expect them to lean most on the style book's rules and on music given to the desk.
 
 ## DadCraft's answers (Oct 23)
 

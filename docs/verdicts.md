@@ -386,3 +386,5 @@ isn't reloaded every session; grep for the part a task needs.
   convince after reducing to three members. the synthwave sounds preserve the sound, but i think the instruments
   still sound generic." Reduction and synth rendering preserve convincing music in these four pieces; generic
   instrument timbres remain open. Decision 19's melodic PDMX spike is next to plan; no training verdict implied.
+- Oct 28, S.0's plan (Claude Code's and Codex's takes merged), asked to approve melody only as general human
+  phrasing (no claim of learned synthwave style) and the data/grid listen before training: "yes to both."

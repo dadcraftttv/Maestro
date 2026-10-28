@@ -4,9 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.0: present the revised melodic model-spike plan using PDMX melodies/chords under decision 19, for
-DadCraft's approval before training. Third proof complete: the reduction and synthwave rendering preserve
-convincing music; instrument timbres still sound generic (DadCraft, Oct 28).
+**Next:** S.0a (bucket S): the PDMX melody inventory, the grid-snapping report and the token round trip, then
+DadCraft's listen to ~10 snapped melodies before any training. S.0's plan approved Oct 28 (melody only).
 
 ## The goal (DadCraft, Oct 23)
 
@@ -826,10 +825,43 @@ For each chosen style, how each member plays it, written from sources.
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a
 learned model finds out what buckets 4 and 5 need before the desk and the training data are built (outside reviews,
 `docs/research.md` round 4).
-- [ ] S.0 Plan approved: revise for a melodic member using human-written PDMX melodies/chords (decision 19,
-      third proof passed); propose the smallest MIDI-GPT-style model that can learn it, a few days' work at most.
-      Data selection/splits, conditioning, rules integration and success measures must be presented before training.
-      The earlier drums/style-book-practice draft is superseded by decision 19.
+- [x] S.0 Plan approved (DadCraft, Oct 28, "yes to both": melody only, as general human phrasing with no claim of
+      learned synthwave style; the data and grid listen before any training). Merged from Claude Code's and Codex's
+      independent takes. The earlier drums/style-book-practice draft is superseded by decision 19. The plan:
+      - **Question:** can a small local model trained on human-written PDMX melodies phrase better than the rules'
+        seeded choose, inside the same rules and in time for the bar? Melody only; bass, pad and drums stay
+        rule-made. PDMX tests phrasing, not synthwave style.
+      - **Data:** PDMX `no_license_conflict`, `license_conflict=False`, `is_original`; arrangements and disputed
+        rights out, each score's license evidence kept. Lead and accompaniment extracted separately (the third
+        proof's fixed rule); chords from the accompaniment only, with confidence and coverage reported, unclear
+        passages skipped (never chords inferred from the melody). 4/4, monophonic lead first.
+      - **Grid (new, decision 13):** snapped to the 24 steps a beat; ties across bars and rests kept explicit. What
+        snapping drops or moves is counted (notes lost, timing moved, collisions, lengths changed); heavy losses
+        rejected, not simplified.
+      - **Splits:** copies, arrangements and transpositions grouped by composition before a fixed ~80/10/10 split;
+        composers held out if the counts allow; windows and transpositions stay in their own split; the test set
+        stays untouched.
+      - **Tokens:** bar, position, key-relative pitch, grid duration, coarse velocity, tie/rest/end. Conditioning:
+        upcoming chords, key, register, density, bar-in-phrase (only with a reproducible definition), the previous
+        4–8 bars. No genre tags.
+      - **Model:** one causal transformer, ~5–10M parameters, from scratch (no foreign weights), a fixed short
+        compute budget. Beside it: the rules' choose and a chord-conditioned n-gram on the same data.
+      - **Inside the rules (decisions 6, 15):** a whole next bar made ahead of time on the shared chords and grid;
+        invalid tokens masked; the existing checks judge the decoded bar; bounded retries, then the rule-made bar.
+        Logged: raw validity, masked choices, retries, accepted bars, fallbacks, rejection reasons (the checks are
+        not weakened to pass it, nor allowed to erase the phrasing under test).
+      - **Measures, frozen before training (5.0):** held-out loss below the n-gram; >=95% of bars accepted on the
+        first try (masking counted apart); <=1% fallback; p99 time per bar (make, check, retry) under half a bar at
+        180 BPM (667 ms), CPU and GPU reported apart (50 ms on CPU a stretch goal; desktop numbers aren't phone
+        numbers); rare-under-choose rate at matched controls; repetition; nearest training-phrase matches including
+        transpositions (novelty alone can't pass). DadCraft's blind listen: matched sound and loudness, several
+        held-out contexts and seeds, against both choose and the n-gram; unclear is recorded as inconclusive.
+      - **Steps:** S.0a data inventory and counts, token round trip; **DadCraft listens to ~10 random snapped
+        melodies over their own chords** before anything is trained. Then the counts, dependencies (PyTorch) and
+        compute budget come back with the frozen measures. Stop with findings if extraction or coverage fails.
+      - **Out of scope:** the generic timbres (sound work, decision 16), bass/pad models, style tags and blends,
+        Ouralia, the desk, distillation, audio transcription.
+- [ ] S.0a Data inventory, snapping report and token round trip; DadCraft's listen to the snapped melodies.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
