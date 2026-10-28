@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** the third proof under decision 19 (approved, on hold until DadCraft says go): PDMX's human-written open scores through Maestro's player, no transcription; steps under "Generic, Oct 27", after the second proof.
+**Next:** the third proof under decision 19 (approved, on hold until DadCraft says go): PDMX's human-written open scores through Maestro's player, no transcription; its four steps under decision 19 in "Decisions" (grep "third proof").
 
 ## The goal (DadCraft, Oct 23)
 
