@@ -369,3 +369,5 @@ isn't reloaded every session; grep for the part a task needs.
   the fix stays.
 - Oct 28: the sounds A/B on trap (`clips/ab/sounds_trap`: A FluidR3 GM, B GeneralUser GS, C Maestro's own bell and
   strings, the same notes): "they still sound painfully generic and meandering. the sounds might be part of the problem, but they aren't the main culprit." The notes are the main cause; "meandering" is new.
+- Oct 28, asked for his moments ((3) of "Generic, Oct 27"): "i can't really pick one or two "moments". it's the whole thing. nothing about it sounds convincing. it's like if you tried to describe what a box is to an alien, and they tried to recreate it, and you can tell how it's supposed to be representative of what you had in your head, but it's just all wrong." No single moment: the rule-made
+  music as a whole doesn't convince.

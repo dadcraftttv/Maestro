@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** (3) under "Generic, Oct 27": his moments and a reference track or two a style, after the sounds A/B showed the notes are the main culprit ("generic and meandering"); plan to agree first.
+**Next:** DadCraft's call on (4) under "Generic, Oct 27" (the rules as guardrails, the notes learned from real music), after "nothing about it sounds convincing"; a reference track a style still wanted.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -740,6 +740,9 @@ For each chosen style, how each member plays it, written from sources.
       close to A). C: Maestro's own `fm bell` and `dark strings` (`synth.py`). Gains set so all three meet the mix
       targets alike (the melody level with the drums, the pad 6-8 dB under). His listen (Oct 28): "they still sound painfully generic and meandering. the sounds might be part of
       the problem, but they aren't the main culprit." (2) answered: mostly the notes.
+      Asked for his moments (Oct 28): "it's the whole thing. nothing about it sounds convincing", like an alien
+      rebuilding a box from a description, "you can tell how it's supposed to be representative ... but it's just
+      all wrong." No moments to give; (4) is on the table, his call.
 
 ### S. A first model spike (draft; after Checkpoint 3, before D; DadCraft, Oct 26)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a
