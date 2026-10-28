@@ -388,3 +388,9 @@ isn't reloaded every session; grep for the part a task needs.
   instrument timbres remain open. Decision 19's melodic PDMX spike is next to plan; no training verdict implied.
 - Oct 28, S.0's plan (Claude Code's and Codex's takes merged), asked to approve melody only as general human
   phrasing (no claim of learned synthwave style) and the data/grid listen before training: "yes to both."
+- Oct 28, S.0a v2, all ten original/snapped melody-over-chord pairs: DadCraft: "the snapped versions *seem*
+  to be fine by my ear"; "the biggest change was in sample 09, and the snapped version sounded better."
+  The grid listen found no reported snapping problem in these samples; preserve the tentative wording. Claude's
+  rights inspection and S.1 dependencies/measures/budget review remain open; no training approval implied.
+- Oct 28, S.0a v2 rights: Claude Code found copyrighted songs in the CC0 sample and proposed reading all 419
+  titles by eye and cutting known songs, arrangements and doubtful or unreadable entries. DadCraft: "yes".

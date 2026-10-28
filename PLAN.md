@@ -4,9 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.0a extraction review (bucket S): the conservative local pilot stopped at S.0's coverage gate.
-Review the authorship screen and accompaniment/chord extraction before completing the inventory, frozen split
-and DadCraft's ~10-melody grid listen. Local findings: `private/s0a/REPORT.md`. No training.
+**Next:** S.1 review (bucket S): measures, dependencies and a fixed compute budget come back before training.
+S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
+254/35/38, families kept apart). Cut list: `private/s0a_v2/claude_rights_cuts.json`; findings: `REPORT.md`.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -862,12 +862,24 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         compute budget come back with the frozen measures. Stop with findings if extraction or coverage fails.
       - **Out of scope:** the generic timbres (sound work, decision 16), bass/pad models, style tags and blends,
         Ouralia, the desk, distillation, audio transcription.
-- [ ] S.0a Data inventory, snapping report and token round trip; DadCraft's listen to the snapped melodies.
+- [x] S.0a Data inventory, snapping report and token round trip; DadCraft's listen to the snapped melodies.
       - Oct 28, Codex: conservative local MIDI/metadata pilot stopped at S.0's extraction/coverage gate.
         Saved rules before execution; source checksums and diagnostic token round trips pass. Narrow evidence
         screening and chord coverage leave too few pieces for the planned split/listen; this does not establish
         PDMX's usable corpus size. No split, listening renders, new downloads, PyTorch or training. Details,
         counts and limitations stay local in `private/s0a/REPORT.md`; extraction review is next. No sound verdict.
+      - Oct 28, Codex v2: reran under the brief's predeclared rules, CC0/public domain only; v1 preserved.
+        419 provisional pieces, 8,690 usable bars; frozen families and identity-held-out split, token round trips
+        and ten original/snapped GM-piano pairs checked. No source download, PyTorch, training or production code
+        changes. Claude's seeded 60-score rights inspection and DadCraft's grid/chord listen remain open; this is
+        not blanket rights clearance. DadCraft subsequently heard all ten: snapped versions seem fine by ear;
+        sample 09 changed most and sounded better snapped (docs/verdicts.md). Rights review remains open.
+        Counts, evidence and scripts: `private/s0a_v2/REPORT.md`.
+      - Oct 28, Claude Code rights review: the seeded 60 had ~14 clear copyrighted songs marked CC0/original
+        (PDMX flags unreliable; the keyword screen missed "Arr.", "Medley", "OST" and song titles). DadCraft
+        approved reading all 419 by eye: cut 62 known songs, 4 arrangements, 15 doubtful, 11 unreadable titles
+        (mangled metadata). 327 left: 254/35/38 pieces, 218/32/31 families; two of the ten listen pieces were cut.
+        Remaining risk: lesser-known songs not recognised by title. Cut list: `private/s0a_v2/claude_rights_cuts.json`.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
