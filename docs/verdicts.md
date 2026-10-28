@@ -398,3 +398,6 @@ isn't reloaded every session; grep for the part a task needs.
   not; he keeps the rights). "Stall is one of his, so let's leave it out." On adding public-domain classical and
   traditional scores (marked not original, so v1/v2 excluded them): "lets use as much as we possibly can."
   Licence stays CC0/public domain only.
+- Oct 28, widening S.0a v3: "as long as we aren't breaking any laws or going to get in any sort of trouble, i'd
+  say lets include or use as much as we can." Applied: composers who died 1931–1955 allowed for works published
+  by 1930 (Claude's dated list); covers of in-copyright songs and the doubtful cuts stay out.
