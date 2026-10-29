@@ -8,7 +8,10 @@ as much as possible to keep token cost low").
 these. it should step through them one at a time."). Codex, one step per review: 1 OpenScore per-song work keys
 (Hensel apart), 2 token codec frozen in `maestro/`, 3 pinned PyTorch+CUDA as an optional extra, 4 n-gram and
 next-bar harness, 5 `docs/s1-measures.md`. Budget: ~5M-parameter transformer, 2 GPU hours, early stop. No
-training until step 5 and DadCraft's go. Corpus before step 1: v11, **592 pieces / 517 families**, 494/50/48 (`private/s0a_v11/`, identical to v9); listens (v8 seven, v9 three
+training until step 5 and DadCraft's go. Step 1 complete (Codex, Oct 29; Claude Code reviewed, clear): v12, **594 pieces / 519 families**,
+split 496/50/48 (`private/s0a_v12/`). V11 already has v5 per-song keys and Hensel normalization;
+reconsidering v4 cap cuts recovers two songs into train. All 592 baseline records/splits exact, no moves.
+Step 2 next (Codex). Baseline: v11, 592 / 517, 494/50/48 (identical to v9); listens (v8 seven, v9 three
 pairs) still open. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
 chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
 35,990 notes / 424,222 scalar tokens. All 592 v9 records and splits are exact. The approved 1.89 GB PDMX
@@ -1027,6 +1030,14 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         tests pass. `private/s0a_v11/REPORT.md`. DadCraft then dropped After You've Gone 156119: v11 rebased
         on v9, **592 / 517, 494/50/48**, audit exact against v9. No sound verdict
         or training. Evidence/listen: `private/s0a_v10/`.
+- [x] S.1 prep step 1: OpenScore per-song identities and Hensel separation (Codex, Oct 29; Claude Code reviewed, clear).
+      V11's 45 OpenScore records already carry v5's corrected identities; zero baseline key changes.
+      Reapplied that helper to the three v4 OpenScore cap cuts: Hensel “Du bist die Ruh” (Op.7 no.4)
+      and Schumann “Gesungen” recovered into train; Dvořák's third copy stays capped. Satie's prior
+      uploader-conflict quarantine stays excluded. V12: 594 pieces / 519 families, split 496/50/48,
+      11,248 bars / 35,944 notes / 423,836 scalar tokens. All 592 baseline records/splits exact;
+      source hashes, cap/family/uploader isolation, codec audit and 327 tests pass. Report: `private/s0a_v12/REPORT.md`.
+      No downloads, musical-gate changes, listens or training. Steps 2–5 remain open, one per review.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

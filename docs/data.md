@@ -48,6 +48,18 @@ not a corpus ceiling or proof the sources are invalid. Full funnels, per-file cr
 causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
 source-music download, musical-gate relaxation, PyTorch or training was approved.
 
+### OpenScore work-key recovery (Oct 29, S.1 prep step 1; Codex, Claude Code reviewed)
+
+V11 already preserves v5's per-song OpenScore identities and separates Fanny Hensel from Felix Mendelssohn.
+The v4 cap cuts had not been reconsidered under those keys. Reusing the same identity helper recovers
+Hensel's “Du bist die Ruh” (Op.7 no.4, lc5987937; four usable bars / 21 notes) and Schumann's “Gesungen”
+(lc6984631; ten bars / 20 notes), both into train. The third Dvořák copy stays capped; Satie's earlier
+uploader-conflict quarantine stays excluded. No baseline identity or musical record changes, no split moves.
+V12: **594 pieces / 519 families**, split **496/50/48**, 11,248 bars / 35,944 notes / 423,836 scalar tokens.
+All 592 v11 records/splits remain exact. All 1,658 approved OpenScore source hashes, codec round trips,
+cap and family/uploader isolation pass. No source downloads, musical-gate changes, listens or training.
+Private replay, per-piece keys, provenance and audits: `private/s0a_v12/`.
+
 ### Pickup bars in MusicXML (Oct 29, S.0a v11; Claude Code)
 
 An unflagged short first or last XML bar now counts as a pickup/final bar when the MIDI has the same short

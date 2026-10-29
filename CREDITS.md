@@ -26,6 +26,10 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
 
 - **OpenScore Lieder**, OpenScore contributors, CC0-1.0. Credit and repository link requested:
   https://github.com/OpenScore/Lieder · https://musescore.com/openscore-lieder-corpus
+  S.1 prep v12 recovers Fanny Hensel, “Du bist die Ruh”, Op.7 no.4 (lc5987937; transcription by emta,
+  from IMSLP #558449), and Robert Schumann, “Gesungen” (lc6984631; transcription by mooing), from the
+  already downloaded CC0 corpus at revision `38c5db510224d9facdc4b08d741fc788cfb58ea8`.
+  Exact source URLs, creators and SHA-256 hashes stay in `private/s0a_v12/corpus.json`.
 - **OpenScore String Quartets**, OpenScore contributors, CC0-1.0. Credit and repository link requested:
   https://github.com/OpenScore/StringQuartets · https://musescore.com/openscore-string-quartets
   Per-piece provenance stays in the local inventory; underlying works/editions still require review.
