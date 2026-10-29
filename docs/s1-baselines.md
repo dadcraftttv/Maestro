@@ -76,3 +76,7 @@ the test split's melodies. Detailed report and per-bar logs are in that folder.
 Tests cover train/held-out isolation, OOV loss, illegal fields and ties, masks,
 raw auditing, bounded retries, failed fallback, failure telemetry, unchanged full
 judge rejection, and imports with torch blocked. No core module imports torch.
+
+Step 5 supersedes the adapter acceptance definition above: `judge_bar` now also
+requires target-bar card acceptance. Frozen measures and rerun: `s1-measures.md`.
+The original step-4 figures remain historical full-context-only measurements.

@@ -15,7 +15,10 @@ Step 2 complete (Codex, Oct 29; Claude Code reviewed, clear): public codec and c
 `docs/s1-tokens.md`; v12 exact-event/round-trip/history checks and 342 tests pass.
 Step 3 complete (Codex, Oct 29; Claude Code reviewed, clear): optional `[spike]` PyTorch 2.7.1+cu126 /
 CUDA 12.6, RTX 2070 GPU smoke passes; `docs/s1-runtime.md`. Step 4 complete (Codex, Oct 29; Claude Code reviewed, clear): train-only event n-gram and
-next-bar harness, `docs/s1-baselines.md`. Validation NLL 7.253827 nats/event; step 5 follows review.
+next-bar harness, `docs/s1-baselines.md`. Validation NLL 7.253827 nats/event. Step 5 complete (Codex, Oct 29; Claude Code reviewed, clear):
+`docs/s1-measures.md`, existing target-bar card gate plus unchanged full judge;
+160/160 rule bars pass, 80/80 corrupt bars rejected. N-gram first try 43/160,
+fallback 67/160; CPU p99 15.64 ms. Next: DadCraft's go for S.1 training.
 Baseline: v11, 592 / 517, 494/50/48 (identical to v9); listens (v8 seven, v9 three
 pairs) still open. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
 chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
@@ -1072,6 +1075,12 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       no transformer training, downloads, listens or new thresholds.
       Review: 359 tests pass with the GPU visible. The full 16-bar judge passed 79/80 random chromatic
       bars substituted into one bar, so it cannot judge a single bar; step 5 must add a per-bar check.
+- [x] S.1 prep step 5 (Codex, Oct 29; Claude Code reviewed, clear): frozen
+      measures in `docs/s1-measures.md`; no new judge thresholds, full judge unchanged.
+      Rule/corruption probes 160/160 pass and 80/80 rejected; n-gram gates fail
+      (43/160 first try, 67/160 fallback), p99 CPU 15.64 ms. No training or listens.
+      Review: 360 tests pass with the GPU visible; noise test tightened to >=76/80. Open for DadCraft: an
+      empty (all-rest) target bar fails as unmeasurable (90 n-gram rejections), so a resting melody bar never passes.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

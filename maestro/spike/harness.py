@@ -87,7 +87,7 @@ def propose(generator, control, bar, rng, masked=True, telemetry=None):
 
 
 def judge_bar(clip, member, bar, notes):
-    """Replace target melody in caller's context and run the full existing judge.
+    """Replace target melody in caller's context and run full-context plus target-bar card checks.
 
     clip is a judge.Clip; notes use absolute 24-tick/beat coordinates. The caller
     supplies accompaniment, style, timeline and prior bars. No thresholds change.
@@ -108,7 +108,20 @@ def judge_bar(clip, member, bar, notes):
     candidate = kept + [Note(a, b-a, p, min(127, v*16+8)) for a,b,p,v in notes]
     updated = replace(clip, players={**clip.players, member: replace(player, notes=sorted(candidate, key=lambda n:n.step))})
     rows = judge.score(updated)
-    return [] if judge.passes(rows) else [r.says() for r in rows if not r.ok]
+    reasons = [] if judge.passes(rows) else [r.says() for r in rows if not r.ok]
+    # Preserve absolute time and the complete accompaniment/chord context. Only
+    # the target member's card measurements use this bar's sounding notes.
+    local = [n for n in updated.players[member].notes
+             if n.step < hi and n.step + n.steps > lo]
+    local = [replace(n, step=max(n.step, lo),
+                     steps=min(n.step+n.steps, hi)-max(n.step, lo)) for n in local]
+    card = judge.BOOK[clip.style_of(member)]['judge'][player.role]
+    local_rows = judge._card_rows(card, local, updated, member, '', 0)
+    if not local_rows or not judge.passes(local_rows):
+        reasons += ['target bar: ' + r.says() for r in local_rows if not r.ok]
+        if not local_rows:
+            reasons.append('target bar: no measurable card traits')
+    return reasons
 
 
 def next_bar(generator, control, bar, rng, check, fallback, attempts=3, synchronize=None):

@@ -87,3 +87,21 @@ def test_train_only_and_heldout_loss_no_mutation():
         model.loss([piece()])
     unknown=piece('validation');unknown['snapped'][0][2]=61
     assert model.loss([unknown])['unknown_events']==1
+
+
+def test_target_bar_cards_reject_random_corruption_and_keep_rule_bars():
+    rng = random.Random(0)
+    rule_ok = random_rejected = 0
+    for seed in range(1, 11):
+        clip = judge.from_song(flow_sketch('synthwave', seed, 16)[0])
+        name = next(n for n, p in clip.players.items() if p.role == 'melody')
+        for bar in range(16):
+            lo, hi = bar*96, (bar+1)*96
+            notes = [[max(n.step, lo), min(n.step+n.steps, hi), n.pitch, n.velocity//16]
+                     for n in clip.players[name].notes if n.step < hi and n.step+n.steps > lo]
+            rule_ok += not judge_bar(clip, name, bar, notes)
+            if seed <= 5:
+                noise = [[lo+i*6, lo+(i+1)*6, rng.randint(36,96), 7] for i in range(16)]
+                random_rejected += bool(judge_bar(clip, name, bar, noise))
+    assert rule_ok == 160
+    assert random_rejected >= 76
