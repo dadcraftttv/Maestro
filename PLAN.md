@@ -4,9 +4,10 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's call after S.1's first run (`docs/s1-results.md`): the 5.1M transformer beats the n-gram on
-held-out loss (validation 5.68 vs 7.25 nats/event) but fails acceptance (first try 87/160, fallback 18/160) and CPU
-free-running p99 (707 ms); GPU timing passes. Novelty diagnostics and his blind listen not run yet.
+**Next:** DadCraft's call on S.1 run 4 (`docs/s1-results.md`): validation 5.15 vs n-gram 7.25 nats/event
+(test 5.43 vs 7.64); timing passes; acceptance fails at the frozen register 60-84 (74/160 first try, 35 fallback).
+The rule melody itself sits at 76-93, so 60-84 forces the line under the band; at 72-96 it is 117/160 and 8
+(n-gram 122 and 5, but 49 of its 122 are rests). Decide: change the frozen register, then novelty and his listen.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -1062,6 +1063,11 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       Loss passes (validation 5.6822 vs n-gram 7.2538; test 6.1971 vs 7.6403). Acceptance fails: 87/160 first
       try, 18/160 fallback (free-running 97/13); rejections are chord tones and under the band, as it has no
       style input. p99 CPU 289/707 ms (contexts/free; free fails 667), GPU 196/401 ms. Novelty, listen open.
+      DadCraft: "go with your recommendation" (style inputs, faster check). Runs 3-4: register, chord-tone,
+      pool controls; events as sums of field embeddings; key passed as 'C' (v12's name for A minor). Run 4:
+      5,034,240 params, validation 5.1503, test 5.4282 (scored once for it). 60-84: 74/160 first try, 35
+      fallback (n-gram 61/35); diagnostic 72-96: 117/8 (n-gram 122/5, 49 rests). p99 CPU 262/227 ms, GPU
+      177/158 ms. ~21 GPU min in all.
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
       into the plans of buckets 4 and 5.
 

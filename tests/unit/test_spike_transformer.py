@@ -28,8 +28,9 @@ def test_rare_events_pool_into_unk_and_loss_is_proper():
     assert gen.vocab.pooled == 2                                     # that event + "unseen"
     control = condition(train[0]['snapped'], train[0]['chords'], 'C', 1, 0, (0, 127), 4)
     d = gen.distribution(control, [], 0)
-    special = 1 - sum(d.values())
-    assert -1e-6 <= special < 1                                      # remainder sits on control tokens
+    assert abs(sum(d.values()) - 1) < 1e-5                           # UNK and ELSEWHERE carry the rest
+    assert all(e[1] == 0 for e in d if e not in (('UNK',), ('ELSEWHERE',)))
+    assert T.run_style(train[1], 0, 1) == {'middle': 63, 'chord_tones': 0.75, 'pool': None}
     assert run['best_validation_nll'] == gen.loss([piece('validation', [60, 62, 64, 65])])['nll_nats_per_event']
     with pytest.raises(ValueError):
         gen.loss(train)
