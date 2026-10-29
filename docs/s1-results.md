@@ -83,5 +83,6 @@ Lead notes in the 8 bars: rules 18-55, n-gram 10-31, model 25-103 (seeds 5, 7 an
 
 **DadCraft's verdict (Oct 29): no preference in all 10 trials.** "they all sound similar and still sound bland";
 "i feel like we burned a ton of time and tokens to wind up more or less where we started." Key opened after:
-each trial held rules, n-gram and model once, in shuffled order. With the lead swapped three ways and nothing
-standing out, the lead's notes are not what makes these songs bland.
+each trial held rules, n-gram and model once, in shuffled order. Read with care (DadCraft's
+correction): the three ways of choosing notes are no different to his ear; that does not clear the notes, since
+all three share the same chords, register, judge and per-bar sampling with no hook, or the instrumentation.

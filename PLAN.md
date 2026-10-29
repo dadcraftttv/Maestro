@@ -5,8 +5,9 @@ same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: 
 as much as possible to keep token cost low").
 
 **Next:** S.1 heard (DadCraft, Oct 29): no preference in all 10 trials, all three leads "bland". The learned
-melody is no better or worse to his ear than the rules' or the n-gram's, so the lead's notes are not the cause of
-the blandness. No more S.1 model work until DadCraft picks where the blandness comes from.
+melody is no better or worse to his ear than the rules' or the n-gram's. That does not clear the notes (all three
+share the same constraints and none has a hook) nor the instrumentation (DadCraft). No more S.1 model work until
+a cheap test splits the two.
 
 ## The goal (DadCraft, Oct 23)
 
