@@ -115,6 +115,9 @@ def judge_bar(clip, member, bar, notes):
              if n.step < hi and n.step + n.steps > lo]
     local = [replace(n, step=max(n.step, lo),
                      steps=min(n.step+n.steps, hi)-max(n.step, lo)) for n in local]
+    # A bar of rest is allowed (DadCraft, Oct 29): only the full judge sees it.
+    if not local:
+        return reasons
     card = judge.BOOK[clip.style_of(member)]['judge'][player.role]
     local_rows = judge._card_rows(card, local, updated, member, '', 0)
     if not local_rows or not judge.passes(local_rows):

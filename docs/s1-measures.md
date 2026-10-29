@@ -30,13 +30,16 @@ run for every seed with actual generated history; do not pool the two regimes.
 melody card measured on the target bar's sounding notes. Absolute times,
 chords and accompaniment remain available. Use existing card ranges, scoring
 and existing 80% member gate. No new key-fit or density threshold: synthwave's
-melody card contains register, chord tones and top. An empty/unmeasurable target
-fails explicitly. No acceptance claim outside tested styles and roles. A bar
+melody card contains register, chord tones and top. A target bar with no sounding
+melody note (a rest bar) skips the card and needs only the full judge (DadCraft,
+Oct 29). Notes that give no measurable card trait still fail explicitly. Report
+the rest share of generated passes beside acceptance; references: rules 0/160,
+train runs 1,536/8,816 bars (17.4%). Rests have no gate of their own. No acceptance claim outside tested styles and roles. A bar
 can pass despite an individual out-of-range trait, as the existing judge allows.
 
 Gate: >=95% of all requested bars pass on the first masked proposal;
 <=1% require rule fallback after three attempts. Denominator includes support
-failures and rests rejected as unmeasurable. Record unmasked first-rollout
+failures. Record unmasked first-rollout
 acceptance separately, masked draws/total choices, removed probability mass,
 all rejection reasons and retries. Never count a successful fallback as generated
 acceptance. Every fallback must pass both checks or the run fails.
@@ -92,11 +95,12 @@ notes/bar, randint(36,96), velocity bin 7: **80/80 rejected**. Requiring every
 card row inside range would wrongly reject 100 rule bars; the existing 80%
 member gate avoids inventing a stricter threshold.
 
-N-gram rerun: raw accepted **24/160 (15%)**; first try **43/160 (26.875%)**;
-generated within three attempts **93/160 (58.125%)**; fallback **67/160
-(41.875%)**, 201 retries. Masked draws 188/1,343 decisions. Rejections: 103
-chord-tone, 56 below-band, 90 unmeasurable target, 48 empty support (reasons
-can overlap). CPU p50/p99 **6.93/15.64 ms**. Acceptance/fallback gates fail;
-CPU latency gates pass. GPU not applicable. Loss and corpus SHA unchanged.
+N-gram rerun (rest bars allowed): raw accepted **51/160**; first try
+**78/160 (48.75%)**, of which 35 are rests; generated within three attempts
+**142/160 (88.75%)**, 69 rests; fallback **18/160 (11.25%)**, 117 retries. Masked
+draws 148/1,004 decisions. Rejections: 80 chord-tone, 42 below-band, 38 empty
+support. CPU p50/p99 **5.44/13.62 ms**. Acceptance/fallback gates fail; CPU
+latency gates pass. GPU not applicable. Loss and corpus SHA unchanged. Before
+rests were allowed: first try 43/160, fallback 67/160 (90 rests rejected).
 Reproduce: `PYTHONPATH=. .venv/bin/python private/s1_prep_step5/check.py`;
 private report/logs retain evidence. Tests retain the fixed corruption probe.

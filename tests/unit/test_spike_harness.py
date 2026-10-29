@@ -105,3 +105,10 @@ def test_target_bar_cards_reject_random_corruption_and_keep_rule_bars():
                 random_rejected += bool(judge_bar(clip, name, bar, noise))
     assert rule_ok == 160
     assert random_rejected >= 76
+
+
+def test_rest_bar_skips_target_card_but_not_full_judge():
+    clip = judge.from_song(flow_sketch('synthwave', 1, 16)[0])
+    name = next(n for n, p in clip.players.items() if p.role == 'melody')
+    rested = sum(not judge_bar(clip, name, bar, []) for bar in range(16))
+    assert rested == 16

@@ -4,36 +4,10 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.1 prep, approved (DadCraft, Oct 29: "yes to all, fix the keys, listens can wait. let Codex handle
-these. it should step through them one at a time."). Codex, one step per review: 1 OpenScore per-song work keys
-(Hensel apart), 2 token codec frozen in `maestro/`, 3 pinned PyTorch+CUDA as an optional extra, 4 n-gram and
-next-bar harness, 5 `docs/s1-measures.md`. Budget: ~5M-parameter transformer, 2 GPU hours, early stop. No
-training until step 5 and DadCraft's go. Step 1 complete (Codex, Oct 29; Claude Code reviewed, clear): v12, **594 pieces / 519 families**,
-split 496/50/48 (`private/s0a_v12/`). V11 already has v5 per-song keys and Hensel normalization;
-reconsidering v4 cap cuts recovers two songs into train. All 592 baseline records/splits exact, no moves.
-Step 2 complete (Codex, Oct 29; Claude Code reviewed, clear): public codec and conditioning,
-`docs/s1-tokens.md`; v12 exact-event/round-trip/history checks and 342 tests pass.
-Step 3 complete (Codex, Oct 29; Claude Code reviewed, clear): optional `[spike]` PyTorch 2.7.1+cu126 /
-CUDA 12.6, RTX 2070 GPU smoke passes; `docs/s1-runtime.md`. Step 4 complete (Codex, Oct 29; Claude Code reviewed, clear): train-only event n-gram and
-next-bar harness, `docs/s1-baselines.md`. Validation NLL 7.253827 nats/event. Step 5 complete (Codex, Oct 29; Claude Code reviewed, clear):
-`docs/s1-measures.md`, existing target-bar card gate plus unchanged full judge;
-160/160 rule bars pass, 80/80 corrupt bars rejected. N-gram first try 43/160,
-fallback 67/160; CPU p99 15.64 ms. Next: DadCraft's go for S.1 training.
-Baseline: v11, 592 / 517, 494/50/48 (identical to v9); listens (v8 seven, v9 three
-pairs) still open. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
-chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
-35,990 notes / 424,222 scalar tokens. All 592 v9 records and splits are exact. The approved 1.89 GB PDMX
-archive is downloaded and MD5-checked; only 387 previously cleared scores extracted. Of 111 melody-only
-chord failures, 43 contain symbols, four align without guessing; two Twinkle copies are duplicates/capped,
-one intro names Pee-Wee Ellis and is cut. Addition 156119 (After You've Gone, 1918) contributes 20 bars /
-87 notes. DadCraft dropped it (Oct 29) in v11. Thirteen previously cleared candidate
-settings cut on closer metadata review; no frozen piece removed. Source/codec/isolation audits, private
-fixtures, 327 tests and one symbol-pad listen pair pass. Report and cuts: `private/s0a_v10/REPORT.md`.
-V11 (Claude Code, Oct 29) recovers unflagged pickup/final bars (aligned 4 → 20) but adds nothing: the rest are capped/duplicate copies, and Greensleeves is a Frank Nordberg transcription (cut). Still 593: `private/s0a_v11/REPORT.md`. Decision 7 unchanged; DadCraft's sound verdict pending; no training.
-DadCraft's v4 listen passed ("snapping didn't hurt anything"); no v5 sound verdict or training approval.
-v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen passed in v4.
-S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
-254/35/38, families kept apart). Cut list: `private/s0a_v2/claude_rights_cuts.json`; findings: `REPORT.md`.
+**Next:** S.1 training, approved (DadCraft, Oct 29: "allow rest bars, then go for training"). Claude Code runs
+it on this PC (Codex's sandbox has no GPU): one ~5M-parameter causal transformer from scratch, 2 GPU hours total,
+early stop on validation event NLL, measured against the frozen `docs/s1-measures.md`. No listens until gates are
+reported.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -1081,6 +1055,8 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       (43/160 first try, 67/160 fallback), p99 CPU 15.64 ms. No training or listens.
       Review: 360 tests pass with the GPU visible; noise test tightened to >=76/80. Open for DadCraft: an
       empty (all-rest) target bar fails as unmeasurable (90 n-gram rejections), so a resting melody bar never passes.
+      DadCraft: allow rest bars. A rest bar skips the target card (full judge still applies); rest share is
+      reported (rules 0/160, train 17.4%). N-gram: first try 78/160 (35 rests), fallback 18/160. 361 tests pass.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
