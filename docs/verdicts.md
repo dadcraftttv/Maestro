@@ -471,3 +471,8 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 29, S.1 blind listen: no preference in all 10 trials (rules, n-gram, model leads): "they all sound similar
   and still sound bland"; "i feel like we burned a ton of time and tokens to wind up more or less where we
   started."
+- Oct 29, after S.1: what's missing is "dynamics, character, texture, weight, impact, flavour ... nothing about it
+  catches the ear". Step back: "how does what we're doing actually, REALLY tie back into Ouralia? how does what
+  we're doing actually, REALLY improve upon dcs_composer?" Then: "Maestro is meant to be a smarter, better, evolved
+  form of dcs_composer. It can and should be able to learn ... the goal for it always has been and always will be
+  to learn and evolve from dcs_composer into something bigger and better."

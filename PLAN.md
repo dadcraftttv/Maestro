@@ -4,10 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.1 heard (DadCraft, Oct 29): no preference in all 10 trials, all three leads "bland". The learned
-melody is no better or worse to his ear than the rules' or the n-gram's. That does not clear the notes (all three
-share the same constraints and none has a hook) nor the instrumentation (DadCraft). No more S.1 model work until
-a cheap test splits the two.
+**Next:** re-plan around dcs_composer (DadCraft, Oct 29, `docs/verdicts.md`): Maestro is dcs_composer evolved,
+learning included, heard through Ouralia's own sound (`Ouralia/desktop`), not the PC renderer. Proposed first
+step, awaiting his go: R.1, a short baseline listen of today's dcs_composer in the desktop app. S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 
