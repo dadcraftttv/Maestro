@@ -446,3 +446,9 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 29, after the v8 review: asked whether low yield was Codex or the rules, DadCraft: "this back and forth is
   getting to be a bit much ... i'd rather you just handle this part. knock it out please." Claude Code ran S.0a
   v9 (whole-bar chord fallback) itself: three additions, 592 pieces. No sound verdict or training approval.
+
+- Oct 29, S.0a v10: DadCraft approved the PDMX MusicXML archive download through Claude Code's handoff
+  ("i'd like Codex to handle that 1.9 GB download"). Codex downloaded and MD5-checked it, extracted only
+  387 previously cleared scores and tested written chord symbols with strict MIDI alignment. One provisional
+  addition, 593 pieces; one new train listen pair. Claude Code reviewed it and kept the addition.
+  No new DadCraft sound verdict, scans or training approval.

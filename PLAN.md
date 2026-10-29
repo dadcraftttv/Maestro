@@ -4,17 +4,17 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listens (v8 seven pairs, v9 three: `private/s0a_v9/LISTEN_S0A.md`), then S.1 prep. S.0a v9
-(Claude Code, Oct 29) adds a whole-bar chord fallback: **592 pieces / 517 families**, split 494/50/48. The
-remaining chord failures are one-line melodies with no accompaniment in the MIDI; their chord symbols, if any, are
-only in PDMX's MusicXML (1.9 GB, not downloaded; DadCraft's call). v8 below: Claude Code reviewed, nine clear. Local replay with
-DadCraft's four approved loosenings adds nine and drops sparse Danny Boy 61265: **589 pieces / 516 families**,
-split 491/50/48; 11,206 usable bars / 35,740 notes / 421,895 scalar tokens. All 580 surviving baseline records
-and splits are exact. Six cap cuts, one frozen-held-out-family quarantine; source/codec/isolation audits,
-eight boundary checks and 327 tests pass. Seven new train listen pairs (requested eight unavailable), including
-two traditional and five meter-run pieces: `private/s0a_v8/LISTEN_S0A.md`. Rights review especially: own-setting
-inferences for 5984045 / 6341482 / 5962248; Lutkin 5930552 arrangement dated 1914 by Rochester catalog.
-Full funnels, dates, sample identities and cuts: `private/s0a_v8/REPORT.md`. Decision 7 unchanged; no training.
+**Next:** DadCraft's listens (v8 seven pairs, v9 three, v10 one:
+`private/s0a_v10/LISTEN_S0A.md`), before S.1 prep. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
+chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
+35,990 notes / 424,222 scalar tokens. All 592 v9 records and splits are exact. The approved 1.89 GB PDMX
+archive is downloaded and MD5-checked; only 387 previously cleared scores extracted. Of 111 melody-only
+chord failures, 43 contain symbols, four align without guessing; two Twinkle copies are duplicates/capped,
+one intro names Pee-Wee Ellis and is cut. Addition 156119 (After You've Gone, 1918) contributes 20 bars /
+87 notes. Claude Code kept it: the Marion Harris artist field names no source, so the rules keep it (the "MED. SWING" marking looks fake-book-like; DadCraft may drop it). Thirteen previously cleared candidate
+settings cut on closer metadata review; no frozen piece removed. Source/codec/isolation audits, private
+fixtures, 327 tests and one symbol-pad listen pair pass. Report and cuts: `private/s0a_v10/REPORT.md`.
+20 of the 29 short-measure cuts are only pickup/final bars: a possible v11 recovery. Decision 7 unchanged; DadCraft's sound verdict pending; no training.
 DadCraft's v4 listen passed ("snapping didn't hurt anything"); no v5 sound verdict or training approval.
 v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen passed in v4.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
@@ -1005,6 +1005,18 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         checked. 592 pieces / 517 families, 494/50/48; 11,234 bars / 35,903 notes / 423,362 scalar tokens.
         589 v8 records exact; audit, 8 boundary checks, 327 tests, listen checks pass. 111 of 113 remaining
         chord failures have no accompaniment at all. `private/s0a_v9/REPORT.md`.
+      - Oct 29, Codex v10 (DadCraft approved the 1.9 GB MusicXML download): archive MD5 matches;
+        387 rights-cleared scores extracted. Of 111 melody-only chord failures, 43 have symbols
+        (1,196/1,197 mapped); four align with exact MIDI measure boundaries and note onsets. Added
+        156119 After You've Gone (1918), 20 bars / 87 notes; two Twinkle copies duplicate/capped;
+        Pee-Wee Ellis intro cut. Thirteen third-party candidate settings excluded on metadata review;
+        no baseline removals. 593 pieces / 518 families, 495/50/48; all 592 baseline records/splits exact.
+        Symbol confidence/margin null, window symbol; accompanied scores retain v9. Thirty-nine alignment
+        cuts recorded, including short non-implicit XML bars, duration/repeat disagreements and one
+        overfull bar. Audit, fixtures, 327 tests and one train listen pair pass. Claude Code reviewed:
+        tests/audit/fixtures rerun pass; Marion Harris call kept under the rules; 20 of 29 short-measure cuts
+        are pickup/final bars only (v11 candidate). No sound verdict
+        or training. Evidence/listen: `private/s0a_v10/`.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

@@ -48,6 +48,29 @@ not a corpus ceiling or proof the sources are invalid. Full funnels, per-file cr
 causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
 source-music download, musical-gate relaxation, PyTorch or training was approved.
 
+### Written MusicXML chords (Oct 29, S.0a v10; reviewed by Claude Code)
+
+DadCraft approved downloading PDMX's `mxl.tar.gz`; 1,894,335,797 bytes, published MD5
+`49ffd75ecf5489c0be6d41182eb11ff7` verified. Streamed only the 387 previously rights-cleared scores.
+Melody-only scores can now use explicit harmony roots/kinds/basses at their written offsets, held to the
+next symbol and sampled at each half-bar start. Extensions are dropped into the existing vocabulary;
+unsupported/altered-core chords remain unlabelled. Labels carry `window: symbol`, null confidence/margin.
+Accompanied scores retain v9 labels. XML/MIDI measure boundaries, meters and note onsets must agree;
+no guessed pickup padding, repeat expansion or grace timing.
+
+Of 111 melody-only chord failures, 43 have harmony symbols (1,196 of 1,197 mapped), four align; 68 have
+none and 39 are cut for uncertain alignment. Two Twinkle copies are duplicates/capped; an intro explicitly
+credits Pee-Wee Ellis and is cut. Added **After You've Gone**, score 156119, Creamer/Layton 1918, encoding
+by uglybeauty, declaration publicdomain: 20 bars / 87 notes. Metadata names Marion Harris as artist but
+names no recording source or arranger; XML credits Creamer/Layton only. Claude Code kept it: no stated source or arranger, so the rules
+retain it. Thirteen previously cleared candidate settings cut for third-party editions,
+recording sources or modern contributors; none was frozen in v9.
+
+**593 pieces / 518 families**, split 495/50/48; 11,254 bars / 35,990 notes / 424,222 scalar tokens.
+All 592 v9 records/splits exact; checksum, cap, family/uploader, codec and listen checks pass; 327 tests pass.
+Only one new train listen pair is available: `private/s0a_v10/LISTEN_S0A.md`; its pad plays symbol labels.
+Full inventory, rights calls, alignment cuts and replay steps: `private/s0a_v10/REPORT.md`. No training.
+
 ### Whole-bar chord fallback (Oct 29, S.0a v9; Claude Code)
 
 A half bar whose accompaniment gives no confident chord now takes its whole bar's label under the same v3 test;
@@ -56,7 +79,7 @@ can drop or down-weight the fallbacks. No chord is taken from the melody. Same c
 three additions (Camptown Races 1850, Twelve Days of Christmas from Austin's 1909 printing, Danny Boy 1913):
 **592 pieces / 517 families**, split 494/50/48; 11,234 bars / 35,903 notes. The 589 v8 records are unchanged.
 111 of the 113 remaining chord failures are single-line melodies with no accompaniment in the MIDI; chord
-symbols, where they exist, are only in PDMX's MusicXML, which is not downloaded. `private/s0a_v9/REPORT.md`.
+symbols, where they exist, are only in PDMX's MusicXML (downloaded and tested in v10 above). `private/s0a_v9/REPORT.md`.
 
 ### Compatible bar runs and traditional songs (Oct 29, S.0a v8; reviewed by Claude Code)
 
