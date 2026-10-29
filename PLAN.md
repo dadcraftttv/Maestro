@@ -4,9 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** re-plan around dcs_composer (DadCraft, Oct 29, `docs/verdicts.md`): Maestro is dcs_composer evolved,
-learning included, heard through Ouralia's own sound (`Ouralia/desktop`), not the PC renderer. Proposed first
-step, awaiting his go: R.1, a short baseline listen of today's dcs_composer in the desktop app. S.1 model parked.
+**Next:** R (below): Maestro grows as dcs_composer, heard through Ouralia's own sound. R.1's baseline came from
+DadCraft's Session Log; R.2 New Pieces is built (Ouralia `d054460`) and waits on his listen. Then R.3 (form numbers
+from the scores) and the sound and character track R.4-R.8. S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -821,6 +821,49 @@ For each chosen style, how each member plays it, written from sources.
       Asked for his moments (Oct 28): "it's the whole thing. nothing about it sounds convincing", like an alien
       rebuilding a box from a description, "you can tell how it's supposed to be representative ... but it's just
       all wrong." No moments to give; (4) is on the table, his call.
+
+### R. dcs_composer, evolved (Oct 29; the re-plan, `docs/verdicts.md`)
+Maestro is dcs_composer grown up (DadCraft: "a smarter, better, evolved form of dcs_composer. It can and should be
+able to learn"), heard through Ouralia's own sound. What he found missing: "dynamics, character, texture, weight,
+impact, flavour". Notes alone don't carry those (S.1: three note-choosers, no difference to his ear), so R works on
+the form, the feel and, with Ouralia, the sounds. Each step behind a switch in Ouralia, the old way the default.
+- [x] **R.1 Baseline.** From his phone with Session Log (Oct 29) instead of a desktop listen: one piece for 18
+  minutes (a new piece only came with a scale change), Home between almost every section, the melody mostly in one
+  octave; the chords vary (62 voicings in 164). He: "the melody, progression, flatness didn't really feel like it
+  changed all that much".
+- [ ] **R.2 New Pieces** (built, Ouralia `d054460`, `new_pieces`): every 64-96 bars a DJ-style handover (his ask:
+  "kind of like how a DJ would overlap"): an open ending with the drums dropping to the hats, the new chords under
+  the old groove and motif, then a new groove, then new motifs; Home between half the sections. Waits on his listen.
+- [ ] **R.3 Form numbers from the scores.** Measure the S.0a corpus (already cleared): how often pieces return to
+  their opening material, section lengths, key changes and where to, melody range. They replace R.2's guesses (7 in
+  10 home, 2-3 phrases, one key) in a second build, so he compares today, rules, and rules tuned to real music.
+- **Sound and character** (DadCraft, Oct 29, from OpenRB-338, a ReBirth RB-338 remake he found, and the inbox's
+  links; "i like all 4"). Ideas only: OpenRB-338's engine is rebuilt from Propellerhead's program and its drums are
+  Propellerhead's samples, so none of its code, tables or samples; its song collection has no license. The machines
+  themselves (TB-303, TR-808, TR-909, the Moog ladder filter, patents long expired) are publicly documented: we
+  write our own. Kits get descriptive names, not brand names.
+  - [ ] **R.4 The target.** Analyse his reference tracks and production logs (private, in `inbox/`, never sent to a
+    free API): loudness and dynamics, stereo width, brightness, how the layers stack. "Flavour" in numbers, before
+    any sound is built.
+  - [ ] **R.5 Sounds with character (Ouralia, ROADMAP item 24).** Much is there already: `dcs_ladder~` (Moog-style),
+    the analog engine (2-3 detuned saws, a sub, the ladder, a filter envelope; the Synth kit), the 808-style sub
+    with glide and synthesized drums (Low end 808-like, EDM 909-like). New: slide between notes and accent (a harder
+    note, the filter opened wider) in the analog engine, an Acid Bass kit (one buzzy oscillator, high resonance, a
+    short filter snap), a Ladder Bass kit (Minimoog-like: three detuned oscillators, glide, the filter's "bwow"), and
+    deeper drums (909-like clap and metallic hats, accents, tone per kit). One kit at a time, each heard by him.
+    NSynth's quality tags (bright, dark, distorted, percussive...; CC BY 4.0, to record in `docs/data.md`) can guide
+    which settings read as which word.
+  - [ ] **R.6 Drums that feel played.** Groove MIDI (already chosen, CC BY 4.0, `docs/data.md`): measure how real
+    drummers push, pull and accent each step per style, and give the composer's drums that timing and loudness
+    instead of the bare grid.
+  - [ ] **R.7 The acid style.** A 16-step line of notes with slides and accents, a style a member can play on any
+    sound (decision 3). Rules first, from the documented 303 sequencer's behaviour.
+  - [ ] **R.8 Textures.** Freesound's CC0 / CC BY recordings (crackle, tape hiss, room tone), each sound's license
+    checked and credited, and Tangerine (MIT, a browser generator of electronic sequences over slow harmony) read
+    for how it layers and changes texture over time.
+  Order: after R.2's listen, R.4, then R.5 one kit at a time, R.6, R.7; R.3 and R.8 where they fit. Skipped: the
+  audio-generating models in the inbox (MusicGen, Stable Audio, Riffusion, ACE-Step, YuE...): they make audio, not
+  decisions, are too heavy for a phone, and several are non-commercial.
 
 ### S. A first model spike (draft; before D; DadCraft, Oct 26; brought forward onto a melodic member, decision 19)
 Buckets 1-3 are rules; the risk is bucket 5 (little open data for our styles, 8 GB to train on). A short test of a

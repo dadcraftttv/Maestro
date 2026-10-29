@@ -476,3 +476,9 @@ isn't reloaded every session; grep for the part a task needs.
   we're doing actually, REALLY improve upon dcs_composer?" Then: "Maestro is meant to be a smarter, better, evolved
   form of dcs_composer. It can and should be able to learn ... the goal for it always has been and always will be
   to learn and evolve from dcs_composer into something bigger and better."
+- Oct 29, R.1/R.2: from his Session Log, "the melody, progression, flatness didn't really feel like it changed all
+  that much"; new pieces should blend, "kind of like how a DJ would overlap", not a cold cut; "yes, go ahead with
+  the first build" (New Pieces, rules first, the scores' numbers second).
+- Oct 29, sound and character: from OpenRB-338 (a ReBirth RB-338 remake he found, not heard), "i like all 4" (acid
+  bass, synthesized 808/909-like drums, the acid style, more weight and impact), asked about Moog sounds and the
+  inbox's links; "yes, write it up in both" (PLAN R.4-R.8, Ouralia ROADMAP item 24).
