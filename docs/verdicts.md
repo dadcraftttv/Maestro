@@ -457,4 +457,8 @@ isn't reloaded every session; grep for the part a task needs.
   transcription). Still 593. No sound verdict or training approval.
 
 - Oct 29, after v11: DadCraft: "drop After You've Gone, move on to S.1 prep". 156119 cut; corpus 592 (= v9).
+
+- Oct 29, S.1 prep plan: DadCraft: "yes to all, fix the keys, listens can wait. let Codex handle these. it should
+  step through them one at a time." Approved: PyTorch install (optional extra), ~5M parameters / 2 GPU hours,
+  OpenScore per-song keys now; v8/v9 listens don't block.
   No new DadCraft sound verdict, scans or training approval.

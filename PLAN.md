@@ -4,8 +4,11 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.1 prep (DadCraft, Oct 29: "drop After You've Gone, move on to S.1 prep"): the corpus is frozen at
-v11, **592 pieces / 517 families**, 494/50/48 (`private/s0a_v11/`, identical to v9); listens (v8 seven, v9 three
+**Next:** S.1 prep, approved (DadCraft, Oct 29: "yes to all, fix the keys, listens can wait. let Codex handle
+these. it should step through them one at a time."). Codex, one step per review: 1 OpenScore per-song work keys
+(Hensel apart), 2 token codec frozen in `maestro/`, 3 pinned PyTorch+CUDA as an optional extra, 4 n-gram and
+next-bar harness, 5 `docs/s1-measures.md`. Budget: ~5M-parameter transformer, 2 GPU hours, early stop. No
+training until step 5 and DadCraft's go. Corpus before step 1: v11, **592 pieces / 517 families**, 494/50/48 (`private/s0a_v11/`, identical to v9); listens (v8 seven, v9 three
 pairs) still open. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
 chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
 35,990 notes / 424,222 scalar tokens. All 592 v9 records and splits are exact. The approved 1.89 GB PDMX
