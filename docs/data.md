@@ -48,6 +48,14 @@ not a corpus ceiling or proof the sources are invalid. Full funnels, per-file cr
 causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
 source-music download, musical-gate relaxation, PyTorch or training was approved.
 
+### Pickup bars in MusicXML (Oct 29, S.0a v11; Claude Code)
+
+An unflagged short first or last XML bar now counts as a pickup/final bar when the MIDI has the same short
+bar. 20 melody-only scores align instead of 4, but the new passes are duplicates or capped extra copies of
+songs already in the corpus; the one new song, Greensleeves (score 4810739 and two copies), is a Frank Nordberg
+musicaviva.com transcription whose chords are his setting, so it is cut. The corpus stays at **593 pieces /
+518 families**. `private/s0a_v11/REPORT.md`.
+
 ### Written MusicXML chords (Oct 29, S.0a v10; reviewed by Claude Code)
 
 DadCraft approved downloading PDMX's `mxl.tar.gz`; 1,894,335,797 bytes, published MD5

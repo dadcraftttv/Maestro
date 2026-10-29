@@ -451,4 +451,8 @@ isn't reloaded every session; grep for the part a task needs.
   ("i'd like Codex to handle that 1.9 GB download"). Codex downloaded and MD5-checked it, extracted only
   387 previously cleared scores and tested written chord symbols with strict MIDI alignment. One provisional
   addition, 593 pieces; one new train listen pair. Claude Code reviewed it and kept the addition.
+
+- Oct 29, after the v10 review: DadCraft: "go ahead with v11 yourself". Claude Code ran S.0a v11 (unflagged
+  pickup/final bars): 20 align, no new piece survives caps, dedupe and rights (Greensleeves cut as a Nordberg
+  transcription). Still 593. No sound verdict or training approval.
   No new DadCraft sound verdict, scans or training approval.
