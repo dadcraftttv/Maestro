@@ -417,3 +417,8 @@ isn't reloaded every session; grep for the part a task needs.
   virtual display; conversion only, no system-package changes or additional source music.
 - Oct 28, S.0a v4 listen (ten new original/snapped pairs): "snapping didn't hurt anything." Applied: the new-pool
   sound check passes; the 550-piece corpus stands for S.1 prep.
+- Oct 28, corpus growth: "lets aim for the real growth first." Applied: S.0a v5 screens permissive IMSLP
+  and Mutopia catalogs with decision 7 and the v4 musical gates unchanged; S.1 stays 4/4.
+- Oct 28, downloads: "can it just go ahead and download those things?" Approval recorded by Claude Code in
+  Conductor `c1e652b` and the v5 handoff. Applied: pinned IMSLP shards, Mutopia metadata and permitted-license
+  historical pieces downloaded privately; no source music committed and no training approval inferred.

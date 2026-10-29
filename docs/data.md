@@ -43,10 +43,55 @@ score is quarantined for an uploader/split conflict. Existing surviving placemen
 3/4 and 6/8 screens yield 31 and 18 additional candidates before duplicate/isolation checks; none are included.
 
 Claude Code inspected all 41 new pieces (Oct 28): CC0 OpenScore transcriptions, composers died by 1924, no
-third-party arrangers; none cut. DadCraft's ten new-v4 listen pairs are pending. The 226 conversion rejections (mostly unresolved tie continuity) describe current reader limits,
+third-party arrangers; none cut. DadCraft passed the ten new-v4 listen pairs (Oct 28: "snapping didn't hurt anything"). The 226 conversion rejections (mostly unresolved tie continuity) describe current reader limits,
 not a corpus ceiling or proof the sources are invalid. Full funnels, per-file credits/checksums, comparison
 causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
 source-music download, musical-gate relaxation, PyTorch or training was approved.
+
+### Permissive catalog screen (Oct 28, S.0a v5; reviewed by Claude Code)
+
+Claude Code's review (Oct 28): all 25 Mutopia additions clear; IMSLP's zero accepted. One baseline Hallelujah
+copy (5783003) is cut so the two-copy cap holds with no exception: 574 pieces once S.1 prep applies
+`private/s0a_v5/claude_review_cuts.json`. The 575 figures below are Codex's, before that cut.
+
+DadCraft approved the TiMauzi IMSLP MIDI CC0 download and Mutopia metadata plus per-piece PD/CC0/CC BY
+music. IMSLP is pinned to Hugging Face revision `703e983510885d9833dd1c534900e0eb258b69af`;
+Mutopia's repository index to `2144afd6f52d56c5b6995b8b589ef1268b3139f0`. Website snapshots, hashes,
+per-piece provenance, exclusions and scripts stay in `private/s0a_v5/`; no source music is committed.
+Mutopia website content is separately checksummed; the repository revision does not pin generated website files.
+The collection label alone does not clear an IMSLP file: 817 license fields are missing and 296 say CC0.
+Source-page evidence must resolve composition and arrangement rights. Mutopia SA/NC/unclear entries are excluded;
+permitted encodings still require composition/arrangement checks. Existing v4 musical gates and frozen 550
+placements remain in force. No PyTorch or training.
+
+Mutopia's live catalog has 2,123 entries (previously quoted: 2,124). Rights-screen passes: 1,058;
+two MIDI URLs return 404. The other 1,056 entries supply 3,396 MIDI members, including movements and parts.
+After byte deduplication: 3,361; parsed: 3,358; all-4/4: 914; fixed lead: 182; chord/snap passes: 33;
+resolved song identities: 29; kept after cap: 25. Four Giulio Cesare candidates have unresolved movement
+mapping. Rights cuts: 765 SA, 204 unresolved composer dates, 36 needing composition grants, 58 unresolved
+arranger grants/dates, 2 unresolved transcriber credits. Missing evidence is not proof of legal unsuitability.
+IMSLP contributes zero: original-file provenance verification encounters a human challenge; its 817 null
+licenses and 296 CC0 rows remain excluded pending composition/arrangement evidence.
+
+Added 461 usable bars / 1,388 notes. Final provisional corpus: 575 pieces / 502 families, split 481/47/47;
+10,990 usable bars / 34,939 notes / 412,609 scalar tokens. All 550 old musical records and splits survive.
+Work keys distinguish OpenScore songs within collections and Hensel from Mendelssohn. Improved aliases reveal
+three baseline Hallelujah encodings, all in train; the preserve-550 instruction takes precedence, so this
+explicit cap exception needs Claude's correction. All three new Hallelujah proposals and Invention 13 are cut.
+Other works meet the two-copy cap; work/family/uploader split checks pass. Mutopia's Dvorak B.150 opus typo
+is corrected in derived identity with a composer-catalog reference; raw source metadata remains intact.
+
+Count-only native-meter diagnostics before cap: 45 in 3/4, 6 in 6/8; none admitted. In 4/4, 149 fail only the
+chord-run gate; 732 without a lead have unassessable chord/snapping gates. Counts describe MIDI members,
+not independent works. Kept catalog style labels: 9 Romantic, 10 Baroque, 5 Classical, 1 Technique; mostly
+voice/orchestra, violin with piano/orchestra, plus quartet/organ/contrapuntal ensemble/piano exercise. This
+adds little contemporary target-style coverage and does not establish sufficient training diversity.
+
+All codec round trips, independent baseline/family/split checks, ten new train original/snapped audio pairs
+and the 327-test suite pass. DadCraft's v5 sound verdict remains open. The pinned IMSLP shards total
+50,519,503 bytes and match upstream LFS SHA256s; Mutopia website files have separate snapshot hashes.
+PyArrow 23.0.1 was added only to the local venv to read Parquet. Per-piece manifests, exclusions, rights
+uncertainties, checksums, listening guide and replay details: `private/s0a_v5/REPORT.md`.
 
 ### Corpus-size follow-up (Oct 28, DadCraft; for Claude Code review)
 
@@ -62,7 +107,8 @@ recommendation: use a mature notation converter (OpenScore documents batch conve
 versus arrangement metadata, and review extraction policy before treating this yield as a corpus-size estimate.
 Keep rights checks; do not silently remove grace notes, thin polyphony or weaken chord checks to increase counts.
 
-Further sources/opportunities discussed, **not approved for download or training**:
+Further sources/opportunities from that discussion (the v5 download approval above supersedes the earlier
+restriction for IMSLP/Mutopia only; no training approved):
 - Revisit [PDMX](https://arxiv.org/abs/2409.10831), over 250,000 scores: separate fixed lead, 4/4 and accompaniment
   chord coverage are deliberate narrow gates. Better conversion/extraction may recover more; any policy changes
   require explicit review, and per-piece rights still matter.
@@ -135,7 +181,7 @@ still sound generic. The third proof passes; model/data suitability still needs 
 | Groove MIDI (GMD) | CC BY 4.0 | SAFE | 1,150 files, 13.6 h; MIDI-only 3 MB (with audio 4.8 GB) | MIDI + synthesized WAV, CSV | 18 drum styles: afrobeat, afrocuban, funk, hip hop, jazz, latin, rock, reggae, pop, soul... | drums (human, with feel) | **chosen**; **in use** (3.3, Oct 24: license re-checked, MIDI-only zip in `private/gmd`, counts in `maestro/data/grooves.json`) |
 | Expanded GMD (E-GMD) | CC BY 4.0 | SAFE | 45,537 sequences (1,059 unique), 444 h, 43 kits; MIDI-only 103 MB (with audio 90 GB) | MIDI + WAV, CSV | as GMD | drums | **chosen**, MIDI only |
 | PDMX | CC BY 4.0 (scores public domain) | SAFE | 250K+ scores, 14.4 GB | MusicXML (MXL), MIDI, MusicRender JSON, PDF; CSV with genres and ratings | mostly classical, folk, hymns, film/game arrangements; genre column | melody, bass, pad (harmony, voice leading); few drums | **chosen**: only the `no_license_conflict` subset (222,856); 12% have license conflicts, dropped |
-| imslp-midi-cc0-1.0 (TiMauzi, HF) | CC0 1.0 | SAFE | 1,113 files, 50 MB download | parquet holding MIDI, with era, style, key | classical, romantic, some "modern" | melody, bass, pad | **chosen** (theory, bucket 2) |
+| imslp-midi-cc0-1.0 (TiMauzi, HF) | CC0 catalog; per-file evidence unresolved | CHECK | 1,113 files, 50 MB download | parquet holding MIDI, with era, style, key | classical, romantic, some "modern" | melody, bass, pad | **screened v5: none admitted** (817 missing licenses; 296 provenance unresolved) |
 | Aria-MIDI | CC BY-NC-SA 4.0 | NC | 1,186,253 files, 16.6 GB | MIDI + metadata.json (genre, composer; "may vary") | piano, all kinds (transcribed from audio) | melody, pad, bass (piano) | **chosen for PC only**; its find-transcribe-filter idea goes into 4.3 |
 | MAESTRO | CC BY-NC-SA 4.0 | NC | ~200 h piano | MIDI + audio | classical piano | melody, pad | candidate, PC only; Aria-MIDI covers it |
 | Lakh MIDI, and sets built from it (Slakh2100, MidiCaps) | fan MIDI of copyrighted songs | OUT | 174K+ files | MIDI | pop, rock, all kinds | all | never (decision 7) |

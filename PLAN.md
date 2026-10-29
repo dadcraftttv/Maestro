@@ -4,9 +4,11 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.1 prep (Codex). S.0a v4 reviewed by Claude Code Oct 28: accepted as is (550 pieces); carry-forward
-notes for S.1 prep in the v4 line under S.0a. DadCraft's v4 listen passed ("snapping didn't hurt anything"). No training approved.
-v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen is still open.
+**Next:** S.1 prep (Codex). S.0a v5 reviewed by Claude Code Oct 28: all 25 Mutopia additions clear; one
+baseline Hallelujah copy cut (cap 2 now holds with no exception), leaving 574 pieces. Apply
+`private/s0a_v5/claude_review_cuts.json` first. Optional: ten new train listen pairs in `private/s0a_v5/LISTEN_S0A.md`.
+DadCraft's v4 listen passed ("snapping didn't hurt anything"); no v5 sound verdict or training approval.
+v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen passed in v4.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
 254/35/38, families kept apart). Cut list: `private/s0a_v2/claude_rights_cuts.json`; findings: `REPORT.md`.
 
@@ -922,6 +924,24 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         collection title, so distinct songs in one opus count as copies (Hensel "Du bist die Ruh" and Schumann
         "Gesungen" were capped out); key them per song. Hensel is normalized to "mendelssohn" (keep her
         separate). Stale velocity comment in `xml_notes.py`; tempo at a pickup shifts by the padding.
+      - Oct 28, Codex v5 (Claude review pending): approved pinned IMSLP/Mutopia catalog screen, v4 gates
+        unchanged. Mutopia: 2,123 entries, 1,058 rights-screen passes; 3,396 MIDI members → 3,361 byte-deduped
+        → 3,358 parsed → 914 all-4/4 → 182 fixed lead → 33 chord/snap passes → 29 identified → 25 kept.
+        Two catalog MIDI URLs return 404. IMSLP: 1,113 entries, none admitted (817 missing license fields;
+        296 CC0 rows lack verified composition/arrangement provenance; source-page human challenge).
+        Added 461 usable bars / 1,388 notes; final 575 pieces / 502 families, split 481/47/47, 10,990 bars /
+        34,939 notes / 412,609 scalar tokens. All 550 baseline musical records and placements preserved.
+        Refined OpenScore work keys per song and separated Hensel; cap blocks four additions. Improved aliases
+        expose three old Hallelujah copies (all train): preserved under the brief, explicit cap exception for
+        Claude to resolve. Four Giulio Cesare candidates excluded for unresolved movement mapping. Count-only:
+        45 3/4 and 6 6/8 MIDI members otherwise pass before cap; 149 4/4 fail only chords, 732 without a lead
+        have unassessable later gates. All codec round trips, independent source/split/family audit, ten new
+        train listen pairs and 327 tests pass. Source SHA256s match pinned IMSLP upstream LFS objects.
+        Mostly classical/sacred/romantic growth; no target contemporary-style coverage claim. Full manifests,
+        cuts, hashes, evidence and replay scripts: `private/s0a_v5/REPORT.md`. No PyTorch, training or sound verdict.
+        Claude Code review (Oct 28): all 25 clear (composers died 1633–1924, named pre-1925 editions, no
+        third-party arrangers; CC BY typesetters credited). IMSLP's zero accepted. Cut baseline 5783003, the
+        third Hallelujah, so cap 2 holds everywhere: 574 pieces. `private/s0a_v5/claude_review_cuts.json`.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

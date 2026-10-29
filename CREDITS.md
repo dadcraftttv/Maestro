@@ -14,8 +14,6 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
 - **PDMX** (`no_license_conflict` subset), CC BY 4.0; the scores are public domain, from MuseScore. Phillip Long,
   Zachary Novack, Taylor Berg-Kirkpatrick, Julian McAuley, "PDMX: A Large-Scale Public Domain MusicXML Dataset for
   Symbolic Music Processing", ICASSP 2025. https://zenodo.org/records/15571083
-- **imslp-midi-cc0-1.0**, compiled by TiMauzi from IMSLP, CC0 1.0 (no attribution required; credited with thanks).
-  https://huggingface.co/datasets/TiMauzi/imslp-midi-cc0-1.0
 - **WaivOps HH-TRP, EDM-TR8 and RTRO-DRM**, by Patchbanks / WaivOps, CC BY 4.0.
   https://zenodo.org/records/15734094 · https://zenodo.org/records/13257814 (RTRO-DRM: Zenodo record to add on
   download)
@@ -27,6 +25,17 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
 - **OpenScore String Quartets**, OpenScore contributors, CC0-1.0. Credit and repository link requested:
   https://github.com/OpenScore/StringQuartets · https://musescore.com/openscore-string-quartets
   Per-piece provenance stays in the local inventory; underlying works/editions still require review.
+
+- **Mutopia Project**, individual public-domain dedications or Creative Commons Attribution licenses only
+  (S.0a v5 screening, DadCraft-approved Oct 28). Composer, work, typesetter/maintainer, precise license,
+  source URL and file hashes are recorded per piece in `private/s0a_v5/`. SA/NC and unclear rights are excluded.
+  CC BY 3.0 typesettings used: Handel, Messiah (Mutopia 1732), typeset by Nicolas Sceaux; O. Rieding, Concerto
+  in B minor, Op. 35 (Mutopia 1781), typeset by Michael Fischer v. Mollard.
+  https://www.mutopiaproject.org/ ; https://www.mutopiaproject.org/legal.html
+- **TiMauzi IMSLP MIDI CC0 catalog**, revision `703e983510885d9833dd1c534900e0eb258b69af`
+  (S.0a v5 screening). Collection CC0 is not a per-composition clearance. Individual provenance and
+  unresolved rights are recorded under `private/s0a_v5/` before any admission.
+  https://huggingface.co/datasets/TiMauzi/imslp-midi-cc0-1.0
 
 ## Tools (not data; never trained on)
 
