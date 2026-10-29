@@ -11,7 +11,9 @@ next-bar harness, 5 `docs/s1-measures.md`. Budget: ~5M-parameter transformer, 2 
 training until step 5 and DadCraft's go. Step 1 complete (Codex, Oct 29; Claude Code reviewed, clear): v12, **594 pieces / 519 families**,
 split 496/50/48 (`private/s0a_v12/`). V11 already has v5 per-song keys and Hensel normalization;
 reconsidering v4 cap cuts recovers two songs into train. All 592 baseline records/splits exact, no moves.
-Step 2 next (Codex). Baseline: v11, 592 / 517, 494/50/48 (identical to v9); listens (v8 seven, v9 three
+Step 2 complete (Codex, Oct 29; Claude Code reviewed, clear): public codec and conditioning,
+`docs/s1-tokens.md`; v12 exact-event/round-trip/history checks and 342 tests pass.
+Step 3 next (Codex; PyTorch). Baseline: v11, 592 / 517, 494/50/48 (identical to v9); listens (v8 seven, v9 three
 pairs) still open. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
 chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
 35,990 notes / 424,222 scalar tokens. All 592 v9 records and splits are exact. The approved 1.89 GB PDMX
@@ -1038,6 +1040,15 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       11,248 bars / 35,944 notes / 423,836 scalar tokens. All 592 baseline records/splits exact;
       source hashes, cap/family/uploader isolation, codec audit and 327 tests pass. Report: `private/s0a_v12/REPORT.md`.
       No downloads, musical-gate changes, listens or training. Steps 2–5 remain open, one per review.
+- [x] S.1 prep step 2: frozen public event codec and conditioning (Codex, Oct 29; Claude Code reviewed, clear).
+      `maestro/spike/tokens.py` preserves private encode/decode behavior; public fixtures cover ties,
+      rests, clipping, transposition and conditioning. Controls: upcoming beat chords, key (explicit
+      unknown allowed), requested register/onset density, previous eight bars within eligible run,
+      and proposed `(bar - run_start) % 8` phrase proxy (no corpus phrase marks).
+      Vocabulary/limits: `docs/s1-tokens.md`. Independent private comparison: all 594 complete
+      melodies and 1,353 eligible runs event-identical; 11,248 causal-history bar checks pass.
+      Corpus unchanged; 48 missing key labels retain tonic-0 pitch behavior with unknown conditioning.
+      342 tests pass; no downloads, PyTorch, training or listens. Phrase proxy accepted. Steps 3–5 open.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
