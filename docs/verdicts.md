@@ -436,3 +436,9 @@ isn't reloaded every session; grep for the part a task needs.
   available, below the requested eight; second rebarred 2/4 piece remains validation. Secondary dates,
   skyline extraction and sparse Danny Boy fragment are flagged for review. DadCraft has not yet judged
   these pairs; no new download, scan or training approval inferred. `private/s0a_v7/REPORT.md`.
+
+- Oct 29, S.0a v8: applied DadCraft's four approved loosenings from Claude Code's handoff (compatible
+  bar runs, exact-title/missing-composer identity, uploader settings, dated traditional tunes). Nine additions
+  and Danny Boy fragment dropped; 589 pieces. Seven train listening pairs prepared, two traditional and five
+  meter-run; requested eighth unavailable under frozen splits. Claude Code rights review pending, especially
+  three own-setting provenance calls. No new DadCraft sound verdict, source download, scan or training approval.

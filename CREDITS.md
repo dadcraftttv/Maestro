@@ -99,3 +99,19 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
 
 - **Aria-MIDI**, CC BY-NC-SA 4.0. Louis Bradshaw, Simon Colton, "Aria-MIDI: A Dataset of Piano MIDI Files for
   Symbolic Music Modeling", ICLR 2025. https://huggingface.co/datasets/loubb/aria-midi
+
+## S.0a v8 local song additions (Oct 29; review pending)
+
+Nine local PDMX encodings, individually recorded in the private v8 rights manifest. Traditional tune dates
+and dated third-party settings are separate from encoding licenses. Danny Boy 61265 is removed for insufficient
+usable material. No new source files downloaded.
+
+- [Down by the riverside 3 voices](https://musescore.com/user/7220866/scores/6341482), score 6341482; encoding by Paweł Kupis, cc-zero. Date: traditional.
+- [All through the night](https://musescore.com/user/3099636/scores/5930552), score 5930552; encoding by sangerforum, cc-zero. Date: traditional.
+- [April Showers](https://musescore.com/user/1461451/scores/818331), score 818331; encoding by clothesliner, publicdomain. Date: secondary.
+- [Love's_Old_Sweet_Song](https://musescore.com/user/3099636/scores/5968906), score 5968906; encoding by sangerforum, cc-zero. Date: secondary.
+- [The Whiffenpoof Song - Tod B. Galloway](https://musescore.com/user/33131263/scores/5767326), score 5767326; encoding by John__Smith, publicdomain. Date: secondary.
+- [Aba Daba Honeymoon - Arthur Fields](https://musescore.com/user/15377981/scores/6146547), score 6146547; encoding by MikeStokesberry, cc-zero. Date: secondary.
+- [St Louis Blues](https://musescore.com/user/28851728/scores/5962248), score 5962248; encoding by peter_scott71, cc-zero. Date: secondary.
+- [There's Music in the Air - SATB](https://musescore.com/user/3099636/scores/2067021), score 2067021; encoding by sangerforum, cc-zero. Date: secondary.
+- [Poor Wayfaring Stranger - Trombone](https://musescore.com/user/27301546/scores/5984045), score 5984045; encoding by ttranman77, cc-zero. Date: traditional.

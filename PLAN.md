@@ -4,14 +4,15 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.0a v8 (Codex, briefed Oct 29). Claude Code reviewed v7 (six additions clear on rights, 581
-pieces) and found the gates still stack: 880 multi-signature files rejected whole though 412 are ≥80% 4/4;
-769 scores of dated songs cut because the composer's name was missing from PDMX fields, the title wasn't
-exact, or any "arr." appeared; every traditional tune cut for having no named creator. DadCraft approved all
-four loosenings (Oct 29): keep 4/4 bar runs inside mixed files; exact title + dated song suffices unless a
-different composer is named; cut only third-party or post-1930 arrangements; traditional tunes with a cited
-printing ≤1925, tagged `date: traditional`. v7 report: `private/s0a_v7/REPORT.md`; listen guide
-`private/s0a_v7/LISTEN_S0A.md` (four pairs). Decision 7 unchanged; no training approval.
+**Next:** DadCraft's listen of S.0a v8 (Claude Code reviewed Oct 29: all nine additions clear on rights;
+chord-run gate is now the main yield limit), then S.1 prep. Local replay with
+DadCraft's four approved loosenings adds nine and drops sparse Danny Boy 61265: **589 pieces / 516 families**,
+split 491/50/48; 11,206 usable bars / 35,740 notes / 421,895 scalar tokens. All 580 surviving baseline records
+and splits are exact. Six cap cuts, one frozen-held-out-family quarantine; source/codec/isolation audits,
+eight boundary checks and 327 tests pass. Seven new train listen pairs (requested eight unavailable), including
+two traditional and five meter-run pieces: `private/s0a_v8/LISTEN_S0A.md`. Rights review especially: own-setting
+inferences for 5984045 / 6341482 / 5962248; Lutkin 5930552 arrangement dated 1914 by Rochester catalog.
+Full funnels, dates, sample identities and cuts: `private/s0a_v8/REPORT.md`. Decision 7 unchanged; no training.
 DadCraft's v4 listen passed ("snapping didn't hurt anything"); no v5 sound verdict or training approval.
 v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen passed in v4.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
@@ -980,6 +981,21 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         Eight-pair listen coverage unattainable under existing splits; no split reassignment or filler.
         Secondary-date/own-arrangement review and sparse Danny Boy fragment especially need attention.
         Full evidence and listening limits: `private/s0a_v7/REPORT.md`. No downloads, scans or training.
+      - Oct 29, Codex v8 (uncommitted; Claude Code review next): source-declared 4/4-compatible
+        meter runs, looser exact-title identity and own arrangements, separately dated traditional tunes.
+        All 1,549 local licensed PDMX encodings and five Mutopia members rerun; diagnostic musical passes
+        101→119. PDMX rights screen 387 → meter 191 → lead 152 → final musical 22; six frozen records,
+        16 candidates → six caps / one held-out-family quarantine → nine additions. Danny Boy 61265
+        drops under explicit four-bar/eight-note floor. 589 pieces / 516 families, split 491/50/48;
+        added 164 bars / 596 notes, net 162 / 595. Overlapping features: meter six, traditional three,
+        identity four (includes traditional), arrangement two. No independent sum claimed.
+        Nine traditional tune dates tagged separately; five priority titles remain unresolved, including
+        Devil's Dream printing linkage. All fourteen priority traditional titles researched.
+        Seven train listen pairs: two traditional, five meter-run; eighth unavailable under frozen splits.
+        Exact 580 surviving baseline records/splits, byte/source/cap/family/uploader/codec checks pass;
+        eight source-boundary checks and 327 tests pass. Reports/evidence/listen: `private/s0a_v8/`.
+        Claude Code review (Oct 29): nine clear. Uploader settings 5962248/5984045 confirmed from metadata;
+        6341482 names no third-party setter; Lutkin 1914 within rule. 580 records byte-identical to v7.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

@@ -48,6 +48,30 @@ not a corpus ceiling or proof the sources are invalid. Full funnels, per-file cr
 causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
 source-music download, musical-gate relaxation, PyTorch or training was approved.
 
+### Compatible bar runs and traditional songs (Oct 29, S.0a v8; Claude review pending)
+
+DadCraft's four approved loosenings retain source-declared 4/4/2/2/paired-2/4 runs of at least four bars,
+accept exact normalized titles with metadata extras and missing composer fields, admit uploader settings,
+and tag traditional tunes separately when a printing ≤1925 is cited. Every new piece also needs ≥4 usable
+bars and ≥8 lead notes. Third-party undated settings, soundtracks and recording transcriptions stay cut.
+
+Final: **589 pieces / 516 families**, split 491/50/48; 11,206 bars / 35,740 notes / 421,895 scalar tokens.
+Nine additions (164 bars / 596 notes), sparse Danny Boy 61265 removed (two bars / one note). Surviving 580
+baseline records and placements unchanged. PDMX rights screen 387 → meter 191 → lead 152 → final musical 22;
+six already frozen, six cap cuts, one held-out-family quarantine, nine kept. No new Mutopia/IMSLP additions.
+
+Nine traditional tune dates are separately tagged `date: traditional`; secondary dates remain independently
+removable. Fourteen priority traditional titles researched; five remain unresolved under the printing/tune
+identity requirement. All final encodings are inherited consistent PD/CC0, with no source downloads or scans.
+Rights review must check inferred own settings 5984045 (Tristan Tran/ttranman77), 6341482 (background recording
+link not described as transcription), 5962248 (unqualified uploader arrangement). Lutkin 5930552 setting is
+[dated 1914 by Rochester](https://urresearch.rochester.edu/institutionalPublicationPublicView.action?institutionalItemVersionId=21578).
+
+Seven new train original/snapped pairs, including two traditional and five meter-run pieces; requested eight
+unavailable under split rules. Source/codec/cap/family/uploader and exact-baseline audits, eight boundary
+checks, 327 tests and independent audio checks pass. No DadCraft sound verdict or training approval.
+Full manifests, cuts, reproducible funnel and guide: `private/s0a_v8/REPORT.md` and `LISTEN_S0A.md`.
+
 ### Looser local song screen (Oct 29, S.0a v7; reviewed by Claude Code)
 
 DadCraft authorized 2/2, paired 2/4, explicit pickup trimming, constrained skyline leads, two-bar chord
