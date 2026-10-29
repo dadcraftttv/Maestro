@@ -4,14 +4,15 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listens (v8 seven pairs, v9 three, v10 one:
-`private/s0a_v10/LISTEN_S0A.md`), before S.1 prep. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
+**Next:** S.1 prep (DadCraft, Oct 29: "drop After You've Gone, move on to S.1 prep"): the corpus is frozen at
+v11, **592 pieces / 517 families**, 494/50/48 (`private/s0a_v11/`, identical to v9); listens (v8 seven, v9 three
+pairs) still open. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
 chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
 35,990 notes / 424,222 scalar tokens. All 592 v9 records and splits are exact. The approved 1.89 GB PDMX
 archive is downloaded and MD5-checked; only 387 previously cleared scores extracted. Of 111 melody-only
 chord failures, 43 contain symbols, four align without guessing; two Twinkle copies are duplicates/capped,
 one intro names Pee-Wee Ellis and is cut. Addition 156119 (After You've Gone, 1918) contributes 20 bars /
-87 notes. Claude Code kept it: the Marion Harris artist field names no source, so the rules keep it (the "MED. SWING" marking looks fake-book-like; DadCraft may drop it). Thirteen previously cleared candidate
+87 notes. DadCraft dropped it (Oct 29) in v11. Thirteen previously cleared candidate
 settings cut on closer metadata review; no frozen piece removed. Source/codec/isolation audits, private
 fixtures, 327 tests and one symbol-pad listen pair pass. Report and cuts: `private/s0a_v10/REPORT.md`.
 V11 (Claude Code, Oct 29) recovers unflagged pickup/final bars (aligned 4 → 20) but adds nothing: the rest are capped/duplicate copies, and Greensleeves is a Frank Nordberg transcription (cut). Still 593: `private/s0a_v11/REPORT.md`. Decision 7 unchanged; DadCraft's sound verdict pending; no training.
@@ -1020,7 +1021,8 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         same short bar. Aligned 4 → 20, musical 37 → 53 on the same cohort, but all new passes are byte
         duplicates, cap cuts or held-out quarantines except Greensleeves 4810739 (+2 copies), cut as a Frank
         Nordberg musicaviva transcription with his chords. Still 593 / 518, 495/50/48; audit, fixtures, 327
-        tests pass. `private/s0a_v11/REPORT.md`. No sound verdict
+        tests pass. `private/s0a_v11/REPORT.md`. DadCraft then dropped After You've Gone 156119: v11 rebased
+        on v9, **592 / 517, 494/50/48**, audit exact against v9. No sound verdict
         or training. Evidence/listen: `private/s0a_v10/`.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).

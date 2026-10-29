@@ -53,8 +53,8 @@ source-music download, musical-gate relaxation, PyTorch or training was approved
 An unflagged short first or last XML bar now counts as a pickup/final bar when the MIDI has the same short
 bar. 20 melody-only scores align instead of 4, but the new passes are duplicates or capped extra copies of
 songs already in the corpus; the one new song, Greensleeves (score 4810739 and two copies), is a Frank Nordberg
-musicaviva.com transcription whose chords are his setting, so it is cut. The corpus stays at **593 pieces /
-518 families**. `private/s0a_v11/REPORT.md`.
+musicaviva.com transcription whose chords are his setting, so it is cut. DadCraft then dropped After You've Gone
+(156119): the corpus is **592 pieces / 517 families**, 494/50/48, identical to v9. `private/s0a_v11/REPORT.md`.
 
 ### Written MusicXML chords (Oct 29, S.0a v10; reviewed by Claude Code)
 

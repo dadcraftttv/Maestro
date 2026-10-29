@@ -455,4 +455,6 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 29, after the v10 review: DadCraft: "go ahead with v11 yourself". Claude Code ran S.0a v11 (unflagged
   pickup/final bars): 20 align, no new piece survives caps, dedupe and rights (Greensleeves cut as a Nordberg
   transcription). Still 593. No sound verdict or training approval.
+
+- Oct 29, after v11: DadCraft: "drop After You've Gone, move on to S.1 prep". 156119 cut; corpus 592 (= v9).
   No new DadCraft sound verdict, scans or training approval.

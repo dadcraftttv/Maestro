@@ -124,7 +124,7 @@ Three more local PDMX encodings from the whole-bar chord fallback; no new source
 - [The Twelve Days of Christmas](https://musescore.com/user/6624501/scores/5851745), score 5851745; encoding by Joshua667746, cc-zero. Date: traditional.
 - [Danny Boy](https://musescore.com/user/4873976/scores/5947839), score 5947839; encoding by Nickbarbosa, cc-zero. Date: secondary.
 
-## S.0a v10 MusicXML-symbol addition (Oct 29; reviewed by Claude Code)
+## S.0a v10 MusicXML-symbol addition (Oct 29; dropped by DadCraft in v11, not in the corpus)
 
 - [After You've Gone](https://musescore.com/user/157900/scores/156119), score 156119; music Turner Layton,
   words Henry Creamer (1918); encoding by uglybeauty, publicdomain declaration. Chord symbols read from the
