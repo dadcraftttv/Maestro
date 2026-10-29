@@ -468,3 +468,6 @@ isn't reloaded every session; grep for the part a task needs.
   register to 72-96 and keep going": the frozen benchmark register is 72-96, where the rules' melody plays.
 - Oct 29, S.1 listen: DadCraft chose synthwave songs (melody swapped over the same band) over the frozen
   validation-piece protocol, whose pieces have no band.
+- Oct 29, S.1 blind listen: no preference in all 10 trials (rules, n-gram, model leads): "they all sound similar
+  and still sound bland"; "i feel like we burned a ton of time and tokens to wind up more or less where we
+  started."

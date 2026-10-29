@@ -4,9 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's blind listen for S.1, ready in `clips/s1_listen/` (sheet `listen.txt`; `docs/s1-results.md`). Register now 72-96 (DadCraft, Oct 29): first try
-117/160, fallback 8 (n-gram 122/5 with 49 rests); loss and timing pass, acceptance gates still fail. Novelty: no
-copied training phrase (closest 2 of 8 bars), no repeated bars, no rests in free runs.
+**Next:** S.1 heard (DadCraft, Oct 29): no preference in all 10 trials, all three leads "bland". The learned
+melody is no better or worse to his ear than the rules' or the n-gram's, so the lead's notes are not the cause of
+the blandness. No more S.1 model work until DadCraft picks where the blandness comes from.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -1073,6 +1073,7 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       nearest train window 2 of 8 bars, no exact 8-bar match at any transposition. Listen next.
       Listen set up on synthwave songs 1-10, 8 bars, melody swapped, shuffled (DadCraft chose it over
       validation pieces, which have no band). Key in `private/s1_train/listen_key.json`.
+      Heard (Oct 29): no preference in 10/10 trials, "they all sound similar and still sound bland".
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
       into the plans of buckets 4 and 5.
 

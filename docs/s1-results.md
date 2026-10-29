@@ -80,3 +80,8 @@ test has been looked at three times in all; no choice was made from it.
 `clips/s1_listen/` (gitignored): 10 trials x A/B/C, the sheet in `listen.txt`; the key in
 `private/s1_train/listen_key.json`, closed until DadCraft has answered. Made by `private/s1_train/listen.py`.
 Lead notes in the 8 bars: rules 18-55, n-gram 10-31, model 25-103 (seeds 5, 7 and 9 run in sixteenths).
+
+**DadCraft's verdict (Oct 29): no preference in all 10 trials.** "they all sound similar and still sound bland";
+"i feel like we burned a ton of time and tokens to wind up more or less where we started." Key opened after:
+each trial held rules, n-gram and model once, in shuffled order. With the lead swapped three ways and nothing
+standing out, the lead's notes are not what makes these songs bland.
