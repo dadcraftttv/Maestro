@@ -4,7 +4,8 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.1 prep (Codex). S.0a v5 reviewed by Claude Code Oct 28: all 25 Mutopia additions clear; one
+**Next:** S.0a v6 (Codex, briefed Oct 28): old songs by title from DadCraft's YouTube playlist leads
+(`private/youtube_leads/`), scores looked up in local PDMX/Mutopia/IMSLP; then S.1 prep. S.0a v5 reviewed by Claude Code Oct 28: all 25 Mutopia additions clear; one
 baseline Hallelujah copy cut (cap 2 now holds with no exception), leaving 574 pieces. Apply
 `private/s0a_v5/claude_review_cuts.json` first. Optional: ten new train listen pairs in `private/s0a_v5/LISTEN_S0A.md`.
 DadCraft's v4 listen passed ("snapping didn't hurt anything"); no v5 sound verdict or training approval.
