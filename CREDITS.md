@@ -115,3 +115,11 @@ usable material. No new source files downloaded.
 - [St Louis Blues](https://musescore.com/user/28851728/scores/5962248), score 5962248; encoding by peter_scott71, cc-zero. Date: secondary.
 - [There's Music in the Air - SATB](https://musescore.com/user/3099636/scores/2067021), score 2067021; encoding by sangerforum, cc-zero. Date: secondary.
 - [Poor Wayfaring Stranger - Trombone](https://musescore.com/user/27301546/scores/5984045), score 5984045; encoding by ttranman77, cc-zero. Date: traditional.
+
+## S.0a v9 local song additions (Oct 29)
+
+Three more local PDMX encodings from the whole-bar chord fallback; no new source files downloaded.
+
+- [De Camptown Races - TTBB](https://musescore.com/user/3099636/scores/1907501), score 1907501; encoding by sangerforum, cc-zero. Date: secondary.
+- [The Twelve Days of Christmas](https://musescore.com/user/6624501/scores/5851745), score 5851745; encoding by Joshua667746, cc-zero. Date: traditional.
+- [Danny Boy](https://musescore.com/user/4873976/scores/5947839), score 5947839; encoding by Nickbarbosa, cc-zero. Date: secondary.

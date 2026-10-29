@@ -4,8 +4,10 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's listen of S.0a v8 (Claude Code reviewed Oct 29: all nine additions clear on rights;
-chord-run gate is now the main yield limit), then S.1 prep. Local replay with
+**Next:** DadCraft's listens (v8 seven pairs, v9 three: `private/s0a_v9/LISTEN_S0A.md`), then S.1 prep. S.0a v9
+(Claude Code, Oct 29) adds a whole-bar chord fallback: **592 pieces / 517 families**, split 494/50/48. The
+remaining chord failures are one-line melodies with no accompaniment in the MIDI; their chord symbols, if any, are
+only in PDMX's MusicXML (1.9 GB, not downloaded; DadCraft's call). v8 below: Claude Code reviewed, nine clear. Local replay with
 DadCraft's four approved loosenings adds nine and drops sparse Danny Boy 61265: **589 pieces / 516 families**,
 split 491/50/48; 11,206 usable bars / 35,740 notes / 421,895 scalar tokens. All 580 surviving baseline records
 and splits are exact. Six cap cuts, one frozen-held-out-family quarantine; source/codec/isolation audits,
@@ -996,6 +998,13 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         eight source-boundary checks and 327 tests pass. Reports/evidence/listen: `private/s0a_v8/`.
         Claude Code review (Oct 29): nine clear. Uploader settings 5962248/5984045 confirmed from metadata;
         6341482 names no third-party setter; Lutkin 1914 within rule. 580 records byte-identical to v7.
+      - Oct 29, Claude Code v9 (DadCraft: "i'd rather you just handle this part"): a half bar with no
+        confident chord takes its whole bar's label (same v3 test, pooled); a silent half holds the other.
+        Each chord records its window (half/bar/hold). Chord run 34 → 39; three additions after caps
+        (1907501 Camptown Races, 5851745 Twelve Days of Christmas, 5947839 Danny Boy), all train, rights
+        checked. 592 pieces / 517 families, 494/50/48; 11,234 bars / 35,903 notes / 423,362 scalar tokens.
+        589 v8 records exact; audit, 8 boundary checks, 327 tests, listen checks pass. 111 of 113 remaining
+        chord failures have no accompaniment at all. `private/s0a_v9/REPORT.md`.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

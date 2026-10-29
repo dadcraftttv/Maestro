@@ -442,3 +442,7 @@ isn't reloaded every session; grep for the part a task needs.
   and Danny Boy fragment dropped; 589 pieces. Seven train listening pairs prepared, two traditional and five
   meter-run; requested eighth unavailable under frozen splits. Claude Code rights review pending, especially
   three own-setting provenance calls. No new DadCraft sound verdict, source download, scan or training approval.
+
+- Oct 29, after the v8 review: asked whether low yield was Codex or the rules, DadCraft: "this back and forth is
+  getting to be a bit much ... i'd rather you just handle this part. knock it out please." Claude Code ran S.0a
+  v9 (whole-bar chord fallback) itself: three additions, 592 pieces. No sound verdict or training approval.

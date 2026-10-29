@@ -48,7 +48,17 @@ not a corpus ceiling or proof the sources are invalid. Full funnels, per-file cr
 causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
 source-music download, musical-gate relaxation, PyTorch or training was approved.
 
-### Compatible bar runs and traditional songs (Oct 29, S.0a v8; Claude review pending)
+### Whole-bar chord fallback (Oct 29, S.0a v9; Claude Code)
+
+A half bar whose accompaniment gives no confident chord now takes its whole bar's label under the same v3 test;
+a silent half holds the other half's label. Each label records its window (`half`, `bar`, `hold`) so training
+can drop or down-weight the fallbacks. No chord is taken from the melody. Same candidates and rules as v8;
+three additions (Camptown Races 1850, Twelve Days of Christmas from Austin's 1909 printing, Danny Boy 1913):
+**592 pieces / 517 families**, split 494/50/48; 11,234 bars / 35,903 notes. The 589 v8 records are unchanged.
+111 of the 113 remaining chord failures are single-line melodies with no accompaniment in the MIDI; chord
+symbols, where they exist, are only in PDMX's MusicXML, which is not downloaded. `private/s0a_v9/REPORT.md`.
+
+### Compatible bar runs and traditional songs (Oct 29, S.0a v8; reviewed by Claude Code)
 
 DadCraft's four approved loosenings retain source-declared 4/4/2/2/paired-2/4 runs of at least four bars,
 accept exact normalized titles with metadata extras and missing composer fields, admit uploader settings,
