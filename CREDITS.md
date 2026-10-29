@@ -36,6 +36,15 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
   CC BY 3.0 typesettings used: Handel, Messiah (Mutopia 1732), typeset by Nicolas Sceaux; O. Rieding, Concerto
   in B minor, Op. 35 (Mutopia 1781), typeset by Michael Fischer v. Mollard.
   https://www.mutopiaproject.org/ ; https://www.mutopiaproject.org/legal.html
+- **S.0a v7 local song candidates** (rights reviewed by Claude Code, Oct 29): PDMX no-conflict PD/CC0 encodings of
+  Joseph M. Daly's Chicken Reel, adapted by uploader Bernard Delahaye (5919666);
+  Euday L. Bowman's Twelfth Street Rag (5860188); Hill tune Happy Birthday, uploader Upsideken's own
+  4/4 setting (5915185); traditional/Weatherly Danny Boy, G. Breen's Wyncote Brass arrangement (61265);
+  Stephen Foster's Camptown Races, uploader Piotr Barcz's score (6320642).
+  MuseScore per-score URLs, metadata hashes, cited dates and arrangement evidence are in
+  `private/s0a_v7/rights_manifest.json`. Secondary dates are flagged; no training approval.
+  Mutopia **1034**, Lowell Mason's Nearer My God to Thee, typeset by **Ross Uber**, Public Domain:
+  https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1034
 - **TiMauzi IMSLP MIDI CC0 catalog**, revision `703e983510885d9833dd1c534900e0eb258b69af`
   (S.0a v5 screening). Collection CC0 is not a per-composition clearance. Individual provenance and
   unresolved rights are recorded under `private/s0a_v5/` before any admission.

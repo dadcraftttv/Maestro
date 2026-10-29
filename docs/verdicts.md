@@ -430,3 +430,9 @@ isn't reloaded every session; grep for the part a task needs.
   that loosens the musical gates (2/2 and 2/4 rebarred to 4/4, pickups trimmed, top-voice lead from polyphonic
   parts, chordless bars dropped instead of whole pieces) and accepts cited secondary first-publication dates
   of 1925 or earlier with named creators, flagged in the manifest. Encoding licenses and decision 7 unchanged.
+
+- Oct 29, S.0a v7 scope applied from Claude Code's handoff: DadCraft's looser meter/lead/chord/date gates
+  rerun on local v6 candidates, with encoding rights unchanged. Six additions; four train listen pairs
+  available, below the requested eight; second rebarred 2/4 piece remains validation. Secondary dates,
+  skyline extraction and sparse Danny Boy fragment are flagged for review. DadCraft has not yet judged
+  these pairs; no new download, scan or training approval inferred. `private/s0a_v7/REPORT.md`.

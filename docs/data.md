@@ -48,6 +48,29 @@ not a corpus ceiling or proof the sources are invalid. Full funnels, per-file cr
 causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
 source-music download, musical-gate relaxation, PyTorch or training was approved.
 
+### Looser local song screen (Oct 29, S.0a v7; reviewed by Claude Code)
+
+DadCraft authorized 2/2, paired 2/4, explicit pickup trimming, constrained skyline leads, two-bar chord
+runs and cited secondary publication dates ≤1925 with named creators. Encoding licenses and decision 7 stay.
+Seven verified + 333 secondary-dated songs; secondary entries are tagged `date: secondary` and removable
+as a group. No recording years used. All local v6 candidates accounted for; 1,549 consistent PDMX encodings
+and five licensed local Mutopia MIDI members rerun. No new source files obtained.
+
+Six additions: Chicken Reel (5919666), Twelfth Street Rag (5860188), Happy Birthday remake (5915185),
+Danny Boy (61265), Camptown Races (6320642), Mutopia 1034 Nearer My God to Thee. Added 55 usable bars /
+212 notes / 2,550 scalar tokens. Final 581 pieces / 507 families, split 485/49/47; 11,044 bars /
+35,145 notes / 415,091 scalar tokens. All 575 complete baseline records and placements exactly preserved.
+Four new train audio pairs; requested eight unavailable, and the second rebarred 2/4 piece is validation.
+Two skyline and three secondary-dated train pieces covered. Danny Boy's two usable bars contain one lead
+note; usefulness awaits DadCraft's judgment. No sound verdict or training approval.
+
+327 tests, ten gate fixtures, all source/codec/cap/family/uploader checks and four audio-pair checks pass.
+Skyline: ≤10% polyphonic onsets (held notes included), C3–C6, ≤24-semitone span, at least eight onsets.
+Secondary dates and own-arrangement readings need Claude Code review; Happy Birthday tune/lyric date
+scope especially. Third-party Cartwright, Anke Held, soundtrack and fake-book settings remain excluded.
+Details, every per-piece bar loss, date citations, rights/cap cuts and replay scripts:
+`private/s0a_v7/REPORT.md`; listening guide `private/s0a_v7/LISTEN_S0A.md`.
+
 ### Song-title screen (Oct 29, S.0a v6; reviewed by Claude Code)
 
 Claude Code's review (Oct 29): 1975051 clears (1859 tune, uploader's own arrangement); 575 pieces stand.

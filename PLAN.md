@@ -4,14 +4,14 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.0a v7 (Codex, briefed Oct 29): rerun v6's songs with looser gates (DadCraft, Oct 29: "too
-strict"): 2/2 and 2/4 rebarred to 4/4, pickups trimmed, top-voice lead, chordless bars dropped, cited
-secondary dates of 1925 or earlier accepted and flagged; then S.1 prep. S.0a v6 reviewed by Claude Code Oct 29.
-Old-song title lookup in local PDMX/Mutopia/IMSLP adds one hymn arrangement (four usable bars / ten notes).
-575 pieces after applying the v5 Hallelujah cut; cap 2 holds without exceptions. Most publication dates remain
-unverified: secondary date leads and confirmed publications are separate, not a claim that the repertoire is
-unavailable. Evidence and cuts: `private/s0a_v6/REPORT.md`. One new train listen pair:
-`private/s0a_v6/LISTEN_S0A.md`; the ten v5 pairs remain optional.
+**Next:** S.0a v8 (Codex, briefed Oct 29). Claude Code reviewed v7 (six additions clear on rights, 581
+pieces) and found the gates still stack: 880 multi-signature files rejected whole though 412 are ≥80% 4/4;
+769 scores of dated songs cut because the composer's name was missing from PDMX fields, the title wasn't
+exact, or any "arr." appeared; every traditional tune cut for having no named creator. DadCraft approved all
+four loosenings (Oct 29): keep 4/4 bar runs inside mixed files; exact title + dated song suffices unless a
+different composer is named; cut only third-party or post-1930 arrangements; traditional tunes with a cited
+printing ≤1925, tagged `date: traditional`. v7 report: `private/s0a_v7/REPORT.md`; listen guide
+`private/s0a_v7/LISTEN_S0A.md` (four pairs). Decision 7 unchanged; no training approval.
 DadCraft's v4 listen passed ("snapping didn't hurt anything"); no v5 sound verdict or training approval.
 v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen passed in v4.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
@@ -966,6 +966,20 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         Rights review especially: uploader authorship of 1975051; excluded quartet/recording arrangements.
         Full evidence, uncertainty lists and replay scripts: `private/s0a_v6/REPORT.md`. No source music
         downloaded, YouTube accessed, scans read, PyTorch or training; no new sound verdict.
+      - Oct 29, Codex v7 (reviewed by Claude Code; DadCraft listen pending): measured all
+        1,217 meter rejects before changing gates; 33 in 2/2, 55 in 2/4, 71 apparent 4/4 pickups, 113 in
+        3/4, 44 in 6/8, 880 mixed, 21 other, none absent. Reran 1,549 consistent PDMX encodings and five
+        local Mutopia MIDI members; diagnostic passes 26 → 101. Dates: seven verified + 333 cited secondary
+        ≤1925 with named creators. Rights-screen PDMX/Mutopia/IMSLP 112/1/0 → meter 35 → lead 29 →
+        chords/snap 11; one frozen, four cap cuts, six additions. Added 55 bars / 212 notes; 581 pieces,
+        507 families, split 485/49/47. Exact 575-record baseline preservation, source/family/uploader/codec
+        audit, 327 tests, ten gate fixtures and four new train listen pairs pass. Skyline threshold ≤10%
+        polyphonic onsets including held notes, C3–C6, ≤two-octave span; minimum chord run two bars.
+        Gains overlap: secondary dates four, meter three, skyline two, shorter chord runs necessary three.
+        V6 already dropped bad bars; its four-bar minimum was the incremental chord constraint.
+        Eight-pair listen coverage unattainable under existing splits; no split reassignment or filler.
+        Secondary-date/own-arrangement review and sparse Danny Boy fragment especially need attention.
+        Full evidence and listening limits: `private/s0a_v7/REPORT.md`. No downloads, scans or training.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
