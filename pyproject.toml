@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = ["mido", "numpy"]   # numpy: the clip player's own sounds (synth.py)
 
 [project.optional-dependencies]
+spike = ["torch==2.7.1+cu126"]   # optional PC spike; official cu126 wheel index (docs/s1-runtime.md)
 data = ["music21==9.9.2"]   # library only; never its bundled corpus
 test = ["pytest", "pytest-xdist", "psutil"]   # psutil: -n auto counts real cores, not hyperthreads
 

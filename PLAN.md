@@ -13,7 +13,9 @@ split 496/50/48 (`private/s0a_v12/`). V11 already has v5 per-song keys and Hense
 reconsidering v4 cap cuts recovers two songs into train. All 592 baseline records/splits exact, no moves.
 Step 2 complete (Codex, Oct 29; Claude Code reviewed, clear): public codec and conditioning,
 `docs/s1-tokens.md`; v12 exact-event/round-trip/history checks and 342 tests pass.
-Step 3 next (Codex; PyTorch). Baseline: v11, 592 / 517, 494/50/48 (identical to v9); listens (v8 seven, v9 three
+Step 3 complete (Codex, Oct 29; Claude Code reviewed, clear): optional `[spike]` PyTorch 2.7.1+cu126 /
+CUDA 12.6, RTX 2070 GPU smoke passes; `docs/s1-runtime.md`. Step 4 next (Codex; n-gram and next-bar harness).
+Baseline: v11, 592 / 517, 494/50/48 (identical to v9); listens (v8 seven, v9 three
 pairs) still open. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
 chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
 35,990 notes / 424,222 scalar tokens. All 592 v9 records and splits are exact. The approved 1.89 GB PDMX
@@ -1049,6 +1051,15 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       melodies and 1,353 eligible runs event-identical; 11,248 causal-history bar checks pass.
       Corpus unchanged; 48 missing key labels retain tonic-0 pitch behavior with unknown conditioning.
       342 tests pass; no downloads, PyTorch, training or listens. Phrase proxy accepted. Steps 3–5 open.
+- [x] S.1 prep step 3: optional pinned PyTorch/CUDA (Codex, Oct 29; Claude Code reviewed, clear).
+      `[spike]`: torch 2.7.1+cu126, CUDA 12.6; BSD-3-Clause, credited in CREDITS.md.
+      RTX 2070 (sm_75, 8 GB, driver 595.91.07): tensor/matmul/sync/result smoke passes.
+      Core/codec torch import blocked in fresh interpreter: passes. Before installation,
+      full suite 343 passed / 1 CUDA skip; separate real-GPU runtime tests 2 passed.
+      Torch wheel 822 MB; required new wheel downloads ~2.99 GB. `docs/s1-runtime.md`;
+      private pip report/log in `private/s1_prep_step3/`. No training, weights or other
+      discretionary downloads. Steps 4–5 remain open, one per review.
+      Review: 344 tests pass with the GPU visible; torch 2.7.1+cu126 sees the RTX 2070; pip check clean.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

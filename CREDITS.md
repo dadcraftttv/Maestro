@@ -56,6 +56,11 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
 
 ## Tools (not data; never trained on)
 
+- **PyTorch** 2.7.1+cu126, PyTorch contributors, BSD-3-Clause,
+  https://github.com/pytorch/pytorch/blob/v2.7.1/LICENSE · optional PC-only `spike` extra.
+  CUDA 12.6 runtime wheels retain their NVIDIA license notices; Triton and other dependencies
+  retain their own notices. No weights or training data downloaded. Setup: `docs/s1-runtime.md`.
+
 - **MuseScore** 3.6.2, MuseScore contributors, GPL-2.0,
   https://github.com/musescore/MuseScore/tree/v3.6.2 · approved local CLI conversion fallback.
 
