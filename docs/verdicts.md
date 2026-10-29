@@ -482,3 +482,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 29, sound and character: from OpenRB-338 (a ReBirth RB-338 remake he found, not heard), "i like all 4" (acid
   bass, synthesized 808/909-like drums, the acid style, more weight and impact), asked about Moog sounds and the
   inbox's links; "yes, write it up in both" (PLAN R.4-R.8, Ouralia ROADMAP item 24).
+- Oct 29, R.2 first listen (New Pieces on, 17.7 min, no marks): "it's sounding better"; "don't move forward on the
+  app just yet". His songs made with Claude in the app and their production logs come Oct 30, into `inbox/`.
