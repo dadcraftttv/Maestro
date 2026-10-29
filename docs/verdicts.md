@@ -422,3 +422,11 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 28, downloads: "can it just go ahead and download those things?" Approval recorded by Claude Code in
   Conductor `c1e652b` and the v5 handoff. Applied: pinned IMSLP shards, Mutopia metadata and permitted-license
   historical pieces downloaded privately; no source music committed and no training approval inferred.
+- Oct 28, S.0a v6 brief relayed by Claude Code (Conductor `7d05d24`): DadCraft requested old-song title lookup
+  in the local catalogs before S.1 prep. Applied Oct 29: Hallelujah cut first; local title/date/rights screen,
+  unchanged musical gates, no source-music downloads, YouTube access, scans or training. This records the
+  authorized scope; DadCraft has not given a v6 sound verdict.
+- Oct 29, S.0a v6 result: "i'm thinking we're being too strict." He approved committing v6 and a v7 brief
+  that loosens the musical gates (2/2 and 2/4 rebarred to 4/4, pickups trimmed, top-voice lead from polyphonic
+  parts, chordless bars dropped instead of whole pieces) and accepts cited secondary first-publication dates
+  of 1925 or earlier with named creators, flagged in the manifest. Encoding licenses and decision 7 unchanged.

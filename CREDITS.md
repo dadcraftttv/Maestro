@@ -14,6 +14,10 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
 - **PDMX** (`no_license_conflict` subset), CC BY 4.0; the scores are public domain, from MuseScore. Phillip Long,
   Zachary Novack, Taylor Berg-Kirkpatrick, Julian McAuley, "PDMX: A Large-Scale Public Domain MusicXML Dataset for
   Symbolic Music Processing", ICASSP 2025. https://zenodo.org/records/15571083
+  S.0a v6 adds the uploader's public-domain string-quartet setting of **Nearer My God to Thee**, score 1975051,
+  uploader `wade.allen.965`; original tune Bethany by Lowell Mason, words by Sarah Flower Adams. Local
+  per-score evidence includes the encoding declaration, first-person authorship statement and publication citation;
+  cleared in Claude Code's review (Oct 29). https://musescore.com/user/123153/scores/1975051
 - **WaivOps HH-TRP, EDM-TR8 and RTRO-DRM**, by Patchbanks / WaivOps, CC BY 4.0.
   https://zenodo.org/records/15734094 · https://zenodo.org/records/13257814 (RTRO-DRM: Zenodo record to add on
   download)

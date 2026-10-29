@@ -48,11 +48,43 @@ not a corpus ceiling or proof the sources are invalid. Full funnels, per-file cr
 causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
 source-music download, musical-gate relaxation, PyTorch or training was approved.
 
+### Song-title screen (Oct 29, S.0a v6; reviewed by Claude Code)
+
+Claude Code's review (Oct 29): 1975051 clears (1859 tune, uploader's own arrangement); 575 pieces stand.
+DadCraft (Oct 29) judged the screen too strict; S.0a v7 loosens meter, lead, chord and dating rules (PLAN.md).
+
+Applied v5's Hallelujah cut first: 574 retained pieces. Correct literal-quote TSV parsing preserves all
+1,401 leads; 455 library rows dropped, 91 classical rows counted, 11 non-song/medley rows excluded.
+844 song rows merge to 628 identities. Seven pre-1931 publications independently checked; 356 secondary
+catalog date leads remain insufficient by themselves for admission, 237 dates unknown, 24 creators unknown,
+one homonym/date conflict, three verified later publications. Recording years never substitute for publication.
+Most first-publication research remains unresolved; these exclusions are not proof the songs are unavailable.
+
+Local PDMX title/song/composer/artist search finds 1,838 loose candidates; Mutopia 12 and IMSLP four.
+Title hits include homonyms and artist-name false positives. Diagnostic preflight of 1,549 consistent PD/CC0
+PDMX encodings yields 26 musical passes, all individually reviewed. The verified-rights PDMX funnel is
+10 scores → 10 parsed → seven 4/4 → four fixed lead → two chord-run/snapping passes. One verified-rights
+Mutopia score fails chord runs; IMSLP admits none. Two old Twinkle settings credited to Mozart are correctly
+aliased to the anonymous French tune, keeping their validation placements; they cap out the new setting.
+
+One new hymn arrangement, PDMX 1975051, adds four usable bars / ten notes. Lowell Mason's Bethany setting
+has an independently cataloged 1859 publication; the uploader describes writing their string-quartet arrangement
+in first person. Claude Code accepts that authorship reading. Final: 575 pieces / 503 families,
+split 481/47/47, 10,989 bars / 34,933 notes / 412,541 scalar tokens. All 574 old musical records, evidence
+and splits preserved; cap 2 without exception, family/uploader isolation, source hashes, codec round trips,
+327 tests and one original/snapped train listen pair pass. New styles: hymn one; ragtime/popular/blues/folk zero.
+
+Three independently dated songs have no local metadata hit: Oh Lady Be Good, My Melancholy Baby, Someone to
+Watch Over Me. Another 218 secondary date leads lack hits; their dates still need verification. These are
+metadata-search results, not proof of source-wide absence or a confirmed 221-song scan backlog.
+Per-song dates/citations, rights and identity exclusions, diagnostics and checks: `private/s0a_v6/REPORT.md`.
+Listen: `private/s0a_v6/LISTEN_S0A.md`. No source-music downloads, YouTube access, scans or training.
+
 ### Permissive catalog screen (Oct 28, S.0a v5; reviewed by Claude Code)
 
 Claude Code's review (Oct 28): all 25 Mutopia additions clear; IMSLP's zero accepted. One baseline Hallelujah
-copy (5783003) is cut so the two-copy cap holds with no exception: 574 pieces once S.1 prep applies
-`private/s0a_v5/claude_review_cuts.json`. The 575 figures below are Codex's, before that cut.
+copy (5783003) is cut so the two-copy cap holds with no exception: 574 pieces. V6 applied
+`private/s0a_v5/claude_review_cuts.json` before its screen. The 575 figures below are Codex's v5, before that cut.
 
 DadCraft approved the TiMauzi IMSLP MIDI CC0 download and Mutopia metadata plus per-piece PD/CC0/CC BY
 music. IMSLP is pinned to Hugging Face revision `703e983510885d9833dd1c534900e0eb258b69af`;

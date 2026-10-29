@@ -4,10 +4,14 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.0a v6 (Codex, briefed Oct 28): old songs by title from DadCraft's YouTube playlist leads
-(`private/youtube_leads/`), scores looked up in local PDMX/Mutopia/IMSLP; then S.1 prep. S.0a v5 reviewed by Claude Code Oct 28: all 25 Mutopia additions clear; one
-baseline Hallelujah copy cut (cap 2 now holds with no exception), leaving 574 pieces. Apply
-`private/s0a_v5/claude_review_cuts.json` first. Optional: ten new train listen pairs in `private/s0a_v5/LISTEN_S0A.md`.
+**Next:** S.0a v7 (Codex, briefed Oct 29): rerun v6's songs with looser gates (DadCraft, Oct 29: "too
+strict"): 2/2 and 2/4 rebarred to 4/4, pickups trimmed, top-voice lead, chordless bars dropped, cited
+secondary dates of 1925 or earlier accepted and flagged; then S.1 prep. S.0a v6 reviewed by Claude Code Oct 29.
+Old-song title lookup in local PDMX/Mutopia/IMSLP adds one hymn arrangement (four usable bars / ten notes).
+575 pieces after applying the v5 Hallelujah cut; cap 2 holds without exceptions. Most publication dates remain
+unverified: secondary date leads and confirmed publications are separate, not a claim that the repertoire is
+unavailable. Evidence and cuts: `private/s0a_v6/REPORT.md`. One new train listen pair:
+`private/s0a_v6/LISTEN_S0A.md`; the ten v5 pairs remain optional.
 DadCraft's v4 listen passed ("snapping didn't hurt anything"); no v5 sound verdict or training approval.
 v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen passed in v4.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
@@ -943,6 +947,25 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         Claude Code review (Oct 28): all 25 clear (composers died 1633–1924, named pre-1925 editions, no
         third-party arrangers; CC BY typesetters credited). IMSLP's zero accepted. Cut baseline 5783003, the
         third Hallelujah, so cap 2 holds everywhere: 574 pieces. `private/s0a_v5/claude_review_cuts.json`.
+      - Oct 29, Codex v6 (reviewed by Claude Code Oct 29: 1975051 clears; DadCraft: "too strict" → v7): local old-song title screen. Applied the Hallelujah cut
+        first (574); parsed 1,401 literal-quote TSV rows correctly. Dropped 455 library rows, counted 91
+        classical rows (49 labeled plus 42 recovered), excluded 11 non-song/medley rows; 844 song rows merge
+        to 628 identities. Seven independently checked pre-1931 publications; 356 secondary date leads,
+        237 unknown, 24 missing creators, one homonym/date conflict, three verified post-1930 publications.
+        Secondary dates alone do not clear a new admission. Searched all four PDMX title/creator fields:
+        1,838 loose score candidates, plus 12 Mutopia / four IMSLP. Diagnostic preflight of 1,549 consistent
+        PD/CC0 PDMX encodings yields 26 musical passes, all individually reviewed (not rights admissions).
+        Verified-rights funnel: PDMX 10 → 10 parsed → seven 4/4 → four fixed lead → two chord/snap passes;
+        Mutopia one → no chord run; IMSLP none. Twinkle is capped by two old validation copies, now correctly
+        aliased to the anonymous French tune. Kept one first-person uploader hymn arrangement, PDMX 1975051:
+        four usable bars / ten notes. Final 575 pieces / 503 families, split 481/47/47; 10,989 bars /
+        34,933 notes / 412,541 scalar tokens. All 574 old musical records/evidence/splits preserved; cap 2,
+        family/uploader isolation, codec round trips, raw-source hashes, one train listen pair and 327 tests
+        pass. Three independently dated songs lack a local metadata hit; another 218 are secondary leads
+        only, not a confirmed scan backlog. Publication/identity gaps remain exclusions; not a catalog ceiling.
+        Rights review especially: uploader authorship of 1975051; excluded quartet/recording arrangements.
+        Full evidence, uncertainty lists and replay scripts: `private/s0a_v6/REPORT.md`. No source music
+        downloaded, YouTube accessed, scans read, PyTorch or training; no new sound verdict.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
