@@ -412,3 +412,6 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 28, after Claude's v3 review: "lets build the proper reader and have Codex do that plus any subsequent work."
   Applied: S.0a v4 (music21 reader, cuts applied, repeats capped at 2 per work) briefed to Codex; later tasks
   (S.1 prep) go to Codex too, each reviewed by Claude Code before the next.
+- Oct 28, S.0a v4 converter fallback: DadCraft selected "Install MuseScore CLI for the 12 files"
+  after music21 failed to import 12 approved scores. Applied: local portable MuseScore 3.6.2 and a local
+  virtual display; conversion only, no system-package changes or additional source music.

@@ -26,10 +26,32 @@ Pinned URLs, per-file checksums/provenance and detailed licence findings stay in
 current custom licence prohibits LLM processing, so it is excluded. Mutopia needs per-piece PD/CC0/CC BY evidence;
 SA/NC remain excluded. No other source corpus was approved or ingested.
 
+### OpenScore reader/recount (Oct 28, S.0a v4; Claude reviewed and accepted Oct 28)
+
+DadCraft approved music21 as a local library-only converter (`data` extra pinned to 9.9.2), and then selected
+"Install MuseScore CLI for the 12 files" for its import failures. The portable 3.6.2 fallback and virtual
+display stay local; no system packages changed. Neither tool's bundled music is used. All 1,658 approved
+score hashes pass. Conversion grows from 341 to 1,432 (1,259 Lieder / 173 quartets), including two checked
+MuseScore exports; every v3-readable score remains readable. The adapter counts notes, merges ties, preserves
+grace groups under a fixed timing rule, aligns pickups and converts transposing instruments to sounding pitch.
+All 37 differing note lists among the 341 shared files have timing causes recorded per file; 304 match exactly.
+
+Unchanged musical gates yield 49 OpenScore candidates (45 Lieder / 4 quartets), versus four in v3. After the
+23 v3 rights cuts, two-copy work cap and frozen-split/uploader isolation, the complete corpus has 550 pieces,
+483 families and 10,529 usable bars (33,551 notes; 396,789 scalar tokens). Eight copies are removed; one new
+score is quarantined for an uploader/split conflict. Existing surviving placements are preserved. Count-only
+3/4 and 6/8 screens yield 31 and 18 additional candidates before duplicate/isolation checks; none are included.
+
+Claude Code inspected all 41 new pieces (Oct 28): CC0 OpenScore transcriptions, composers died by 1924, no
+third-party arrangers; none cut. DadCraft's ten new-v4 listen pairs are pending. The 226 conversion rejections (mostly unresolved tie continuity) describe current reader limits,
+not a corpus ceiling or proof the sources are invalid. Full funnels, per-file credits/checksums, comparison
+causes, fixtures, cap/quarantine lists and checked listen pairs remain in `private/s0a_v4/`. No additional
+source-music download, musical-gate relaxation, PyTorch or training was approved.
+
 ### Corpus-size follow-up (Oct 28, DadCraft; for Claude Code review)
 
 DadCraft asked about other datasets and the gigabytes of music available, concerned that 537 pieces seems small.
-**537 is the current pipeline's candidate yield, not the available-data ceiling or proof of sufficient training
+**537 was v3's pipeline candidate yield, not the available-data ceiling or proof of sufficient training
 data.** The combined 10,224 usable bars permit a feasibility experiment; adequate musical variety/generalization
 has not been demonstrated. Overlapping training windows and transpositions do not add independent compositions.
 
@@ -235,7 +257,7 @@ material only if DadCraft wants those styles later.
 | "A corpus and a modular infrastructure for ... (an)notated music" (Sci Data 2025, PMC12052250) | article CC BY-NC-ND | OUT | ideas; the corpus is checked on its own if wanted |
 | S3 symphony dataset (ISMIR 2024 LBD 37) | none in the paper | CHECK | off-target |
 | Dilemmadata (zenodo 19661224): AugmentedNet + Distant Listening Corpus as pitch arrays | CC BY-NC-SA 4.0 | NC | off-target (classical analysis) |
-| music21 (BSD), mido (MIT; docs CC BY 4.0), maialib (GPL-3.0) | code licenses | SAFE | tools: mido in use; no music21 (decision 2.0); maialib ideas |
+| music21 (BSD), mido (MIT; docs CC BY 4.0), maialib (GPL-3.0) | code licenses | SAFE | tools: mido in use; music21 library-only converter approved Oct 28 for S.0a v4; maialib ideas |
 | TransFolk (MIT), folk_ngram_analysis (CC BY 4.0) | code licenses | SAFE | ideas (folk n-grams); off-target |
 | Tegridy MIDI Dataset | Apache-2.0 on the repo; holds Lakh and fan MIDI | OUT | never (decision 7) |
 | MCFlow, Regional Hip-Hop (CCML) | none | CHECK | rap flow and rhyme: the only hip hop sources; ask the lab for a license |
@@ -394,7 +416,7 @@ Licenses from each repo's own page (GitHub's license field, the Hugging Face car
 | WaivOps Lo-Fi Chords | CC BY 4.0 (Zenodo; the GitHub repo states none) | SAFE | already audited above | off-target for synthwave (piano, soul) |
 | Open Music Theory | already in use (3.2) | - | - | - |
 | YC Music Theory (CUNY Academic Commons; source github.com/georgelam155/cunyopenmusic, from DadCraft) | CC BY-SA 4.0 (the site's footer and its "about" page: use, change, even sell, with credit and the same license) | SAFE | a 2019 remix of Open Music Theory 1.0 for a York College course; its pop/rock harmony pages | ideas, in our own words (below) |
-| music21 | BSD-3-Clause | SAFE | already audited above (a tool, not used) | - |
+| music21 | BSD-3-Clause | SAFE | already audited above; library-only S.0a v4 converter, never bundled corpus | - |
 | mingus | GPL-3.0 | SAFE | a Python theory library (chords, scales, progressions) | not needed: our theory core covers it |
 
 The Reimaginer's synthwave preset agrees with the entry: 96-128 BPM (ours 112), four on the floor, a gated snare,

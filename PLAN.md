@@ -4,9 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.0a v4 (bucket S, Codex has the brief): a proper MusicXML reader (music21), rerun OpenScore, apply
-Claude Code's 23 v3 cuts, cap repeats at 2 per work, recount (DadCraft, Oct 28: "lets build the proper reader and
-have Codex do that plus any subsequent work"). Then Claude reviews and S.1 prep goes to Codex.
+**Next:** S.1 prep (Codex). S.0a v4 reviewed by Claude Code Oct 28: accepted as is (550 pieces); carry-forward
+notes for S.1 prep in the v4 line under S.0a. DadCraft's ten new-v4 original/snapped pairs are ready in
+`private/s0a_v4/LISTEN_S0A.md`; the new-pool sound verdict remains open. No training approved.
 v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen is still open.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
 254/35/38, families kept apart). Cut list: `private/s0a_v2/claude_rights_cuts.json`; findings: `REPORT.md`.
@@ -902,6 +902,27 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
         and 2 unreadable titles. Copies of one work stay in one split, but some works repeat (Invention 13 six times,
         all in test); cap copies per work before S.1. Composers spanning splits is fine for S.1 (works and families
         are apart). The cuts still need applying to the corpus and recounting.
+      - Oct 28, Codex v4 (Claude reviewed, accepted): music21 9.9.2 library-only reader plus DadCraft-approved
+        MuseScore 3.6.2 fallback; no bundled corpus. All 1,658 approved inputs checked: 1,432 convert versus
+        v3's 341; 1,091 recovered, no old reader acceptance lost. Two final conversions use checked MuseScore
+        exports. Both readers accept 341: 304 identical note lists, 37 timing differences explained per file
+        (pickups, short internal measures and one polymetric encoding). Notes are counted, ties merged,
+        grace groups retain fixed stolen time, transposing parts sound at concert pitch; repeats stay written.
+        OpenScore musical candidates grow from 4 to 49 (45 Lieder / 4 quartets), before cap/isolation.
+        Applied all 23 v3 rights cuts, capped works at 2 (8 copies removed, including Invention 13 from 6 to 2),
+        quarantined one conflicting addition. Final 550 pieces / 483 families, split 462/45/43; 10,529 usable
+        bars, 33,551 notes, 396,789 scalar tokens. Surviving v3 placements and MIDI notes/chords preserved;
+        work/family/uploader isolation and all token round trips pass. Count-only native 3/4 and 6/8 yield
+        31 and 18 additional musical candidates before cap/isolation; neither meter is admitted.
+        Ten seeded newly admitted train listen pairs pass independent note/audio checks. Reader fixtures and
+        existing suite pass (327 tests). New rights candidates, work aliases and the 226 remaining conversion
+        rejections need Claude's review; rejection is not proof the source is unusable. No new source-music
+        downloads, PyTorch, training or sound verdict. Music/evidence/scripts stay in `private/s0a_v4/`.
+        Claude's review (Oct 28): all 41 new pieces clear (CC0 OpenScore transcriptions from IMSLP, composers
+        died by 1924, no third-party arrangers); reader logic sound. For S.1 prep: OpenScore work keys use the
+        collection title, so distinct songs in one opus count as copies (Hensel "Du bist die Ruh" and Schumann
+        "Gesungen" were capped out); key them per song. Hensel is normalized to "mendelssohn" (keep her
+        separate). Stale velocity comment in `xml_notes.py`; tempo at a pickup shifts by the padding.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes

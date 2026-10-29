@@ -30,6 +30,13 @@ Every data set Maestro uses, with the attribution its license asks for. A set is
 
 ## Tools (not data; never trained on)
 
+- **MuseScore** 3.6.2, MuseScore contributors, GPL-2.0,
+  https://github.com/musescore/MuseScore/tree/v3.6.2 · approved local CLI conversion fallback.
+
+- **music21** v9.9.2, Michael Scott Asato Cuthbert and contributors, BSD-3-Clause,
+  https://github.com/cuthbertLab/music21 · local MusicXML conversion only (`data` extra).
+  Its bundled corpus is never accessed or used.
+
 - **FluidR3 GM** soundfont, by Frank Wen (Toby Smithe and contributors), MIT license: the clip player's sounds
   (`tools/get_sounds.sh`, from Ubuntu's `fluid-soundfont-gm`). **FluidSynth** (LGPL-2.1), used as the system library.
 - **GeneralUser GS** v2.0.3 soundfont, by S. Christian Collins, its own license ("You may use GeneralUser GS without
