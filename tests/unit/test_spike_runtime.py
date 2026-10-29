@@ -17,6 +17,8 @@ class NoTorch(importlib.abc.MetaPathFinder):
 sys.meta_path.insert(0, NoTorch())
 import maestro
 import maestro.spike.tokens
+import maestro.spike.ngram
+import maestro.spike.harness
 assert not any(n == 'torch' or n.startswith('torch.') for n in sys.modules)
 """], check=True)
 

@@ -14,7 +14,8 @@ reconsidering v4 cap cuts recovers two songs into train. All 592 baseline record
 Step 2 complete (Codex, Oct 29; Claude Code reviewed, clear): public codec and conditioning,
 `docs/s1-tokens.md`; v12 exact-event/round-trip/history checks and 342 tests pass.
 Step 3 complete (Codex, Oct 29; Claude Code reviewed, clear): optional `[spike]` PyTorch 2.7.1+cu126 /
-CUDA 12.6, RTX 2070 GPU smoke passes; `docs/s1-runtime.md`. Step 4 next (Codex; n-gram and next-bar harness).
+CUDA 12.6, RTX 2070 GPU smoke passes; `docs/s1-runtime.md`. Step 4 complete (Codex, Oct 29; Claude Code reviewed, clear): train-only event n-gram and
+next-bar harness, `docs/s1-baselines.md`. Validation NLL 7.253827 nats/event; step 5 follows review.
 Baseline: v11, 592 / 517, 494/50/48 (identical to v9); listens (v8 seven, v9 three
 pairs) still open. V10 (Codex, Oct 29; Claude Code reviewed, clear) adds written MusicXML
 chords for melody-only scores: **593 pieces / 518 families**, split 495/50/48; 11,254 usable bars /
@@ -1060,6 +1061,17 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       private pip report/log in `private/s1_prep_step3/`. No training, weights or other
       discretionary downloads. Steps 4–5 remain open, one per review.
       Review: 344 tests pass with the GPU visible; torch 2.7.1+cu126 sees the RTX 2070; pip check clean.
+- [x] S.1 prep step 4: chord-conditioned event n-gram and next-bar harness (Codex, Oct 29; Claude Code reviewed).
+      Train-only fit (496 pieces), validation 50 pieces / 4,689 events: 7.253827 nats/event,
+      884 unseen events. Validation grammar: 803/910 raw, 881/910 masked (29 support failures).
+      Separate 160 rule-context bars: 137 first try, 159 generated, 1 checked rule fallback;
+      CPU p50/p99 4.23/7.54 ms, including raw audit and full unchanged judge. No GPU generator.
+      Full reference-clip checks, independent target substitutions; not corpus musical acceptance
+      or a free-running result. Decisions, loss units, limits: `docs/s1-baselines.md`;
+      private replay/report/logs: `private/s1_prep_step4/`. V12 SHA unchanged. Step 5 after review;
+      no transformer training, downloads, listens or new thresholds.
+      Review: 359 tests pass with the GPU visible. The full 16-bar judge passed 79/80 random chromatic
+      bars substituted into one bar, so it cannot judge a single bar; step 5 must add a per-bar check.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
