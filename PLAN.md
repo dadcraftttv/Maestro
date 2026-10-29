@@ -4,10 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's call on S.1 run 4 (`docs/s1-results.md`): validation 5.15 vs n-gram 7.25 nats/event
-(test 5.43 vs 7.64); timing passes; acceptance fails at the frozen register 60-84 (74/160 first try, 35 fallback).
-The rule melody itself sits at 76-93, so 60-84 forces the line under the band; at 72-96 it is 117/160 and 8
-(n-gram 122 and 5, but 49 of its 122 are rests). Decide: change the frozen register, then novelty and his listen.
+**Next:** DadCraft's blind listen for S.1 (`docs/s1-results.md`). Register now 72-96 (DadCraft, Oct 29): first try
+117/160, fallback 8 (n-gram 122/5 with 49 rests); loss and timing pass, acceptance gates still fail. Novelty: no
+copied training phrase (closest 2 of 8 bars), no repeated bars, no rests in free runs.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -1068,6 +1067,10 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       5,034,240 params, validation 5.1503, test 5.4282 (scored once for it). 60-84: 74/160 first try, 35
       fallback (n-gram 61/35); diagnostic 72-96: 117/8 (n-gram 122/5, 49 rests). p99 CPU 262/227 ms, GPU
       177/158 ms. ~21 GPU min in all.
+      DadCraft: "yes, move the register to 72-96 and keep going". At 72-96: 117/160 first try, 8 fallback
+      (free 120/5); p99 CPU 207/419, GPU 137/224 ms. Novelty (`private/s1_train/novelty.py`): every model bar
+      unseen in 1,000 matched choose draws (choose's own independent draws: 102/160); 0 equal-pitch bar pairs;
+      nearest train window 2 of 8 bars, no exact 8-bar match at any transposition. Listen next.
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
       into the plans of buckets 4 and 5.
 

@@ -23,34 +23,45 @@ train", a proper distribution over the n-gram's vocabulary + UNK. It cannot make
 
 Benchmark key: v12 names keys by signature (241 pieces 'C', 6 with minor names), so the synthwave A minor
 contexts are passed as 'C', the corpus's name for them; 'Am' put the chords nine semitones from anything the
-models learned. The n-gram is rerun the same way. Chord-tone control 0.75 (middle of the card's 50-100%), pool
-unset, both fixed before the run.
+models learned. Register 72-96 (DadCraft, Oct 29: the rules' own melody sits at 76-93 over a band topping out at
+74-76; the earlier 60-84 forced the line under it). Chord-tone control 0.75 (middle of the card's 50-100%), pool
+unset, both fixed before the run. The n-gram runs under the same controls.
 
 | Measure | Gate | n-gram | Transformer (run 4) |
 |---|---|---|---|
 | Validation NLL (nats/event, 4,689 events, 884 unseen) | below n-gram | 7.2538 | **5.1503** pass |
 | Test NLL, scored once for run 4 (5,572 events, 914 unseen) | reported | 7.6403 | 5.4282 |
-| First try / fallback, 160 contexts, register 60-84 | >=95% / <=1% | 61 / 35 | 74 / 35: fail |
-| Same, free-running 16 bars x 10 seeds | as above | not run | 90 / 19: fail |
-| p99 per bar CPU (6 threads), contexts / free | <667 ms (stretch 50) | 18.6 ms | 262 / 227 ms: pass, stretch fails |
-| p99 per bar RTX 2070, contexts / free | <667 ms | n/a | 177 / 158 ms: pass |
+| First try, 160 contexts | >=95% | 122 (49 of them rests) | **117 (73%)**, 6 rests: fail |
+| Fallback, 160 contexts | <=1% | 5 | **8 (5%)**: fail |
+| First try / fallback, free-running 16 bars x 10 seeds | as above | not run | 120 / 5, no rests: fail |
+| p99 per bar CPU (6 threads), contexts / free | <667 ms (stretch 50) | 12 ms | 207 / 419 ms: pass, stretch fails |
+| p99 per bar RTX 2070, contexts / free | <667 ms | n/a | 137 / 224 ms: pass |
 
-Rejections at 60-84 (contexts): under the band 144, too few chord tones 88.
+Rejections (contexts): too few chord tones 43, under the band 33, too high 8. At the old register 60-84 the
+transformer made 74 first try / 35 fallback, the n-gram 61 / 35 (`private/s1_train/report_reg60-84.json`).
 
-**Register diagnostic (not a gate change).** The rules' own synthwave melody sits at MIDI 76-93 (median 84) over a
-band that tops out at 74-76; the frozen register 60-84 caps every generated note at 84, which pushes the line into
-the band. With register 72-96 (the same width, an octave up):
+## Novelty diagnostics (no gates)
 
-| 160 contexts | First try | Rests in first try | Fallback | p99 CPU |
-|---|---|---|---|---|
-| n-gram | 122 | 49 | 5 | 12 ms |
-| Transformer | 117 | about 7 | 8 | 222 ms (free-running 120 first try, 5 fallback, 438 ms) |
+`private/s1_train/novelty.py`, `novelty.json`. Matched choose: each phrase of the rule melody drawn again from
+seeds 0-999 with the same chords, key, pad floor, phrase position and prior onsets (`phrase_melody` before the
+later voicing steps, same octave as the final line); seed 1000+i is the independent draw for context i.
 
-Both still miss 95% / 1%; the transformer passes with sounding bars far more often than the n-gram.
+| | Transformer | n-gram | Choose, independent |
+|---|---|---|---|
+| Bars at choose frequency <=1/1000 (never drawn) | 152/152 (152) | 155/155 (155) | 102/160 (74) |
+| Free runs: equal-pitch bar pairs, adjacent /150, any /1200 | 0 / 0 | 22 / 198 | |
+| Free runs: equal-rhythm bar pairs, adjacent /150, any /1200 | 26 / 167 | 22 / 200 | |
+| Free runs: rest bars /160 | 0 | 65 (its repeats) | |
+| Nearest train 8-bar window, most identical bars (of 8), per seed | 0-2, mostly 0 | 1 each | |
+| Exact 8-bar train matches, any transposition -24..+24 | 0 | 0 | |
+
+Rarity is exact-signature: neither model reproduces a bar the rules would draw, and even the rules' own
+independent draws are mostly unseen in 1,000, so it says little beyond "not a copy of the rules". No training
+phrase is copied: the closest window shares 2 of 8 bars (seed 8, train 5729991, ours moved down 5 semitones).
 
 ## The runs
 
-| Run | Change | Validation NLL | First try / fallback (60-84) |
+| Run | Change | Validation NLL | First try / fallback (register 60-84) |
 |---|---|---|---|
 | 1 | atomic event embeddings, key 'Am' | 6.3376 | 83 / 21 |
 | 2 | + bar position input | 5.6822 | 87 / 18 |
@@ -64,5 +75,4 @@ improved loss and chord tones; the rest of the gap is the register.
 Selection used validation NLL only. Protocol slip: runs 1 and 2 also scored the test split (6.8326, 6.1971), so
 test has been looked at three times in all; no choice was made from it.
 
-Not yet measured: novelty diagnostics (rarity against 1,000 choose bars, repetition, nearest train phrase), and
-DadCraft's blind listen.
+Not yet done: DadCraft's blind listen.

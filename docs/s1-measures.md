@@ -22,7 +22,8 @@ per scalar field to event NLL. No test vocabulary, counts or melodies in fitting
 
 Use the step-4 160 contexts (synthwave seeds 1–10, 16 independent bar
 substitutions each), identical chords, accompaniment, previous rule melody,
-register 60–84, density 4 and RNG seeds 1000+seed*16+bar. These are contextual
+register 72–96 (was 60–84; DadCraft, Oct 29: the rules' own melody sits at
+76–93 over a band topping out at 74–76), density 4 and RNG seeds 1000+seed*16+bar. These are contextual
 substitutions, not a free-running test. Key (Oct 29, after S.1 run 3): the contexts
 pass 'C', v12's signature name for A minor; 'Am' named no key the corpus uses. Report a separate 16-bar free-running
 run for every seed with actual generated history; do not pool the two regimes.

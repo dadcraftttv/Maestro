@@ -464,3 +464,5 @@ isn't reloaded every session; grep for the part a task needs.
   No new DadCraft sound verdict, scans or training approval.
 - Oct 29, S.1 prep step 5: DadCraft: "allow rest bars, then go for training". A melody bar of rest passes on the
   full judge alone; training approved within the frozen budget (~5M parameters, 2 GPU hours, early stop).
+- Oct 29, S.1: DadCraft: "go with your recommendation" (style inputs, faster harness check), then "yes, move the
+  register to 72-96 and keep going": the frozen benchmark register is 72-96, where the rules' melody plays.
