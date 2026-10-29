@@ -4,10 +4,9 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** S.1 training, approved (DadCraft, Oct 29: "allow rest bars, then go for training"). Claude Code runs
-it on this PC (Codex's sandbox has no GPU): one ~5M-parameter causal transformer from scratch, 2 GPU hours total,
-early stop on validation event NLL, measured against the frozen `docs/s1-measures.md`. No listens until gates are
-reported.
+**Next:** DadCraft's call after S.1's first run (`docs/s1-results.md`): the 5.1M transformer beats the n-gram on
+held-out loss (validation 5.68 vs 7.25 nats/event) but fails acceptance (first try 87/160, fallback 18/160) and CPU
+free-running p99 (707 ms); GPU timing passes. Novelty diagnostics and his blind listen not run yet.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -1059,6 +1058,10 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       reported (rules 0/160, train 17.4%). N-gram: first try 78/160 (35 rests), fallback 18/160. 361 tests pass.
 - [ ] S.1 Train it on this PC and play it inside the rules (decision 6); measure 5.0's success measures and the time
       to make a bar (decision 15).
+      First run (Claude Code, Oct 29; `docs/s1-results.md`): 5,085,184 parameters, ~12 GPU minutes of 2 hours.
+      Loss passes (validation 5.6822 vs n-gram 7.2538; test 6.1971 vs 7.6403). Acceptance fails: 87/160 first
+      try, 18/160 fallback (free-running 97/13); rejections are chord tones and under the band, as it has no
+      style input. p99 CPU 289/707 ms (contexts/free; free fails 667), GPU 196/401 ms. Novelty, listen open.
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
       into the plans of buckets 4 and 5.
 
