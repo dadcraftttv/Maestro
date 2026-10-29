@@ -415,3 +415,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 28, S.0a v4 converter fallback: DadCraft selected "Install MuseScore CLI for the 12 files"
   after music21 failed to import 12 approved scores. Applied: local portable MuseScore 3.6.2 and a local
   virtual display; conversion only, no system-package changes or additional source music.
+- Oct 28, S.0a v4 listen (ten new original/snapped pairs): "snapping didn't hurt anything." Applied: the new-pool
+  sound check passes; the 550-piece corpus stands for S.1 prep.

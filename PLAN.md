@@ -5,8 +5,7 @@ same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: 
 as much as possible to keep token cost low").
 
 **Next:** S.1 prep (Codex). S.0a v4 reviewed by Claude Code Oct 28: accepted as is (550 pieces); carry-forward
-notes for S.1 prep in the v4 line under S.0a. DadCraft's ten new-v4 original/snapped pairs are ready in
-`private/s0a_v4/LISTEN_S0A.md`; the new-pool sound verdict remains open. No training approved.
+notes for S.1 prep in the v4 line under S.0a. DadCraft's v4 listen passed ("snapping didn't hurt anything"). No training approved.
 v3 cut list: `private/s0a_v3/claude_rights_cuts.json`. DadCraft's new-pool listen is still open.
 S.0a v2 passed DadCraft's grid listen; Claude Code's rights review cut 92 of 419 pieces, leaving 327 (split
 254/35/38, families kept apart). Cut list: `private/s0a_v2/claude_rights_cuts.json`; findings: `REPORT.md`.
