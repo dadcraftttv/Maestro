@@ -75,4 +75,8 @@ improved loss and chord tones; the rest of the gap is the register.
 Selection used validation NLL only. Protocol slip: runs 1 and 2 also scored the test split (6.8326, 6.1971), so
 test has been looked at three times in all; no choice was made from it.
 
-Not yet done: DadCraft's blind listen.
+## Blind listen (ready, Oct 29)
+
+`clips/s1_listen/` (gitignored): 10 trials x A/B/C, the sheet in `listen.txt`; the key in
+`private/s1_train/listen_key.json`, closed until DadCraft has answered. Made by `private/s1_train/listen.py`.
+Lead notes in the 8 bars: rules 18-55, n-gram 10-31, model 25-103 (seeds 5, 7 and 9 run in sixteenths).

@@ -78,6 +78,11 @@ approved in S.0: report distributions and examples; novelty alone cannot pass.
 
 ## DadCraft's blind listen
 
+S.1 setup (DadCraft, Oct 29): the validation pieces have no band, so the listen uses the ten synthwave rule songs
+(seeds 1-10), first 8 bars, the melody swapped (rules, n-gram and model free runs) over the same band and sounds;
+order shuffled per trial with seed 510, bends and vibrato off on every lead, loudness matched on gated RMS. The
+validation-piece protocol below waits for a way to voice a band under corpus chords.
+
 Only after measured gates are reported: 10 matched held-out contexts (first ten
 validation IDs in frozen split order with eight contiguous usable bars), seeds
 1 and 2; if fewer qualify, report the shortfall without silently replacing them.

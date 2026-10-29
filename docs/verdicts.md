@@ -466,3 +466,5 @@ isn't reloaded every session; grep for the part a task needs.
   full judge alone; training approved within the frozen budget (~5M parameters, 2 GPU hours, early stop).
 - Oct 29, S.1: DadCraft: "go with your recommendation" (style inputs, faster harness check), then "yes, move the
   register to 72-96 and keep going": the frozen benchmark register is 72-96, where the rules' melody plays.
+- Oct 29, S.1 listen: DadCraft chose synthwave songs (melody swapped over the same band) over the frozen
+  validation-piece protocol, whose pieces have no band.

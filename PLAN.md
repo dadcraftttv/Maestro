@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** DadCraft's blind listen for S.1 (`docs/s1-results.md`). Register now 72-96 (DadCraft, Oct 29): first try
+**Next:** DadCraft's blind listen for S.1, ready in `clips/s1_listen/` (sheet `listen.txt`; `docs/s1-results.md`). Register now 72-96 (DadCraft, Oct 29): first try
 117/160, fallback 8 (n-gram 122/5 with 49 rests); loss and timing pass, acceptance gates still fail. Novelty: no
 copied training phrase (closest 2 of 8 bars), no repeated bars, no rests in free runs.
 
@@ -1071,6 +1071,8 @@ learned model finds out what buckets 4 and 5 need before the desk and the traini
       (free 120/5); p99 CPU 207/419, GPU 137/224 ms. Novelty (`private/s1_train/novelty.py`): every model bar
       unseen in 1,000 matched choose draws (choose's own independent draws: 102/160); 0 equal-pitch bar pairs;
       nearest train window 2 of 8 bars, no exact 8-bar match at any transposition. Listen next.
+      Listen set up on synthwave songs 1-10, 8 bars, melody swapped, shuffled (DadCraft chose it over
+      validation pieces, which have no band). Key in `private/s1_train/listen_key.json`.
 - [ ] Checkpoint S: DadCraft hears it blind, A/B against the rule-made part. What it shows (data, size, tokens) goes
       into the plans of buckets 4 and 5.
 
