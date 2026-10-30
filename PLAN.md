@@ -4,7 +4,16 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next: R.5** (DadCraft, Oct 30: after seeing the seven R.4 targets, "resume the R.5 task" next session). The
+**Now: R.5 SET ASIDE, the kits are being removed (DadCraft, Oct 30).** After hearing Future bass step 2: "this
+feels like we're going down the same Maestro path. it's turning into live constant generative things when it's
+supposed to be reactionary." Then: "i'm very seriously considering removing the kits completely because i feel like
+they detract from what the goal of Ouralia is supposed to be. it should still feel and sound like a spiritual
+successor to RjDj" and "remove the kits and keep accoustic as the \"Classic\"". Ouralia's R.5 work stays on its
+archived `dev` branch, never merged; the removal starts from `main` (branch `reactive`). The bline ports are
+reverted here (ad57cdc, 308f1be), so the port matches Ouralia `main` again. The composer features are frozen: no
+new work until the "evolved RjDj" direction (hearing what the sounds around you are) is planned.
+
+**Was next: R.5** (DadCraft, Oct 30: after seeing the seven R.4 targets, "resume the R.5 task" next session). The
 targets (`docs/reference-targets.md`, private detail `private/r4/out/report.md`) were shown to him with no changes
 asked, so they stand as provisional full-mix checks. R.5 is Ouralia work (ROADMAP item 24) on a **parallel dev path**
 (DadCraft, Oct 30: "test this changes without changing what would go into the main project until i can listen and
@@ -869,7 +878,7 @@ the form, the feel and, with Ouralia, the sounds. Each step behind a switch in O
     `private/r4/out/report.md`. Seven synthetic tests and numeric/independent-meter/cache audits pass. Broader
     suite: 366 passed / one skipped / existing composer-sync failure (`PIECE_BARS`, Ouralia R.2 drift).
     References only: no training or app changes, no inferred sound verdict. DadCraft reviews targets before R.5.
-  - [ ] **R.5 Sounds with character (Ouralia, ROADMAP item 24).** Much is there already: `dcs_ladder~` (Moog-style),
+  - [-] **R.5 Sounds with character (SET ASIDE Oct 30: kits removed, see the top; Ouralia, ROADMAP item 24).** Much is there already: `dcs_ladder~` (Moog-style),
     the analog engine (2-3 detuned saws, a sub, the ladder, a filter envelope; the Synth kit), the 808-style sub
     with glide and synthesized drums (Low end 808-like, EDM 909-like). New: slide between notes and accent (a harder
     note, the filter opened wider) in the analog engine, an Acid Bass kit (one buzzy oscillator, high resonance, a
