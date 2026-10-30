@@ -492,3 +492,7 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 30, R.5 path: "R.5 should begin a parallel dev/beta path for Ouralia, where we can test this changes
   without changing what would go into the main project until i can listen and make sure i like the results. i
   don't want to hit the same wall/issue we did with Maestro where we spend a week going down a wrong path."
+- Oct 30, R.5 step 1 (Acid Bass in Ouralia Dev): "it sounds fine but it's only doing the same basic pattern. i'm
+  using it to count the measures as it's playing that's how steady it's hitting. shouldn't it be more varied?" The
+  sound is accepted; the sameness is the missing bass line, so R.7's 16-step line comes forward as step 2 (with slide
+  and accent), handed to Codex: "let's have Codex handle this."

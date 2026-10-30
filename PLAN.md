@@ -21,7 +21,9 @@ passes). First kit: **Acid Bass** (DadCraft, Oct 30). Step 1, his first listen: 
 one saw, high resonance, a short filter decay, no sub) and an opt-in `snap` so the bass's held note snaps its
 filter open again on each kick, as the 808 already restarts; Synth's bass unchanged. Built (Ouralia `ac4a156`,
 dev; cutoff 2, reso 0.8, fenv 6: a sweep ending on the note dragged its pitch ~130 cents flat), installed on the Moto as
-Ouralia Dev, full tests pass; **waiting for his listen**. Slide and accent only after his yes on step 1. R.3 open; S.1 model parked.
+Ouralia Dev, full tests pass; his listen: "it sounds fine" but "only doing the same basic pattern" (the bass holds the chord root,
+so the snap follows the kicks). Step 2, **with Codex** (brief in Conductor `.handoff/to-codex.md`): the composer's
+16-step bass line (R.7's core brought forward) with slide and accent, played by Acid Bass only. R.3 open; S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 
