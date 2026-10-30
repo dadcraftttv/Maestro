@@ -4,7 +4,7 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next: R.5** (DadCraft, Oct 30: after seeing the seven R.4 targets, "resume the R.5 task" next session). The
+**Next: R.5 Future bass step 2 — Claude Code review, then DadCraft’s listen** (DadCraft, Oct 30: after seeing the seven R.4 targets, "resume the R.5 task" next session). The
 targets (`docs/reference-targets.md`, private detail `private/r4/out/report.md`) were shown to him with no changes
 asked, so they stand as provisional full-mix checks. R.5 is Ouralia work (ROADMAP item 24) on a **parallel dev path**
 (DadCraft, Oct 30: "test this changes without changing what would go into the main project until i can listen and
@@ -40,6 +40,18 @@ sections/renew/scale changes; a deliberate wrong-root port mutation failed all f
 Maestro whole suite: 380 passed / one skipped. Ouralia full tier: 172 patch sections and every other suite pass
 (649 s); all four native ABIs and assembleDev pass, APK contents verified. Patch holds preserve every sample on
 both kit layers; level 21 gives standalone RMS .04916 vs Synth .05551 (x.886). See Ouralia's Acid Bass design entry.
+**Future bass step 2 built (Oct 30, Codex; uncommitted):** DadCraft heard the spread but found the pad dark
+and beat-locked, and picked tone plus a melodic chord part first. `chords 1` opts into a syncopated 16-tick pad
+part (Calm sparser, fourth-bar variation), a stepwise modal top line doubled up, and one/two-bar harmonic pace.
+Ported with eight parity scenarios and three unit tests; disabled requests preserve the old RNG sequence.
+Bright seven-saw pad, no wobble/bend/sub, a short filter sweep, independent layer tone and lighter pad pump.
+40 s mix: centroid 336 → 727 Hz; low/high side/mid 0.0168/0.313. Pad spread reduced 0.8 → 0.6 because 0.8
+measured 0.538 high-band power; melody stays 0.8. Level 0.5 → 1.7: mix +3.5 dB RMS/+4.6 LU, isolated pad
++14.2 dB RMS, reported without lowering other parts. Top mean 1.817 semitones, 92% ≤2, max 3 (no b9 over the chord, review fix); 70.7% offbeat hits.
+20 HEAD/current legacy kit/layer fixtures sample-identical. Maestro 391 passed / one skipped; Ouralia full tier
+175 patch sections and every supporting suite passed (529 s); four native ABIs and Dev APK verified. Handoff in
+Conductor's Supersaw item;
+Claude reviews and installs; DadCraft listens before bass/drums. No sound verdict inferred from measurements.
 Do not proceed to another sound step until his verdict; R.5 and the general R.7 style remain open. R.3 open;
 S.1 model parked.
 
@@ -898,7 +910,9 @@ the form, the feel and, with Ouralia, the sounds. Each step behind a switch in O
     - [x] Acid Bass step 2 built and measured (Oct 30, Codex): 16-step line/rests/slide/accent and matching port.
       Reviewed/committed and heard: better, still busy.
     - [x] Acid Bass step 3 built and measured (Oct 30, Codex): 8ths, no-op holds and sparser Calm; matching port.
-      Claude Code review and DadCraft's listen next; the general R.7 style remains open.
+      Reviewed and heard: DadCraft said "sounds good so far" and kept it in dev.
+    - [x] Future bass step 2 built/measured (Oct 30, Codex): melodic chord part, brighter pad, matching port.
+      Claude Code review/install and DadCraft's listen next; the general R.7 style remains open.
   - [ ] **R.6 Drums that feel played.** Groove MIDI (already chosen, CC BY 4.0, `docs/data.md`): measure how real
     drummers push, pull and accent each step per style, and give the composer's drums that timing and loudness
     instead of the bare grid.

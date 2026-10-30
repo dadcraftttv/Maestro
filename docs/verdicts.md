@@ -500,3 +500,9 @@ isn't reloaded every session; grep for the part a task needs.
   is there a slower, half time way of running the bass also? ... its still very busy." Given 8ths, true half time,
   or sparser calmer sections, DadCraft chose "go with 8ths plus calmer sections going sparser, have Codex build it."
   Step 3 built; review and listening verdict pending.
+
+- Oct 30, R.5 Acid Bass step 3: DadCraft said "sounds good so far" and "i want to keep it in dev for now".
+- Oct 30, Future bass spread heard: "it doesn't sound like future bass"; the pad was wider but dark and
+  "it's just constant stabs that you can measure the beat to. there's nothing melodic there."
+  DadCraft picked pads first, tone and part together ("lets start with 1"), then approved the plan ("yes").
+  Codex built step 2; review/install and the new listening verdict remain open. Bass and drums follow later.

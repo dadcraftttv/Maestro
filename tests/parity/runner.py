@@ -16,7 +16,7 @@ OURALIA = os.environ.get("MAESTRO_OURALIA", os.path.join(os.path.dirname(ROOT), 
 LIB = os.path.join(OURALIA, "tools", ".libpd", "libpd.so")
 DCS_LIB = os.path.join(OURALIA, "dcs", "build", "dcs.pd_linux")
 DCS_SRC = os.path.join(OURALIA, "dcs", "src", "dcs_composer.c")
-OUTLETS = ("chord", "sect", "mel", "form", "drum", "arp", "cell", "bline")
+OUTLETS = ("chord", "sect", "mel", "form", "drum", "arp", "cell", "bline", "chords")
 SR, BLOCK = 48000, 64
 
 
@@ -82,6 +82,13 @@ def scenarios():
             if b == 250:
                 steps.append(("msg", "scale", 7))
         sc[name] = steps
+    for scale in range(8):
+        steps = [("msg", "chords_on", 1), ("msg", "seed", 47), ("msg", "scale", scale), ("msg", "renew", 1), ("msg", "start")]
+        for b in range(420):
+            steps += [("msg", "bar"), ("msg", "chords", 0.5), ("msg", "drums", 0.5, 0.3)]
+            if b == 250:
+                steps.append(("msg", "scale", (scale + 1) % 8))
+        sc[f"chords_{scale}"] = steps
     # before start: bars and patterns while nothing plays yet
     sc["before_start"] = ([("msg", "seed", 9), ("msg", "bar"), ("msg", "drums", 0.3, 0), ("msg", "arp", 0.5, 7),
                            ("msg", "cell", 0.4, 3), ("msg", "note", 7, 0, 7), ("msg", "again")] * 5
@@ -94,9 +101,9 @@ def run_c(steps):
     import tempfile
     from pdtest import Engine
     lines = ["#N canvas 0 0 600 400 12;", "#X declare -lib dcs;"]
-    objs = ["r cin", "dcs_composer", "s m_chord", "s m_sect", "s m_mel", "s m_form", "route drum arp cell bline",
-            "s m_drum", "s m_arp", "s m_cell", "s m_bline"]
-    conns = [(0, 0, 1, 0)] + [(1, i, 2 + i, 0) for i in range(4)] + [(1, 4, 6, 0)] + [(6, i, 7 + i, 0) for i in range(4)]
+    objs = ["r cin", "dcs_composer", "s m_chord", "s m_sect", "s m_mel", "s m_form", "route drum arp cell bline chords",
+            "s m_drum", "s m_arp", "s m_cell", "s m_bline", "s m_chords"]
+    conns = [(0, 0, 1, 0)] + [(1, i, 2 + i, 0) for i in range(4)] + [(1, 4, 6, 0)] + [(6, i, 7 + i, 0) for i in range(5)]
     lines += [f"#X obj 10 {40 + 25 * i} {t};" for i, t in enumerate(objs)]
     lines += [f"#X connect {a} {o} {b} {i};" for a, o, b, i in conns]
     path = os.path.join(tempfile.mkdtemp(prefix="maestro_parity_"), "parity.pd")

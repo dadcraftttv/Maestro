@@ -6,10 +6,10 @@ the parity test (tests/parity) runs both and compares every output. Its tables c
 (kept in step by tools/sync_check.py); its logic follows the C line by line, so the C comments explain it. Float
 maths is rounded to 32 bits at each step, as the C does it.
 
-Messages are methods (scale, tempo, bright, energy, bar, start, again, seed, color, renew, note, drums, arp, cell);
+Messages are methods (scale, tempo, bright, energy, bar, start, again, seed, color, renew, note, drums, arp, cell, bline, chords_on, chords);
 `tick()` lets Pd's time pass (the composer's own bar clock fires when no bar comes). Everything the composer sends
 lands in `out` as (outlet, values): "chord" [anchor, bass, 4 pad notes], "sect" [kind, register], "mel" note,
-"form" [form, first note], "drum" [lane, 16 velocities], "arp" [8 steps], "cell" [16 lengths, count, last onset].
+"form" [form, first note], "drum" [lane, 16 velocities], "arp" [8 steps], "cell" [16 lengths, count, last onset], "chords" [16 × (action, five semitone offsets)].
 
 Ported from dcs_composer.c: Copyright (c) 2026 dadcraft (DadCraft Studios), BSD-3-Clause.
 """
@@ -114,6 +114,7 @@ class Composer:
         self.cell_base, self.cell_cur = [[0] * 16 for _ in range(NKINDS)], [0] * 16
         self.cell_have, self.cell_style, self.cell_kind, self.cell_bars = [0] * NKINDS, [0] * NKINDS, -1, 0
         self.cell_d = [0.0] * NKINDS
+        self.chord_bars = self.chord_note = self.chords_on_value = 0
         self.bline_base = [[[0] * 3 for _ in range(16)] for _ in range(NKINDS)]
         self.bline_cur = [[0] * 3 for _ in range(16)]
         self.bline_have, self.bline_kind, self.bline_bars = [0] * NKINDS, -1, 0
@@ -250,7 +251,7 @@ class Composer:
         b = max(1, min(4, b))
         if self.pos == PLEN - 1 and self.rnd(100) < 35:
             b += 1   # a cadence held a little longer
-        return b
+        return min(b, 2) if self.chords_on_value else b
 
     def _voice_chord(self):
         m = self.mode()
@@ -520,6 +521,29 @@ class Composer:
             drop = lane < 2 and self.leadin and self.pos == PLEN - 1   # the drop
             self.out.append(("drum", [lane] + ([0.0] * 16 if drop else self.drum_cur[lane][:])))
 
+    def chords_on(self, f):
+        self.chords_on_value = int(f32(f) >= .5)
+        if self.chords_on_value:
+            self.bars_left = min(self.bars_left, 2)
+
+    def chords(self, drive=0.5):
+        """Optional syncopated pad, matching C; does not consume the shared RNG."""
+        m, bar, k = self.mode(), self.chord_bars, self.kind
+        self.chord_bars += 1
+        deg = self.deg
+        contour, row = (0, 1, 2, 3, 2, 1, 0, 1), []
+        for i in range(16):
+            hit = i in (0, 6) or (k != CALM and i in (3, 11 if bar % 4 == 3 else 10))
+            action = 1 if hit else -1 if i == 14 or (k == TURN and i == 8) else -2
+            c = contour[self.chord_note % 8]
+            top, notes = pc(m, c) + 12, [pc(m, deg) % 12, pc(m, deg + 4) % 12, pc(m, deg + 2) % 12]
+            if any((top - n) % 12 == 1 for n in notes):
+                top = pc(m, c + m["n"] - 1)   # no b9 over the chord: onto its tone
+            if hit:
+                self.chord_note += 1
+            row += [action] + notes + [top, top + 12]
+        self.out.append(("chords", row))
+
     def _bline_step(self, d, hold):
         n, r = SCALE_N[self.scale], self.rnd(100)
         p = [0 if r < 55 else n if r < 75 else (4 if n == 7 else 3) if r < 90 else 1, 0, 0]
@@ -702,7 +726,8 @@ class Composer:
             self.sus_voice = -1
             self._emit()
 
-    def _piece(self):   # a new piece: forget the sections, Home first
+    def _piece(self):
+        self.chord_bars = self.chord_note = 0   # a new piece: forget the sections, Home first
         for k in range(NKINDS):
             self.have[k] = self.have_motif[k] = self.drum_have[k] = self.arp_have[k] = self.cell_have[k] = self.bline_have[k] = 0
         self.drum_kind = self.arp_kind = self.cell_kind = self.bline_kind = -1

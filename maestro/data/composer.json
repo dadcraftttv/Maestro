@@ -3,8 +3,8 @@
   "repo": "dadcraftttv/Ouralia",
   "path": "dcs/src/dcs_composer.c",
   "commit": "0ae42a7f60ffbabf9f1c8daddd4b4a9f2e8c8b1c",
-  "blob": "9c0c6c73e2a0018491677252e843af8b14a9df55",
-  "note": ""
+  "blob": "bad2bfcadc6745d53e6b8f0256d18a9c61b30945",
+  "note": "uncommitted changes"
  },
  "defines": {
   "NSCALES": 8,
@@ -803,6 +803,16 @@
    10,
    14,
    15
+  ],
+  "contour": [
+   0,
+   1,
+   2,
+   3,
+   2,
+   1,
+   0,
+   1
   ],
   "K_5": [
    1,
