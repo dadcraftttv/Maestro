@@ -484,3 +484,6 @@ isn't reloaded every session; grep for the part a task needs.
   inbox's links; "yes, write it up in both" (PLAN R.4-R.8, Ouralia ROADMAP item 24).
 - Oct 29, R.2 first listen (New Pieces on, 17.7 min, no marks): "it's sounding better"; "don't move forward on the
   app just yet". His songs made with Claude in the app and their production logs come Oct 30, into `inbox/`.
+- Oct 30, R.4: DadCraft asked Codex to handle the private reference analysis and approved continuing without
+  one unreadable file. Measurements and seven provisional mix targets prepared; no new sound verdict or app
+  change. Details: `docs/reference-targets.md`, private `private/r4/out/report.md`.

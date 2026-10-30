@@ -4,9 +4,10 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** R (below): Maestro grows as dcs_composer, heard through Ouralia's own sound. R.1's baseline came from
-DadCraft's Session Log; R.2 New Pieces is built (Ouralia `d054460`) and waits on his listen. Then R.3 (form numbers
-from the scores) and the sound and character track R.4-R.8. S.1 model parked.
+**Next:** R.4 measurements are complete and reviewed; DadCraft reviews the seven
+reference mix targets (`docs/reference-targets.md`; private details in `private/r4/out/report.md`). R.5 follows
+one kit at a time when DadCraft is ready. R.2's first listen was “sounding better”; further app changes remain
+on hold at his request (Oct 29). R.3 remains open; S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 
@@ -833,7 +834,8 @@ the form, the feel and, with Ouralia, the sounds. Each step behind a switch in O
   changed all that much".
 - [ ] **R.2 New Pieces** (built, Ouralia `d054460`, `new_pieces`): every 64-96 bars a DJ-style handover (his ask:
   "kind of like how a DJ would overlap"): an open ending with the drums dropping to the hats, the new chords under
-  the old groove and motif, then a new groove, then new motifs; Home between half the sections. Waits on his listen.
+  the old groove and motif, then a new groove, then new motifs; Home between half the sections. First listen
+  (Oct 29): “sounding better”; further app changes on hold at DadCraft’s request.
 - [ ] **R.3 Form numbers from the scores.** Measure the S.0a corpus (already cleared): how often pieces return to
   their opening material, section lengths, key changes and where to, melody range. They replace R.2's guesses (7 in
   10 home, 2-3 phrases, one key) in a second build, so he compares today, rules, and rules tuned to real music.
@@ -842,9 +844,15 @@ the form, the feel and, with Ouralia, the sounds. Each step behind a switch in O
   Propellerhead's samples, so none of its code, tables or samples; its song collection has no license. The machines
   themselves (TB-303, TR-808, TR-909, the Moog ladder filter, patents long expired) are publicly documented: we
   write our own. Kits get descriptive names, not brand names.
-  - [ ] **R.4 The target.** Analyse his reference tracks and production logs (private, in `inbox/`, never sent to a
-    free API): loudness and dynamics, stereo width, brightness, how the layers stack. "Flavour" in numbers, before
-    any sound is built.
+  - [x] **R.4 The target (Oct 30, Codex; reviewed by Claude Code).** Local, private reference analysis: 3,617 audio
+    rows; 1,254 alternate exports skipped; one unreadable file omitted with DadCraft’s approval; 2,362 measured
+    without failures, 2,345 distinct hashes / 83.5 hours after byte dedupe. All tag files matched; 136 distinct
+    measured files untagged. Loudness/true peak, dynamics, band energy/width/correlation, brightness, estimated
+    rhythm and energy changes; 532 same-prompt take groups, tag associations and 14 explicit log selections.
+    Seven provisional full-mix targets in `docs/reference-targets.md`; private report/evidence in
+    `private/r4/out/report.md`. Seven synthetic tests and numeric/independent-meter/cache audits pass. Broader
+    suite: 366 passed / one skipped / existing composer-sync failure (`PIECE_BARS`, Ouralia R.2 drift).
+    References only: no training or app changes, no inferred sound verdict. DadCraft reviews targets before R.5.
   - [ ] **R.5 Sounds with character (Ouralia, ROADMAP item 24).** Much is there already: `dcs_ladder~` (Moog-style),
     the analog engine (2-3 detuned saws, a sub, the ladder, a filter envelope; the Synth kit), the 808-style sub
     with glide and synthesized drums (Low end 808-like, EDM 909-like). New: slide between notes and accent (a harder
