@@ -489,3 +489,6 @@ isn't reloaded every session; grep for the part a task needs.
   change. Details: `docs/reference-targets.md`, private `private/r4/out/report.md`.
 - Oct 30, R.4 targets shown (all seven, plain-language summary); no changes asked: "make sure this is saved so i
   can clear the window and resume the R.5 task".
+- Oct 30, R.5 path: "R.5 should begin a parallel dev/beta path for Ouralia, where we can test this changes
+  without changing what would go into the main project until i can listen and make sure i like the results. i
+  don't want to hit the same wall/issue we did with Maestro where we spend a week going down a wrong path."

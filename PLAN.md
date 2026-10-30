@@ -6,10 +6,17 @@ as much as possible to keep token cost low").
 
 **Next: R.5** (DadCraft, Oct 30: after seeing the seven R.4 targets, "resume the R.5 task" next session). The
 targets (`docs/reference-targets.md`, private detail `private/r4/out/report.md`) were shown to him with no changes
-asked, so they stand as provisional full-mix checks. R.5 is Ouralia work (ROADMAP item 24), one kit at a time:
-confirm with him at the start that this lifts the Oct 29 app hold and which kit goes first. The composer-sync test
-fails (Ouralia R.2 `PIECE_BARS` after the pinned snapshot); port it before or with the first R.5 build. R.3 open;
-S.1 model parked.
+asked, so they stand as provisional full-mix checks. R.5 is Ouralia work (ROADMAP item 24) on a **parallel dev path**
+(DadCraft, Oct 30: "test this changes without changing what would go into the main project until i can listen and
+make sure i like the results. i don't want to hit the same wall/issue we did with Maestro where we spend a week
+going down a wrong path"):
+- An Ouralia `dev` branch; `main` and the rc releases stay untouched. A dev build installs beside the release app
+  on his phone (applicationId suffix `.dev`, name "Ouralia Dev"), so he compares the two directly.
+- One kit at a time, and he listens after the first audible change, not after a finished kit. Nothing more is
+  built on a step until he likes it; a step he doesn't like is dropped, not tuned for days.
+- A kit merges to `main` only after his "yes".
+First session: set up the branch and dev build, ask which kit goes first. The composer-sync test fails (Ouralia R.2
+`PIECE_BARS` after the pinned snapshot); port it before or with the first R.5 build. R.3 open; S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 
