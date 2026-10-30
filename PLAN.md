@@ -8,8 +8,8 @@ as much as possible to keep token cost low").
 feels like we're going down the same Maestro path. it's turning into live constant generative things when it's
 supposed to be reactionary." Then: "i'm very seriously considering removing the kits completely because i feel like
 they detract from what the goal of Ouralia is supposed to be. it should still feel and sound like a spiritual
-successor to RjDj" and "remove the kits and keep accoustic as the \"Classic\"". Ouralia's R.5 work stays on its
-archived `dev` branch, never merged; the removal starts from `main` (branch `reactive`). The bline ports are
+successor to RjDj" and "remove the kits and keep accoustic as the \"Classic\"". Ouralia's R.5 work and its `dev`
+branch are deleted (DadCraft: "scrap the dev branch completely"), never merged; the removal starts from `main` (branch `reactive`). The bline ports are
 reverted here (ad57cdc, 308f1be), so the port matches Ouralia `main` again. The composer features are frozen: no
 new work until the "evolved RjDj" direction (hearing what the sounds around you are) is planned.
 
