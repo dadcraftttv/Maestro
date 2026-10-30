@@ -4,10 +4,12 @@ The one place that says where Maestro stands. Read it at the start of every Maes
 same commit that finishes them. Work goes one task at a time (DadCraft, Oct 23: "bucket by bucket, or task by task
 as much as possible to keep token cost low").
 
-**Next:** R.4 measurements are complete and reviewed; DadCraft reviews the seven
-reference mix targets (`docs/reference-targets.md`; private details in `private/r4/out/report.md`). R.5 follows
-one kit at a time when DadCraft is ready. R.2's first listen was “sounding better”; further app changes remain
-on hold at his request (Oct 29). R.3 remains open; S.1 model parked.
+**Next: R.5** (DadCraft, Oct 30: after seeing the seven R.4 targets, "resume the R.5 task" next session). The
+targets (`docs/reference-targets.md`, private detail `private/r4/out/report.md`) were shown to him with no changes
+asked, so they stand as provisional full-mix checks. R.5 is Ouralia work (ROADMAP item 24), one kit at a time:
+confirm with him at the start that this lifts the Oct 29 app hold and which kit goes first. The composer-sync test
+fails (Ouralia R.2 `PIECE_BARS` after the pinned snapshot); port it before or with the first R.5 build. R.3 open;
+S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 

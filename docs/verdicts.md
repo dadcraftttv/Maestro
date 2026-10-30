@@ -487,3 +487,5 @@ isn't reloaded every session; grep for the part a task needs.
 - Oct 30, R.4: DadCraft asked Codex to handle the private reference analysis and approved continuing without
   one unreadable file. Measurements and seven provisional mix targets prepared; no new sound verdict or app
   change. Details: `docs/reference-targets.md`, private `private/r4/out/report.md`.
+- Oct 30, R.4 targets shown (all seven, plain-language summary); no changes asked: "make sure this is saved so i
+  can clear the window and resume the R.5 task".
