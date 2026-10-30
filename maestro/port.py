@@ -37,6 +37,7 @@ HOME, LIFT, CALM, TURN, NKINDS = (_E[k] for k in ("HOME", "LIFT", "CALM", "TURN"
 WHOLE = _E["WHOLE"]
 F_MOTIF, F_AGAIN, F_ANSWER, F_MOVED, F_INVERT, F_BACK, F_SHORT, F_LONGER = range(8)
 SCALE_N, SCALE_IV, PARENT, MODES = _T["SCALE_N"], _T["SCALE_IV"], _T["PARENT"], _T["MODES"]
+KIND_BLINE_HOLD = _T["KIND_BLINE_HOLD"]
 KIND_SECS, KIND_DRIVE = _f32s(_T["KIND_SECS"]), _f32s(_T["KIND_DRIVE"])
 KIND_REG, KIND_BASS, KIND_OPEN, KIND_COLOR = _T["KIND_REG"], _T["KIND_BASS"], _T["KIND_OPEN"], _T["KIND_COLOR"]
 GHOST, CELL_K_STRAIGHT, CELL_K_DOTTED = _T["ghost"], _T["K_5"], _T["K_3"]
@@ -519,24 +520,39 @@ class Composer:
             drop = lane < 2 and self.leadin and self.pos == PLEN - 1   # the drop
             self.out.append(("drum", [lane] + ([0.0] * 16 if drop else self.drum_cur[lane][:])))
 
-    def _bline_step(self, d):
+    def _bline_step(self, d, hold):
         n, r = SCALE_N[self.scale], self.rnd(100)
         p = [0 if r < 55 else n if r < 75 else (4 if n == 7 else 3) if r < 90 else 1, 0, 0]
         if self.rnd(100) < 35 - int(f32(20 * d)):
             p[0] = -1
+        if p[0] >= 0 and hold and self.rnd(100) < hold:
+            p[0] = -2
         p[2] = int(p[0] >= 0 and self.rnd(4) == 0)
         return p
+
+    @staticmethod
+    def _bline_prev(p, i):
+        for j in range(i - 2, -1, -2):
+            if p[j][0] != -2:
+                return p[j][0]
+        return -1
 
     def bline(self, fdrive):
         k = self._pat_kind(self.bline_kind)
         d = f32(f32(fdrive) + KIND_DRIVE[k])
         d = 0.0 if d < 0 else 1.0 if d > 1 else d
         if not self.bline_have[k]:
-            self.bline_base[k] = [self._bline_step(d) for _ in range(16)]
-            self.bline_base[k][0][0] = 0
             for i in range(16):
+                self.bline_base[k][i] = [-2, 0, 0]
+                if not i % 2:
+                    hold = KIND_BLINE_HOLD[k] if self._bline_prev(self.bline_base[k], i) >= 0 else 0
+                    self.bline_base[k][i] = self._bline_step(d, hold)
+                    if not i:
+                        self.bline_base[k][i][0] = 0
+            self.bline_base[k][0][0] = 0
+            for i in range(2, 16, 2):
                 self.bline_base[k][i][1] = int(self.bline_base[k][i][0] >= 0 and
-                    self.bline_base[k][(i + 15) % 16][0] >= 0 and self.rnd(6) == 0)
+                    self._bline_prev(self.bline_base[k], i) >= 0 and self.rnd(6) == 0)
             self.bline_have[k] = 1
         if self.bline_kind != k or self._bump("bline_bars") % 4 == 0:
             if self.bline_kind != k:
@@ -546,12 +562,15 @@ class Composer:
         elif self.rnd(10) < 7:
             edits = 1 + self.rnd(2)
             for _ in range(edits):
-                i = self.rnd(16)
-                self.bline_cur[i] = self._bline_step(d)
+                i = 2 * self.rnd(8)
+                hold = KIND_BLINE_HOLD[k] if self._bline_prev(self.bline_cur, i) >= 0 else 0
+                self.bline_cur[i] = self._bline_step(d, hold)
+                if not i or (self.bline_cur[i][0] == -1 and i < 14 and self.bline_cur[i + 2][0] == -2):
+                    self.bline_cur[i][0] = 0
                 self.bline_cur[i][1] = int(self.bline_cur[i][0] >= 0 and
-                    self.bline_cur[(i + 15) % 16][0] >= 0 and self.rnd(6) == 0)
+                    self._bline_prev(self.bline_cur, i) >= 0 and self.rnd(6) == 0)
         for i in range(16):
-            if self.bline_cur[i][0] < 0 or self.bline_cur[(i + 15) % 16][0] < 0:
+            if self.bline_cur[i][0] < 0 or self._bline_prev(self.bline_cur, i) < 0:
                 self.bline_cur[i][1] = 0
         self.out.append(("bline", [v for p in self.bline_cur for v in p]))
 

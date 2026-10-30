@@ -75,7 +75,7 @@ def scenarios():
             if b == 330:
                 steps.append(("msg", "renew", 1))
         sc[name] = steps
-    for name, scale in (("bline_minor", 1), ("bline_pent", 3)):
+    for name, scale in (("bline_minor", 1), ("bline_pent", 3), ("bline_major", 0), ("bline_whole", 7)):
         steps = [("msg", "seed", 47), ("msg", "scale", scale), ("msg", "renew", 1), ("msg", "start")]
         for b in range(420):
             steps += [("msg", "bar"), ("msg", "bline", (b % 21) / 20), ("msg", "drums", 0.5, 0.3)]

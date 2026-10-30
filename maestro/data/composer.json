@@ -2,8 +2,8 @@
  "source": {
   "repo": "dadcraftttv/Ouralia",
   "path": "dcs/src/dcs_composer.c",
-  "commit": "fa7b2b0cf5b2dd648925c0abc5da4a6cd3aecfc1",
-  "blob": "5f2335636bdaefc0fe3e753e49226ed88840c9bb",
+  "commit": "0ae42a7f60ffbabf9f1c8daddd4b4a9f2e8c8b1c",
+  "blob": "9c0c6c73e2a0018491677252e843af8b14a9df55",
   "note": ""
  },
  "defines": {
@@ -790,6 +790,12 @@
    0.15,
    -0.25,
    0.05
+  ],
+  "KIND_BLINE_HOLD": [
+   10,
+   0,
+   60,
+   10
   ],
   "ghost": [
    7,

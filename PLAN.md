@@ -22,7 +22,7 @@ one saw, high resonance, a short filter decay, no sub) and an opt-in `snap` so t
 filter open again on each kick, as the 808 already restarts; Synth's bass unchanged. Built (Ouralia `ac4a156`,
 dev; cutoff 2, reso 0.8, fenv 6: a sweep ending on the note dragged its pitch ~130 cents flat), installed on the Moto as
 Ouralia Dev, full tests pass; his listen: "it sounds fine" but "only doing the same basic pattern" (the bass holds the chord root,
-so the snap follows the kicks). Step 2, **built by Codex; Claude Code review and DadCraft's listen next** (brief in Conductor
+so the snap follows the kicks). Step 2, **reviewed and heard** (brief in Conductor
 `.handoff/to-codex.md`): the composer's optional 16-step bass line (R.7's core brought forward), with rests, slide
 and accent, played by Acid Bass only. The C and Python port remember section bases, vary most bars, return every
 fourth bar, carry the old line through handover phrase 1 and renew it with the groove. No bline request means no
@@ -30,6 +30,16 @@ new random draws. Two parity scenarios cover sections, renew and scale changes; 
 was caught and restored. Object checks: 60 ms slide, repeated-note filter snap, accent x1.31 RMS / x1.46 brightness,
 rest silence in 25 ms, transient drag -40.4 cents at cutoff 2. Final checks: Maestro 377 passed / one skipped;
 Ouralia full tier (171 patch sections and all other suites), four native ABIs and assembleDev passed. See Ouralia `docs/design/dcs-objects.md` Acid Bass.
+Step 2 was reviewed/committed (Ouralia `fa7b2b0`, Maestro `ad57cdc`); DadCraft heard it as better but still
+busy and chose "8ths plus calmer sections going sparser, have Codex build it". **Step 3 built (Oct 30, Codex;
+Claude Code review and DadCraft's listen next):** note/rest starts on even ticks only, odd ticks are no-op holds
+(degree -2). Calm extends more sounding notes; at middle drive, 20 seeds × 200 bars per kind average Home 6.19,
+Lift 6.61, Calm 3.92, Turn 6.25 note starts/bar. Section hold probabilities 10/0/60/10%; only sounding notes can
+be extended on even slots. Clock holds after a rest simply preserve silence. Four parity scenarios cover
+sections/renew/scale changes; a deliberate wrong-root port mutation failed all four, then was restored.
+Maestro whole suite: 380 passed / one skipped. Ouralia full tier: 172 patch sections and every other suite pass
+(649 s); all four native ABIs and assembleDev pass, APK contents verified. Patch holds preserve every sample on
+both kit layers; level 21 gives standalone RMS .04916 vs Synth .05551 (x.886). See Ouralia's Acid Bass design entry.
 Do not proceed to another sound step until his verdict; R.5 and the general R.7 style remain open. R.3 open;
 S.1 model parked.
 
@@ -886,6 +896,8 @@ the form, the feel and, with Ouralia, the sounds. Each step behind a switch in O
     NSynth's quality tags (bright, dark, distorted, percussive...; CC BY 4.0, to record in `docs/data.md`) can guide
     which settings read as which word.
     - [x] Acid Bass step 2 built and measured (Oct 30, Codex): 16-step line/rests/slide/accent and matching port.
+      Reviewed/committed and heard: better, still busy.
+    - [x] Acid Bass step 3 built and measured (Oct 30, Codex): 8ths, no-op holds and sparser Calm; matching port.
       Claude Code review and DadCraft's listen next; the general R.7 style remains open.
   - [ ] **R.6 Drums that feel played.** Groove MIDI (already chosen, CC BY 4.0, `docs/data.md`): measure how real
     drummers push, pull and accent each step per style, and give the composer's drums that timing and loudness
