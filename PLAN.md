@@ -19,8 +19,9 @@ Set up (Oct 30): Ouralia `dev` branch with the "Ouralia Dev" build (`f039a8c`, `
 Pieces ported to `maestro/port.py` with two renew parity scenarios (composer-sync in step again, whole suite
 passes). First kit: **Acid Bass** (DadCraft, Oct 30). Step 1, his first listen: the kit file (the analog engine,
 one saw, high resonance, a short filter decay, no sub) and an opt-in `snap` so the bass's held note snaps its
-filter open again on each kick, as the 808 already restarts; Synth's bass unchanged. Slide and accent only after
-his yes on step 1. R.3 open; S.1 model parked.
+filter open again on each kick, as the 808 already restarts; Synth's bass unchanged. Built (Ouralia `ac4a156`,
+dev; cutoff 2, reso 0.8, fenv 6: a sweep ending on the note dragged its pitch ~130 cents flat), installed on the Moto as
+Ouralia Dev, full tests pass; **waiting for his listen**. Slide and accent only after his yes on step 1. R.3 open; S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 
