@@ -113,9 +113,6 @@ class Composer:
         self.cell_base, self.cell_cur = [[0] * 16 for _ in range(NKINDS)], [0] * 16
         self.cell_have, self.cell_style, self.cell_kind, self.cell_bars = [0] * NKINDS, [0] * NKINDS, -1, 0
         self.cell_d = [0.0] * NKINDS
-        self.bline_base = [[[0] * 3 for _ in range(16)] for _ in range(NKINDS)]
-        self.bline_cur = [[0] * 3 for _ in range(16)]
-        self.bline_have, self.bline_kind, self.bline_bars = [0] * NKINDS, -1, 0
         self.color, self.sus_voice, self.sus_third = 0, -1, 0
         # new pieces: bars until the next, the open ending under way, and the handover's phrases (0: none)
         self.renew, self.piece_bars, self.leadin, self.handover = 0, PIECE_BARS, 0, 0
@@ -332,8 +329,8 @@ class Composer:
                 self.handover += 1
             if self.handover == 2:     # a phrase into the new piece: a new groove
                 for k in range(NKINDS):
-                    self.drum_have[k] = self.arp_have[k] = self.cell_have[k] = self.bline_have[k] = 0
-                self.drum_kind = self.arp_kind = self.cell_kind = self.bline_kind = -1
+                    self.drum_have[k] = self.arp_have[k] = self.cell_have[k] = 0
+                self.drum_kind = self.arp_kind = self.cell_kind = -1
             elif self.handover == 3:   # and a phrase later, new motifs
                 for k in range(NKINDS):
                     self.have_motif[k] = 0
@@ -519,42 +516,6 @@ class Composer:
             drop = lane < 2 and self.leadin and self.pos == PLEN - 1   # the drop
             self.out.append(("drum", [lane] + ([0.0] * 16 if drop else self.drum_cur[lane][:])))
 
-    def _bline_step(self, d):
-        n, r = SCALE_N[self.scale], self.rnd(100)
-        p = [0 if r < 55 else n if r < 75 else (4 if n == 7 else 3) if r < 90 else 1, 0, 0]
-        if self.rnd(100) < 35 - int(f32(20 * d)):
-            p[0] = -1
-        p[2] = int(p[0] >= 0 and self.rnd(4) == 0)
-        return p
-
-    def bline(self, fdrive):
-        k = self._pat_kind(self.bline_kind)
-        d = f32(f32(fdrive) + KIND_DRIVE[k])
-        d = 0.0 if d < 0 else 1.0 if d > 1 else d
-        if not self.bline_have[k]:
-            self.bline_base[k] = [self._bline_step(d) for _ in range(16)]
-            self.bline_base[k][0][0] = 0
-            for i in range(16):
-                self.bline_base[k][i][1] = int(self.bline_base[k][i][0] >= 0 and
-                    self.bline_base[k][(i + 15) % 16][0] >= 0 and self.rnd(6) == 0)
-            self.bline_have[k] = 1
-        if self.bline_kind != k or self._bump("bline_bars") % 4 == 0:
-            if self.bline_kind != k:
-                self.bline_bars = 0
-            self.bline_kind = k
-            self.bline_cur = [p[:] for p in self.bline_base[k]]
-        elif self.rnd(10) < 7:
-            edits = 1 + self.rnd(2)
-            for _ in range(edits):
-                i = self.rnd(16)
-                self.bline_cur[i] = self._bline_step(d)
-                self.bline_cur[i][1] = int(self.bline_cur[i][0] >= 0 and
-                    self.bline_cur[(i + 15) % 16][0] >= 0 and self.rnd(6) == 0)
-        for i in range(16):
-            if self.bline_cur[i][0] < 0 or self.bline_cur[(i + 15) % 16][0] < 0:
-                self.bline_cur[i][1] = 0
-        self.out.append(("bline", [v for p in self.bline_cur for v in p]))
-
     def _bump(self, name):
         """C's ++x->name, used inside a condition."""
         setattr(self, name, getattr(self, name) + 1)
@@ -685,8 +646,8 @@ class Composer:
 
     def _piece(self):   # a new piece: forget the sections, Home first
         for k in range(NKINDS):
-            self.have[k] = self.have_motif[k] = self.drum_have[k] = self.arp_have[k] = self.cell_have[k] = self.bline_have[k] = 0
-        self.drum_kind = self.arp_kind = self.cell_kind = self.bline_kind = -1
+            self.have[k] = self.have_motif[k] = self.drum_have[k] = self.arp_have[k] = self.cell_have[k] = 0
+        self.drum_kind = self.arp_kind = self.cell_kind = -1
         self.voiced = 0
         self.mel_kind = -1
         self.stmt_on = 0
