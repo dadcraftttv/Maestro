@@ -17,7 +17,10 @@ going down a wrong path"):
 - A kit merges to `main` only after his "yes".
 Set up (Oct 30): Ouralia `dev` branch with the "Ouralia Dev" build (`f039a8c`, `./gradlew assembleDev`); R.2's New
 Pieces ported to `maestro/port.py` with two renew parity scenarios (composer-sync in step again, whole suite
-passes). Next: DadCraft picks the first kit. R.3 open; S.1 model parked.
+passes). First kit: **Acid Bass** (DadCraft, Oct 30). Step 1, his first listen: the kit file (the analog engine,
+one saw, high resonance, a short filter decay, no sub) and an opt-in `snap` so the bass's held note snaps its
+filter open again on each kick, as the 808 already restarts; Synth's bass unchanged. Slide and accent only after
+his yes on step 1. R.3 open; S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 
