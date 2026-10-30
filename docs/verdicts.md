@@ -496,7 +496,3 @@ isn't reloaded every session; grep for the part a task needs.
   using it to count the measures as it's playing that's how steady it's hitting. shouldn't it be more varied?" The
   sound is accepted; the sameness is the missing bass line, so R.7's 16-step line comes forward as step 2 (with slide
   and accent), handed to Codex: "let's have Codex handle this."
-- Oct 30, R.5 step 2 heard: "sounding better. i don't have a problem with how fast it's moving, but others might.
-  is there a slower, half time way of running the bass also? ... its still very busy." Given 8ths, true half time,
-  or sparser calmer sections, DadCraft chose "go with 8ths plus calmer sections going sparser, have Codex build it."
-  Step 3 built; review and listening verdict pending.
