@@ -2,13 +2,14 @@
  "source": {
   "repo": "dadcraftttv/Ouralia",
   "path": "dcs/src/dcs_composer.c",
-  "commit": "933148d461c2e715f0300385fee9a3441c1a7245",
-  "blob": "54bb7f2d9770d4331487ac19d830e5bafeeda365",
+  "commit": "d054460b996bff82edbf67e2d70ca3a6e863fe27",
+  "blob": "aaa6552430d16fa2a374fc9caf1052ca9b68f7e0",
   "note": ""
  },
  "defines": {
   "NSCALES": 8,
   "PLEN": 4,
+  "PIECE_BARS": 64,
   "MOTIF_MAX": 8,
   "GAP_MS": 2200,
   "ROAM": 4,

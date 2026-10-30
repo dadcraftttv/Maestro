@@ -15,8 +15,9 @@ going down a wrong path"):
 - One kit at a time, and he listens after the first audible change, not after a finished kit. Nothing more is
   built on a step until he likes it; a step he doesn't like is dropped, not tuned for days.
 - A kit merges to `main` only after his "yes".
-First session: set up the branch and dev build, ask which kit goes first. The composer-sync test fails (Ouralia R.2
-`PIECE_BARS` after the pinned snapshot); port it before or with the first R.5 build. R.3 open; S.1 model parked.
+Set up (Oct 30): Ouralia `dev` branch with the "Ouralia Dev" build (`f039a8c`, `./gradlew assembleDev`); R.2's New
+Pieces ported to `maestro/port.py` with two renew parity scenarios (composer-sync in step again, whole suite
+passes). Next: DadCraft picks the first kit. R.3 open; S.1 model parked.
 
 ## The goal (DadCraft, Oct 23)
 

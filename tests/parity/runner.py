@@ -62,6 +62,19 @@ def scenarios():
                        ("msg", "bar")] + [("run", blocks(1.0))] * 60 + [("msg", "bar")] * 40
                       + [("msg", "scale", 5)] + [("run", blocks(0.5))] * 40 + [("msg", "seed", 22)]
                       + [("msg", "bar"), ("msg", "drums", 0.7, 0.5), ("run", blocks(0.3))] * 60)
+    # new pieces (renew): handovers with the open ending, the drop, the old groove and motif carried, then new ones;
+    # renew off mid-piece and back on
+    for name, scale, seed in (("renew_minor", 1, 31), ("renew_dorian", 4, 32)):
+        steps = [("msg", "renew", 1), ("msg", "seed", seed), ("msg", "scale", scale), ("msg", "start")]
+        for b in range(420):
+            drive = 0.5 + 0.5 * math.sin(b / 23.0)
+            steps += [("msg", "bar"), ("msg", "drums", drive, 0.3), ("msg", "arp", 1 - drive, 7),
+                      ("msg", "cell", drive, 1 + (b // 40) % 3), ("msg", "note", 7 - b % 5, (b * 3) % 7, 7)]
+            if b == 300:
+                steps.append(("msg", "renew", 0))
+            if b == 330:
+                steps.append(("msg", "renew", 1))
+        sc[name] = steps
     # before start: bars and patterns while nothing plays yet
     sc["before_start"] = ([("msg", "seed", 9), ("msg", "bar"), ("msg", "drums", 0.3, 0), ("msg", "arp", 0.5, 7),
                            ("msg", "cell", 0.4, 3), ("msg", "note", 7, 0, 7), ("msg", "again")] * 5

@@ -6,7 +6,7 @@ the parity test (tests/parity) runs both and compares every output. Its tables c
 (kept in step by tools/sync_check.py); its logic follows the C line by line, so the C comments explain it. Float
 maths is rounded to 32 bits at each step, as the C does it.
 
-Messages are methods (scale, tempo, bright, energy, bar, start, again, seed, color, note, drums, arp, cell);
+Messages are methods (scale, tempo, bright, energy, bar, start, again, seed, color, renew, note, drums, arp, cell);
 `tick()` lets Pd's time pass (the composer's own bar clock fires when no bar comes). Everything the composer sends
 lands in `out` as (outlet, values): "chord" [anchor, bass, 4 pad notes], "sect" [kind, register], "mel" note,
 "form" [form, first note], "drum" [lane, 16 velocities], "arp" [8 steps], "cell" [16 lengths, count, last onset].
@@ -32,6 +32,7 @@ def _f32s(v):
 
 _D, _E, _T = _C["defines"], _C["enums"], _C["tables"]
 NSCALES, PLEN, MOTIF_MAX, GAP_MS, ROAM, ARP_LEN = (_D[k] for k in ("NSCALES", "PLEN", "MOTIF_MAX", "GAP_MS", "ROAM", "ARP_LEN"))
+PIECE_BARS = _D["PIECE_BARS"]
 HOME, LIFT, CALM, TURN, NKINDS = (_E[k] for k in ("HOME", "LIFT", "CALM", "TURN", "NKINDS"))
 WHOLE = _E["WHOLE"]
 F_MOTIF, F_AGAIN, F_ANSWER, F_MOVED, F_INVERT, F_BACK, F_SHORT, F_LONGER = range(8)
@@ -113,6 +114,8 @@ class Composer:
         self.cell_have, self.cell_style, self.cell_kind, self.cell_bars = [0] * NKINDS, [0] * NKINDS, -1, 0
         self.cell_d = [0.0] * NKINDS
         self.color, self.sus_voice, self.sus_third = 0, -1, 0
+        # new pieces: bars until the next, the open ending under way, and the handover's phrases (0: none)
+        self.renew, self.piece_bars, self.leadin, self.handover = 0, PIECE_BARS, 0, 0
         self._make_phrase(HOME, self.prog)       # (quietly: nothing is sent while the patch loads)
         self.have[HOME] = 1
         self.kept[HOME] = self.prog[:]
@@ -224,7 +227,7 @@ class Composer:
         self.out.append(("sect", [kind, KIND_REG[kind]]))
 
     def _next_kind(self):
-        if self.kind != HOME and self.rnd(10) < 7:
+        if self.kind != HOME and self.rnd(10) < (5 if self.renew else 7):
             return HOME
         w = [0.0, f32(f32(1.0 + self.energy) + f32(0.5 * self.bright)), f32(1.0 + f32(1 - self.energy)), _V["c7"]]
         w[self.kind] = 0.0
@@ -315,19 +318,39 @@ class Composer:
         self._voice_chord()
         self._emit()
 
+    def _lead_in(self):   # the last phrase of a piece: its ending open, so the new piece answers it
+        self.leadin = 1
+        self.prog[PLEN - 1] = self._pick_of(self.mode()["open"], self.prog[PLEN - 2])
+
     def _advance(self):
         self.pos += 1
         if self.pos >= PLEN:
-            self.phrases_left -= 1
-            if self.phrases_left > 0:   # the phrase again: often the same, sometimes changed
-                self.pos = 0
-                if self.rnd(2):
-                    self._vary_phrase(self.kind, self.prog)
+            if self.handover:
+                self.handover += 1
+            if self.handover == 2:     # a phrase into the new piece: a new groove
+                for k in range(NKINDS):
+                    self.drum_have[k] = self.arp_have[k] = self.cell_have[k] = 0
+                self.drum_kind = self.arp_kind = self.cell_kind = -1
+            elif self.handover == 3:   # and a phrase later, new motifs
+                for k in range(NKINDS):
+                    self.have_motif[k] = 0
+                self.mel_kind = -1
+                self.handover = 0
+            if self.leadin:
+                self._handover()
             else:
-                k = self._next_kind()
-                if self.kind != HOME:
-                    self.last_away = self.kind
-                self._begin_section(k)
+                self.phrases_left -= 1
+                if self.phrases_left > 0:   # the phrase again: often the same, sometimes changed
+                    self.pos = 0
+                    if self.rnd(2):
+                        self._vary_phrase(self.kind, self.prog)
+                else:
+                    k = self._next_kind()
+                    if self.kind != HOME:
+                        self.last_away = self.kind
+                    self._begin_section(k)
+            if self.renew and not self.leadin and not self.handover and self.piece_bars <= 0 and self.phrases_left == 1:
+                self._lead_in()
         self._play_pos(0)
 
     # ---- the melody ----
@@ -355,7 +378,8 @@ class Composer:
             m[1 + self.rnd(len(m) - 1)] += s
 
     def _new_statement(self, middle, chord, n):
-        if self.mel_kind != self.kind or not self.have_motif[self.kind]:   # the section's own motif
+        carry = self.handover and self.mel_kind >= 0 and self.have_motif[self.mel_kind]   # a handover: the old motif
+        if not carry and (self.mel_kind != self.kind or not self.have_motif[self.kind]):   # the section's own motif
             self.mel_kind = self.kind
             if self.have_motif[self.kind]:
                 self._nudge_motif(self.motif[self.kind])
@@ -471,8 +495,11 @@ class Composer:
             else:
                 p[2][i] = 0.0 if p[2][i] > 0 else V["h1"]
 
+    def _pat_kind(self, cur):   # the section whose patterns play: the old piece's for the first phrase of a handover
+        return cur if self.handover == 1 and cur >= 0 else self.kind
+
     def drums(self, fdrive, fbrk):
-        k = self.kind
+        k = self._pat_kind(self.drum_kind)
         d = f32(f32(fdrive) + KIND_DRIVE[k])
         d = 0.0 if d < 0 else 1.0 if d > 1 else d
         if not self.drum_have[k] or abs(f32(d - self.drum_d[k])) > _V["c15"]:   # this section's own bar
@@ -486,7 +513,8 @@ class Composer:
         elif self.rnd(10) < 7:
             self._vary_drums(self.drum_cur)
         for lane in range(3):
-            self.out.append(("drum", [lane] + self.drum_cur[lane][:]))
+            drop = lane < 2 and self.leadin and self.pos == PLEN - 1   # the drop
+            self.out.append(("drum", [lane] + ([0.0] * 16 if drop else self.drum_cur[lane][:])))
 
     def _bump(self, name):
         """C's ++x->name, used inside a condition."""
@@ -517,7 +545,7 @@ class Composer:
 
     def arp(self, fpace, fn):
         fpace, fn = f32(fpace), f32(fn)
-        k, n = self.kind, int(fn) if fn >= 1 else 7
+        k, n = self._pat_kind(self.arp_kind), int(fn) if fn >= 1 else 7
         pace = 0.0 if fpace < 0 else 1.0 if fpace > 1 else fpace
         if not self.arp_have[k] or n != self.arp_n or abs(f32(pace - self.arp_pace[k])) > _V["c3"]:
             self._make_arp(pace, n, self.arp_base[k])
@@ -571,7 +599,7 @@ class Composer:
             on[at[1 + self.rnd(n - 2)]] = 0
 
     def cell(self, fdrive, fstyle):
-        k, style = self.kind, int(f32(fstyle))
+        k, style = self._pat_kind(self.cell_kind), int(f32(fstyle))
         d = f32(f32(fdrive) + KIND_DRIVE[k])
         d = 0.0 if d < 0 else 1.0 if d > 1 else d
         if style == 2:
@@ -607,6 +635,7 @@ class Composer:
         self._clock_delay(self._bar_ms() * 1.6)
         if not self.started:
             return
+        self.piece_bars -= 1
         self.bars_left -= 1
         if self.bars_left <= 0:
             self._advance()
@@ -623,7 +652,23 @@ class Composer:
         self.mel_kind = -1
         self.stmt_on = 0
         self.last_away = CALM
+        self.leadin = self.handover = 0
+        self.piece_bars = PIECE_BARS   # (the first piece draws no random number: a seed gives the same piece)
         self._begin_section(HOME)
+
+    def _handover(self):   # the new piece takes over: its own chords and sections, under the old groove and motif
+        for k in range(NKINDS):
+            self.have[k] = 0
+        self.last_away = CALM
+        self.leadin = 0
+        self.handover = 1
+        self.piece_bars = PIECE_BARS + self.rnd(PIECE_BARS // 2 + 1)
+        self._begin_section(HOME)
+
+    def renew_(self, f):
+        self.renew = int(f32(f) >= 0.5)
+        if not self.renew:
+            self.leadin = 0   # (a handover under way finishes)
 
     def scale_(self, f):
         s = int(f32(f))
@@ -661,5 +706,5 @@ class Composer:
 
     def send(self, selector, *args):
         """A message by its Pd name, e.g. send("scale", 3)."""
-        getattr(self, {"scale": "scale_", "color": "color_", "bright": "bright_", "energy": "energy_",
+        getattr(self, {"scale": "scale_", "color": "color_", "renew": "renew_", "bright": "bright_", "energy": "energy_",
                        "bang": "again"}.get(selector, selector))(*args)
